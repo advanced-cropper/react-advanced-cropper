@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[9146],{6437:function(e){e.exports=JSON.parse('{"allTagsPath":"/react-advanced-cropper/blog/tags","slug":"/react-advanced-cropper/blog/tags/hello","name":"hello","count":2,"permalink":"/react-advanced-cropper/blog/tags/hello"}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[8704],{4211:function(e){e.exports=JSON.parse('{"allTagsPath":"/react-advanced-cropper/blog/tags","slug":"/react-advanced-cropper/blog/tags/facebook","name":"facebook","count":1,"permalink":"/react-advanced-cropper/blog/tags/facebook"}')}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkmy_website=self.webpackChunkmy_website||[]).push([[3887],{3256:function(a){a.exports=JSON.parse('{"allTagsPath":"/react-advanced-cropper/blog/tags","slug":"/react-advanced-cropper/blog/tags/docusaurus","name":"docusaurus","count":4,"permalink":"/react-advanced-cropper/blog/tags/docusaurus"}')}}]);
