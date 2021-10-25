@@ -1,0 +1,166 @@
+@import '../css/mixins';
+@import '../css/constants';
+
+$z-croppers-wizard-buttons: 1;
+$z-croppers-wizard-splash: 2;
+
+.croppers-wizard {
+	display: flex;
+	min-width: 0;
+
+	&__cropper {
+		max-height: 100vh;
+		height: 520px;
+	}
+
+	&__body {
+		box-shadow: 0 0 18px 0 rgba(2, 3, 3, 0.48);
+		max-width: calc(100% - 40px);
+		margin-left: 20px;
+		margin-right: 20px;
+		width: 540px;
+		border-radius: 10px;
+		overflow: hidden;
+		position: relative;
+	}
+
+	&__column {
+		width: 60px;
+		display: flex;
+		flex-direction: column;
+
+		&--left {
+			margin-right: 20px;
+		}
+
+		&--right {
+			margin-left: 20px;
+		}
+	}
+
+	&__column-title {
+		font-size: 14px;
+		color: #a7a7a7;
+		margin-bottom: 16px;
+	}
+
+	&__column-cell {
+		margin-bottom: 20px;
+		background: #2d2c2c;
+		border-radius: 5px;
+		width: 40px;
+		height: 40px;
+	}
+
+	&__cropper-type {
+		cursor: pointer;
+		fill: white;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		&--active, &:focus, &:hover {
+			fill: $theme-color;
+		}
+	}
+
+	&__image {
+		cursor: pointer;
+		background-size: cover;
+		background-position: center;
+		opacity: 0.7;
+		transition: opacity 0.5s;
+
+		&--active, &:focus, &:hover {
+			opacity: 1;
+		}
+	}
+
+	&__custom-image {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		fill: rgba(#6E6D6E, 0.8);
+		transition: fill 0.5s;
+
+		&:hover, &:focus {
+			fill: #6E6D6E;
+		}
+	}
+
+	&__file-input {
+		display: none;
+	}
+
+	&__info-button, &__settings-button, &__close-button {
+		@include reset-browsers-button-styles();
+		@include center-content();
+		@include circle();
+		transition: 0.5s;
+		opacity: 0.5;
+		cursor: pointer;
+		position: absolute;
+		z-index: $z-croppers-wizard-buttons;
+		width: 32px;
+		height: 32px;
+		top: 5px;
+		&:hover, &:focus {
+			opacity: 1;
+		}
+	}
+	&__info-button {
+		left: 10px;
+	}
+	&__settings-button {
+		right: 10px;
+	}
+	&__close-button {
+		right: 10px;
+		padding: 5px;
+	}
+
+	&__info, &__settings {
+		z-index: $z-croppers-wizard-splash;
+		width: 100%;
+		height: 100%;
+		background: rgba(black, 0.98);
+		left: 0;
+		top: 0;
+		position: absolute;
+		transform: translateX(-100%);
+		transition: 0.5s;
+		opacity: 0;
+		&--visible {
+			transform: translateX(0);
+			opacity: 1;
+		}
+	}
+
+
+	@include mobile() {
+		display: block;
+		&__column {
+			width: 100%;
+			flex-direction: row;
+			justify-content: center;
+			padding-top: 20px;
+			padding-bottom: 20px;
+
+			&--left {
+				margin-right: 0;
+			}
+
+			&--right {
+				margin-left: 0;
+			}
+		}
+		&__column-cell {
+			margin-bottom: 0;
+			margin-right: 20px;
+			flex-shrink: 0;
+		}
+		&__column-title {
+			display: none;
+		}
+	}
+}

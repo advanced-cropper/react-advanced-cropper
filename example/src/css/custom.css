@@ -1,0 +1,81 @@
+/**
+ * Any CSS included here will be global. The classic template
+ * bundles Infima by default. Infima is a CSS framework designed to
+ * work well for content-centric websites.
+ */
+
+/* You can override the default Infima variables here. */
+:root {
+  /*--ifm-color-primary: #25c2a0;*/
+  /*--ifm-color-primary-dark: rgb(33, 175, 144);*/
+  /*--ifm-color-primary-darker: rgb(31, 165, 136);*/
+  /*--ifm-color-primary-darkest: rgb(26, 136, 112);*/
+  /*--ifm-color-primary-light: rgb(70, 203, 174);*/
+  /*--ifm-color-primary-lighter: rgb(102, 212, 189);*/
+  /*--ifm-color-primary-lightest: rgb(146, 224, 208);*/
+  /*--ifm-code-font-size: 95%;*/
+
+	/*--ifm-color-primary: #61dafb;*/
+	/*--ifm-color-primary-dark: #3fd2fa;*/
+	/*--ifm-color-primary-darker: #2ecefa;*/
+	/*--ifm-color-primary-darkest: #06bcee;*/
+	/*--ifm-color-primary-light: #83e2fc;*/
+	/*--ifm-color-primary-lighter: #94e6fc;*/
+	/*--ifm-color-primary-lightest: #c7f2fe;*/
+	--ifm-font-size-base: 15px;
+
+	--ifm-color-primary: #1aa7f9;
+	--ifm-color-primary-dark: #069bf1;
+	--ifm-color-primary-darker: #0692e4;
+	--ifm-color-primary-darkest: #0578bc;
+	--ifm-color-primary-light: #35b1fa;
+	--ifm-color-primary-lighter: #42b6fa;
+	--ifm-color-primary-lightest: #6ac6fb;
+
+	--ifm-navbar-background-color: #20232A;
+	--ifm-navbar-link-color: white;
+	--ifm-navbar-link-hover-color: #61DAFB;
+	/*--ifm-menu-color: #dadde1;*/
+	/*--ifm-menu-color-background-active: rgba(255,255,255, 0.05);*/
+	/*--ifm-menu-color-active: white;*/
+
+  --ifm-navbar-padding-horizontal: 24px;
+ 	--ifm-spacing-horizontal: 24px;
+	--ifm-code-font-size: 85%;
+	/* Rewrite the exclusions for sidebar */
+	/*--doc-sidebar-width: 200px !important;*/
+	--ifm-menu-link-sublist-icon-filter: invert(100%) sepia(94%) saturate(17%)
+	hue-rotate(223deg) brightness(104%) contrast(98%);
+}
+
+.navbar, .navbar-sidebar {
+	color: white;
+}
+
+.navbar__brand:hover {
+	color: var(--ifm-navbar-link-hover-color);
+}
+
+.navbar-sidebar .menu__link {
+	color:  white;
+}
+
+.navbar-sidebar .menu__link--active {
+	color: #61DAFB;
+}
+
+.docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.1);
+  display: block;
+  margin: 0 calc(-1 * var(--ifm-pre-padding));
+  padding: 0 var(--ifm-pre-padding);
+}
+
+html[data-theme='dark'] .docusaurus-highlight-code-line {
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+article {
+	max-width: 660px;
+	margin: 0 auto;
+}

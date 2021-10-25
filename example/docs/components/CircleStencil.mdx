@@ -1,0 +1,306 @@
+---
+title: CircleStencil
+sidebar_position: 3
+---
+
+import TOCInline from "@theme/TOCInline";
+
+<TOCInline toc={toc} />
+
+## Props
+
+### `movable`
+
+- **Type:** `boolean`
+
+- **Default:** `true`
+
+- **Details:**
+
+	Define if stencil can be moved.
+
+### `resizable`
+
+- **Type:** `boolean`
+
+- **Default:** `true`
+
+- **Details:**
+
+	Define if stencil can be resized.
+
+
+### `className`
+
+- **Type:** `string`
+
+- **Details:**
+
+	The class for the entire stencil.
+
+### `movingClassName`
+
+- **Type:** `string`
+
+- **Details:**
+
+	The class that applies to the entire stencil, when user moves it.
+
+### `resizingClassName`
+
+- **Type:** `string`
+
+- **Details:**
+
+	The class that applies to the entire stencil, when user resizes it.
+
+### `previewClassName`
+
+- **Type:** `string`
+
+- **Details:**
+
+	The class for the preview area.
+
+### `overlayClassName`
+
+- **Type:** `string`
+
+- **Details:**
+
+	The class for the stencil overlay.
+
+
+### `boundingBoxClassName`
+
+- **Type:** `string`
+
+- **Details:**
+
+	The class for the bounding box component.  Probably you don't need to use it.
+
+### `handlerComponent`
+
+- **Type:** `Component`
+
+- **Default:** `SimpleHandler`
+
+- **Details:**
+
+	The handler component.
+
+### `handlers`
+
+- **Type:**
+
+	```
+	{
+		eastNorth?: boolean;
+		north?: boolean;
+		westNorth?: boolean;
+		west?: boolean;
+		westSouth?: boolean;
+		south?: boolean;
+		eastSouth?: boolean;
+		east?: boolean;
+	}
+	```
+
+- **Details:**
+
+	The object of handlers that should be visible or hidden.
+
+	For example if you pass the following object to the current prop, only handlers at  corners will be visible
+
+	```tsx
+	{
+		eastNorth: true,
+		north: false,
+		westNorth: true,
+		west: false,
+		westSouth: true,
+		south: false,
+		eastSouth: true,
+		east: false,
+	}
+	```
+
+### `handlerClassNames`
+
+- **Type:** `Object`
+
+	```tsx
+	{
+		default?: string;
+		hover?: string;
+		disabled?: string;
+		north?: string;
+		westNorth?: string;
+		west?: string;
+		westSouth?: string;
+		south?: string;
+		eastSouth?: string;
+		east?: string;
+	}
+	```
+
+- **Details:**
+
+	The object of custom handler classes.
+
+
+### `handlerWrapperClassNames`
+
+- **Type:** `Object`
+
+	```tsx
+	{
+		default?: string;
+		hover?: string;
+		disabled?: string;
+		north?: string;
+		westNorth?: string;
+		west?: string;
+		westSouth?: string;
+		south?: string;
+		eastSouth?: string;
+		east?: string;
+	}
+	```
+
+- **Details:**
+
+	The object of custom handler wrapper classes.
+
+
+### `lineComponent`
+
+- **Type:** `Component`
+
+- **Default:** `SimpleLine`
+
+- **Details:**
+
+	The line component.
+
+### `lines`
+
+- **Type:**
+
+	```tsx
+	{
+		north?: boolean;
+		west?: boolean;
+		south?: boolean;
+		east?: boolean;
+	}
+	```
+
+- **Details:**
+
+	The object of lines that should be visible or hidden.
+
+	For example if you pass the following object to the current prop, only top and bottom lines will be visible
+	```tsx
+	{
+		north: true,
+		west: false,
+		south: true,
+		east: false,
+	}
+	```
+
+### `lineClassNames`
+
+- **Type:**
+
+	```tsx
+	{
+		default: string;
+		hover: string;
+		north: string;
+		west: string;
+		south: string;
+		east: string;
+	}
+	```
+
+- **Details:**
+
+	The object of custom lines classes.
+
+### `linesWrapperClassNames`
+
+- **Type:**
+
+	```tsx
+	{
+		default: string;
+		hover: string;
+		north: string;
+		west: string;
+		south: string;
+		east: string;
+	}
+	```
+
+- **Details:**
+
+	The object of custom lines wrapper classes.
+
+## Service props
+
+:::danger Remember!
+You should not pass this props to stencil, they are passed by the cropper itself
+:::
+
+### `state`
+- **Type:** `CropperState`
+
+- **Details:**
+
+	The object with the current cropper state.
+
+### `image`
+- **Type:** `CropperImage`
+
+- **Details:**
+
+	The object with the current cropper image.
+
+### `transitions`
+- **Type:** `CropperTransitions`
+
+- **Details:**
+
+	The object with the current cropper transitions.
+
+
+### `onResize`
+- **Type:** `(event: ResizeEvent) => void`
+
+- **Details:**
+
+	The callback that should be called on stencil resize.
+
+### `onResizeEnd`
+- **Type:** `() => void`
+
+- **Details:**
+
+	The callback that should be called on stencil resize end.
+
+
+### `onMove`
+- **Type:** `(event: MoveEvent) => void`
+
+- **Details:**
+
+	The callback that should be called on stencil move.
+
+### `onMoveEnd`
+- **Type:** `() => void`
+
+- **Details:**
+
+	The callback that should be called on stencil move end.

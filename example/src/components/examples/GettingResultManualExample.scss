@@ -1,0 +1,28 @@
+.getting-result-manual-example {
+	position: relative;
+
+	&__cropper {
+		max-height: 450px;
+		background: #354146;
+	}
+
+	&__crop-button {
+		display: flex;
+		justify-content: center;
+		margin-top: 10px;
+		position: absolute;
+		left: 50%;
+		top: -10px;
+		transform: translateX(-50%);
+		background: rgba(black, 0.8);
+		padding: 5px 20px;
+		transition: background 0.5s;
+		color: white;
+		font-size: 16px;
+		cursor: pointer;
+
+		&:hover {
+			background: rgba(#1AA7F9, 0.9);
+		}
+	}
+}

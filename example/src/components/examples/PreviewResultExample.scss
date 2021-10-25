@@ -1,0 +1,36 @@
+.preview-result-example {
+	display: flex;
+	position: relative;
+	&__cropper {
+		width: 300px;
+	}
+	&__previews {
+		margin-left: 32px;
+	}
+	&__preview {
+		border-radius: 50%;
+		overflow: hidden;
+		margin-top: 24px;
+		margin-bottom: 24px;
+		width: 100px;
+		height: 100px;
+		&--small {
+			width: 60px;
+			height: 60px;
+		}
+	}
+	&__preview-image {
+		width: 100%;
+	}
+	&__buttons {
+		position: absolute;
+		display: flex;
+		left: 16px;
+		bottom: 0;
+	}
+	&__button {
+		&:not(:last-child) {
+			margin-right: 16px;
+		}
+	}
+}

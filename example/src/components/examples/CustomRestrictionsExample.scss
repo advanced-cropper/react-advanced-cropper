@@ -1,0 +1,82 @@
+@import "../../css/constants";
+
+.custom-restrictions-example {
+
+	&__cropper {
+		background: #354146;
+		width: 100%;
+	}
+
+	&__panel {
+		color: white;
+		display: flex;
+		background: $black-button-color;
+	}
+
+	&__panel-left {
+		width: 100%;
+		padding: 10px 20px;
+		padding-right: 30px;
+		border-right: solid 1px $black-button-color-hover;
+	}
+
+	&__panel-right {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__input {
+		border: solid 1px $black-button-color;
+		width: 100%;
+	}
+
+	&__input-control {
+		padding: 2px;
+		width: 100%;
+		border: none;
+		color: black;
+		font: inherit;
+		font-size: 15px;
+		margin-bottom: 5px;
+	}
+
+	&__input-label {
+		display: block;
+		font-size: 11px;
+		margin-bottom: 5px;
+	}
+
+	&__file-input {
+		display: none;
+	}
+
+	&__button {
+		width: 150px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 16px;
+		padding: 10px 20px;
+		text-align: center;
+		background: #1f8255;
+		cursor: pointer;
+		transition: background 0.5s;
+		font-weight: normal;
+		background: $black-button-color;
+		height: 100%;
+
+		&:not(:first-child) {
+			border-top: solid 1px $black-button-color-hover;
+		}
+
+		&:hover {
+			background: $black-button-color-hover;
+			text-decoration: none !important;
+		}
+
+		input {
+			display: none;
+		}
+	}
+}

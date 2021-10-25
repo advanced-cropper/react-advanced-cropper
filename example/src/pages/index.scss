@@ -1,0 +1,141 @@
+@import '../css/constants';
+@import '../css/mixins';
+
+$landing-background: #161515;
+
+.main-page {
+	.navbar {
+		background: none;
+		padding: 0;
+		&, &__brand, &__link {
+			color: white;
+			&:hover {
+				color: $theme-color;
+			}
+		}
+	}
+	&__container {
+		@include container();
+	}
+	&__landing {
+		background: $landing-background;
+		width: 100%;
+		padding-bottom: 80px;
+		color: white;
+	}
+	&__landing-title {
+		font-size: 36px;
+		margin-bottom: 42px;
+		margin-top: 80px;
+		text-align: center;
+		@include mobile() {
+			margin-top: 40px;
+		}
+	}
+	&__section-title {
+		font-size: 36px;
+		font-weight: bold;
+	}
+	&__showcase {
+		display: flex;
+		justify-content: center;
+		min-width: 0;
+		@include mobile() {
+			margin-left: -$container-padding;
+			margin-right: -$container-padding;
+			background: #1A1919;
+		}
+	}
+	&__separator {
+		width: 47px;
+		display: block;
+		margin: 30px auto 50px;
+	}
+	&__section-text {
+		font-size: 16px;
+		line-height: 28px;
+		text-align: center;
+		width: 600px;
+		margin: 0 auto 24px;
+		max-width: 100%;
+	}
+	&__features {
+		padding-top: 30px;
+		padding-bottom: 80px;
+		max-width: 800px;
+		margin: 0 auto;
+	}
+	&__features-wrapper {
+		background: white;
+		color: $black-color;
+	}
+	&__section-title-wrapper {
+		display: flex;
+		align-items: center;
+	}
+	&__section-title {
+		font-size: 36px;
+		text-align: center;
+		border-bottom: solid 2px $theme-color;
+		padding-bottom: 6px;
+		display: inline-block;
+		margin: 40px auto 40px;
+	}
+	&__features-row {
+		display: flex;
+		@include mobile() {
+			display: block;
+			margin: 0;
+		}
+	}
+	&__feature {
+		margin-left: 32px;
+		margin-right: 32px;
+		margin-bottom: 32px;
+		width: 50%;
+		@include mobile() {
+			width: 80%;
+			text-align: center;
+			margin: 0 auto 50px;
+		}
+	}
+	&__feature-title {
+		font-size: 24px;
+		margin-bottom: 8px;
+	}
+	&__example {
+		background: #f6f6f8;
+		color: $black-color;
+		padding-bottom: 50px;
+		padding-top: 20px;
+	}
+	&__example-installation-block {
+		max-width: 600px;
+		margin: 0 auto 40px;
+	}
+	&__example-code-wrapper {
+		background: #F6F8FA;
+		padding: 10px 0;
+		margin-bottom: 40px;
+		box-shadow: inset 0 0 10px 0 rgb(0 0 0 / 10%);
+	}
+	&__example-code {
+		margin: 0 auto 40px;
+		max-width: 800px;
+		> div {
+			box-shadow: none;
+		}
+	}
+	&__more-examples{
+		font-size: 20px;
+		text-align: center;
+		font-weight: bold;
+		color: $black-color;
+		margin-top: 32px;
+	}
+}
+
+// TODO: move something else
+.navbar__toggle {
+	margin-right: calc(50% - 120px);
+}

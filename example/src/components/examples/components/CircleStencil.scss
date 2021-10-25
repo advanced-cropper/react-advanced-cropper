@@ -1,0 +1,25 @@
+.circle-stencil {
+	cursor: move;
+	&__handler {
+		position: absolute;
+		right: 15%;
+		top: 14%;
+		z-index: 1;
+		cursor: ne-resize;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transform: translate(50%, -50%);
+	}
+	 &__overlay {
+		 border: dashed 2px white;
+		 box-sizing: border-box;
+		 border-radius: 50%;
+	 }
+	&__draggable-area {
+		width: 100%;
+		height: 100%;
+	}
+}

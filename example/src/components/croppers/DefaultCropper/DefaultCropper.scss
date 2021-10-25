@@ -1,0 +1,17 @@
+.default-cropper {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: black;
+	&__cropper {
+		height: 100%;
+		min-height: 0;
+	}
+	&__navigation {
+		background: #080808;
+		border-top: solid 1px #171616;
+		height: 64px;
+		flex-shrink: 0;
+		margin-top: auto;
+	}
+}

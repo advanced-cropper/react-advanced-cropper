@@ -1,0 +1,1220 @@
+---
+title: Cropper
+sidebar_position: 1
+---
+import TOCInline from "@theme/TOCInline";
+
+:::note
+This section still in the development. Stay up to date.
+:::
+
+<TOCInline toc={toc} />
+
+## Props
+
+### `src`
+
+- **Type:** `String | Null`
+
+- **Default:** `null`
+
+- **Details:**
+
+	The link to cropping image or the image itself in base64 format
+
+### `stencilComponent`
+
+- **Type:** `Component`
+
+- **Default:** `RectangleStencil`
+
+- **Details:**
+
+	The stencil component. This property can be used to replace the stencil on the custom component.
+
+	**See also: [Example](/docs/guides/recipes#changing-a-stencil)**
+
+
+### `stencilProps`
+
+- **Type:** `object`
+
+- **Default:** `{}`
+
+- **Details:**
+
+	The props that will be passed to the stencil component. The usual scenario is passing
+	aspect ratio props [here](/docs/components/rectangle-stencil#props).
+
+
+### `className`
+
+- **Type:** `String`
+
+- **Details:**
+
+	The optional class for the entire cropper
+
+
+### `imageClassName`
+
+- **Type:** `String`
+
+- **Details:**
+
+	The optional class for the cropper image
+
+
+### `boundariesClassName`
+
+- **Type:** `String`
+
+- **Details:**
+
+	The optional class for the boundaries. Probably you should not use this prop.
+
+
+### `backgroundClassName`
+
+- **Type:** `String`
+
+- **Details:**
+
+	The optional class for the background that is placed under the cropper background image (actually it wraps that image).
+
+
+### `stencilSize`
+
+- **Type:** `Size | ((state: CropperState, settings: CropperSettings) => Size)`
+
+- **Details:**
+
+	The size of the stencil in pixels (absolute, not relative to an image).
+
+	#### `Object`
+
+	If you just want to set the known size you can pass object to `stencilSize` prop:
+
+	```js
+	{
+		width: 100,
+		height: 100,
+	}
+	```
+
+	#### `Function`
+
+	If you need to set the stencil size based on the boundaries size, you should pass a function.
+	For example:
+
+	```js
+	(state, settings) => {
+		const { boundary } = state;
+		return {
+			width: boundary.width - 100,
+			height: boundary.height - 100,
+		}
+	}
+	```
+
+	**See also: [Example](/docs/guides/advanced-recipes#fixed-stencil)**
+
+
+### `checkOrientation`
+
+- **Type:** `Boolean`
+
+- **Default:** `true`
+
+- **Details:**
+
+	The flag that indicates if EXIF orientation should be checked
+
+
+### `canvas`
+
+- **Type:** `Boolean`
+
+- **Default:** `true`
+
+- **Details:**
+
+	The flag that indicates if EXIF orientation should be checked
+
+
+### `imageRestriction`
+
+- **Type:** `'fitArea' | 'fillArea' | 'stencil' | 'none'`
+
+- **Default:** `'fitArea'`
+
+- **Details:**
+
+	This parameter sets different restrictions of an image position:
+	- `fitArea` fit image to area and prevents resizing and moving the image beyond the area as much as possible ([example](/introduction/news.html#new-image-restriction-type-borders))
+	- `fillArea` fill area by image and prevents resizing and moving the image beyond the area
+	- `stencil` prevents resizing and moving the image beyond the stencil
+	- `none` allows free resizing and moving the image
+
+	**See also: [Example](/docs/guides/advanced-recipes#different-image-restrictions)**
+
+### `resizeImage`
+
+- **Type:** `boolean | ResizeImageSettings`
+```tsx
+interface ResizeImageSettings {
+	touch?: boolean;
+	wheel?:
+		| boolean
+		| {
+				ratio?: number;
+		  };
+	adjustStencil?: boolean;
+}
+```
+
+
+- **Default:** `true`
+
+- **Details:**
+
+	This prop is either boolean flag or object settings. The default object used when `true` is passed to `resizeImage`:
+	```js
+	{
+		touch: true,
+		wheel: {
+			ratio: 0.1
+		},
+		adjustStencil: true
+	}
+	```
+
+	The `touch` field checks if image should be resized by a pinch gesture.
+
+	The `wheel` field is either boolean flag or object. The object currently support only one option: `ratio`, i.e. speed of resizing by wheel.
+
+	The particular attention should be focused on `adjustStencil` parameter. It enables or disables the adjusting
+	of the stencil size on resize image. It makes cropper more convenient especially when you have the limitations of width / height,
+	but you probably shouldn't  use it if you have fixed stencil, because it will change its size.
+
+	**See also: [Example](/docs/guides/advanced-recipes#adjust-stencil)**
+
+
+### `moveImage`
+
+- **Type:** `boolean | MoveImageSettings`
+```tsx
+interface MoveImageSettings {
+	touch?: boolean;
+	mouse?: boolean;
+}
+```
+
+- **Default:** `true`
+
+- **Details:**
+
+	This prop is either boolean flag or object settings. The default object:
+    ```js
+    {
+    	touch: true,
+    	mouse: true
+    }
+    ```
+
+    The fields:
+    - `touch` is a flag that checks if image should be moved by a touch
+    - `mouse` is a flag that checks if image should be moved by a mouse
+
+
+### `minWidth`
+
+- **Type:** `number`
+
+- **Details:**
+
+	The minimum width of the cropped coordinates in pixels
+
+### `minHeight`
+
+- **Type:** `number`
+
+- **Details:**
+
+	The minimum height of the cropped coordinates in pixels
+
+### `maxWidth`
+
+- **Type:** `number`
+
+- **Details:**
+
+	The maximum width of the cropped coordinates in pixels
+
+### `maxHeight`
+
+- **Type:** `number`
+
+- **Details:**
+
+	The maximum height of the cropped coordinates in pixels
+
+
+### `onChange`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on change.
+
+### `onReady`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on load image.
+
+### `onError`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on error during the image loading.
+
+### `onTransitionsStart`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on start transitions.
+
+### `onTransitionsEnd`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on end transitions.
+
+### `onResizeEnd`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on resize end.
+
+### `onMoveEnd`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on move end.
+
+### `onMove`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on move start.
+
+### `onResize`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on resize.
+
+### `onTransformImage`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on the transform image (wheel scroll, touch and mouse move, touch resize)
+
+### `onTransformImageEnd`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on the end of transform image (wheel scroll, touch and mouse move, touch resize)
+
+### `onInteractionStart`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on start any of the interaction with a cropper.
+
+### `onInteractionEnd`
+
+- **Type**: ``(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on end of all the interactions with a cropper.
+
+
+### `transitions`
+
+- **Type:** `boolean | TransitionsSettings`
+```tsx
+interface TransitionsSettings {
+	timingFunction?: string;
+	duration?: number;
+}
+```
+
+- **Default:** `true`
+
+- **Details:**
+
+	This flag indicates if transitions should be enabled.
+	The transitions are used during auto-zoom, rotate image, flip image, using `zoom` and `move` methods.
+
+### `autoZoom`
+
+- **Type:** `Boolean`
+
+- **Default:** `false`
+
+- **Details:**
+
+	This flag indicates if auto-zoom should be enabled.
+
+	If the auto-zoom algorithm was not redefined, there are two algorithms used.
+
+	1. If `stencilSize` is not defined, the default simple auto-zoom algorithm will be used. It resizes and move visible area to
+	when you setting the coordinates by `setCoordinates` method, to prevent overlap the coordinates and the visible area.
+
+	2. If `stencilSize` is defined, the default fixed auto-zoom algorithm will be used. It adapts coordinates and visible area
+	to fit the `stencilSize` restrictions.
+
+### `priority`
+
+- **Type:** `'coordinates' | 'visibleArea'`
+
+- **Default:** `'coordinates'`
+
+- **Details:**
+
+	:::tip Rule of thumb
+	If you set the default coordinates it's better to set `'coordinates'`, if you set the default visible area it's better to set `'visibleArea'`.
+	:::
+
+	It can be either `'coordinates'` or `'visibleArea'`. It sets the priority of initialization default values.
+
+	#### `'coordinates'`
+	The coordinates will be initialized first, but `defaultSize` and `defaultPosition` algorithms
+	will know nothing about visible area.
+
+	#### `'visibleArea'`
+
+	The visible area will be initialized first, but `defaultVisibleArea` algorithm
+	will know nothing about coordinates.
+
+
+
+### `defaultPosition`
+
+- **Type:** `Position | ((state: CropperState, settings: CropperSettings) => Position);`
+
+- **Details:**
+
+	It's either an object or static function.
+
+	#### `Object`
+
+	The object should correspond the following scheme:
+	```js
+	{
+		left: 142,
+		top: 73
+	}
+	```
+
+	#### `Function`
+
+	The static function can accept the two arguments: `state` and `settings`.
+
+	It should return an object with `left` and `top` fields, i.e. default position of the stencil (relative to original image size)
+
+	```js
+	({ visibleArea, coordinates, imageSize }, settings) => {
+		return {
+			left: imageSize.width / 2 - coordinates.width / 2,
+			top: imageSize.height / 2 - coordinates.height / 2,
+		}
+	}
+	```
+
+	**See also: [Example](/docs/guides/advanced-recipes#default-size-and-position)**
+
+### `defaultSize`
+
+- **Type:** `Size | ((state: CropperState, settings: CropperSettings) => Size);`
+
+- **Details:**
+
+	It's either an object or static function.
+
+	#### `Object`
+
+	The object should correspond the following scheme:
+	```js
+	{
+		width: 142,
+		height: 73
+	}
+	```
+
+	#### `Function`
+
+	The static function can accept the two arguments: `state` and `settings`.
+
+	It should return an object with `height` and `width` fields, i.e. default size of the stencil (relative to original image size)
+
+	```js
+	({ visibleArea, imageSize, stencilRatio, sizeRestrictions }, settings) => {
+		return {
+			width: imageSize.width,
+			height: imageSize.height,
+		}
+	}
+	```
+	**See also: [Example](/docs/guides/advanced-recipes#default-size-and-position)**
+
+### `defaultVisibleArea`
+
+- **Type:** `VisibleArea | ((state: CropperState, settings: Settings) => VisibleArea)`
+
+- **Details:**
+
+	It's either an object or static function.
+
+	#### `Object`
+
+	::: warning Remember!
+
+	The visible area always have the aspect ratio as boundaries, so if they will not be the same,
+	cropper will resize the visible area vertically to fix it.
+	:::
+
+	The object should correspond the following scheme:
+	```js
+	{
+		width: 200,
+		height: 200,
+		left: 0,
+		top: 0
+	}
+	```
+
+	#### `Function`
+
+	The static function can accept the two arguments: `state` and `settings`.
+
+	It should return an object with the coordinates of visible area:
+	```js
+	({ coordinates, boundaries, imageSize }, settings) => {
+		return {
+			left: coordinates.left - 50,
+			top: coordinates.top - 50,
+			width: coordinates.width + 100,
+			height: coordinates.height + 100,
+		}
+	}
+	```
+	**See also: [Example](/docs/guides/advanced-recipes#default-visible-area)**
+
+
+### `boundarySizeAlgorithm`
+
+- **Type:** `'fit' | 'fill' | BoundarySizeAlgorithm`
+
+```
+type BoundarySizeAlgorithm = ({ boundary, size }: {
+    boundary: HTMLElement;
+    size: Size;
+}) => Boundary
+```
+
+- **Default:**  `'fill'`
+
+- **Details:**
+
+	It's either an string or static function.
+
+	#### 'String'
+
+	There are available two string values:
+
+	- `'fill'`, boundaries should fill the cropper
+	- `'fit'`, boundaries should have the same aspect ratio as the image and should be fitted to the cropper
+
+	#### 'Function'
+
+	The static function that accepts the only argument, the object with following fields:
+	- `boundary: HTMLElement`, i.e. DOM element of the boundary;
+	- `size: Size`, i.e. desired image size,
+
+	It should return the object with `height` and `width` fields, i.e. width and height of the area.
+
+	```js
+	({ boundary, size  }) => {
+		return {
+			width: boundary.clientWidth,
+			height: boundary.clientHeight,
+		}
+	}
+	```
+
+### `stretchAlgorithm`
+
+- **Type:** `StretchAlgorithm`
+
+```
+type StretchAlgorithm = ({ boundary, size }: {
+	boundary: HTMLElement;
+	stretcher: HTMLElement;
+	size: Size;
+ }) => void
+```
+
+- **Details:**
+
+	This function do arbitrary operations on `boundary` and `stretcher`. Usually, it sets the `stretcher` size to fit the
+	cropper image.
+
+
+### `sizeRestrictions`
+
+- **Type:** `SizeRestrictions | ((state: CropperState, settings: ExtendedCropperSettings) => SizeRestrictions)`
+
+```
+interface SizeRestrictions {
+    minWidth: number;
+    maxWidth: number;
+    minHeight: number;
+    maxHeight: number;
+}
+```
+
+- **Default:**  pixels restrictions algorithm.
+
+- **Details:**
+
+	The static function that accepts the state and extended settings (that includes `minWidth`, `minHeight`, `maxWidth`, `maxHeight` fields).
+
+	It should return the object with restrictions for the stencil, e.g.:
+	```tsx
+	{
+		minWidth: 0,
+		minHeight: 0,
+		maxWidth: 100,
+		maxHeight: 100
+	}
+	```
+
+### `positionRestrictions`
+
+- **Type:** `PositionRestrictions | ((state: CropperState, settings: CropperSettings) => PositionRestrictions)`
+
+```
+interface PositionRestrictions {
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
+}
+```
+
+- **Details:**
+
+	The static function that accepts the state and the settings.It should return the object with position restrictions for the stencil.
+
+
+### `areaSizeRestrictions`
+
+- **Type:** `SizeRestrictions | ((state: CropperState, settings: ExtendedCropperSettings) => SizeRestrictions)`
+
+```
+interface AreaSizeRestrictions {
+    minWidth: number;
+    maxWidth: number;
+    minHeight: number;
+    maxHeight: number;
+}
+```
+
+- **Details:**
+
+	The static function that accepts the state and the settings.	It should return the object with restrictions for the visible area.
+
+
+### `areaPositionRestrictions`
+
+- **Type:** `PositionRestrictions | ((state: CropperState, settings: CropperSettings) => PositionRestrictions)`
+
+```
+interface PositionRestrictions {
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
+}
+```
+
+- **Details:**
+
+	The static function that accepts the state and the settings.It should return the object with position restrictions for the visible area.
+
+
+### `setCoordinatesAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, , transforms: CoordinatesTransform | CoordinatesTransform[], safe?: boolean) => CropperState`
+
+- **Details**
+
+	The function that redefines the default `setCoordinates` algorithm.
+
+### `setVisibleAreaAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, visibleArea: VisibleArea, safe?: boolean) => CropperState`
+
+- **Details**
+
+	The function that redefines the default `setVisibleArea` algorithm.
+
+### `setBoundaryAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, boundary: Boundary) => CropperState`
+
+- **Details**
+
+	The function that redefines the default `setBoundary` algorithm.
+
+### `transformImageAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, move?: MoveDirections, scale?: Scale | number) => CropperState`
+```tsx
+interface MoveDirections {
+    top?: number;
+    left?: number;
+}
+```
+```tsx
+interface Scale {
+    factor: number;
+    center?: Point;
+}
+```
+
+- **Details**
+
+	The function that redefines the default transform image algorithm.
+
+### `resizeCoordinatesAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, directions: ResizeDirections, options: ResizeOptions) => CropperState`
+
+```tsx
+interface ResizeDirections {
+    top: number;
+    left: number;
+    right: number;
+    bottom: number;
+}
+```
+```tsx
+interface ResizeOptions {
+    compensate?: boolean;
+    preserveRatio?: boolean;
+    allowedDirections?: ResizeDirections;
+    respectDirection?: 'width' | 'height';
+}
+```
+
+- **Details**
+
+	The function that redefines the default resize algorithm.
+
+### `createStateAlgorithm`
+
+- **Type:** `(options: CreateStateParams, settings: CropperSettings) => CropperState`
+
+```tsx
+interface CreateStateParams {
+    boundary: Boundary;
+    imageSize: ImageSize;
+    transforms?: Transforms;
+    priority?: 'visibleArea' | 'coordinates';
+}
+```
+
+- **Details**
+
+	The function that redefines the default create state algorithm.
+
+### `reconcileStateAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings) => CropperState`
+
+- **Details**
+
+	The function that redefines the default reconcile state algorithm.
+
+### `moveCoordinatesAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, directions: MoveDirections) => CropperState`
+```tsx
+interface MoveDirections {
+    top?: number;
+    left?: number;
+}
+```
+
+- **Details**
+
+	The function that redefines the default move algorithm.
+
+### `flipImageAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, horizontal?: boolean, vertical?: boolean) => CropperState`
+
+- **Details**
+
+	The function that redefines the default flip image algorithm.
+
+### `rotateImageAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, angle: number) => CropperState`
+
+- **Details**
+
+	The function that redefines the default rotate image algorithm.
+
+
+
+### `zoomImageAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, scale: Scale | number) => CropperState`
+```tsx
+interface Scale {
+    factor: number;
+    center?: Point;
+}
+```
+
+- **Details**
+
+	The function that redefines the default zoom image algorithm.
+
+
+### `moveImageAlgorithm`
+
+- **Type:** `(state: CropperState, settings: CropperSettings, move: MoveDirections) => CropperState`
+```tsx
+interface MoveDirections {
+    top?: number;
+    left?: number;
+}
+```
+
+- **Details**
+
+	The function that redefines the default move image algorithm.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Methods
+
+This methods are available via [the ref](https://en.reactjs.org/docs/refs-and-the-dom.html) on the cropper component. For its
+typing use `CropperRef` type.
+
+### `getState()`
+
+- **Returns:**
+
+	The actual [cropper state](/docs/concept/basic):
+	```tsx
+	interface CropperState {
+    boundary: Boundary;
+    imageSize: ImageSize;
+    transforms: Transforms;
+    visibleArea: VisibleArea | null;
+    coordinates: Coordinates | null;
+	}
+	```
+
+
+- **Usage:**
+
+	The method allows you to get the cropper state. It can be retrieved via ref or as parameter in the callbacks
+
+	#### Ref
+	```tsx
+	const cropperRef = useRef<CropperRef>();
+
+	useEffect(() => {
+		console.log(cropperRef.current.getState());
+	})
+
+	return (
+		<Cropper
+			ref={cropperRef}
+		/>
+	)
+	```
+
+	#### Callback
+	```tsx
+	const onChange = (cropper: CropperRef) => {
+		console.log(cropper.current.getState());
+	}
+
+	return (
+		<Cropper
+			onChange={onChange}
+		/>
+	)
+	```
+
+
+### `getCoordinates()`
+
+- **Returns:**
+
+	The cropper coordinates:
+	```tsx
+	interface Coordinates {
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+	}
+	```
+
+
+- **Usage:**
+
+	[See `getState`.](/docs/components/Cropper/#getState)
+
+### `getTransforms()`
+
+- **Returns:**
+
+	The cropper transforms:
+	```tsx
+	interface CropperTransitions {
+		timingFunction: string;
+		duration: number;
+		active: boolean;
+	}
+	```
+
+- **Usage:**
+
+	[See `getState`.](/docs/components/Cropper/#getState)
+
+
+### `getSettings()`
+
+- **Returns:**
+
+	The settings for the cropper. By default, it has `CropperSettings` type, but it can contain additional custom fields depends of
+	passed settings.
+
+
+- **Usage:**
+
+	[See `getState`.](/docs/components/Cropper/#getState)
+
+
+
+### `getImage()`
+
+- **Returns:**
+
+	The cropper image:
+	```tsx
+	interface CropperImage {
+		src: string;
+		revoke: boolean;
+		transforms: Transforms;
+		arrayBuffer: ArrayBuffer | null;
+		width: number;
+		height: number;
+	}
+	```
+
+- **Usage:**
+
+	[See `getState`.](/docs/components/Cropper/#getState)
+
+
+### `getCanvas(options)`
+
+- **Returns:**
+
+	The canvas with cropped image `HTMLCanvasElement` or `null` if something goes wrong.getState
+
+- **Arguments:**
+
+  `options: DrawOptions`
+  ```tsx
+  interface DrawOptions {
+    	imageSmoothingQuality?: 'low' | 'medium' | 'high';
+    	imageSmoothingEnabled?: boolean;
+    	fillColor?: string;
+    	width?: number;
+    	height?: number;
+    	minWidth?: number;
+    	maxWidth?: number;
+    	minHeight?: number;
+    	maxHeight?: number;
+    	maxArea?: number;
+  }
+  ```
+
+- **Usage:**
+
+	**See also:** [the getting result example](/docs/guides/recipes#getting-the-result), [the resize result example](/docs/guides/recipes#resize-the-result).
+
+
+### `setState(state)`
+
+- **Arguments:**
+
+  `state: CropperState`
+
+	`options: CropperMethodOptions`
+	```tsx
+	interface CropperMethodOptions {
+		transitions?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This method is the escape solution for the cases, when you can't do what you want by other methods.
+
+### `setCoordinates(transform)`
+
+- **Arguments:**
+
+  `transform: CoordinatesTransform | CoordinatesTransform[]`
+	```tsx
+	type CoordinatesTransform =
+		((state: CropperState, settings: CropperSettings) => Partial<Coordinates>) | Partial<Coordinates>;
+	```
+
+	`options: CropperMethodOptions`
+	```tsx
+	interface CropperMethodOptions {
+		transitions?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	The method allows you to set the coordinates programmatically.
+	The transform argument can be: object, function or array that contains objects or function in the case if you need consequence transforms.
+
+	#### `Object`
+
+	If you just want to set the known coordinates you can pass object to `setCoordinates` method
+
+	```tsx
+	cropper.setCoordinates({
+		width: 32,
+		height: 42,
+		left: 102,
+		top: 74
+	})
+	```
+
+	#### `Function`
+
+	But mostly you need to set coordinates based on the current coordinates or the image size.
+
+	1. Center stencil:
+	```tsx
+	cropper.setCoordinates(({ coordinates, imageSize }) => ({
+		left: imageSize.width/2 - coordinates.width/2,
+		top: imageSize.height/2 - coordinates.height/2
+	}))
+	```
+
+	2. Maximize stencil:
+	```tsx
+	cropper.setCoordinates(({ coordinates, imageSize }) => ({
+		width: imageSize.width,
+		height: imageSize.height
+	}))
+	```
+
+	#### `Array`
+
+	Finally, there might be situations where you need to make consequence transforms. For example, resize stencil and then center it.
+
+	That can appear to be superfluous, because you can set coordinates and size simultaneosly:
+	```js
+	cropper.setCoordinates(({ coordinates, imageSize }) => ({
+		width: newWidth,
+		height: newHeight,
+		left: imageSize.width/2 - newWidth.width/2,
+		top: imageSize.height/2 - newHeight.height/2
+	}))
+	```
+
+	But there is a catch, `setCoordinates` method respects limitations, so the new width might be different than `newWidth` in this example.
+
+	So the right way is do multiple consequence transforms:
+	```js
+	cropper.setCoordinates([
+		({ coordinates, imageSize }) => ({
+			width: newWidth,
+			height: newHeight,
+		}),
+		// There will be state after the first transformation
+		({ coordinates, imageSize }) => ({
+			left: imageSize.width/2 - coordinates.width/2,
+			top: imageSize.height/2 - coordinates.height/2
+		}),
+	])
+	```
+
+	**See also: [Example](/docs/guides/advanced-recipes#set-coordinates)**
+
+### `refresh()`
+
+- **Usage:**
+
+	This method refreshes the cropper. This method is called on every window resize and can be
+	useful if the external container width is changed, but window's size isn't changed.
+
+	**See also: [Example](/docs/guides/advanced-recipes#dynamic-cropper-size)**
+
+
+### `zoom(factor, center, options)`
+
+- **Arguments:**
+
+	`factor: number`
+
+	`center: Point | null`
+	```tsx
+	interface Point {
+		left: number;
+		top: number;
+	}
+	```
+
+	`options: CropperMethodOptions`
+	```tsx
+	interface CropperMethodOptions {
+		transitions?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This methods is used to scale visible area relative to its scale.
+
+	The first parameter `factor` is the number, that represents scale factor (i.e. `1.1` to resize to `110%`, `0.8` to resize to `80%`).
+
+	The second parameter `center` is the object `{ left, top }`.
+
+	**See also: [Example](/docs/guides/advanced-recipes#move-and-scale-image)**
+
+
+### `move(left, top, options)`
+
+- **Arguments:**
+
+  `left: number`
+
+  `top: number`
+
+	`options: CropperMethodOptions`
+	```tsx
+	interface CropperMethodOptions {
+		transitions?: boolean;
+	}
+
+- **Usage:**
+	This methods is used to translate visible area relative to its position. The parameters
+	`left` and `top` determine the relative shift at left and top.
+
+	**See also: [Example](/docs/guides/advanced-recipes#move-and-scale-image)**
+
+### `rotate(angle, options)`
+
+- **Arguments:**
+
+  `angle: number`
+
+	`options: CropperMethodOptions`
+	```tsx
+	interface CropperMethodOptions {
+		transitions?: boolean;
+	}
+
+- **Usage:**
+
+	This methods is used to rotate the image to a specific angle in **degrees**.
+
+	**See also: [Example](/docs/guides/advanced-recipes#rotate--flip-image)**
+
+### `flip(horizontal, vertical)`
+
+- **Arguments:**
+
+  `horizontal: boolean`
+
+  `vertical: boolean`
+
+	`options: CropperMethodOptions`
+	```tsx
+	interface CropperMethodOptions {
+		transitions?: boolean;
+	}
+
+- **Usage:**
+
+	This methods is used to flip the image horizontally and/or vertically.
+
+	**See also: [Example](/docs/guides/advanced-recipes#rotate--flip-image)**
+
+
+### `reset()`
+
+- **Usage:**
+
+	This method resets the cropper to the initial state.
+

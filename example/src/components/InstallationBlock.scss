@@ -1,0 +1,26 @@
+@import '../css/constants';
+@import '../css/mixins';
+
+.installation-block {
+	background: #212121;
+	border-radius: 10px;
+	padding: 20px 30px;
+	color: white;
+	position: relative;
+	&__prefix {
+		user-select: none;
+		color: $theme-color;
+		margin-right: 8px;
+	}
+	&__buttons {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		right: 20px;
+		opacity: 0.6;
+	}
+	&__button {
+		@include reset-browsers-button-styles();
+		cursor: pointer;
+	}
+}

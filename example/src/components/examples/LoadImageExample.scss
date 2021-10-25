@@ -1,0 +1,76 @@
+@import '../../css/constants';
+
+.load-image-example {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	user-select: none;
+
+	&__cropper {
+		border: solid 1px $black-button-color;
+		min-height: 400px;
+		max-height: 500px;
+		width: 100%;
+		background: white;
+	}
+
+	&__cropper-background {
+		background: black;
+	}
+
+	&__cropper-wrapper {
+		position: relative;
+	}
+
+	&__reset-button {
+		position: absolute;
+		right: 20px;
+		bottom: 20px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 42px;
+		width: 42px;
+		background: $black-button-color;
+		transition: background 0.5s;
+		&:hover {
+			background: $black-button-color-hover;
+		}
+	}
+
+	&__buttons-wrapper {
+		display: flex;
+		justify-content: center;
+	}
+
+	&__button {
+		border: none;
+		outline: solid transparent;
+		color: white;
+		font-size: 16px;
+		padding: 10px 20px;
+		background: $black-button-color;
+		cursor: pointer;
+		transition: background 0.5s;
+		width: 100%;
+		&:hover,
+		&:focus {
+			background: $black-button-color-hover;
+		}
+		input {
+			display: none;
+		}
+	}
+
+	&__file-type {
+		position: absolute;
+		top: 20px;
+		left: 20px;
+		background: #0d0d0d;
+		border-radius: 5px;
+		padding: 0 10px;
+		padding-bottom: 2px;
+		font-size: 12px;
+		color: white;
+	}
+}

@@ -1,0 +1,224 @@
+---
+title: Cropper Types
+---
+
+import { CropperTypesExample } from '../../src/components/examples/CropperTypesExample';
+
+# Cropper Types
+
+The croppers are different. The mission of this library is give the developer possibility to create
+not only croppers with different appearance, but also with different behavior.
+
+Despite the variety of different croppers they can be classified on the three groups:
+ - [Classic](/introduction/types.html#classic-cropper)
+ - [Static](/introduction/types.html#static-cropper)
+ - [Hybrid](/introduction/types.html#hybrid-cropper)
+
+If you able to create all of them, you will able to create almost any of existing and even possible croppers.
+
+
+## Classic Cropper
+
+The classic cropper is the cropper, where the major way to choice an area is the resizing and moving the stencil. Depending on specific cropper
+use may or may not resize and move image, but it's always the minor way.
+
+<CropperTypesExample
+	src="https://images.pexels.com/photos/3761018/pexels-photo-3761018.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260"
+/>
+
+Examples: [Yandex](https://www.yandex.com).
+
+
+### Recommended Implementation
+
+The most basic cropper configuration will give you the **classic** cropper, that is displayed above.
+```jsx
+<Cropper src={img} />
+```
+
+## Static Cropper
+
+The static cropper has the static stencil. It doesn't have handlers, it can't be moved or resized. An user can only change the image size and position.
+
+<CropperTypesExample
+		src="https://norserium.github.io/vue-advanced-cropper/assets/img/girl-on-bridge.dbd693c7.jpg"
+		stencilProps={{
+  		handlers: {},
+  		lines: {},
+  		movable: false,
+  		resizable: false,
+  		aspectRatio: 1,
+  	}}
+  	resizeImage={{
+  		adjustStencil: false
+  	}}
+  	imageRestriction="stencil"
+/>
+
+Examples: [Twitter](https://www.twitter.com), [Instagram](https://www.instagram.com).
+
+### Basic Implementation
+
+To implement the static cropper above you should:
+
+- set `image-restriction` to `stencil` (to give an user the possibility to move the image to the edge of the fixed stencil)
+- disable the stencil adjusting to prevent the changing of stencil size during the image resize
+- hide the handlers, disable move and scale for the stencil or use a custom one
+- set the aspect ratio, because you can't change aspect ratio in the static cropper and you shouldn't rely on a random one
+
+```tsx
+<Cropper
+	src={img}
+	stencilProps={{
+  	handlers: {},
+  	lines: {},
+  	movable: false,
+  	resizable: false,
+		aspectRatio: 1,
+	}}
+	resizeImage={{
+		adjustStencil: false
+	}}
+	imageRestriction="stencil"
+/>
+```
+
+
+### Improving Techniques
+
+#### The fixed stencil size
+
+<CropperTypesExample
+		size={'small'}
+		src="https://images.unsplash.com/photo-1583172332547-c768b4e2f5ff?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80"
+		stencilProps={{
+  		handlers: {},
+  		lines: {},
+  		movable: false,
+  		resizable: false,
+  		aspectRatio: 1,
+  	}}
+  	resizeImage={{
+  		adjustStencil: false
+  	}}
+  	imageRestriction="stencil"
+/>
+
+The stencil size in the cropper above is pretty unpredictable. For the used image above it's already too small.
+You can imagine what the stencil size you would get for a narrower image. So the fixed croppers have fixed stencil size alike.
+
+The most simpler way to set fixed stencil size is using [`stencil-size`](http://localhost:8080/vue-advanced-cropper/components/cropper.html#stencilsize) prop.
+
+Notice, that in the following example:
+ - `aspectRatio` is not set explicitly because it's calculated from `stencil-size`,
+ - `adjustStencil` option is absented too because it's always disabled if you use `stencil-size` prop.
+
+
+```tsx
+<Cropper
+	src={img}
+	stencilProps={{
+		handlers: {},
+		movable: false,
+		resizable: false,
+	}}
+	stencilSize={{
+		width: 280,
+		height: 280
+	}}
+	imageRestriction="stencil"
+/>
+```
+
+<CropperTypesExample
+	size={'small'}
+	src="https://images.unsplash.com/photo-1583172332547-c768b4e2f5ff?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80"
+	stencilProps={{
+		handlers: {},
+		movable: false,
+		resizable: false,
+	}}
+	stencilSize={{
+		width: 280,
+		height: 280
+	}}
+	imageRestriction="stencil"
+/>
+
+### Recommended Implementation
+
+
+Thus, taking into account the written above the recommended implementation of **fixed cropper** type is following:
+```tsx
+<Cropper
+	src={img}
+	stencilProps={{
+		handlers: {},
+		movable: false,
+		resizable: false,
+	}}
+	stencilSize={{
+		width: 280,
+		height: 280
+	}}
+	imageRestriction="stencil"
+/>
+```
+
+## Hybrid Cropper
+
+The hybrid cropper is the cropper that has semi-static stencil, i.e. user able to
+change its size and position, but it always tries to return to some default position and return some default size.
+
+This process of returning to some default constraints is called **auto zoom**.
+
+Examples: [Telegram](https://www.telegram.org).
+
+### Implementation
+
+To implement the hybrid cropper we will use the fragments of recommended implementations and just add `autoZoom`
+prop to them.
+
+#### Classic Hybrid
+
+The **classic hybrid** is the cropper type, that is very similar to the **classic cropper**, but its stencil is
+automatically resized and moved. It makes it more closer to static cropper, because its stencil tries to be static.
+```tsx
+<Cropper
+	src={img}
+	autoZoom={true}
+ />
+```
+
+<CropperTypesExample
+	size="medium"
+	src="https://images.unsplash.com/photo-1586598901893-8ac605430b78?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80"
+	autoZoom={true}
+/>
+
+#### Fixed Hybrid
+
+The **fixed hybrid** is the cropper type, that is very similar to the **fixed cropper**, but user is able to change
+the size and position of cropper.
+```tsx
+<Cropper
+	src={img}
+	autoZoom={true}
+	stencilSize={{
+		width: 280,
+		height: 280
+	}}
+	imageRestriction="stencil"
+/>
+```
+
+<CropperTypesExample
+	src="https://images.unsplash.com/photo-1583853287541-6e82b3d5ea12?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2048&q=80"
+	autoZoom={true}
+	stencilSize={{
+		width: 280,
+		height: 280
+	}}
+	imageRestriction="stencil"
+/>
+

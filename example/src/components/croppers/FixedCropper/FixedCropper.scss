@@ -1,0 +1,29 @@
+.fixed-cropper {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: black;
+	&__cropper {
+		height: 100%;
+		min-height: 0;
+		overflow: visible;
+		margin-bottom: -40px;
+	}
+	&__navigation {
+		height: 80px;
+		flex-shrink: 0;
+		overflow: hidden;
+		margin: 0 auto;
+	}
+}
+
+.fixed-cropper-stencil {
+	&__overlay, &__preview {
+		border-radius: 10px;
+		//border-radius: calc(1000px + 10px);
+	}
+	&__preview {
+		border-radius: 10px;
+		border: solid 2px rgba(white, 0.5);
+	}
+}

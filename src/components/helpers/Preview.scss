@@ -1,0 +1,28 @@
+.react-preview {
+	overflow: hidden;
+	box-sizing: border-box;
+	position: relative;
+	&--fill {
+		width: 100%;
+		height: 100%;
+		position: absolute;
+	}
+	&__wrapper {
+		position: absolute;
+		height: 100%;
+		width: 100%;
+	}
+	&__image {
+		display: none;
+		pointer-events: none;
+		position: absolute;
+		user-select: none;
+		transform-origin: center;
+		// Workaround to prevent bugs at the websites with max-width
+		// rule applied to img (Vuepress for example)
+		max-width: none !important;
+		&--visible {
+			display: block;
+		}
+	}
+}

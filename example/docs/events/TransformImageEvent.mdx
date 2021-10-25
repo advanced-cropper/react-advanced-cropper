@@ -1,0 +1,33 @@
+---
+title: TransformImageEvent
+sidebar_position: 3
+---
+
+
+This event is emitted to the cropper by auxiliary components to transform the image. It emits, for example, by [CropperWrapper]('/docs/components/cropper-wrapper.html) component.
+
+This event is represented by `TransformImageEvent` class instance that has two fields:
+
+- `move`
+
+   **Type:** `MoveDirections`
+
+   ```tsx
+   interface MoveDirections {
+   	left?: number;
+   	top?: number;
+   	right?: number;
+   	bottom?: number;
+   }
+   ```
+
+- `resize`
+
+   **Type:** `Scale | number`
+
+   ```tsx
+   interface Scale {
+   	factor: number;
+   	center?: Point;
+   }
+   ```

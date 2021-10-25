@@ -1,0 +1,22 @@
+.react-rectangle-stencil {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	box-sizing: border-box;
+	-webkit-backface-visibility: hidden;
+	-webkit-transform-style: preserve-3d;
+	&__draggable-area,
+	&__overlay {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	&__preview {
+		position: absolute;
+		height:100%;
+		width: 100%;
+	}
+	&--movable {
+		cursor: move;
+	}
+}

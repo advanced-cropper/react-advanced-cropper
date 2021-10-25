@@ -1,0 +1,23 @@
+@import '../../css/constants';
+
+.refresh-example {
+	position: relative;
+	height: 400px;
+	width: 100%;
+	border: solid 1px #EEE;
+
+	&__wrapper {
+		position: absolute;
+	}
+
+	&__cropper {
+		width: 100%;
+		height: 100%;
+	}
+	&__line {
+		border-color: rgba($theme-color, 0.5);
+	}
+	&__handler {
+		background:  $theme-color;
+	}
+}

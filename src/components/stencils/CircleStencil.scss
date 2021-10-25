@@ -1,0 +1,30 @@
+.react-circle-stencil {
+	position: absolute;
+	height: 100%;
+	width: 100%;
+	box-sizing: content-box;
+	cursor: move;
+	-webkit-backface-visibility: hidden;
+	-webkit-transform-style: preserve-3d;
+	&__overlay {
+		border-radius: 50%;
+		overflow: hidden;
+	}
+
+	&__preview {
+		border-radius: 50%;
+		position: absolute;
+		height:100%;
+		width: 100%;
+	}
+
+	&__draggable-area,
+	&__overlay {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+	}
+	&--movable {
+		cursor: move;
+	}
+}

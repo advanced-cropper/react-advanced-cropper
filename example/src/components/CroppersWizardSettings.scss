@@ -1,0 +1,70 @@
+@import "../css/constants";
+@import "../css/mixins";
+
+.croppers-wizard-settings {
+	color: white;
+	padding: 20px 40px;
+	position: relative;
+	&__name {
+		margin-bottom: 24px;
+		font-size: 24px;
+	}
+	&__property-title {
+		font-size: 16px;
+		opacity: 0.8;
+		margin-bottom: 6px;
+	}
+	&__property-values {
+		margin-bottom: 22px;
+		display: flex;
+		align-items: center;
+		margin-left: -40px;
+		margin-right: -40px;
+		padding-left: 40px;
+	}
+	&__icon {
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		padding: 5px 15px;
+		height: 100%;
+		fill: white;
+		stroke: white;
+		transition: fill 0.5s, stroke 0.5s;
+		&--active {
+			fill: $theme-color;
+			stroke: $theme-color;
+		}
+	}
+	&__inputs {
+		display: flex;
+		margin-left: -40px;
+		margin-right: -40px;
+		padding-left: 40px;
+	}
+	&__input {
+		max-width: 125px;
+		padding-right: 40px;
+	}
+
+	&__close-button {
+		@include reset-browsers-button-styles();
+		@include center-content();
+		@include circle();
+		transition: 0.5s;
+		opacity: 0.5;
+		cursor: pointer;
+		position: absolute;
+		width: 32px;
+		height: 32px;
+		top: 5px;
+		right: 10px;
+		padding: 5px;
+		&:hover, &:focus {
+			opacity: 1;
+		}
+	}
+
+
+
+}

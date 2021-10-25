@@ -1,0 +1,68 @@
+@import "../../css/constants";
+
+.image-restriction-example {
+
+	&__cropper {
+		background: #354146;
+		width: 100%;
+		max-height: 500px;
+	}
+
+	&__panel {
+		color: white;
+		display: flex;
+		background: $black-button-color;
+	}
+
+	&__panel-left {
+		width: 100%;
+		padding: 20px;
+		padding-right: 30px;
+		border-right: solid 1px $black-button-color-hover;
+	}
+
+	&__input {
+		border: solid 1px $black-button-color;
+	}
+
+	&__input-control {
+		padding: 8px;
+		width: 100%;
+		border: none;
+		color: black;
+		font: inherit;
+		font-size: 15px;
+	}
+
+	&__input-label {
+		display: block;
+		font-size: 11px;
+		margin-bottom: 5px;
+	}
+
+	&__button {
+		width: 150px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: white;
+		font-size: 16px;
+		padding: 10px 20px;
+		text-align: center;
+		background: #1f8255;
+		cursor: pointer;
+		transition: background 0.5s;
+		font-weight: normal;
+		height: 100%;
+		background: $black-button-color;
+
+		&:hover {
+			background: $black-button-color-hover;
+			text-decoration: none !important;
+		}
+
+		input {
+			display: none;
+		}
+	}
+}

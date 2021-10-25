@@ -1,0 +1,20 @@
+@import '../css/mixins';
+
+.settings-input {
+	&__label {
+		font-size: 16px;
+		opacity: 0.8;
+		margin-bottom: 6px;
+		text-align: center;
+		white-space: nowrap;
+	}
+	&__input {
+		@include reset-browsers-input-styles;
+		text-align: center;
+		font-size: 24px;
+		color: white;
+		width: 100%;
+		border-bottom: solid 1px white;
+		padding-bottom: 8px;
+	}
+}

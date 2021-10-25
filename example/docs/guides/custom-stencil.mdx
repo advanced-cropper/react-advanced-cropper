@@ -1,0 +1,471 @@
+---
+title: Custom Stencil
+---
+
+import {CustomStencilExample} from '../../src/components/examples/CustomStencilExample';
+
+## Idea
+
+There will be described creating an one of possible croppers and you can apply this ideas to arbitrary cropper.
+
+Let's consider the following cropper:
+
+![Internal structure](/img/custom-stencil/idea.svg)
+
+It's not like default stencil, at least because it has only one handler which is arranged not on the corner of a bounding box.
+
+In addition, this cropper has different resize logic. Unlike the default stencil it expands in all directions simultaneously.
+
+![Internal structure](/img/custom-stencil/idea-resize.svg)
+
+## Basic structure
+
+A custom stencil is always a React component.
+
+```tsx
+import React from 'react';
+
+export const CircleStencil = () => {
+	return (
+		<div class="circle-stencil"></div>
+	)
+}
+```
+
+Let's define basic requirements to a typical stencil:
+- it should be inscribed to box is represented by coordinates (width, height, left, top)
+- if stencil has aspect ratios it should has `aspectRatios` method to inform the cropper resize algorithm about it (this method should return object with minimum and maximum aspect ratio values)
+- it should have `onResize`, `onResizeEnd`, `onMove`, `onMoveEnd` props
+- it should display the cropped part of a image
+- it should display the overlay around the stencil
+
+## Stencil Props
+
+First of all, it's need to describe service props that come from the cropper.
+
+#### [`image`](/docs/concept/basic/#image)
+
+This prop is the object, that describes the properties of image and has following properties:
+
+- `src` - the link to the image
+- `width` - the image width
+- `height` - the image height
+- `transforms` - the transforms applied to the image
+- `revoke` - flag that indicates should be the image revoked (by `window/revokeObjectURL`)
+- `arrayBuffer` - the content of the image in bytes
+
+####  [`state`](/docs/concept/basic/#state)
+
+It's the object that represent the current cropper state.
+
+#### [`transitions`](/docs/concept/basic/#transitions)
+
+It's the object that represent the current transition settings
+
+## Stencil coordinates
+
+The stencil coordinates can be easily calculated from `state`, so you should set the coordinates of your stencil **himself**.
+It was done on purpose, to give you possibility to create the custom stencil more flexible.
+
+That's how it can be done:
+
+```tsx
+import React from 'react';
+import { getStencilCoordinates, BasicStencilProps } from 'react-advanced-cropper';
+
+export const CircleStencil = ({ state }: BasicStencilProps) => {
+	const coordinates = getStencilCoordinates(state)
+	return (
+		<div class="circle-stencil"></div>
+	)
+}
+```
+
+## Applying the stencil coordinates
+
+You can compute the style himself, but it's recommended to use `StencilWrapper` component, that gives
+also the artificial transitions with better perfomance.
+
+```tsx
+import React from 'react';
+import {
+	getStencilCoordinates,
+	BasicStencilProps,
+	StencilWrapper
+} from 'react-advanced-cropper';
+
+export const CircleStencil = ({ state, transitions }: BasicStencilProps) => {
+	const coordinates = getStencilCoordinates(state)
+	return (
+		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
+		</StencilWrapper>
+	)
+}
+```
+
+## Aspect ratios
+
+The stencil should provide the possibility to call `aspectRatio` method, that will return the object:
+```
+{
+	minimum?: number;
+	maximum?: number;
+}
+```
+Therefore the component should be wrapped in `forwardRef` method.
+
+```tsx
+import React, { useImperativeHandle, forwardRef } from 'react';
+import {
+	getStencilCoordinates,
+	StencilRef,
+	BasicStencilProps,
+	StencilWrapper
+} from 'react-advanced-cropper';
+
+export const CircleStencil = forwardRef<StencilRef, BasicStencilProps> (({ state, transitions }: BasicStencilProps, ref) => {
+	const coordinates = getStencilCoordinates(state)
+
+	useImperativeHandle(ref, () => ({
+		aspectRatio: () => {
+			return {
+				minimum: 1,
+				maximum: 1,
+			};
+		},
+	}));
+
+	return (
+		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
+		</StencilWrapper>
+	)
+})
+```
+
+:::tip
+Notice, that in this example `aspectRatio` method return the following objecT:
+
+For this stencil this method should return the object:
+```tsx
+{
+	minimum: 1,
+	maximum: 1
+}
+```
+That's because it should be always a circle.
+:::
+
+
+## Overlay
+
+The preferable way to create the overlay (i.e. black background around the stencil) is the using `StencilOverlay`. There are other
+techniques, but they can produce some glitches during the transitions.
+
+```tsx
+import React, { useImperativeHandle, forwardRef } from 'react';
+import {
+	getStencilCoordinates,
+	StencilRef,
+	BasicStencilProps,
+	StencilWrapper,
+	StencilOverlay
+} from 'react-advanced-cropper';
+
+export const CircleStencil = forwardRef<StencilRef, BasicStencilProps> (({ state, transitions }: BasicStencilProps, ref) => {
+	const coordinates = getStencilCoordinates(state)
+
+	useImperativeHandle(ref, () => ({
+		aspectRatio: () => {
+			return {
+				minimum: 1,
+				maximum: 1,
+			};
+		},
+	}));
+
+	return (
+		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
+			<StencilOverlay className="circle-stencil__overlay">
+      </StencilOverlay>
+		</StencilWrapper>
+	)
+})
+```
+
+It's time to add some styling now to make the stencil overlay round and add the little border to it:
+```scss
+.circle-stencil {
+	&__overlay {
+		cursor: move;
+    border: dashed 2px white;
+    box-sizing: border-box;
+		border-radius: 50%;
+	}_
+}
+```
+
+
+## Handler
+
+Let's add the handler to resize the stencil:
+
+```tsx
+import React, { useImperativeHandle, forwardRef } from 'react';
+import {
+	getStencilCoordinates,
+	StencilRef,
+	BasicStencilProps,
+	StencilWrapper
+} from 'react-advanced-cropper';
+
+const handlerIcon = require('./handler.svg');
+
+export const CircleStencil = forwardRef<StencilRef, BasicStencilProps> (
+	({ state, transitions }: BasicStencilProps, ref) => {
+	const coordinates = getStencilCoordinates(state)
+
+	useImperativeHandle(ref, () => ({
+		aspectRatio: () => {
+			return {
+				minimum: 1,
+				maximum: 1,
+			};
+		},
+	}));
+
+	return (
+		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
+			<img src={handlerIcon} className="circle-stencil__handler" />
+			<StencilOverlay className="circle-stencil__overlay">
+      </StencilOverlay>
+		</StencilWrapper>
+	)
+})
+```
+
+```scss
+.circle-stencil {
+	&__handler {
+		position: absolute;
+		right: 15%;
+		top: 14%;
+		z-index: 1;
+		cursor: ne-resize;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transform: translate(50%, -50%);
+	}
+	&__overlay {
+		cursor: move;
+    border: dashed 2px white;
+    box-sizing: border-box;
+		border-radius: 50%;
+	}
+	&__draggable-area {
+		width: 100%;
+		height: 100%;
+	}
+}
+```
+
+## Events handling
+
+### Preparing
+
+You may handle drag events himself, but this library provides two very useful components for this goal: `DraggableElement` and `DraggableArea`. The first  one is used for different handlers, lines and etc, the second one is used for dragging the stencil itself.
+
+```tsx
+import React, { useImperativeHandle, forwardRef } from 'react';
+import {
+	getStencilCoordinates,
+	StencilRef,
+	BasicStencilProps,
+	StencilWrapper
+} from 'react-advanced-cropper';
+
+const handlerIcon = require('./handler.svg');
+
+export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(
+	({ state, transitions, onMove, onMoveEnd, onResize, onResizeEnd }: BasicStencilProps, ref) => {
+		const coordinates = getStencilCoordinates(state);
+
+	useImperativeHandle(ref, () => ({
+		aspectRatio: () => {
+			return {
+				minimum: 1,
+				maximum: 1,
+			};
+		},
+	}));
+
+	return (
+		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
+			<DraggableElement
+    		className="circle-stencil__handler"
+    		onDrag={onResizeHandler}
+    		onDragEnd={onResizeEnd}
+    	>
+    		<img src={handlerIcon} />
+    	</DraggableElement>
+			<DraggableArea className="circle-stencil__draggable-area" onMove={onMove} onMoveEnd={onMoveEnd}>
+				<StencilOverlay className="circle-stencil__overlay"/>
+			</DraggableArea>
+		</StencilWrapper>
+	)
+})
+```
+
+Notice, we didn't define `onResizeHandler` handlers. It's time to do it.
+
+### Moving handler
+
+It's the most complicated part of creating this custom stencil. We should process the mouse / touch moving and resize our handler accordingly.
+
+Remember, that the [resize event](/events/resize-event.html) tells cropper, how much area should be changed in all four sides: `left`, `right`, `top`, `bottom`.
+
+![Resize event](/img/custom-stencil/resize-event.svg)
+
+The draft of `onResize` method is represented below
+```tsx
+import { DragEvent } from 'react-advanced-cropper';
+
+const onResizeHandler = (event: DragEvent) => {
+	// 1. Parsing the drag event to find out the resize factor
+	// 2. Forming the resize event
+}
+```
+
+#### Handling `dragEvent`
+
+The `dragEvents` is the instance of [DragEvent](/events/drag-event.html) class. We should resize our handler in a such way that the mouse cursor will be in **the exactly same point** of handler where user ends dragging. That's is what he anticipates.
+
+Fortunately, it has method `shift` that tells us the needed shift to achieve this task
+```tsx
+import { DragEvent } from 'react-advanced-cropper';
+
+const onResizeHandler = (event: DragEvent) => {
+	const shift = event.shift();
+	const widthResize = shift.left;
+	const heightResize = -shift.top;
+}
+```
+Notice, that we use negative value for `heightResize` because when the top position of the handler is decreasing `shift.top` will be negative, but stencil should resize in this case.
+
+#### Using the `onResize` callback
+
+It's is pretty easy:
+
+```tsx
+import { DragEvent, ResizeEvent } from 'react-advanced-cropper';
+
+const onResizeHandler = (event: DragEvent) => {
+	const shift = event.shift()
+	const widthResize = shift.left;
+	const heightResize = -shift.top;
+	onResize(new ResizeEvent(
+		{
+			left: widthResize,
+			right: widthResize,
+			top: heightResize,
+			bottom: heightResize,
+		},
+		{
+			compensate: true,
+		},
+	));
+}
+```
+
+## Result
+
+The full ready-to-use source code of this example is [here](https://codesandbox.io/s/vue-advanced-cropper-custom-stencil-omseq?file=/src/Stencil.vue).
+
+<CustomStencilExample />
+
+```tsx
+import React, { useImperativeHandle, forwardRef } from 'react';
+import {
+	getStencilCoordinates,
+	StencilRef,
+	BasicStencilProps,
+	StencilWrapper,
+	StencilOverlay,
+	DragEvent,
+	ResizeEvent,
+	DraggableElement,
+	DraggableArea,
+} from 'react-advanced-cropper';
+
+const handlerIcon = require('./handler.svg');
+
+export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(
+	({ state, transitions, onMove, onMoveEnd, onResize, onResizeEnd }: BasicStencilProps, ref) => {
+		const coordinates = getStencilCoordinates(state);
+
+		useImperativeHandle(ref, () => ({
+			aspectRatio: () => {
+				return {
+					minimum: 1,
+					maximum: 1,
+				};
+			},
+		}));
+
+		const onResizeHandler = (event: DragEvent) => {
+			const shift = event.shift();
+			const widthResize = shift.left;
+			const heightResize = -shift.top;
+			onResize(
+				new ResizeEvent(
+					{
+						left: widthResize,
+						right: widthResize,
+						top: heightResize,
+						bottom: heightResize,
+					},
+					{
+						compensate: true,
+					},
+				),
+			);
+		};
+
+	return (
+		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
+			<DraggableElement className="circle-stencil__handler" onDrag={onResizeHandler} onDragEnd={onResizeEnd}>
+    		<img src={handlerIcon} />
+			</DraggableElement>
+			<DraggableArea className="circle-stencil__draggable-area" onMove={onMove} onMoveEnd={onMoveEnd}>
+				<StencilOverlay className="circle-stencil__overlay" />
+			</DraggableArea>
+		</StencilWrapper>
+	)
+})
+```
+
+```scss
+.circle-stencil {
+	&__handler {
+		position: absolute;
+		right: 15%;
+		top: 14%;
+		z-index: 1;
+		cursor: ne-resize;
+		width: 30px;
+		height: 30px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transform: translate(50%, -50%);
+	}
+	&__overlay {
+		cursor: move;
+    border: dashed 2px white;
+    box-sizing: border-box;
+		border-radius: 50%;
+	}
+}
+```

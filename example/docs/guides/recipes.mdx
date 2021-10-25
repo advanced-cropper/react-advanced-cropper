@@ -1,0 +1,391 @@
+---
+title: Recipes
+sidebar_position: 1
+---
+
+import { ChangingStencilExample } from '../../src/components/examples/ChangingStencilExample';
+import { GettingResultExample } from '../../src/components/examples/GettingResultExample';
+import { GettingResultManualExample } from '../../src/components/examples/GettingResultManualExample';
+import { ResizeResultExample } from '../../src/components/examples/ResizeResultExample';
+import { PreviewResultExample } from '../../src/components/examples/PreviewResultExample';
+import { LoadImageExample } from '../../src/components/examples/LoadImageExample';
+import { UploadExample } from '../../src/components/examples/UploadExample';
+
+# Recipes
+
+## Changing a stencil
+
+There are only two default stencil components now, `RectangleStencil` (default) and `CircleStencil`, but you can easily create your own stencil himself.
+
+To specify stencil component you should pass it to `stencilComponent` prop. For globally registered component just pass their name:
+```jsx
+<Cropper
+	stencilComponent={CircleStencil}
+/>
+```
+
+<ChangingStencilExample/>
+
+```jsx
+import React, { useState } from 'react';
+import { CircleStencil, Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const [image] = useState(
+		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
+	);
+
+	return (
+		<Cropper
+			src={image}
+			stencilComponent={CircleStencil}
+		/>;
+	)
+};
+```
+
+## Passing props to the stencil
+
+To pass any props to the stencil pass them as object to `stencilProps` prop.
+
+For example, that's how you can set aspect ratio:
+
+```jsx
+<Cropper
+	stencilProps={{
+		aspectRatio: 6/9,
+		movable: false,
+		resizable: false
+	}}
+/>
+```
+
+The list of available props varies from one stencil component to another. The props of default stencils are available at this site ([RectangleStencil](/components/rectangle-stencil.html), [CircleStencil](/components/circle-stencil.html))
+
+## Setting the aspect ratio
+
+
+This library supports setting either aspect ratio value or aspect ratio range (i.e. minimum and maximums aspect ratio values).
+
+Generally speaking, aspect ratio is the property of the stencil, not the cropper, so the possibility to set aspect ratio
+entirely depends of used stencil. For example, `CircleStencil` aspect ratio can't be customized, it's always circle, in the same time
+`RectangleStencil` has not any restrictions on aspect ratios.
+
+The examples below are written for `RectangleStencil`.
+
+### Fixed aspect ratio
+```jsx
+<Cropper
+	stencilProps={{
+		aspectRatio: 1/1,
+	}}
+/>
+```
+
+### Aspect ratio range
+```jsx
+<Cropper
+	stencilProps={{
+		minAspectRatio: 16/8,
+		maxAspectRatio: 4/8
+	}}
+/>
+```
+
+## Getting the result
+
+### First method
+
+You can get the coordinates of stencil and canvas with cropped image by processing `change` event.
+
+:::tip
+Cropper will call `onChange` callback on any change of the state.
+:::
+
+<GettingResultExample/>
+
+```jsx
+import { Cropper, CropperRef } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const [coordinates, setCoordinates] = useState(null);
+	const [image, setImage] = useState(null);
+
+	const [src] = useState(
+		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
+	);
+
+	const onChange = (cropper: CropperRef) => {
+		setCoordinates(cropper.getCoordinates());
+		// You able to do different manipulations at a canvas
+		// but there we just get a cropped image, that can be used
+		// as src for <img/> to preview result
+		setImage(cropper.getCanvas().toDataURL());
+	};
+
+	return (
+		<Cropper
+			src={src}
+			onChange={onChange}
+		/>;
+	)
+};
+```
+
+### Second method
+
+Also there is alternative to get the cropper result. You can call the cropper method `getResult` to get current stencil coordinates and canvas with cropped image.
+
+Click at the button **Crop Image** below to see this method in action
+<GettingResultManualExample/>
+
+```tsx
+import React, { useState, useRef } from 'react';
+import { Cropper, CropperRef } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const cropperRef = useRef<CropperRef>();
+
+	const [coordinates, setCoordinates] = useState(null);
+	const [image, setImage] = useState(null);
+
+	const [src, setSrc] = useState(
+		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
+	);
+
+	const onCrop = () => {
+		if (cropperRef.current) {
+			setCoordinates(cropperRef.current.getCoordinates());
+			setPreview(cropperRef.current.getCanvas().toDataURL());
+		}
+	};
+
+	return (
+		<Cropper
+			ref={cropperRef}
+			src={src}
+		/>;
+	)
+};
+```
+
+## Resize the result
+
+If you use coordinates only, the result should be scaled on server-side, but if you use canvas you may prefer to resize the result on client-side.
+
+The most simplest way to do it is pass the restrictions for the result size in `getCanvas` method options.
+
+```jsx
+const canvas = cropper.getCanvas({
+		minHeight: 0,
+		minWidth: 0,
+		maxHeight: 2048,
+		maxWidth: 2048,
+})
+```
+
+If you need to set the specific height and width use `height` and `width` attributes.
+But you should note that canvas will have the same aspect ratio as the stencil, so the result size may
+be different than one that you have set.
+```jsx
+const canvas = cropper.getCanvas({
+		height: 256,
+		width: 256,
+})
+```
+
+<ResizeResultExample/>
+
+It uses default canvas image scaling procedure under the hood. If the result doesn't suit you, try to use the external libraries
+to resize image ([pica](https://github.com/nodeca/pica), [downscale](https://github.com/ytiurin/downscale) and etc.)
+
+## Preview the result
+
+To implement real-time preview of cropping result you can use [`Preview`](/components/preview.html) component.
+
+<PreviewResultExample/>
+
+```jsx
+import React, { useRef, useState } from 'react';
+import {
+	CropperRef,
+	Cropper,
+	Preview,
+	CropperImage,
+	CropperState,
+	CropperTransitions,
+} from 'react-advanced-cropper';
+
+export const Example = () => {
+	const [state, setState] = useState<CropperState>(null);
+	const [image, setImage] = useState<CropperImage>(null);
+	const [transitions, setTransitions] = useState<CropperTransitions>(null);
+
+	const [src, setSrc] = useState(
+		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
+	);
+
+	const onChange = (cropper: CropperRef) => {
+		setState(cropper.getState());
+		setImage(cropper.getImage());
+	};
+
+	const onTransitionsChange = (cropper: CropperRef) => {
+		setTransitions(cropper.getTransitions());
+	};
+
+	return (
+		<div>
+			<Cropper
+				className="cropper"
+				stencilProps={{ aspectRatio: 1 }}
+				src={src}
+				onChange={onChange}
+				onTransitionsStart={onTransitionsChange}
+				onTransitionsEnd={onTransitionsChange}
+			/>
+			<Preview
+				className="preview"
+				image={image}
+				state={state}
+				transitions={transitions}
+			/>
+		</div>
+	);
+};
+```
+## Load image from a disc
+
+The image loading doesn't depend at this library and can be completed by a numerous ways. There will be considered only one of them.
+
+That's what you will get:
+<LoadImageExample/>
+
+:::warning Warning!
+[Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) is used in the example below. Ensure that browsers that you support can fully handle it or use the corresponding polyfill.
+:::
+
+```js
+import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
+import { CropperRef, Cropper, getMimeType } from 'react-advanced-cropper';
+
+
+export const UploadExample = () => {
+	const inputRef = useRef<HTMLInputElement>();
+
+	const [image, setImage] = useState<Image>(null);
+
+	const onUpload = () => {
+		if (inputRef.current) {
+			inputRef.current.click();
+		}
+	};
+
+	const onLoadImage = (event: ChangeEvent<HTMLInputElement>) => {
+		// Reference to the DOM input element
+		const { files } = event.target;
+		// Ensure that you have a file before attempting to read it
+		if (files && files[0]) {
+			// 1. Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+			if (image && image.src) {
+				URL.revokeObjectURL(image.src);
+			}
+			// 2. Create the blob link to the file to optimize performance:
+			const blob = URL.createObjectURL(files[0]);
+
+			// 3. The steps below are designated to determine a file mime type to use it during the
+			// getting of a cropped image from the canvas. You can replace it them by the following string,
+			// but the type will be derived from the extension and it can lead to an incorrect result:
+			//
+			// setImage({
+			//    src: blob;
+			//    type: files[0].type
+			// })
+
+			// Create a new FileReader to read this image binary data
+			const reader = new FileReader();
+			// Define a callback function to run, when FileReader finishes its job
+			reader.onload = (e) => {
+				// Note: arrow function used here, so that "this.image" refers to the image of Vue component
+				setImage({
+					// Read image as base64 and set it as src:
+					src: blob,
+					// Determine the image type to preserve it during the extracting the image from canvas:
+					type: getMimeType(e.target.result, files[0].type),
+				});
+			};
+			// Start the reader job - read file as a data url (base64 format)
+			reader.readAsArrayBuffer(files[0]);
+		}
+	};
+
+	useEffect(() => {
+		// Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+		return () => {
+			if (image && image.src) {
+				URL.revokeObjectURL(image.src);
+			}
+		};
+	}, []);
+
+	return (
+		<div className="upload-example">
+			<Cropper className="upload-example__cropper" src={image && image.src} />
+			<div className="buttons-wrapper">
+				<button className="button" onClick={onUpload}>
+					<input ref={inputRef} type="file" accept="image/*" onChange={onLoadImage} />
+					Upload image
+				</button>
+			</div>
+		</div>
+	);
+};
+```
+
+## Upload image to a server
+
+The preferred method to upload image to the server is using [a blob](https://developer.mozilla.org/ru/docs/Web/API/HTMLCanvasElement/toBlob) (for IE-11 you should use polyfill).
+The detailed explanation why you shouldn't use the data-url you can read [in the great answer](https://stackoverflow.com/questions/59020799/which-function-should-i-use-todataurl-or-toblob/59025746#59025746) on Stackoverflow.
+
+There are different approaches to implement image uploading because it depends on your backend. The one of them is presented below.
+
+<UploadExample></UploadExample>
+
+:::tip
+*Look the network section in your developer tools to examine the sent request.*
+:::
+
+```tsx
+import React, { useState, useRef } from 'react';
+import { CropperRef, Cropper } from 'react-advanced-cropper';
+
+export const UploadExample = () => {
+	const cropperRef = useRef<CropperRef>();
+
+	const [image] = useState(
+		'https://images.unsplash.com/photo-1604335079441-274c03ad99a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&q=80',
+	);
+
+	const onUpload = () => {
+		const canvas = cropperRef.current.getCanvas();
+		if (canvas) {
+			const form = new FormData();
+			canvas.toBlob((blob) => {
+				form.append('file', blob);
+				fetch('http://example.com/upload/', {
+					method: 'POST',
+					body: form,
+				});
+			}, 'image/jpeg');
+		}
+	};
+
+	return (
+		<Cropper
+			ref={cropperRef}
+			src={image}
+		/>
+	);
+};
+
+```

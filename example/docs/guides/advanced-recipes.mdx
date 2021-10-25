@@ -1,0 +1,365 @@
+---
+title: Advanced Recipes
+sidebar_position: 2
+---
+
+import { FixedSizeExample } from '../../src/components/examples/FixedSizeExample';
+import { DefaultPositionExample } from '../../src/components/examples/DefaultPositionExample';
+import { FillingCropperExample } from '../../src/components/examples/FillingCropperExample';
+import { DefaultVisibleArea } from '../../src/components/examples/DefaultVisibleArea';
+import { TransformImageExample } from '../../src/components/examples/TransformImageExample';
+import { RotateImageExample } from '../../src/components/examples/RotateImageExample';
+import { AdjustStencilExample } from '../../src/components/examples/AdjustStencilExample';
+import { ImageRestrictionExample } from '../../src/components/examples/ImageRestrictionExample';
+import { SetCoordinatesExample } from '../../src/components/examples/SetCoordinatesExample';
+import { CustomRestrictionsExample } from '../../src/components/examples/CustomRestrictionsExample';
+import { RefreshExample } from '../../src/components/examples/RefreshExample';
+
+# Advanced Recipes
+
+
+## Fixed stencil
+
+There is the example of a fixed stencil below, that may be useful for mobile devices.
+<FixedSizeExample/>
+
+```tsx
+<Cropper
+	src={'https://images.unsplash.com/photo-1527137342181-19aab11a8ee8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80'}
+	stencilSize={{
+		width: 300,
+		height: 300
+	}}
+	stencilProps={{
+		handlers: {},
+		lines: {},
+		movable: false,
+		resizable: false
+	}}
+  imageRestriction="stencil"
+/>
+```
+
+
+## Default size and position
+
+Sometimes you should set the default position and default size of cropper. For example, if you automatically detect an user face.
+
+<DefaultPositionExample/>
+
+Notice, you can use either a function or object to set the default position and size.
+
+The function:
+
+```tsx
+import React from 'react';
+import { Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const defaultPosition = () => {
+			return {
+				left: 100,
+				top: 100,
+			};
+	},
+	const defaultSize = () => {
+			return {
+				width: 400,
+				height: 400,
+			};
+	}
+	return (
+		<Cropper
+			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
+			defaultSize={defaultSize}
+			defaultPosition={defaultPosition}
+		/>;
+	)
+};
+```
+The object:
+```tsx
+import React from 'react';
+import { Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	return (
+		<Cropper
+			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
+			defaultSize={{
+					return {
+						width: 400,
+						height: 400,
+					};
+			}}
+			defaultPosition={{
+					return {
+						left: 100,
+						top: 100,
+					};
+			}}
+		/>;
+	)
+};
+```
+
+### Fill the image
+
+The `default-size` prop can determine the default size based on `imageSize`, `visibleArea`, `stencilRatio` and `sizeRestrictions`  as mentioned in [its documentation](/components/cropper.html#defaultsize).
+
+It can be used to force the cropper fills all visible area by default:
+
+```jsx
+import React from 'react';
+import { Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const defaultSize = ({ imageSize, visibleArea }) => {
+			return {
+				width: (visibleArea || imageSize).width,
+				height: (visibleArea || imageSize).height,
+			};
+	}
+	return (
+		<Cropper
+			src={'https://images.pexels.com/photos/6524107/pexels-photo-6524107.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}
+			defaultSize={defaultSize}
+		/>;
+	)
+};
+```
+
+<FillingCropperExample/>
+
+
+## Default visible area
+
+Moreover, there are situations where you need to save, for example, previous visible area position, i.e. zoom or translate image.
+To implement it you can use `defaultVisibleArea` prop.
+
+It should be noted, that visible area can be calculated either before default
+coordinates calculation or after one's calculation. The priority is set by
+prop [priority](/components/cropper.html#priority) that can be either `'coordinates'` (default) or `'visibleArea'`.
+
+:::tip
+If you define only the visible area coordinates it may be easier to set priority to `visibleArea`. It eliminates the necessity
+to set default size and default position by yourself (default algorithms handle this situation).
+:::
+
+<DefaultVisibleArea/>
+
+```jsx
+import React from 'react';
+import { Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const defaultVisibleArea = {
+		width: 800,
+		height: 775,
+		left: 63,
+		top: 668,
+	};
+	return (
+		<Cropper
+			src={
+				'https://images.unsplash.com/photo-1602718571797-49d5e9d54563?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjcyNTgzfQ&auto=format&fit=crop&w=1024&q=80'
+			}
+			defaultVisibleArea={defaultVisibleArea}
+			priority={'visibleArea'}
+		/>
+	);
+};
+```
+
+## Move and scale image
+
+There are two methods to move and scale image: **move** and **scale**.
+
+<TransformImageExample/>
+
+The minimal working example:
+```jsx
+import React from 'react';
+import { Cropper, CropperRef } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const cropperRef = useRef<CropperRef>();
+	const zoom = () => {
+		if (cropperRef.current) {
+			cropperRef.current.zoom(1);
+		}
+	};
+	const move = () => {
+		if (cropperRef.current) {
+			cropperRef.current.move(100, 100);
+		}
+	};
+	return (
+		<Cropper
+			ref={cropperRef}
+			src={
+				'https://images.unsplash.com/photo-1602718571797-49d5e9d54563?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjcyNTgzfQ&auto=format&fit=crop&w=1024&q=80'
+			}
+		/>
+	);
+};
+```
+
+## Rotate / flip image
+
+To rotate image use `rotate` method, it accepts the only argument: `angle` (in degrees).
+
+:::warning Available Angles
+It's strongly recommended to use an angle multiple of 90. Otherwise, the different restrictions may be broken.
+:::
+
+To flip an image use `flip` method, it accepts two boolean arguments. If first is equal to `true`
+then image will be flipped horizontally, if the second is equal to `true` then image will be flipped vertically and etc.
+
+<RotateImageExample/>
+
+
+The minimal working example:
+```jsx
+import React from 'react';
+import { Cropper, CropperRef } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const cropperRef = useRef<CropperRef>();
+	const flip = (horizontal: boolean, vertical: boolean) => {
+		if (cropperRef.current) {
+			cropperRef.current.flip(horizontal, vertical);
+		}
+	};
+	const rotate = (angle: number) => {
+		if (cropperRef.current) {
+			cropperRef.current.rotate(angle);
+		}
+	};
+	return (
+		<Cropper
+			ref={cropperRef}
+			src={
+				'https://images.unsplash.com/photo-1602718571797-49d5e9d54563?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjcyNTgzfQ&auto=format&fit=crop&w=1024&q=80'
+			}
+		/>
+	);
+};
+```
+
+## Adjust Stencil
+
+Adjust stencil is the one of [`resizeImage`](/components/cropper.html#resizeimage) prop option.
+By default it's enabled. It makes cropper more convenient especially when you have the limitations of width / height,
+but you probably shouldn't  use it if you have fixed stencil, because it will change its size.
+
+Try to resize image when `adjustStencil` is disabled and enabled to feel the difference.
+
+<AdjustStencilExample/>
+
+## Different image restrictions
+
+You are able to set different the restrictions of an image position by passing the following string to the `imageRestriction` prop:
+- `fillArea` fill area by image and prevents resizing and moving the image beyond the area
+- `fitArea` fit image to area and prevents resizing and moving the image beyond the area as much as possible ([example](/introduction/news.html#new-image-restriction-type-borders))
+- `stencil` prevents resizing and moving the image beyond the stencil
+- `none` allows free resizing and moving the image
+
+<ImageRestrictionExample/>
+
+
+## Set coordinates
+
+Usually an user changes the coordinates of a stencil, but sometimes you need to set its coordinates programmatically. There is the special method to do it: [setCoordinates](/components/cropper.html#setcoordinates-transform). It applies your changes respect to existing limitation (aspect ratios, minimum size and etc.)
+
+<SetCoordinatesExample/>
+
+The minimal working example:
+
+
+```jsx
+import React from 'react';
+import { Cropper, CropperRef } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const cropperRef = useRef<CropperRef>();
+
+	const resize(width, height, left, top) => {
+		if (cropperRef.current) {
+			cropperRef.current.setCoordinates({
+				width: width,
+				height: height,
+				left: left,
+				top: top
+			})
+		}
+	};
+
+	return (
+		<Cropper
+			ref={cropperRef}
+			src={
+				'https://images.unsplash.com/photo-1602718571797-49d5e9d54563?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjcyNTgzfQ&auto=format&fit=crop&w=1024&q=80'
+			}
+		/>
+	);
+};
+```
+
+## Custom size restrictions
+
+There may be situations, when you need to set the minimum and maximum sizes, for example, in percents, not in pixels. In that situations you should redefine the `sizeRestrictionsAlgorithm` functions by passing your custom function as [a corresponding prop](/components/cropper.html#sizeretrictionsalgorithm)
+
+<CustomRestrictionsExample/>
+
+```js
+import React from 'react';
+import { Cropper, CropperRef, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const percentsRestriction = (state, settings) => {
+		const { minWidth, minHeight, maxWidth, maxHeight } = retrieveSizeRestrictions(settings);
+
+		const imageSize = getTransformedImageSize(state);
+
+		return {
+			minWidth: (minWidth / 100) * imageSize.width,
+			minHeight: (minHeight / 100) * imageSize.height,
+			maxWidth: (maxWidth / 100) * imageSize.width,
+			maxHeight: (maxHeight / 100) * imageSize.height,
+		};
+	};
+
+	return (
+		<Cropper
+			sizeRestrictionsAlgorithm={percentsRestriction}
+			src={'https://images.unsplash.com/photo-1494205577727-d32e58564756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80'}
+		/>
+	);
+};
+```
+
+
+## Dynamic cropper size
+
+There are situations, when a cropper container size is changed. It's
+can't be handle by cropper itself, because it doesn't know about this changes at all (in contradistinction to window's resize),
+so you should call [refresh](/components/cropper.html#refresh) method.
+
+:::tip
+This situation may seems unlikely, but in fact if your cropper was in a container that was, for example, hidden by
+`display: none`, you should call `refresh` method after its appearing.
+:::
+
+There is a minimal example:
+```html
+<Cropper ref={cropperRef}/>
+```
+
+```js
+// On some change, that causes container's size change
+cropperRef.current.refresh();
+```
+
+
+<RefreshExample/>

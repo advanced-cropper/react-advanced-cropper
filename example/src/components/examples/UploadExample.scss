@@ -1,0 +1,41 @@
+@import '../../css/constants';
+
+.upload-example {
+	margin-bottom: 20px;
+	&__cropper {
+		border: solid 1px $black-button-color;
+		max-height: 450px;
+		width: 100%;
+		background: white;
+	}
+
+	&__cropper-background {
+		background: black;
+	}
+
+	&__cropper-wrapper {
+		position: relative;
+	}
+
+	&__button-wrapper {
+		display: flex;
+		justify-content: center;
+	}
+
+	&__button {
+		color: white;
+		font-size: 16px;
+		padding: 10px 20px;
+		background: $black-button-color;
+		cursor: pointer;
+		transition: background 0.5s;
+		width: 100%;
+		text-align: center;
+		&:hover {
+			background: $black-button-color-hover;
+		}
+		input {
+			display: none;
+		}
+	}
+}

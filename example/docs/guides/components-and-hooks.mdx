@@ -1,0 +1,92 @@
+---
+title: Components / hooks
+sidebar_position: 3
+---
+
+import { ComponentsHierarchy } from '../../src/components/schemes/ComponentsHierarchy';
+import { StencilHierarchy } from '../../src/components/schemes/StencilHierarchy';
+
+# Components / hooks
+
+## Cropper
+
+Probably, you should use only `Cropper` component as in the recipes. But sometimes you need to understand how cropper works internally.
+And it's based on some components and hooks. That's about this guide.
+
+Components and hooks are wrappers for the cropper state and its modifiers. They are organized in the following structure:
+
+<ComponentsHierarchy/>
+
+That's the basic hierarchy of common cropper. Each of the components and hooks has own specific task, but all of them can be grouped in the following categories:
+
+### Work with the cropper state
+
+#### `useAbstractCropperState`
+
+This hook is the most important in all of the cropper parts.
+
+It wraps all of [the state modifiers](test), provides the interface for state manipulation and add the new concepts:
+- **Transitions**: the way to tell the components when transitions should be enabled;
+- **Postprocess**: the special functions that applies to result of different actions (actually to a new state) before state will be updated. The most common scenario is the creating auto zoom.
+
+
+#### `useCropperState`
+
+This hook is a wrapper of the `useAbstractCropperState`. That hook doesn't define [the cropper settings](any) and any other
+properties, therefore this hook provides the default settings (ones that `withDefaults` function provides) and add default `autoZoom` postprocess function.
+
+### Work with the cropper image
+
+#### `useCropperImage`
+
+This hook provides the simple way to load image and gets `CropperImage` instance for it (with parsed basic transforms). Also it gives the consumer
+the possibility to display loading, unloading image process easialy and without pain.
+
+### Interact / visualize the cropper state
+
+#### `Stencil`
+
+It's the custom component, that is used to display the current cropped area and change it by interaction with it.
+
+#### `CropperBackground`
+
+This component is used to display cropper image. It's recommended to use it to display the image, because it handle transforms and transitions
+internally in the convenient way.
+
+#### `CropperWrapper`
+
+This component is used to give the user possibility to resize and move image by mouse and touch. It handles the touch, mouse and wheel events and produces
+`TransformImage` event.
+
+#### `useMoveImageOptions`
+
+The auxiliary hook, that can be used to parse `MoveImageOptions` object and transform them into the actual options with default values.
+
+#### `useResizeImageOptions`
+
+The auxiliary hook, that can be used to parse `ResizeImageOptions` object and transform them into the actual options with default values.
+
+### Service
+
+#### `CropperBoundary`
+
+This component is the auxiliary component that gives the possibility to stretch it easily to the image size. It's very conveniently for
+adaptive croppers.
+
+#### `CropperCanvas`
+
+This component is the auxiliary component to draw the cropped area on canvas.
+
+## Stencil
+
+Stencil can be literally any arbitrary component, but to make sense there are some requirements to it:
+
+- it should be inscribed to box is represented by coordinates (width, height, left, top)
+- if stencil has aspect ratios it should has `aspectRatios` method to inform the cropper resize algorithm about it (this method should return object with minimum and maximum aspect ratio values)
+- it should have `onResize`, `onResizeEnd`, `onMove`, `onMoveEnd` props
+- it should display the cropped part of a image
+- it should display the overlay around the stencil
+
+However the default stencils (`RectangleStencil` and `CircleStencil`) and most of other custom stencils have the following structure:
+
+<StencilHierarchy/>
