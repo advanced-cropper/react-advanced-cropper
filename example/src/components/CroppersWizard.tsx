@@ -14,7 +14,6 @@ import { DefaultCropperIcon } from './icons/DefaultCropperIcon';
 import { SettingsIcon } from './icons/SettingsIcon';
 import { CroppersWizardInfo } from './CroppersWizardInfo';
 import { CroppersWizardSettings } from './CroppersWizardSettings';
-import 'react-mobile-cropper/dist/style.css';
 import './CroppersWizard.scss';
 
 interface Image {

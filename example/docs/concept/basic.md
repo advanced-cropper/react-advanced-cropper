@@ -82,7 +82,7 @@ interface Coordinates {
 
 ### Transforms
 
-The transforms define the applied to an image transforms.
+The transforms define the transforms applied to an image.
 
 ```ts
 interface Transforms {
@@ -99,7 +99,7 @@ They can include flip (horizontal , vertical) and rotate.
 ## State Modifiers
 
 The state is useless itself. It just a bunch of data. To make it useful there are plenty of different
-[modifiers](/state/modifiers.html):
+[modifiers](/docs/concept/modifiers):
 - transform image
 - flip image
 - rotate image
@@ -116,10 +116,10 @@ Also, there are two auxiliary functions: [`createState`](/docs/concept/modifiers
 
 ## Settings
 
-To use  [the default modifiers](/state/modifiers.html) described above you should define `settings` before.
+To use  [the default modifiers](/docs/concept/modifiers) described above you should define `settings` before.
 This object may be considered as props in a some component framework.
 
-The settings are the most basic constraints that applies to the state, they includes:
+[The settings](/docs/concept/settings) are the most basic constraints that applies to the state, they includes:
 - default coordinates
 - default visible area
 - area position restrictions
@@ -130,7 +130,7 @@ The settings are the most basic constraints that applies to the state, they incl
 
 By defining this settings in different ways you can create a lot of different cropper behaviors without even creating your own
 modifiers. However, it's pretty complicated to define them all on your own, so this library provides special
-function `withDefaults` that add to  an object all that methods. It's described in [the corresponding section](/state/defaults.html).
+function `withDefaults` that add to  an object all that methods. They are described in [the corresponding section](/docs/concept/defaults).
 
 
 ## Image
@@ -157,10 +157,7 @@ The meaning of the fields are the following:
 - `arrayBuffer` - the content of the image in bytes
 
 
-
-Usually, it's gotten by `loadImage` function.
-
-
+Usually, it's gotten by [`loadImage`](/docs/concept/utils#load-image) function.
 
 ## Transitions
 
