@@ -8,11 +8,6 @@ $z-croppers-wizard-splash: 2;
 	display: flex;
 	min-width: 0;
 
-	&__cropper {
-		max-height: 100vh;
-		height: 520px;
-	}
-
 	&__body {
 		box-shadow: 0 0 18px 0 rgba(2, 3, 3, 0.48);
 		max-width: calc(100% - 40px);
@@ -22,6 +17,9 @@ $z-croppers-wizard-splash: 2;
 		border-radius: 10px;
 		overflow: hidden;
 		position: relative;
+		height: 520px;
+		max-height: 100vh;
+		background: black;
 	}
 
 	&__column {
@@ -58,6 +56,7 @@ $z-croppers-wizard-splash: 2;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		transition: fill 0.5s;
 		&--active, &:focus, &:hover {
 			fill: $theme-color;
 		}

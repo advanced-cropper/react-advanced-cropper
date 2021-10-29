@@ -13,3 +13,7 @@ export function range(from: number, to: number, step = 1): number[] {
 export function sum(collection: number[]) {
 	return collection.reduce((result, value) => result + value, 0);
 }
+
+export function isClient() {
+	return typeof window !== undefined;
+}

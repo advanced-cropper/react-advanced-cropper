@@ -185,6 +185,8 @@ export const CroppersWizard: FC = () => {
 		minAspectRatio,
 	};
 
+	console.log({ cropper });
+
 	return (
 		<div className={'croppers-wizard'}>
 			<div className="croppers-wizard__column croppers-wizard__column--left">
@@ -205,6 +207,7 @@ export const CroppersWizard: FC = () => {
 			<div className="croppers-wizard__body">
 				{cropper === 'mobile-cropper' && (
 					<MobileCropper
+						key={'mobile-cropper'}
 						minHeight={minHeight}
 						minWidth={minWidth}
 						maxWidth={maxWidth}
@@ -217,6 +220,7 @@ export const CroppersWizard: FC = () => {
 				)}
 				{cropper === 'default-cropper' && (
 					<DefaultCropper
+						key={'default-cropper'}
 						minHeight={minHeight}
 						minWidth={minWidth}
 						maxWidth={maxWidth}
@@ -234,6 +238,7 @@ export const CroppersWizard: FC = () => {
 				)}
 				{cropper === 'fixed-cropper' && (
 					<FixedCropper
+						key={'fixed-cropper'}
 						wrapperClassName={'croppers-wizard__cropper'}
 						src={src}
 						stencilProps={stencilProps}
@@ -254,14 +259,16 @@ export const CroppersWizard: FC = () => {
 					</button>
 					{data && <CroppersWizardInfo data={data} />}
 				</div>
-				<CroppersWizardSettings
-					open={showSettings && hasSettings}
-					settings={settings}
-					onClose={onCloseSettings}
-					sections={data.settings}
-					className={'croppers-wizard__settings'}
-					visibleClassName={'croppers-wizard__settings--visible'}
-				/>
+				{data && (
+					<CroppersWizardSettings
+						open={showSettings && hasSettings}
+						settings={settings}
+						onClose={onCloseSettings}
+						sections={data.settings}
+						className={'croppers-wizard__settings'}
+						visibleClassName={'croppers-wizard__settings--visible'}
+					/>
+				)}
 			</div>
 			<div className="croppers-wizard__column croppers-wizard__column--right">
 				<div className="croppers-wizard__column-title">Image</div>
