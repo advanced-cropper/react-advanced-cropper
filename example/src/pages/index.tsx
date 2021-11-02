@@ -54,7 +54,15 @@ export default function Home(): JSX.Element {
 							for your website design. Not only the appearance, but the behavior alike. Don’t limit
 							yourself: rotate, zoom, transitions, autozoom and many other features included.
 						</div>
-						<Separator className={'main-page__separator'} />
+						<div className="main-page__family">
+							<span className="main-page__family-item main-page__family-item--active">React</span>
+							<a
+								href={'https://norserium.github.io/vue-advanced-cropper/'}
+								className="main-page__family-item"
+							>
+								Vue
+							</a>
+						</div>
 						<div className="main-page__showcase">
 							<CroppersWizard />
 						</div>

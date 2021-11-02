@@ -50,6 +50,10 @@ $z-croppers-wizard-splash: 2;
 		height: 40px;
 	}
 
+	&__cropper {
+		height: 100%;
+	}
+
 	&__cropper-type {
 		cursor: pointer;
 		fill: white;

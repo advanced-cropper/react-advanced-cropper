@@ -36,6 +36,25 @@ $landing-background: #161515;
 		font-size: 36px;
 		font-weight: bold;
 	}
+	&__family {
+		display: flex;
+		justify-content: center;
+		color: #777677;
+		position: relative;
+		margin: 50px auto 70px;
+		width: 220px;
+		border-top: solid 1px #262626;
+		border-bottom: solid 1px #262626;
+		padding: 15px 0;
+	}
+	&__family-item {
+		margin-left: 20px;
+		margin-right: 20px;
+		color: #777677;
+		&--active {
+			color: #cbc8cb;
+		}
+	}
 	&__showcase {
 		display: flex;
 		justify-content: center;
