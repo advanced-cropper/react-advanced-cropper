@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unknown-property */
 import React, { FC } from 'react';
 
 interface Props {

@@ -12,7 +12,14 @@ import {
 	Scale,
 } from 'advanced-cropper/types';
 import { getOptions, isArray, isFunction, isNumber } from 'advanced-cropper/utils';
-import { TransformImageEvent, MoveEvent, ResizeEvent } from 'advanced-cropper/events';
+import {
+	TransformImageEvent,
+	MoveEvent,
+	ResizeEvent,
+	normalizeMoveEvent,
+	normalizeResizeEvent,
+	normalizeTransformImageEvent,
+} from 'advanced-cropper/events';
 import {
 	copyState,
 	createState,
@@ -36,13 +43,7 @@ import {
 	TransformImageAlgorithm,
 	ReconcileStateAlgorithm,
 } from 'advanced-cropper/state';
-import {
-	normalizeMoveEvent,
-	normalizeResizeEvent,
-	normalizeTransformImageEvent,
-	roundCoordinates,
-	isEqualStates,
-} from 'advanced-cropper/service';
+import { roundCoordinates, isEqualStates } from 'advanced-cropper/service';
 import { TransitionsSettings } from '../types';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';

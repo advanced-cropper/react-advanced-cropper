@@ -3,9 +3,21 @@ import { forwardRef, useImperativeHandle, useRef } from 'react';
 import cn from 'classnames';
 import { DrawOptions } from 'advanced-cropper/canvas';
 import { StretchAlgorithm } from 'advanced-cropper/html';
-import { BoundarySizeAlgorithm, CropperImage, CropperSettings, CropperState, CropperTransitions } from 'advanced-cropper/types';
+import {
+	BoundarySizeAlgorithm,
+	CropperImage,
+	CropperSettings,
+	CropperState,
+	CropperTransitions,
+} from 'advanced-cropper/types';
 import { isUndefined } from 'advanced-cropper/utils';
-import { MoveImageSettings, ResizeImageSettings, StencilComponent } from '../types';
+import {
+	CropperBackgroundWrapperComponent,
+	CropperWrapperComponent,
+	MoveImageSettings,
+	ResizeImageSettings,
+	StencilComponent,
+} from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
 import { useMoveImageOptions } from '../hooks/useMoveImageOptions';
@@ -23,10 +35,13 @@ import { CropperWrapper } from './service/CropperWrapper';
 import { CropperBackgroundImage } from './service/CropperBackgroundImage';
 import { CropperCanvas, CropperCanvasMethods } from './service/CropperCanvas';
 import { RectangleStencil } from './stencils/RectangleStencil';
+import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
 import './Cropper.scss';
 
 export interface CropperProps extends CropperStateSettings, CropperStateCallbacks<CropperRef | null> {
 	src?: string | null;
+	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
+	wrapperComponent?: CropperWrapperComponent;
 	stencilComponent?: StencilComponent;
 	stencilProps?: Record<string | number | symbol, unknown>;
 	className?: string;
@@ -41,7 +56,6 @@ export interface CropperProps extends CropperStateSettings, CropperStateCallback
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm | string;
 	stretchAlgorithm?: StretchAlgorithm;
 	style?: CSSProperties;
-	wrapperStyle?: CSSProperties;
 	onReady?: (cropper: CropperRef) => void;
 	onError?: (cropper: CropperRef) => void;
 }
@@ -69,6 +83,8 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	const {
 		src,
 		stencilComponent = RectangleStencil,
+		wrapperComponent = CropperWrapper,
+		backgroundWrapperComponent = CropperBackgroundWrapper,
 		imageClassName,
 		className,
 		boundaryClassName,
@@ -81,7 +97,6 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		resizeImage = true,
 		moveImage = true,
 		style,
-		wrapperStyle,
 		stencilProps = {},
 		onReady,
 		onError,
@@ -97,8 +112,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	const resizeImageOptions = useResizeImageOptions(resizeImage);
 	const moveImageOptions = useMoveImageOptions(moveImage);
 
-
-	const { image, loaded } = useCropperImage({
+	const { image, loaded, loading } = useCropperImage({
 		src,
 		crossOrigin,
 		checkOrientation,
@@ -213,7 +227,11 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		getState: cropper.getState,
 	}));
 
-	const Stencil = stencilComponent;
+	const StencilComponent = stencilComponent;
+
+	const WrapperComponent = wrapperComponent;
+
+	const BackgroundWrapperComponent = backgroundWrapperComponent;
 
 	return (
 		<CropperBoundary
@@ -225,45 +243,49 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 			contentClassName={cn('react-advanced-cropper__boundary', boundaryClassName)}
 			stretcherClassName={cn('react-advanced-cropper__stretcher')}
 		>
-			<CropperWrapper
-				className={cn(
-					'react-advanced-cropper__wrapper',
-					cropper.state && loaded && 'react-advanced-cropper__wrapper--visible',
-				)}
-				wheelResize={resizeImageOptions.wheel}
-				touchResize={resizeImageOptions.touch}
-				touchMove={moveImageOptions.touch}
-				mouseMove={moveImageOptions.mouse}
-				onMove={cropper.onTransformImage}
-				onResize={cropper.onTransformImage}
-				onTransformEnd={cropper.onTransformImageEnd}
-				style={wrapperStyle}
+			<WrapperComponent
+				state={cropper.state}
+				loading={loading}
+				loaded={loaded}
+				className={'react-advanced-cropper__wrapper'}
 			>
-				<div className={cn('react-advanced-cropper__background', backgroundClassName)}>
-					{cropper.state && (
-						<CropperBackgroundImage
-							ref={imageRef}
-							crossOrigin={crossOrigin}
-							image={image}
-							state={cropper.state}
-							transitions={cropper.transitions}
-							className={cn('react-advanced-cropper__image', imageClassName)}
-						/>
-					)}
-				</div>
-				<Stencil
-					{...stencilProps}
-					ref={stencilRef}
-					image={image}
+				<BackgroundWrapperComponent
 					state={cropper.state}
-					transitions={cropper.transitions}
-					onResize={cropper.onResize}
-					onResizeEnd={cropper.onResizeEnd}
-					onMove={cropper.onMove}
-					onMoveEnd={cropper.onMoveEnd}
-				/>
+					className={'react-advanced-cropper__background-wrapper'}
+					wheelResize={resizeImageOptions.wheel}
+					touchResize={resizeImageOptions.touch}
+					touchMove={moveImageOptions.touch}
+					mouseMove={moveImageOptions.mouse}
+					onMove={cropper.onTransformImage}
+					onResize={cropper.onTransformImage}
+					onTransformEnd={cropper.onTransformImageEnd}
+				>
+					<div className={cn('react-advanced-cropper__background', backgroundClassName)}>
+						{cropper.state && (
+							<CropperBackgroundImage
+								ref={imageRef}
+								crossOrigin={crossOrigin}
+								image={image}
+								state={cropper.state}
+								transitions={cropper.transitions}
+								className={cn('react-advanced-cropper__image', imageClassName)}
+							/>
+						)}
+					</div>
+					<StencilComponent
+						{...stencilProps}
+						ref={stencilRef}
+						image={image}
+						state={cropper.state}
+						transitions={cropper.transitions}
+						onResize={cropper.onResize}
+						onResizeEnd={cropper.onResizeEnd}
+						onMove={cropper.onMove}
+						onMoveEnd={cropper.onMoveEnd}
+					/>
+				</BackgroundWrapperComponent>
 				{canvas && <CropperCanvas ref={canvasRef} />}
-			</CropperWrapper>
+			</WrapperComponent>
 		</CropperBoundary>
 	);
 });

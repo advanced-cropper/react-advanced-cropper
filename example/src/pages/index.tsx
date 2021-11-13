@@ -1,5 +1,6 @@
 import React from 'react';
 import 'react-mobile-cropper/dist/style.css';
+import 'react-advanced-cropper/dist/style.css';
 import Navbar from '@theme/Navbar';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
@@ -8,7 +9,6 @@ import useTheme from '@theme/hooks/useTheme';
 import { InstallationBlock } from '@site/src/components/InstallationBlock';
 import Layout from '../components/layout/Layout';
 import { CroppersWizard } from '../components/CroppersWizard';
-import { Separator } from '../components/icons/Separator';
 import './index.scss';
 
 const example = `

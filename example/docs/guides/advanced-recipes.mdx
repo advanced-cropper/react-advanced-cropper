@@ -14,6 +14,7 @@ import { ImageRestrictionExample } from '../../src/components/examples/ImageRest
 import { SetCoordinatesExample } from '../../src/components/examples/SetCoordinatesExample';
 import { CustomRestrictionsExample } from '../../src/components/examples/CustomRestrictionsExample';
 import { RefreshExample } from '../../src/components/examples/RefreshExample';
+import { CropperScrollExample } from '../../src/components/examples/CropperScrollExample';
 
 # Advanced Recipes
 
@@ -363,3 +364,12 @@ cropperRef.current.refresh();
 
 
 <RefreshExample/>
+
+## Scroll the cropper
+
+Sometimes, there are situations, where an user can scroll the page and accidentally stops the scrolling when cursor happens to be placed on the cropper.
+This default behavior is the result of preventing all default mouse and touch events in the cropper background wrapper.
+
+However, this behavior can be easily redefined by replacing the default `CropperBackgroundWrapper` by the custom one.
+
+<CropperScrollExample/>

@@ -13,17 +13,12 @@
 		max-width: 100%;
 		height: 100%;
 	}
-	&__wrapper {
+	&__wrapper, &__background-wrapper {
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: 0;
 		position: absolute;
-		width: 100%;
-		height: 100%;
-		visibility: hidden;
-		opacity: 0;
-		transition: 0.5s;
-		&--visible {
-			opacity: 1;
-			visibility: visible;
-		}
 	}
 	&__stencil-wrapper {
 		position: absolute;

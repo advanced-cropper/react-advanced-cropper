@@ -4,6 +4,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
 import url from '@rollup/plugin-url';
+import { visualizer } from 'rollup-plugin-visualizer';
 import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
@@ -57,5 +58,6 @@ export default {
 		replace({
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 		}),
+		visualizer()
 	],
 };
