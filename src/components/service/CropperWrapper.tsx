@@ -3,8 +3,8 @@ import classnames from 'classnames';
 import { CropperState } from 'advanced-cropper/types';
 import { CropperFade } from './CropperFade';
 
-export interface CropperWrapperProps {
-	state?: CropperState | null;
+export interface CropperWrapperProps<CropperRef = unknown> {
+	cropper?: unknown;
 	loading?: boolean;
 	loaded?: boolean;
 	className?: string;

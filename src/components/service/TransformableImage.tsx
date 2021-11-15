@@ -26,18 +26,14 @@ interface Props {
 	onTransformEnd?: () => void;
 	style?: CSSProperties;
 	state?: CropperState | null;
-	eventsFilter?: (
-		type: TransformImageType,
-		nativeEvent: Event,
-		transforms: Record<TransformImageType, boolean>,
-	) => boolean | void;
+	eventsFilter?: (nativeEvent: Event, transforming: boolean) => boolean | void;
 }
 
 export type TransformImageType = 'touchTransform' | 'mouseMove' | 'wheelResize';
 
 export class TransformableImage extends Component<Props> {
 	touches: (SimpleTouch & { identifier?: number })[];
-	transforms: Record<TransformImageType, boolean>;
+	transforming: boolean;
 	anchor: Point;
 	container: RefObject<HTMLDivElement>;
 	oldGeometricProperties: GeometricProperties | null;
@@ -54,11 +50,8 @@ export class TransformableImage extends Component<Props> {
 	constructor(props) {
 		super(props);
 
-		this.transforms = {
-			mouseMove: false,
-			touchTransform: false,
-			wheelResize: false,
-		};
+		this.transforming = false;
+
 		this.touches = [];
 		this.anchor = {
 			left: 0,
@@ -94,30 +87,29 @@ export class TransformableImage extends Component<Props> {
 		}
 	};
 
-	processEnd = (transform: TransformImageType) => {
+	processEnd = () => {
 		const { onTransformEnd } = this.props;
-		if (this.transforms.mouseMove || this.transforms.touchTransform || this.transforms.wheelResize) {
-			this.transforms[transform] = false;
-			if (!this.transforms.mouseMove && !this.transforms.touchTransform && !this.transforms.wheelResize) {
-				if (onTransformEnd) {
-					onTransformEnd();
-				}
+		if (this.transforming) {
+			this.transforming = false;
+			if (onTransformEnd) {
+				onTransformEnd();
 			}
 		}
 	};
 
-	processStart = (transform: TransformImageType) => {
-		this.transforms[transform] = true;
+	processStart = () => {
+		this.transforming = true;
 		this.debouncedProcessEnd.clear();
 	};
 
-	processEvent = (transform: TransformImageType, nativeEvent: Event) => {
+	processEvent = (nativeEvent: Event) => {
 		const { eventsFilter } = this.props;
 		if (eventsFilter) {
-			return eventsFilter(transform, nativeEvent, this.transforms) !== false;
+			return eventsFilter(nativeEvent, this.transforming) !== false;
 		} else {
 			nativeEvent.preventDefault();
 			nativeEvent.stopPropagation();
+			return true;
 		}
 	};
 
@@ -125,14 +117,14 @@ export class TransformableImage extends Component<Props> {
 		const { onResize, wheelResize } = this.props;
 		const container = this.container.current;
 		if (wheelResize) {
-			if (this.processEvent('wheelResize', event)) {
-				this.processStart('wheelResize');
+			if (this.processEvent(event)) {
+				this.processStart();
 				if (onResize && container) {
 					onResize(createWheelResizeEvent(event, container, wheelResize === true ? 0.1 : wheelResize.ratio));
 				}
 
 				if (!this.touches.length) {
-					this.debouncedProcessEnd('wheelResize');
+					this.debouncedProcessEnd();
 				}
 			}
 		}
@@ -140,7 +132,7 @@ export class TransformableImage extends Component<Props> {
 	onTouchStart = (event: TouchEvent) => {
 		const { touchMove, touchResize } = this.props;
 		if (event.cancelable && (touchMove || (touchResize && event.touches.length > 1))) {
-			if (this.processEvent('touchTransform', event)) {
+			if (this.processEvent(event)) {
 				const container = this.container.current;
 				if (container) {
 					const { left, top, bottom, right } = container.getBoundingClientRect();
@@ -152,10 +144,6 @@ export class TransformableImage extends Component<Props> {
 							touch.clientY < bottom,
 					);
 					this.oldGeometricProperties = calculateGeometricProperties(this.touches, container);
-					if (event.preventDefault) {
-						event.preventDefault();
-					}
-					event.stopPropagation();
 				}
 			}
 		}
@@ -163,7 +151,7 @@ export class TransformableImage extends Component<Props> {
 	onTouchEnd = (event) => {
 		if (event.touches.length === 0) {
 			this.touches = [];
-			this.processEnd('touchTransform');
+			this.processEnd();
 		}
 	};
 
@@ -175,9 +163,9 @@ export class TransformableImage extends Component<Props> {
 					this.touches.find((anotherTouch) => anotherTouch.identifier === touch.identifier),
 			);
 
-			if (this.processEvent('touchTransform', event) !== false) {
+			if (this.processEvent(event)) {
 				this.processMove(event, touches);
-				this.processStart('touchTransform');
+				this.processStart();
 			}
 		}
 	};
@@ -185,20 +173,20 @@ export class TransformableImage extends Component<Props> {
 	onMouseDown = (event: MouseEvent) => {
 		const { mouseMove } = this.props;
 		if (mouseMove && 'buttons' in event && event.buttons === 1) {
-			if (this.processEvent('mouseMove', event)) {
+			if (this.processEvent(event)) {
 				const touch = {
 					clientX: event.clientX,
 					clientY: event.clientY,
 				};
 				this.touches = [touch];
-				this.processStart('mouseMove');
+				this.processStart();
 			}
 		}
 	};
 
 	onMouseMove = (event) => {
 		if (this.touches.length) {
-			if (this.processEvent('mouseMove', event)) {
+			if (this.processEvent(event)) {
 				this.processMove(event, [
 					{
 						clientX: event.clientX,
@@ -211,7 +199,7 @@ export class TransformableImage extends Component<Props> {
 
 	onMouseUp = () => {
 		this.touches = [];
-		this.processEnd('mouseMove');
+		this.processEnd();
 	};
 
 	shouldComponentUpdate(): boolean {

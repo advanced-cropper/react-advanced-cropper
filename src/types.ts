@@ -6,6 +6,7 @@ import { CropperWrapperProps } from './components/service/CropperWrapper';
 export type StencilComponent = any;
 
 export type CropperWrapperComponent = React.ComponentType<CropperWrapperProps>;
+
 export type CropperBackgroundWrapperComponent = React.ComponentType<CropperBackgroundWrapperProps>;
 
 export interface TransitionsSettings {

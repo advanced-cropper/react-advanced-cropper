@@ -31,13 +31,9 @@ export const BackgroundWrapperWithNotifications = ({
 		setNotificationVisible(false);
 	}, 1500);
 
-	const eventsFilter = (
-		transform: TransformImageType,
-		nativeEvent: Event,
-		currentTransforms: Record<TransformImageType, boolean>,
-	) => {
-		if (transform === 'touchTransform') {
-			if (isTouchEvent(nativeEvent) && nativeEvent.touches.length === 1 && !currentTransforms.touchTransform) {
+	const eventsFilter = (nativeEvent: Event, transforming: boolean) => {
+		if (isTouchEvent(nativeEvent)) {
+			if (nativeEvent.touches.length === 1 && !transforming) {
 				setNotificationVisible(true);
 				setNotificationType('touch');
 				debouncedHideNotification();
@@ -45,13 +41,8 @@ export const BackgroundWrapperWithNotifications = ({
 			} else {
 				setNotificationVisible(false);
 			}
-		} else if (transform === 'wheelResize') {
-			if (
-				isWheelEvent(nativeEvent) &&
-				!nativeEvent.ctrlKey &&
-				!currentTransforms.wheelResize &&
-				!currentTransforms.mouseMove
-			) {
+		} else if (isWheelEvent(nativeEvent)) {
+			if (!transforming && !nativeEvent.ctrlKey) {
 				setNotificationVisible(true);
 				setNotificationType('wheel');
 				debouncedHideNotification();
