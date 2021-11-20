@@ -1,7 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import cn from 'classnames';
-import { DragEvent } from 'advanced-cropper/events';
-import { HorizontalCardinalDirection, VerticalCardinalDirection } from 'advanced-cropper/types';
+import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper/types';
 import { HandlerWrapper } from '../service/HandlerWrapper';
 import './SimpleHandler.scss';
 
@@ -13,7 +12,7 @@ interface Props {
 	verticalPosition?: VerticalCardinalDirection;
 	horizontalPosition?: HorizontalCardinalDirection;
 	disabled?: boolean;
-	onDrag?: (event: DragEvent) => void;
+	onDrag?: (shift: MoveDirections, event: TouchEvent | MouseEvent) => void;
 	onDragEnd?: () => void;
 }
 

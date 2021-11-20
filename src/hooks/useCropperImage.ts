@@ -20,7 +20,7 @@ export function useCropperImage(options: CropperImageHookSettings) {
 	const { src, onLoadingStart, onLoadingEnd, onError, onLoad, crossOrigin, checkOrientation, canvas } = options;
 	const [loading, setLoading] = useState(false);
 	const [loaded, setLoaded] = useState(false);
-	const [image, setImage] = useState(null);
+	const [image, setImage] = useState<CropperImage>(null);
 
 	const currentSrc = useRef<string>(null);
 
@@ -81,9 +81,9 @@ export function useCropperImage(options: CropperImageHookSettings) {
 
 	useEffect(() => {
 		if (image) {
-			setLoaded(image)
+			setLoaded(true)
 		}
 	}, [image])
 
-	return { loading, loaded, image };
+	return { loading, loaded, image, setImage };
 }

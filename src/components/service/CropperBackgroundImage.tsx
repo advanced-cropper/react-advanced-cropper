@@ -21,6 +21,7 @@ export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
 		return (
 			Boolean(image) && (
 				<img
+					key={image.src}
 					ref={ref}
 					className={cn('react-cropper-background-image', className)}
 					src={image && image.src}

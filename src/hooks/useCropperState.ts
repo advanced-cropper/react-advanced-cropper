@@ -13,7 +13,7 @@ export interface CropperStateSettings extends AbstractCropperStateSettings, Exte
 export type CropperStateCallbacks<Instance> = AbstractCropperStateCallbacks<Instance>;
 
 export function useCropperState<Settings extends CropperStateSettings, Instance = unknown>(
-	props: Settings & CropperStateCallbacks<Instance>,
+	settings: Settings & CropperStateCallbacks<Instance>,
 ) {
 	const {
 		adjustStencil,
@@ -33,8 +33,6 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		createStateAlgorithm,
 		reconcileStateAlgorithm,
 		moveCoordinatesAlgorithm,
-		flipImageAlgorithm,
-		rotateImageAlgorithm,
 		onTransitionsStart,
 		onTransitionsEnd,
 		onResizeEnd,
@@ -47,7 +45,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		onInteractionEnd,
 		onInteractionStart,
 		...cropperSettings
-	} = props;
+	} = settings;
 
 	const cropper = useAbstractCropperState({
 		...withDefaults({
@@ -69,8 +67,6 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		resizeCoordinatesAlgorithm,
 		createStateAlgorithm,
 		moveCoordinatesAlgorithm,
-		flipImageAlgorithm,
-		rotateImageAlgorithm,
 		reconcileStateAlgorithm,
 		priority,
 		onTransitionsStart,

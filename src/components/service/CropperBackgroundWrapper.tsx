@@ -1,12 +1,19 @@
 import React, { CSSProperties, ReactNode } from 'react';
-import { isMouseEvent, isTouchEvent, isWheelEvent, TransformImageEvent } from 'advanced-cropper/events';
-import { CropperState, CropperTransitions } from 'advanced-cropper/types';
-import { TransformableImage, TransformImageType } from './TransformableImage';
+import { CropperTransitions, ImageTransform } from 'advanced-cropper/types';
+import { TransformableImage } from './TransformableImage';
+
+interface DesiredCropperRef {
+	transformImage: (transform: ImageTransform) => void;
+	transformImageEnd: () => void;
+	getTransitions: () => CropperTransitions;
+}
 
 export interface CropperBackgroundWrapperProps {
+	cropper: DesiredCropperRef;
 	touchMove?: boolean;
 	mouseMove?: boolean;
 	touchResize?: boolean;
+	touchRotate?: boolean;
 	wheelResize?:
 		| boolean
 		| {
@@ -14,12 +21,7 @@ export interface CropperBackgroundWrapperProps {
 		  };
 	children?: ReactNode;
 	className?: string;
-	onMove?: (event: TransformImageEvent) => void;
-	onResize?: (event: TransformImageEvent) => void;
-	onTransformEnd?: () => void;
 	style?: CSSProperties;
-	state?: CropperState | null;
-	transitions?: CropperTransitions | null;
 }
 
 export const CropperBackgroundWrapper = ({
@@ -27,24 +29,23 @@ export const CropperBackgroundWrapper = ({
 	mouseMove,
 	touchResize,
 	wheelResize,
+	touchRotate,
 	children,
 	className,
-	onMove,
-	onResize,
-	onTransformEnd,
 	style,
+	cropper,
 }: CropperBackgroundWrapperProps) => {
 	return (
 		<TransformableImage
 			className={className}
 			style={style}
-			onMove={onMove}
-			onResize={onResize}
-			onTransformEnd={onTransformEnd}
+			onTransform={cropper.transformImage}
+			onTransformEnd={cropper.transformImageEnd}
 			touchMove={touchMove}
 			mouseMove={mouseMove}
 			touchResize={touchResize}
 			wheelResize={wheelResize}
+			touchRotate={touchRotate}
 		>
 			{children}
 		</TransformableImage>

@@ -2,6 +2,9 @@
 	overflow: hidden;
 	max-height: 100%;
 	background: black;
+	position: relative;
+	display: flex;
+	flex-direction: column;
 	&__background {
 		width: 100%;
 		height: 100%;
@@ -9,9 +12,8 @@
 		background: inherit;
 	}
 	&__boundary {
-		max-height: 100%;
-		max-width: 100%;
-		height: 100%;
+		flex-grow: 1;
+		min-height: 0;
 	}
 	&__wrapper, &__background-wrapper {
 		left: 0;

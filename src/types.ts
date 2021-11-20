@@ -1,7 +1,8 @@
 import { CropperState, CropperImage, CropperTransitions, AspectRatio } from 'advanced-cropper/types';
-import { MoveEvent, ResizeEvent } from 'advanced-cropper/events';
 import { CropperBackgroundWrapperProps } from './components/service/CropperBackgroundWrapper';
 import { CropperWrapperProps } from './components/service/CropperWrapper';
+import { CropperStateHook } from './hooks/useCropperState';
+import { CropperRef } from './components/Cropper';
 
 export type StencilComponent = any;
 
@@ -24,20 +25,37 @@ export interface ResizeImageSettings {
 	adjustStencil?: boolean;
 }
 
+export interface RotateImageSettings {
+	touch?: boolean;
+}
+
 export interface MoveImageSettings {
 	touch?: boolean;
 	mouse?: boolean;
 }
 
-export interface BasicStencilProps {
+export interface BasicStencilProps<Cropper = CropperRef> {
 	state: CropperState | null;
 	image: CropperImage | null;
 	transitions: CropperTransitions | null;
-	onResize?: (event: ResizeEvent) => void;
-	onResizeEnd?: () => void;
-	onMove?: (event: MoveEvent) => void;
-	onMoveEnd?: () => void;
+	cropper?: Cropper;
 }
+
+export interface BasicCropperRef {
+	setCoordinates: CropperStateHook['setCoordinates'];
+	setState: CropperStateHook['setState'];
+	flipImage: CropperStateHook['flipImage'];
+	zoomImage: CropperStateHook['zoomImage'];
+	rotateImage: CropperStateHook['rotateImage'];
+	moveImage: CropperStateHook['moveImage'];
+	moveCoordinates: CropperStateHook['moveCoordinates'];
+	resizeCoordinates: CropperStateHook['resizeCoordinates'];
+	getCoordinates: CropperStateHook['getCoordinates'];
+	getVisibleArea: CropperStateHook['getVisibleArea'];
+	getTransforms: CropperStateHook['getTransforms'];
+	getTransitions: () => CropperTransitions;
+}
+
 export interface StencilRef {
 	aspectRatio: () => AspectRatio;
 }

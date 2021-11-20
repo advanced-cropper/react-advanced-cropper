@@ -1,9 +1,8 @@
 import React, { CSSProperties, ReactNode } from 'react';
 import classnames from 'classnames';
-import { DragEvent } from 'advanced-cropper/events';
-import { DraggableElement } from './DraggableElement';
-import { HorizontalCardinalDirection, VerticalCardinalDirection } from 'advanced-cropper/types';
+import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper/types';
 import { getDirectionNames } from 'advanced-cropper/utils';
+import { DraggableElement } from './DraggableElement';
 
 import './HandlerWrapper.scss';
 
@@ -11,7 +10,7 @@ interface Props {
 	className?: string;
 	style?: CSSProperties;
 	children?: ReactNode;
-	onDrag?: (event: DragEvent) => void;
+	onDrag?: (shift: MoveDirections, event: MouseEvent | TouchEvent) => void;
 	onDragEnd?: () => void;
 	onLeave?: () => void;
 	onEnter?: () => void;
@@ -30,7 +29,7 @@ export const HandlerWrapper = ({
 	onLeave,
 	onEnter,
 	children,
-	style
+	style,
 }: Props) => {
 	const position =
 		horizontalPosition || verticalPosition

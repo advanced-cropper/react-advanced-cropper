@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
-import { DragEvent } from 'advanced-cropper/events';
-import { CardinalDirection } from 'advanced-cropper/types';
+import { CardinalDirection, MoveDirections } from 'advanced-cropper/types';
 import { LineWrapper } from '../service/LineWrapper';
 import './SimpleLine.scss';
 
@@ -11,7 +10,7 @@ interface Props {
 	wrapperClassName?: string;
 	position?: CardinalDirection;
 	disabled?: boolean;
-	onDrag?: (event: DragEvent) => void;
+	onDrag?: (directions: MoveDirections, event: TouchEvent | MouseEvent) => void;
 	onDragEnd?: () => void;
 }
 

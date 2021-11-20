@@ -1,26 +1,20 @@
 import React, {
 	ReactNode,
-	useEffect,
-	useCallback,
-	useRef,
 	PureComponent,
 	RefObject,
 	createRef,
-	Component,
 } from 'react';
 import { distance } from 'advanced-cropper/utils';
-import { MoveEvent } from 'advanced-cropper/events';
-import { SimpleTouch } from 'advanced-cropper/touch';
 import './DraggableArea.scss';
 import cn from 'classnames';
-import { Point } from 'advanced-cropper/types';
+import { MoveDirections, SimpleTouch, Point } from 'advanced-cropper/types';
 
 interface Props {
 	className?: string;
 	movable?: boolean;
 	activationDistance?: number;
 	children?: ReactNode;
-	onMove?: (event: MoveEvent) => void;
+	onMove?: (directions: MoveDirections) => void;
 	onMoveEnd?: () => void;
 	onMoveStart?: () => void;
 	useAnchor?: boolean;
@@ -50,23 +44,21 @@ export class DraggableArea extends PureComponent<Props> {
 		this.container = createRef();
 	}
 
-	processMove = (event: MoveEvent, newTouches: SimpleTouch[]) => {
+	processMove = (newTouches: SimpleTouch[]) => {
 		const container = this.container.current;
 
 		if (container && this.touches.length) {
 			const { left, top } = container.getBoundingClientRect();
 			if (this.touches.length === 1 && newTouches.length === 1) {
 				if (this.props.onMove) {
-					this.props.onMove(
-						new MoveEvent({
-							left:
-								newTouches[0].clientX -
-								(this.props.useAnchor ? left + this.anchor.left : this.touches[0].clientX),
-							top:
-								newTouches[0].clientY -
-								(this.props.useAnchor ? top + this.anchor.top : this.touches[0].clientY),
-						}),
-					);
+					this.props.onMove({
+						left:
+							newTouches[0].clientX -
+							(this.props.useAnchor ? left + this.anchor.left : this.touches[0].clientX),
+						top:
+							newTouches[0].clientY -
+							(this.props.useAnchor ? top + this.anchor.top : this.touches[0].clientY),
+					});
 					this.touches = newTouches;
 				}
 			}
@@ -117,7 +109,7 @@ export class DraggableArea extends PureComponent<Props> {
 	onTouchMove = (e) => {
 		if (this.touches.length >= 1) {
 			if (this.started) {
-				this.processMove(e, e.touches);
+				this.processMove(e.touches);
 				e.preventDefault();
 				e.stopPropagation();
 			} else if (
@@ -152,7 +144,7 @@ export class DraggableArea extends PureComponent<Props> {
 
 	onMouseMove = (e) => {
 		if (this.touches.length) {
-			this.processMove(e, [
+			this.processMove([
 				{
 					clientX: e.clientX,
 					clientY: e.clientY,

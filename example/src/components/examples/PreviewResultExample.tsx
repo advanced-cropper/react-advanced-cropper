@@ -26,7 +26,7 @@ export const PreviewResultExample = () => {
 
 	const onRotate = () => {
 		if (cropperRef.current) {
-			cropperRef.current.rotate(90);
+			cropperRef.current.rotateImage(90);
 		}
 	};
 

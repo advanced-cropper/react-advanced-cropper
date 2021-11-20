@@ -1,6 +1,6 @@
 import React from 'react';
-import 'react-mobile-cropper/dist/style.css';
 import 'react-advanced-cropper/dist/style.css';
+import 'react-mobile-cropper/dist/style.css';
 import Navbar from '@theme/Navbar';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
@@ -85,7 +85,7 @@ export default function Home(): JSX.Element {
 								<div className="main-page__feature">
 									<div className="main-page__feature-title">Mobile Support</div>
 									<div className="main-page__feature-text">
-										Vue Advanced Cropper supports desktop and mobile devices alike. Built in support
+										React Advanced Cropper supports desktop and mobile devices alike. Built in support
 										for touch events, cropper resizing, etc.
 									</div>
 								</div>

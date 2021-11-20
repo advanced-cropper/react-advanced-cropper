@@ -33,13 +33,13 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 
 	const onRotate = (angle: number) => {
 		if (cropperRef.current) {
-			cropperRef.current.rotate(angle);
+			cropperRef.current.rotateImage(angle);
 		}
 	};
 
 	const onFlip = (horizontal: boolean, vertical: boolean) => {
 		if (cropperRef.current) {
-			cropperRef.current.flip(horizontal, vertical);
+			cropperRef.current.flipImage(horizontal, vertical);
 		}
 	};
 

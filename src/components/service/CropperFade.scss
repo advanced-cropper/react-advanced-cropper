@@ -1,10 +1,13 @@
 .react-cropper-fade {
-		visibility: hidden;
-		opacity: 0;
-		transition: 0.5s;
-		&--visible {
-			opacity: 1;
-			visibility: visible;
-			color: black;
-		}
+	visibility: hidden;
+	opacity: 0;
+	transition: 0.5s;
+	display: flex;
+	flex-direction: column;
+
+	&--visible {
+		opacity: 1;
+		visibility: visible;
+		color: black;
+	}
 }

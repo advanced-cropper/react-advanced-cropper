@@ -185,8 +185,6 @@ export const CroppersWizard: FC = () => {
 		minAspectRatio,
 	};
 
-	console.log({ cropper });
-
 	return (
 		<div className={'croppers-wizard'}>
 			<div className="croppers-wizard__column croppers-wizard__column--left">

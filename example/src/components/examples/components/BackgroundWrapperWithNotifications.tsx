@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
-import {
-	CropperBackgroundWrapperProps,
-	TransformableImage,
-	TransformImageType,
-	isTouchEvent,
-	isWheelEvent,
-} from 'react-advanced-cropper';
+import { CropperBackgroundWrapperProps, TransformableImage, isTouchEvent, isWheelEvent } from 'react-advanced-cropper';
 import { useDebouncedCallback } from 'use-debounce';
 import './BackgroundWrapperWithNotifications.scss';
 import cn from 'classnames';
 
 export const BackgroundWrapperWithNotifications = ({
+	cropper,
 	touchMove,
 	mouseMove,
 	touchResize,
 	wheelResize,
 	children,
 	className,
-	onMove,
-	onResize,
-	onTransformEnd,
 	style,
-	transitions,
 }: CropperBackgroundWrapperProps) => {
 	const [notificationType, setNotificationType] = useState<'touch' | 'wheel'>('wheel');
 
@@ -54,16 +45,15 @@ export const BackgroundWrapperWithNotifications = ({
 		nativeEvent.preventDefault();
 		nativeEvent.stopPropagation();
 
-		return !transitions;
+		return !cropper.getTransitions().active;
 	};
 
 	return (
 		<TransformableImage
 			className={className}
 			style={style}
-			onMove={onMove}
-			onResize={onResize}
-			onTransformEnd={onTransformEnd}
+			onTransform={cropper.transformImage}
+			onTransformEnd={cropper.transformImageEnd}
 			touchMove={touchMove}
 			mouseMove={mouseMove}
 			touchResize={touchResize}

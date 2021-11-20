@@ -71,6 +71,7 @@ export const CropperBoundary = forwardRef(
 					} else {
 						result = fillBoundary(params);
 					}
+
 					if (!result.width || !result.height) {
 						return Promise.resolve(null);
 					} else {

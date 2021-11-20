@@ -3,12 +3,15 @@ import cn from 'classnames';
 import {
 	CardinalDirection,
 	OrdinalDirection,
-	CropperTransitions,
-	CropperState,
 	AspectRatio,
+	CropperImage,
+	MoveDirections,
+	ResizeDirections,
+	CropperState,
+	CropperTransitions,
 } from 'advanced-cropper/types';
-import { MoveEvent, ResizeEvent } from 'advanced-cropper/events';
 import { getStencilCoordinates } from 'advanced-cropper/service';
+import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import { BoundingBox } from '../service/BoundingBox';
@@ -33,9 +36,18 @@ interface LineClassNames extends Partial<Record<CardinalDirection, string>> {
 	hover?: string;
 }
 
+interface DesiredCropperRef {
+	getState: () => CropperState;
+	getTransitions: () => CropperTransitions;
+	resizeCoordinates: (directions: ResizeDirections, options: ResizeOptions) => void;
+	resizeCoordinatesEnd: () => void;
+	moveCoordinates: (directions: MoveDirections) => void;
+	moveCoordinatesEnd: () => void;
+}
+
 interface Props {
-	state: CropperState | null;
-	transitions?: CropperTransitions | null;
+	cropper?: DesiredCropperRef | null;
+	image?: CropperImage | null;
 	handlerComponent?: HandlerComponent;
 	handlers?: Partial<Record<OrdinalDirection, boolean>>;
 	handlerClassNames?: HandlerClassNames;
@@ -55,10 +67,6 @@ interface Props {
 	aspectRatio?: number;
 	movable?: boolean;
 	resizable?: boolean;
-	onResize?: (event: ResizeEvent) => void;
-	onResizeEnd?: () => void;
-	onMove?: (event: MoveEvent) => void;
-	onMoveEnd?: () => void;
 }
 
 interface Methods {
@@ -68,8 +76,7 @@ interface Methods {
 export const RectangleStencil = forwardRef<Methods, Props>(
 	(
 		{
-			state,
-			transitions,
+			cropper,
 			handlerComponent = SimpleHandler,
 			handlers = {
 				eastNorth: true,
@@ -111,6 +118,10 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 
 		const [resizing, setResizing] = useState(false);
 
+		const state = cropper.getState();
+
+		const transitions = cropper.getTransitions();
+
 		useImperativeHandle(ref, () => ({
 			aspectRatio: () => {
 				return {
@@ -120,34 +131,32 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			},
 		}));
 
-		const onMove = (event: MoveEvent) => {
-			if (movable) {
-				if (props.onMove) {
-					props.onMove(event);
-				}
+		const onMove = (directions: MoveDirections) => {
+			if (movable && cropper) {
+				cropper.moveCoordinates(directions);
 				setMoving(true);
 			}
 		};
 
 		const onMoveEnd = () => {
-			if (props.onMoveEnd) {
-				props.onMoveEnd();
+			if (cropper) {
+				cropper.moveCoordinatesEnd();
 			}
 			setMoving(false);
 		};
 
-		const onResize = (event: ResizeEvent) => {
+		const onResize = (directions: ResizeDirections, options: ResizeOptions) => {
 			if (resizable) {
-				if (props.onResize) {
-					props.onResize(event);
+				if (cropper) {
+					cropper.resizeCoordinates(directions, options);
 				}
 				setResizing(true);
 			}
 		};
 
 		const onResizeEnd = () => {
-			if (props.onResizeEnd) {
-				props.onResizeEnd();
+			if (cropper) {
+				cropper.resizeCoordinatesEnd();
 			}
 			setResizing(false);
 		};

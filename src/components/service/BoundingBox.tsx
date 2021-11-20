@@ -7,9 +7,11 @@ import {
 	HorizontalCardinalDirection,
 	VerticalCardinalDirection,
 	CropperTransitions,
+	ResizeDirections,
+	MoveDirections,
 } from 'advanced-cropper/types';
 import { getDirectionNames } from 'advanced-cropper/utils';
-import { DragEvent, ResizeEvent } from 'advanced-cropper/events';
+import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import { ArtificialTransition } from './ArtificialTransition';
@@ -46,7 +48,7 @@ interface Props {
 	lineClassNames?: LinesClassNames;
 	lineWrapperClassNames?: LinesClassNames;
 	resizable?: boolean;
-	onResize?: (event: ResizeEvent) => void;
+	onResize?: (directions: ResizeDirections, options?: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
 	width?: number;
@@ -99,8 +101,6 @@ export const BoundingBox = ({
 	height,
 	transitions,
 }: Props) => {
-	const transitionsActive = transitions && transitions.active;
-
 	const points = useMemo(() => {
 		const result = [];
 		HORIZONTAL_DIRECTIONS.forEach((hDirection) => {
@@ -170,22 +170,11 @@ export const BoundingBox = ({
 			}
 		});
 		return result;
-	}, [
-		height,
-		width,
-		points,
-		handlers,
-		handlerComponent,
-		handlerClassNames,
-		handlerWrapperClassNames,
-		resizable,
-	]);
+	}, [height, width, points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, resizable]);
 
 	const onHandlerDrag =
 		(horizontalDirection: HorizontalCardinalDirection, verticalDirection: VerticalCardinalDirection) =>
-		(dragEvent: DragEvent) => {
-			const { left, top } = dragEvent.shift();
-
+		({ left, top }: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => {
 			const directions = {
 				left: 0,
 				right: 0,
@@ -213,18 +202,16 @@ export const BoundingBox = ({
 
 			if (resizable) {
 				if (onResize) {
-					onResize(
-						new ResizeEvent(directions, {
-							allowedDirections: {
-								left: horizontalDirection === 'west' || !horizontalDirection,
-								right: horizontalDirection === 'east' || !horizontalDirection,
-								bottom: verticalDirection === 'south' || !verticalDirection,
-								top: verticalDirection === 'north' || !verticalDirection,
-							},
-							preserveAspectRatio: dragEvent.nativeEvent && dragEvent.nativeEvent.shiftKey,
-							respectDirection,
-						}),
-					);
+					onResize(directions, {
+						allowedDirections: {
+							left: horizontalDirection === 'west' || !horizontalDirection,
+							right: horizontalDirection === 'east' || !horizontalDirection,
+							bottom: verticalDirection === 'south' || !verticalDirection,
+							top: verticalDirection === 'north' || !verticalDirection,
+						},
+						preserveAspectRatio: nativeEvent && nativeEvent.shiftKey,
+						respectDirection,
+					});
 				}
 			}
 		};

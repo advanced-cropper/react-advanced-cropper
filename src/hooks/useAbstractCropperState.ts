@@ -10,29 +10,23 @@ import {
 	Boundary,
 	CropperState,
 	Scale,
+	MoveDirections,
+	ImageTransform,
+	ResizeDirections,
+	Rotate,
+	PostprocessAction,
 } from 'advanced-cropper/types';
-import { getOptions, isArray, isFunction, isNumber } from 'advanced-cropper/utils';
-import {
-	TransformImageEvent,
-	MoveEvent,
-	ResizeEvent,
-	normalizeMoveEvent,
-	normalizeResizeEvent,
-	normalizeTransformImageEvent,
-} from 'advanced-cropper/events';
+import { getOptions, isArray, isFunction } from 'advanced-cropper/utils';
+
 import {
 	copyState,
 	createState,
 	CreateStateAlgorithm,
-	flipImage,
-	FlipImageAlgorithm,
 	moveCoordinates,
 	MoveAlgorithm,
 	reconcileState,
 	resizeCoordinates,
 	ResizeAlgorithm,
-	rotateImage,
-	RotateImageAlgorithm,
 	setBoundary,
 	SetBoundaryAlgorithm,
 	setCoordinates,
@@ -43,13 +37,24 @@ import {
 	TransformImageAlgorithm,
 	ReconcileStateAlgorithm,
 } from 'advanced-cropper/state';
-import { roundCoordinates, isEqualStates } from 'advanced-cropper/service';
+import {
+	roundCoordinates,
+	isEqualStates,
+	normalizeImageTransform,
+	normalizeMoveDirections,
+	normalizeResizeDirections,
+	getStencilCoordinates,
+	fillMoveDirections,
+	fillResizeDirections,
+} from 'advanced-cropper/service';
 import { TransitionsSettings } from '../types';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
 
 export interface CropperMethodOptions {
 	transitions?: boolean;
+	immediately?: boolean;
+	normalize?: boolean;
 }
 
 export interface AbstractCropperStateCallbacks<Instance = unknown> {
@@ -74,39 +79,29 @@ export interface AbstractCropperStateSettings<Cropper = unknown> {
 	setVisibleAreaAlgorithm?: SetVisibleAreaAlgorithm;
 	setBoundaryAlgorithm?: SetBoundaryAlgorithm;
 	transformImageAlgorithm?: TransformImageAlgorithm;
+	moveCoordinatesAlgorithm?: MoveAlgorithm;
 	resizeCoordinatesAlgorithm?: ResizeAlgorithm;
 	createStateAlgorithm?: CreateStateAlgorithm;
-	moveCoordinatesAlgorithm?: MoveAlgorithm;
-	flipImageAlgorithm?: FlipImageAlgorithm;
-	rotateImageAlgorithm?: RotateImageAlgorithm;
 	reconcileStateAlgorithm?: ReconcileStateAlgorithm;
-	zoomImageAlgorithm?: (
-		state: CropperState,
-		settings: CropperSettings,
-		scale: Partial<Scale> | number,
-	) => CropperState;
 	moveImageAlgorithm?: (state: CropperState, settings: CropperSettings, left?: number, top?: number) => CropperState;
 	priority?: Priority;
 }
 
 type StateModifier = (state: CropperState, settings: CropperSettings) => CropperState;
 
-export type PostprocessAction =
-	| 'create'
-	| 'reconcile'
-	| 'resize'
-	| 'resizeEnd'
-	| 'move'
-	| 'moveEnd'
-	| 'transformImage'
-	| 'transformImageEnd'
-	| 'interactionEnd'
-	| 'flip'
-	| 'rotate'
-	| 'zoom'
-	| 'setBoundary'
-	| 'setVisibleArea'
-	| 'setCoordinates';
+type Callback<Instance> = (instance: Instance) => void;
+
+interface TransitionOptions {
+	transitions?: boolean;
+}
+
+interface ImmediatelyOptions {
+	immediately?: boolean;
+}
+
+interface NormalizeOptions {
+	normalize?: boolean;
+}
 
 function runCallback<Instance>(callback?: (instance: Instance) => void, getInstance?: () => Instance) {
 	if (callback && getInstance) {
@@ -117,9 +112,17 @@ function runCallback<Instance>(callback?: (instance: Instance) => void, getInsta
 	}
 }
 
-function createCallback<Instance>(callback?: (instance: Instance) => void, getInstance?: () => Instance) {
+function createCallback<Instance>(callback?: Callback<Instance>, getInstance?: () => Instance) {
 	return () => {
 		runCallback(callback, getInstance);
+	};
+}
+
+function mergeCallbacks<Instance>(callbacks: Function[]) {
+	return () => {
+		callbacks.forEach((callback) => {
+			callback();
+		});
 	};
 }
 
@@ -137,8 +140,6 @@ export function useAbstractCropperState<
 	resizeCoordinatesAlgorithm,
 	createStateAlgorithm,
 	moveCoordinatesAlgorithm,
-	flipImageAlgorithm,
-	rotateImageAlgorithm,
 	reconcileStateAlgorithm,
 	priority,
 	onTransitionsStart,
@@ -189,7 +190,11 @@ export function useAbstractCropperState<
 		}
 	};
 
-	const updateState = (modifier: StateModifier | CropperState, options: CropperMethodOptions = {}) => {
+	const updateState = (
+		modifier: StateModifier | CropperState,
+		options: CropperMethodOptions = {},
+		callbacks: Callback<ReturnType<typeof getInstance>>[] = [],
+	) => {
 		const { transitions = false } = options;
 		// TODO: check, that's the best approach
 		setState((state) => {
@@ -203,7 +208,7 @@ export function useAbstractCropperState<
 			} else {
 				return state;
 			}
-		}, createCallback(onChange, getInstance));
+		}, mergeCallbacks([createCallback(onChange, getInstance), ...callbacks.map((callback) => createCallback(callback, getInstance))]));
 	};
 
 	const actions = useRef({
@@ -222,10 +227,22 @@ export function useAbstractCropperState<
 	const endAction = (action: keyof typeof actions.current) => {
 		actions.current[action] = false;
 		if (!actions.current.move && !actions.current.resize && !actions.current.transformImage) {
-			runCallback(onInteractionEnd, getInstance);
-			updateState(() => state && applyPostProcess('interactionEnd', state), {
-				transitions: true,
-			});
+			updateState(
+				() =>
+					state &&
+					applyPostProcess(
+						{
+							name: 'interactionEnd',
+							immediately: true,
+							transitions: true,
+						},
+						state,
+					),
+				{
+					transitions: true,
+				},
+				[onInteractionEnd],
+			);
 		}
 	};
 
@@ -233,7 +250,11 @@ export function useAbstractCropperState<
 		if (boundary) {
 			updateState(
 				applyPostProcess(
-					'create',
+					{
+						name: 'create',
+						immediately: true,
+						transitions: false,
+					},
 					(createStateAlgorithm || createState)(
 						{
 							boundary,
@@ -250,68 +271,142 @@ export function useAbstractCropperState<
 		}
 	};
 
-	return {
+	const cropper = {
 		state,
 		transitions: transitionsOptions,
-		reconcileState: () => {
-			updateState(
-				state && applyPostProcess('reconcile', (reconcileStateAlgorithm || reconcileState)(state, settings)),
-			);
-		},
 		clear: () => {
 			setState(null);
 		},
-		flip: (horizontal?: boolean, vertical?: boolean, options: CropperMethodOptions = {}) => {
-			const { transitions = true } = options;
-
+		reconcileState: () => {
 			updateState(
-				() =>
-					state &&
-					applyPostProcess('flip', (flipImageAlgorithm || flipImage)(state, settings, horizontal, vertical)),
-				{
-					transitions: transitions,
-				},
-			);
-		},
-		rotate: (angle: number, options: CropperMethodOptions = {}) => {
-			const { transitions = true } = options;
-
-			updateState(
-				() =>
-					state && applyPostProcess('rotate', (rotateImageAlgorithm || rotateImage)(state, settings, angle)),
-				{
-					transitions: transitions,
-				},
-			);
-		},
-		zoom: (scale: Scale | number, options: CropperMethodOptions = {}) => {
-			const { transitions = true } = options;
-
-			updateState(
-				() =>
-					state &&
+				state &&
 					applyPostProcess(
-						'zoom',
-						(transformImageAlgorithm || transformImage)(
-							state,
-							settings,
-							{},
-							isNumber(scale)
-								? {
-										factor: scale,
-								  }
-								: scale,
-						),
+						{
+							name: 'reconcile',
+							immediately: true,
+							transitions: false,
+						},
+						(reconcileStateAlgorithm || reconcileState)(state, settings),
 					),
+			);
+		},
+		transformImage: (
+			transform: ImageTransform,
+			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
+		) => {
+			const { transitions = true, immediately = false, normalize = true } = options;
+
+			const callbacks = [];
+
+			if (state) {
+				if (normalize) {
+					transform = normalizeImageTransform(state, transform);
+				}
+
+				let result = applyPostProcess(
+					{
+						name: 'transformImage',
+						transitions,
+						immediately,
+					},
+					(transformImageAlgorithm || transformImage)(state, settings, transform),
+				);
+				callbacks.push(onTransformImage);
+
+				if (immediately) {
+					result = applyPostProcess(
+						{
+							name: 'transformImageEnd',
+							transitions,
+							immediately,
+						},
+						result,
+					);
+					callbacks.push(onTransformImageEnd);
+				} else {
+					startAction('transformImage');
+				}
+
+				updateState(
+					result,
+					{
+						transitions: immediately && transitions,
+					},
+					callbacks,
+				);
+			}
+		},
+		transformImageEnd: (options: ImmediatelyOptions & TransitionOptions = {}) => {
+			const { immediately = false, transitions = true } = options;
+			updateState(
+				() => state && applyPostProcess({ name: 'transformImageEnd', immediately, transitions }, state),
 				{
-					transitions: transitions,
+					transitions,
 				},
+				[onTransformImageEnd],
+			);
+			endAction('transformImage');
+		},
+		zoomImage: (scale: Scale | number, options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {}) => {
+			const { immediately = true, transitions = true, normalize = false } = options;
+
+			cropper.transformImage(
+				{
+					scale,
+				},
+				{ immediately, transitions, normalize },
+			);
+		},
+		moveImage: (
+			left: number,
+			top?: number,
+			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
+		) => {
+			const { immediately = true, transitions = true, normalize = false } = options;
+
+			cropper.transformImage(
+				{
+					move: {
+						left,
+						top,
+					},
+				},
+				{ immediately, transitions, normalize },
+			);
+		},
+		flipImage: (
+			horizontal?: boolean,
+			vertical?: boolean,
+			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
+		) => {
+			const { immediately = true, transitions = true } = options;
+
+			cropper.transformImage(
+				{
+					flip: {
+						horizontal,
+						vertical,
+					},
+				},
+				{ immediately, transitions },
+			);
+		},
+		rotateImage: (
+			rotate: number | Rotate,
+			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
+		) => {
+			const { immediately = true, transitions = true, normalize = false } = options;
+			cropper.transformImage(
+				{
+					rotate,
+				},
+				{ immediately, transitions, normalize },
 			);
 		},
 		reset: (boundary: Boundary, image: CropperImage) => {
 			resetState(boundary, image);
 		},
-		setState: (newState: Partial<CropperState>, options: CropperMethodOptions = {}) => {
+		setState: (newState: Partial<CropperState>, options: TransitionOptions = {}) => {
 			const { transitions = true } = options;
 			updateState(() => state && { ...state, ...newState }, {
 				transitions,
@@ -319,14 +414,18 @@ export function useAbstractCropperState<
 		},
 		setCoordinates: (
 			transforms: CoordinatesTransform | CoordinatesTransform[],
-			options: CropperMethodOptions = {},
+			options: TransitionOptions = {},
 		) => {
 			const { transitions = true } = options;
 			updateState(
 				() =>
 					state &&
 					applyPostProcess(
-						'setCoordinates',
+						{
+							name: 'setCoordinates',
+							immediately: true,
+							transitions,
+						},
 						(setCoordinatesAlgorithm || setCoordinates)(state, settings, transforms, false),
 					),
 				{
@@ -334,13 +433,13 @@ export function useAbstractCropperState<
 				},
 			);
 		},
-		setVisibleArea: (visibleArea: VisibleArea, options: CropperMethodOptions = {}) => {
+		setVisibleArea: (visibleArea: VisibleArea, options: TransitionOptions = {}) => {
 			const { transitions = true } = options;
 			updateState(
 				() =>
 					state &&
 					applyPostProcess(
-						'setVisibleArea',
+						{ name: 'setVisibleArea', immediately: true, transitions },
 						(setVisibleAreaAlgorithm || setVisibleArea)(state, settings, visibleArea),
 					),
 				{
@@ -354,7 +453,7 @@ export function useAbstractCropperState<
 					() =>
 						state &&
 						applyPostProcess(
-							'setBoundary',
+							{ name: 'setBoundary', immediately: true, transitions: false },
 							(setBoundaryAlgorithm || setBoundary)(state, settings, boundary),
 						),
 				);
@@ -362,88 +461,106 @@ export function useAbstractCropperState<
 				updateState(null);
 			}
 		},
-		onResizeEnd: () => {
-			updateState(() => state && applyPostProcess('resizeEnd', state), {
-				transitions: true,
-			});
-			endAction('resize');
-			runCallback(onResizeEnd, getInstance);
-		},
-		onMoveEnd: () => {
-			updateState(() => state && applyPostProcess('moveEnd', state), {
-				transitions: true,
-			});
-			endAction('move');
-			runCallback(onMoveEnd, getInstance);
-		},
-		onMove: (event: MoveEvent) => {
+		moveCoordinates: (
+			directions: Partial<MoveDirections>,
+			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
+		) => {
+			const { transitions = false, immediately = false, normalize = true } = options;
+
+			const callbacks = [];
+
 			if (!transitionsActive && state) {
-				const { directions } = normalizeMoveEvent(state, event);
-				updateState(() =>
-					applyPostProcess(
-						'move',
-						(moveCoordinatesAlgorithm || moveCoordinates)(state, settings, directions),
-					),
+				const normalizedDirections = normalize
+					? normalizeMoveDirections(state, directions)
+					: fillMoveDirections(directions);
+
+				let result = applyPostProcess(
+					{ name: 'move', immediately, transitions },
+					(moveCoordinatesAlgorithm || moveCoordinates)(state, settings, normalizedDirections),
 				);
-				startAction('move');
-				runCallback(onMove, getInstance);
-			}
-		},
-		onResize: (event: ResizeEvent) => {
-			if (!transitionsOptions.active && state) {
-				const { directions, options } = normalizeResizeEvent(state, event);
-				updateState(() =>
-					applyPostProcess(
-						'resize',
-						(resizeCoordinatesAlgorithm || resizeCoordinates)(state, settings, directions, options),
-					),
-				);
-				startAction('resize');
-				runCallback(onResize, getInstance);
-			}
-		},
-		onTransformImage: (event: TransformImageEvent) => {
-			if (!transitionsOptions.active && state) {
-				const { scale, move } = normalizeTransformImageEvent(state, event);
+				callbacks.push(onMove);
+
+				if (immediately) {
+					result = applyPostProcess({ name: 'moveEnd', immediately, transitions }, result);
+					callbacks.push(onMoveEnd);
+				} else {
+					startAction('move');
+				}
 
 				updateState(
-					() =>
-						applyPostProcess(
-							'transformImage',
-							(transformImageAlgorithm || transformImage)(state, settings, move, scale),
-						),
+					result,
 					{
-						transitions: false,
+						transitions: immediately && transitions,
 					},
+					callbacks,
 				);
-				startAction('transformImage');
-				runCallback(onTransformImage, getInstance);
 			}
 		},
-		onTransformImageEnd: () => {
-			updateState(() => state && applyPostProcess('transformImageEnd', state), {
-				transitions: true,
-			});
-			endAction('transformImage');
-			runCallback(onTransformImageEnd, getInstance);
-		},
-		move: (left: number, top?: number, options: CropperMethodOptions = {}) => {
-			const { transitions = true } = options;
-
+		moveCoordinatesEnd: (options: ImmediatelyOptions & TransitionOptions = {}) => {
+			const { transitions = true, immediately = false } = options;
 			updateState(
-				() =>
-					state &&
-					applyPostProcess(
-						'move',
-						(transformImageAlgorithm || transformImage)(state, settings, {
-							left,
-							top,
-						}),
-					),
+				() => state && applyPostProcess({ name: 'moveEnd', transitions, immediately }, state),
 				{
-					transitions: transitions,
+					transitions,
 				},
+				[onMoveEnd],
 			);
+			endAction('move');
+		},
+		resizeCoordinates: (
+			directions: Partial<ResizeDirections>,
+			parameters: Record<string, unknown>,
+			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
+		) => {
+			const { transitions = false, immediately = false, normalize = true } = options;
+
+			if (!transitionsOptions.active && state) {
+				const callbacks = [];
+
+				const normalizedDirections = normalize
+					? normalizeResizeDirections(state, directions)
+					: fillResizeDirections(directions);
+
+				let result = applyPostProcess(
+					{ name: 'resize', immediately, transitions },
+					(resizeCoordinatesAlgorithm || resizeCoordinates)(
+						state,
+						settings,
+						normalizedDirections,
+						parameters,
+					),
+				);
+				callbacks.push(onResize);
+
+				if (immediately) {
+					result = applyPostProcess({ name: 'resizeEnd', immediately, transitions }, result);
+					callbacks.push(onResizeEnd);
+				} else {
+					startAction('resize');
+				}
+
+				updateState(
+					result,
+					{
+						transitions: immediately && transitions,
+					},
+					callbacks,
+				);
+			}
+		},
+		resizeCoordinatesEnd: (options: ImmediatelyOptions & TransitionOptions = {}) => {
+			const { transitions = true, immediately = false } = options;
+			updateState(
+				() => state && applyPostProcess({ name: 'resizeEnd', transitions, immediately }, state),
+				{
+					transitions,
+				},
+				[onResizeEnd],
+			);
+			endAction('resize');
+		},
+		getStencilCoordinates() {
+			return getStencilCoordinates(state);
 		},
 		getCoordinates(options: { round?: boolean } = {}) {
 			const { round = true } = options;
@@ -484,6 +601,8 @@ export function useAbstractCropperState<
 				  };
 		},
 	};
+
+	return cropper;
 }
 
 export type AbstractCropperStateHook = ReturnType<typeof useCropperState>;

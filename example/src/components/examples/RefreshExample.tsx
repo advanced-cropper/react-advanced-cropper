@@ -1,5 +1,5 @@
-import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
-import { BoundingBox, CropperRef, Cropper, ResizeEvent, useWindowResize } from 'react-advanced-cropper';
+import React, { CSSProperties, useEffect, useRef, useState } from 'react';
+import { BoundingBox, CropperRef, Cropper, useWindowResize, ResizeDirections } from 'react-advanced-cropper';
 import './RefreshExample.scss';
 
 export const RefreshExample = () => {
@@ -14,8 +14,8 @@ export const RefreshExample = () => {
 	const updateCoordinates = (width, height) => {
 		const container = containerRef.current;
 		if (container) {
-			const resultWidth = Math.min(Math.max(0, width), container.clientWidth)
-			const resultHeight = Math.min(Math.max(0, height), container.clientHeight)
+			const resultWidth = Math.min(Math.max(0, width), container.clientWidth);
+			const resultHeight = Math.min(Math.max(0, height), container.clientHeight);
 			setWidth(resultWidth);
 			setHeight(resultHeight);
 			setLeft(container.clientWidth / 2 - resultWidth / 2);
@@ -30,10 +30,10 @@ export const RefreshExample = () => {
 		updateCoordinates(width, height);
 	};
 
-	const onResize = (event: ResizeEvent) => {
+	const onResize = (resize: ResizeDirections) => {
 		const container = containerRef.current;
 		if (container) {
-			const directions = { ...event.directions };
+			const directions = { ...resize };
 
 			if (directions.left) {
 				directions.right = directions.left;

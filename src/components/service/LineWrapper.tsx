@@ -1,7 +1,6 @@
 import React, { ReactNode } from 'react';
 import classnames from 'classnames';
-import { DragEvent } from 'advanced-cropper/events';
-import { HorizontalCardinalDirection, VerticalCardinalDirection } from 'advanced-cropper/types';
+import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper/types';
 import { DraggableElement } from './DraggableElement';
 
 import './LineWrapper.scss';
@@ -9,7 +8,7 @@ import './LineWrapper.scss';
 interface Props {
 	className?: string;
 	children?: ReactNode;
-	onDrag?: (event: DragEvent) => void;
+	onDrag?: (directions: MoveDirections, event: TouchEvent | MouseEvent) => void;
 	onDragEnd?: () => void;
 	onLeave?: () => void;
 	onEnter?: () => void;

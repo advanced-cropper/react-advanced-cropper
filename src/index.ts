@@ -27,11 +27,21 @@ export * from './hooks/useWindowResize';
 export * from './service/react';
 export * from 'advanced-cropper/types';
 export * from 'advanced-cropper/defaults';
+export * from 'advanced-cropper/algorithms';
 export * from 'advanced-cropper/image';
 export * from 'advanced-cropper/html';
-export * from 'advanced-cropper/touch';
 export * from 'advanced-cropper/canvas';
-export * from 'advanced-cropper/events';
 export * from 'advanced-cropper/service';
 export * from 'advanced-cropper/state';
-export { isLower, isGreater, isRoughlyEqual, isNumber, isUndefined, isArray, isNumeric } from 'advanced-cropper/utils';
+export {
+	isLower,
+	isGreater,
+	isRoughlyEqual,
+	isNumber,
+	isUndefined,
+	isArray,
+	isNumeric,
+	isWheelEvent,
+	isMouseEvent,
+	isTouchEvent,
+} from 'advanced-cropper/utils';

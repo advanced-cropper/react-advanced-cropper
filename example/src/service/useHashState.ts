@@ -23,7 +23,6 @@ export function useHashState(defaultValue?: string, allowedValues?: string[]): [
 
 
 	useEffect(() => {
-		console.log({value, internalValue, isBrowser})
 		if (internalValue !== value) {
 			setInternalValue(value);
 		}

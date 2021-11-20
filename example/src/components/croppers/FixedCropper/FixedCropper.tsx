@@ -34,7 +34,7 @@ export const FixedCropper: FC<FixedCropperProps> = ({ wrapperClassName, classNam
 	const onZoom = (value: number, transitions?: boolean) => {
 		const cropper = cropperRef.current;
 		if (cropper) {
-			cropper.zoom(
+			cropper.zoomImage(
 				getVisibleAreaSize(cropper.getState(), cropper.getSettings(), absoluteZoom) /
 					getVisibleAreaSize(cropper.getState(), cropper.getSettings(), value),
 				{

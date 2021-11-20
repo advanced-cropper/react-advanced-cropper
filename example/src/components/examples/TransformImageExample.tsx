@@ -16,7 +16,7 @@ export const TransformImageExample = () => {
 	const zoom = (factor: number) => () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
-			cropper.zoom(factor);
+			cropper.zoomImage(factor);
 		}
 	};
 
@@ -25,13 +25,13 @@ export const TransformImageExample = () => {
 		if (cropper) {
 			const { width, height } = cropper.getCoordinates();
 			if (direction === 'left') {
-				cropper.move(-width / 4);
+				cropper.moveImage(-width / 4);
 			} else if (direction === 'right') {
-				cropper.move(width / 4);
+				cropper.moveImage(width / 4);
 			} else if (direction === 'top') {
-				cropper.move(0, -height / 4);
+				cropper.moveImage(0, -height / 4);
 			} else if (direction === 'bottom') {
-				cropper.move(0, height / 4);
+				cropper.moveImage(0, height / 4);
 			}
 		}
 	};

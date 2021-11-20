@@ -1,12 +1,10 @@
 import React, { ReactNode, Component, RefObject, createRef } from 'react';
-import { DragEvent } from 'advanced-cropper/events';
-import { SimpleTouch } from 'advanced-cropper/touch';
-import { Point } from 'advanced-cropper/types';
+import { MoveDirections, Point, SimpleTouch } from 'advanced-cropper/types';
 
 interface Props {
 	className?: string;
 	children?: ReactNode;
-	onDrag?: (event: DragEvent) => void;
+	onDrag?: (directions: MoveDirections, nativeEvent?: MouseEvent | TouchEvent) => void;
 	onDragEnd?: () => void;
 	onLeave?: () => void;
 	onEnter?: () => void;
@@ -42,21 +40,14 @@ export class DraggableElement extends Component<Props> {
 		if (container && this.touches.length) {
 			if (this.touches.length === 1 && newTouches.length === 1) {
 				if (onDrag) {
-					onDrag(
-						new DragEvent(
-							event,
-							container,
-							{
-								left: newTouches[0].clientX,
-								top: newTouches[0].clientY,
-							},
-							{
-								left: this.touches[0].clientX,
-								top: this.touches[0].clientY,
-							},
-							this.anchor,
-						),
-					);
+					const { left, top } = container.getBoundingClientRect();
+
+					const shift = {
+						left: newTouches[0].clientX - left - this.anchor.left,
+						top: newTouches[0].clientY - top - this.anchor.top,
+					};
+
+					onDrag(shift, event);
 				}
 			}
 			this.touches = newTouches;

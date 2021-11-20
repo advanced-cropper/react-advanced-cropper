@@ -16,9 +16,9 @@ export const RotateImageExample = () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
 			if (cropper.getState().transforms.rotate % 180 !== 0) {
-				cropper.flip(!horizontal, !vertical);
+				cropper.flipImage(!horizontal, !vertical);
 			} else {
-				cropper.flip(horizontal, vertical);
+				cropper.flipImage(horizontal, vertical);
 			}
 		}
 	};
@@ -26,7 +26,7 @@ export const RotateImageExample = () => {
 	const rotate = (angle: number) => () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
-			cropper.rotate(angle);
+			cropper.rotateImage(angle);
 		}
 	};
 
