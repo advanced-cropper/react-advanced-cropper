@@ -43,6 +43,7 @@ export const ArtificialTransition: FC<Props> = ({
 				transitions,
 			);
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [width, height, top, left, transitions]);
 	return (
 		<div

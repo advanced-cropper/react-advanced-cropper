@@ -150,8 +150,6 @@ export const BoundingBox = ({
 		const result: HandlerNode[] = [];
 		points.forEach((point) => {
 			if (handlers[point.name]) {
-				const { horizontalPosition, verticalPosition } = point;
-
 				result.push({
 					name: point.name,
 					component: handlerComponent,

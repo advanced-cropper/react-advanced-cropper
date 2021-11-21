@@ -1,10 +1,9 @@
-import React, { ReactNode, useMemo, useState, forwardRef, useImperativeHandle, useRef, CSSProperties } from 'react';
+import React, { ReactNode, forwardRef, useImperativeHandle, useRef, CSSProperties } from 'react';
 import cn from 'classnames';
 import { BoundarySizeAlgorithm, Size } from 'advanced-cropper/types';
 import { updateStretcher, StretchAlgorithm } from 'advanced-cropper/html';
 import { fillBoundary, fitBoundary } from 'advanced-cropper/defaults';
 import { isFunction } from 'advanced-cropper/utils';
-import { tick } from '../../service/utils';
 
 import './CropperBoundary.scss';
 

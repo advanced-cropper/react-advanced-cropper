@@ -96,6 +96,7 @@ export const Preview = ({
 		if (image && (image.width || image.height)) {
 			refresh();
 		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [image?.src]);
 
 	return (

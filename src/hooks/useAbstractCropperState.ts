@@ -1,5 +1,4 @@
 import { useRef, useMemo } from 'react';
-import { useDebouncedCallback } from 'use-debounce';
 import {
 	CropperSettings,
 	PostprocessFunction,
@@ -50,6 +49,7 @@ import {
 import { TransitionsSettings } from '../types';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
+import { useDebouncedCallback } from './useDebouncedCallback';
 
 export interface CropperMethodOptions {
 	transitions?: boolean;

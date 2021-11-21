@@ -44,19 +44,23 @@ the possibility to display loading, unloading image process easialy and without 
 
 ### Interact / visualize the cropper state
 
-#### `Stencil`
+#### `CropperWrapper`
 
-It's the custom component, that is used to display the current cropped area and change it by interaction with it.
+This component wraps the cropper itself. It can be used to inject some content in the cropper, to customze image loading and etc.
+
+#### `CropperBackgroundWrapper`
+
+This component that wraps cropper background and stencil. It process touch and mouse events to transform image.
 
 #### `CropperBackground`
 
 This component is used to display cropper image. It's recommended to use it to display the image, because it handle transforms and transitions
 internally in the convenient way.
 
-#### `CropperWrapper`
+#### `Stencil`
 
-This component is used to give the user possibility to resize and move image by mouse and touch. It handles the touch, mouse and wheel events and produces
-`TransformImage` event.
+It's the custom component, that is used to display the current cropped area and change it by interaction with it.
+
 
 #### `useMoveImageOptions`
 

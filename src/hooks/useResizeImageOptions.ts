@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { ResizeImageSettings } from '../types';
 import { getOptions } from 'advanced-cropper/utils';
+import { ResizeImageSettings } from '../types';
 
 interface UseResizeImageOptions {
 	touch: boolean;

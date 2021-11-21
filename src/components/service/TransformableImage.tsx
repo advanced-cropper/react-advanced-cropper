@@ -3,11 +3,6 @@ import debounce from 'debounce';
 import { ImageTransform, Point, SimpleTouch } from 'advanced-cropper/types';
 import { touchesToImageTransform, wheelEventToImageTransform } from 'advanced-cropper/transforms';
 
-interface DesiredCropperRef {
-	transformImage: (transform: ImageTransform) => void;
-	transformImageEnd: () => void;
-}
-
 interface Props {
 	onTransform?: (transform: ImageTransform) => void;
 	onTransformEnd?: () => void;

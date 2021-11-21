@@ -110,7 +110,6 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
-			...props
 		}: Props,
 		ref,
 	) => {

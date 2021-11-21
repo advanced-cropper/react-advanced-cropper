@@ -103,7 +103,6 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
-			...props
 		}: Props,
 		ref,
 	) => {

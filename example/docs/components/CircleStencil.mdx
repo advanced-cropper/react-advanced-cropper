@@ -229,7 +229,7 @@ import TOCInline from "@theme/TOCInline";
 
 	The object of custom lines classes.
 
-### `linesWrapperClassNames`
+### `lineWrapperClassNames`
 
 - **Type:**
 
@@ -254,53 +254,38 @@ import TOCInline from "@theme/TOCInline";
 You should not pass this props to stencil, they are passed by the cropper itself
 :::
 
-### `state`
-- **Type:** `CropperState`
+
+### `cropper`
+- **Type:** `CropperRef`
 
 - **Details:**
 
-	The object with the current cropper state.
+	The ref to [the cropper instance](/docs/components/Cropper).
 
 ### `image`
-- **Type:** `CropperImage`
+- **Type:**
+
+	```tsx
+	interface CropperImage {
+		src: string;
+		revoke: boolean;
+		transforms: Transforms;
+		arrayBuffer: ArrayBuffer | null;
+		width: number;
+		height: number;
+	}
+	```
+
+	```tsx
+	interface Transforms {
+		rotate: number;
+		flip: {
+			horizontal: boolean;
+			vertical: boolean;
+		};
+	}
+	```
 
 - **Details:**
 
 	The object with the current cropper image.
-
-### `transitions`
-- **Type:** `CropperTransitions`
-
-- **Details:**
-
-	The object with the current cropper transitions.
-
-
-### `onResize`
-- **Type:** `(event: ResizeEvent) => void`
-
-- **Details:**
-
-	The callback that should be called on stencil resize.
-
-### `onResizeEnd`
-- **Type:** `() => void`
-
-- **Details:**
-
-	The callback that should be called on stencil resize end.
-
-
-### `onMove`
-- **Type:** `(event: MoveEvent) => void`
-
-- **Details:**
-
-	The callback that should be called on stencil move.
-
-### `onMoveEnd`
-- **Type:** `() => void`
-
-- **Details:**
-
-	The callback that should be called on stencil move end.

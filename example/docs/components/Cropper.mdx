@@ -227,6 +227,26 @@ interface MoveImageSettings {
     - `mouse` is a flag that checks if image should be moved by a mouse
 
 
+
+
+### `rotateImage`
+
+- **Type:** `boolean | RotateImageSettings`
+```tsx
+interface RotateImageSettings {
+	touch?: boolean;
+}
+```
+
+- **Default:** `false`
+
+- **Details:**
+
+	This prop is either boolean flag or object settings.
+
+	The `touch` field checks if image should be rotated by a rotate gesture.
+
+
 ### `minWidth`
 
 - **Type:** `number`
@@ -364,6 +384,61 @@ Callback that called on start any of the interaction with a cropper.
 
 Callback that called on end of all the interactions with a cropper.
 
+
+
+### `wrapperComponent`
+
+- **Type:** `Component`
+
+- **Default:** `CropperWrapper`
+
+- **Details:**
+
+	The wrapper component. This property can be used to replace the wrapper on the custom component.
+
+
+### `wrapperProps`
+
+- **Type:** `object`
+
+- **Default:** `{}`
+
+- **Details:**
+
+	The props that will be passed to the wrapper component.
+
+
+### `backgroundWrapperComponent`
+
+- **Type:** `Component`
+
+- **Default:** `CropperWrapper`
+
+- **Details:**
+
+	The background wrapper component. This property can be used to replace the background wrapper on the custom component.
+
+
+### `backgroundWrapperProps`
+
+- **Type:** `object`
+
+- **Default:** `{}`
+
+- **Details:**
+
+	The props that will be passed to the background wrapper component.
+
+
+
+### `stateSettings`
+
+- **Type:** `object`
+
+- **Details:**
+
+	The escape hatch to pass the additional parameters to `CropperSettings`, that could be used
+	by the custom algorithms.
 
 ### `transitions`
 
@@ -1023,6 +1098,19 @@ typing use `CropperRef` type.
 
 	This method is the escape solution for the cases, when you can't do what you want by other methods.
 
+
+
+### `setImage(image)`
+
+- **Arguments:**
+
+  `state: CropperImage`
+
+- **Usage:**
+
+	This method is the escape hatch to replace the image without reset the cropper state.
+
+
 ### `setCoordinates(transform)`
 
 - **Arguments:**
@@ -1121,24 +1209,28 @@ typing use `CropperRef` type.
 	**See also: [Example](/docs/guides/advanced-recipes#dynamic-cropper-size)**
 
 
-### `zoom(factor, center, options)`
+### `zoomImage(scale, options)`
 
 - **Arguments:**
 
-	`factor: number`
+	`scale: number | Scale`
 
-	`center: Point | null`
 	```tsx
-	interface Point {
-		left: number;
-		top: number;
+	interface Scale {
+		factor: number;
+		center?: {
+			left: number;
+			top: number;
+		};
 	}
 	```
 
-	`options: CropperMethodOptions`
+	`options: Options`
 	```tsx
-	interface CropperMethodOptions {
-		transitions?: boolean;
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
 	}
 	```
 
@@ -1146,14 +1238,10 @@ typing use `CropperRef` type.
 
 	This methods is used to scale visible area relative to its scale.
 
-	The first parameter `factor` is the number, that represents scale factor (i.e. `1.1` to resize to `110%`, `0.8` to resize to `80%`).
-
-	The second parameter `center` is the object `{ left, top }`.
-
 	**See also: [Example](/docs/guides/advanced-recipes#move-and-scale-image)**
 
 
-### `move(left, top, options)`
+### `moveImage(left, top, options)`
 
 - **Arguments:**
 
@@ -1161,11 +1249,14 @@ typing use `CropperRef` type.
 
   `top: number`
 
-	`options: CropperMethodOptions`
+	`options: Options`
 	```tsx
-	interface CropperMethodOptions {
-		transitions?: boolean;
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
 	}
+	```
 
 - **Usage:**
 	This methods is used to translate visible area relative to its position. The parameters
@@ -1173,17 +1264,30 @@ typing use `CropperRef` type.
 
 	**See also: [Example](/docs/guides/advanced-recipes#move-and-scale-image)**
 
-### `rotate(angle, options)`
+### `rotateImage(rotate, options)`
 
 - **Arguments:**
 
-  `angle: number`
+  `rotate: number | Rotate`
 
-	`options: CropperMethodOptions`
 	```tsx
-	interface CropperMethodOptions {
-		transitions?: boolean;
+	interface Rotate {
+		angle: number;
+		center?: {
+			left: number;
+			top: number;
+		};
 	}
+	```
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
+	}
+	```
 
 - **Usage:**
 
@@ -1191,7 +1295,7 @@ typing use `CropperRef` type.
 
 	**See also: [Example](/docs/guides/advanced-recipes#rotate--flip-image)**
 
-### `flip(horizontal, vertical)`
+### `flipImage(horizontal, vertical, options)`
 
 - **Arguments:**
 
@@ -1199,17 +1303,172 @@ typing use `CropperRef` type.
 
   `vertical: boolean`
 
-	`options: CropperMethodOptions`
+	`options: Options`
 	```tsx
-	interface CropperMethodOptions {
-		transitions?: boolean;
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
 	}
+	```
 
 - **Usage:**
 
 	This methods is used to flip the image horizontally and/or vertically.
 
 	**See also: [Example](/docs/guides/advanced-recipes#rotate--flip-image)**
+
+
+### `transformImage(horizontal, vertical, options)`
+
+- **Arguments:**
+
+  `transform: ImageTransform`
+
+	```tsx
+	interface ImageTransform {
+		scale?: number | Scale;
+		move?: {
+			left?: number;
+			top?: number;
+		};
+		rotate?: number | Rotate;
+		flip?: Flip;
+	}
+	```
+
+  `vertical: boolean`
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This is the general method to transform image. The methods above `zoomImage`, `moveImage` and `rotateImage` are the
+	synonyms for this method with default `immediately = true`, `transitions = true` and `normalize = false`.
+
+
+### `transformImageEnd(options)`
+
+- **Arguments:**
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This method indicates that transform image is end.
+
+
+### `moveCoordinates(directions, options)`
+
+- **Arguments:**
+
+  `directions: Partial<MoveDirections>`
+
+	```tsx
+	interface MoveDirections {
+		left: number;
+		top: number;
+	}
+	```
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This is the method to move cropper. It's used in the stencils internally.
+
+
+### `moveCoordinatesEnd(options)`
+
+- **Arguments:**
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This method indicates that move coordinates is end.
+
+
+### `resizeCoordinates(directions, options)`
+
+- **Arguments:**
+
+  `directions: Partial<ResizeDirections>`
+
+	```tsx
+	interface ResizeDirections {
+		left: number;
+		top: number;
+		bottom: number;
+		right: number;
+	}
+	```
+
+	`resizeOptions: ResizeOptions`
+	```tsx
+	interface ResizeOptions {
+		compensate?: boolean;
+		preserveRatio?: boolean;
+		allowedDirections?: ResizeDirections;
+		respectDirection?: 'width' | 'height';
+	}
+	```
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+    normalize?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This is the method to resize cropper. It's used in the stencils internally.
+
+
+### `resizeCoordinatesEnd(options)`
+
+- **Arguments:**
+
+	`options: Options`
+	```tsx
+	interface Options {
+		immediately?: boolean;
+    transitions?: boolean;
+	}
+	```
+
+- **Usage:**
+
+	This method indicates that resize coordinates is end.
 
 
 ### `reset()`

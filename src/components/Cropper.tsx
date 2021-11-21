@@ -174,7 +174,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		},
 	});
 
-	// To give the possibility to change an image without resetting the state
+	// Additional variable to give the possibility to change an image without resetting the state
 	const [currentImage, setCurrentImage] = useState<CropperImage>(null);
 
 	const resetCropper = () => {

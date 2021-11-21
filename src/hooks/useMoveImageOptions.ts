@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
-import { MoveImageSettings } from '../types';
 import { getOptions } from 'advanced-cropper/utils';
+import { MoveImageSettings } from '../types';
 
 export function useMoveImageOptions(moveImage: MoveImageSettings | boolean) {
 	return useMemo(

@@ -101,10 +101,18 @@ export const GettingStartedExample = () => {
 | maxHeight                 | `number`             | The maximum height of the stencil (percents)                    			      |
 | checkOrientation          | `boolean`            | Check if EXIF orientation should be checked                     			      | `true`
 | resizeImage               | `boolean`, `object`  | The options for the image resizing ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#resizeimage)) | `true`
-| moveImage                 | `boolean`, `object`  | The options for the image moving ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#moveimage)) | `true`
+| moveImage                 | `boolean`, `object`  | The options for the image moving ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#moveimage))     | `true`
+| rotateImage               | `boolean`, `object`  | The options for the image moving ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#rotateImage))   | `false`
 | imageRestriction          | `string`             | Set restrictions for image position ('fillArea' 'fitArea', 'stencil', 'none')    | `'fillArea'`
 | defaultSize               | `object`, `Function` | The function that returns the default size of the stencil or object              |
 | defaultPosition           | `object`, `Function` | The function that returns the default position of the stencil or object          |
+| wrapperComponent          | `Component`          | The wrapper component                                           			      | `CropperWrapper`
+| wrapperProps              | `object`             | The props for the wrapper component                             			      | `{}`
+| backgroundWrapperComponent| `Component`          | The background wrapper component                                           | `CropperBackgroundWrapper`
+| backgroundWrapperProps    | `object`             | The props for the background wrapper component                             | `{}`
+
+
+
 
 See [the documentation](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper) for more props and details.
 

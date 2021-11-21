@@ -1,9 +1,4 @@
-import React, {
-	ReactNode,
-	PureComponent,
-	RefObject,
-	createRef,
-} from 'react';
+import React, { ReactNode, PureComponent, RefObject, createRef } from 'react';
 import { distance } from 'advanced-cropper/utils';
 import './DraggableArea.scss';
 import cn from 'classnames';

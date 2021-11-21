@@ -19,11 +19,20 @@ export const ComponentsHierarchy: FC = () => {
 					type={'hook'}
 					title={'useResizeImageOptions'}
 				/>
-				<HierarchyElement to={'CropperCanvas'} type={'component'} title={'CropperCanvas'} />
-				<HierarchyElement to={'CropperBoundary'} type={'component'} title={'CropperBoundary'} />
-				<HierarchyElement to={'CropperBackground'} type={'component'} title={'CropperBackground'} />
-				<HierarchyElement to={'CropperWrapper'} type={'component'} title={'CropperWrapper'} />
-				<HierarchyElement type={'custom-component'} title={'Stencil'} />
+
+				<HierarchyElement to={'CropperWrapper'} type={'custom-component'} title={'CropperWrapper'}>
+					<HierarchyElement to={'CropperBoundary'} type={'component'} title={'CropperBoundary'}>
+						<HierarchyElement
+							to={'CropperBackgroundWrapper'}
+							type={'custom-component'}
+							title={'CropperBackgroundWrapper'}
+						>
+							<HierarchyElement to={'CropperBackground'} type={'component'} title={'CropperBackground'} />
+							<HierarchyElement type={'custom-component'} title={'Stencil'} />
+						</HierarchyElement>
+						<HierarchyElement to={'CropperCanvas'} type={'component'} title={'CropperCanvas'} />
+					</HierarchyElement>
+				</HierarchyElement>
 			</HierarchyElement>
 		</div>
 	);
