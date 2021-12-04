@@ -1,8 +1,7 @@
 <p align="center"><a href="https://norserium.github.io/react-advanced-cropper/" target="_blank" rel="noopener noreferrer"><img width="133" src="https://github.com/norserium/react-advanced-cropper/blob/master/example/static/img/github-logo.svg?raw=true&timestamp=1608385818575" alt="React Advanced Cropper logo"></a></p>
 <p align="center">
-  <a href="https://npmcharts.com/compare/react-advanced-cropper?minimal=true"><img src="https://img.shields.io/npm/dm/react-advanced-cropper.svg?sanitize=true" alt="Downloads"></a>
-  <a href="https://www.npmjs.com/package/react-advanced-cropper"><img src="https://img.shields.io/npm/v/react-advanced-cropper.svg" alt="Version"></a>
-  <a href="https://www.npmjs.com/package/react-advanced-cropper">
+  <a href="https://github.com/Norserium/react-advanced-cropper/issues"><img src="https://img.shields.io/github/issues/Norserium/react-advanced-cropper" alt="Issues"></a>
+  <a href="https://www.npmjs.com/package/react-advanced-cropper"><img src="https://img.shields.io/npm/v/react-advanced-cropper?color=6FCFF0" alt="Version"></a>
   <br>
   <a href="https://norserium.github.io/react-advanced-cropper/">Documentation</a target="_blank" rel="noopener noreferrer"> /
   <a href="https://norserium.github.io/react-advanced-cropper/docs/guides/recipes">Examples</a target="_blank" rel="noopener noreferrer"> /
