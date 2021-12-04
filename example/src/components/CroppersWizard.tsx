@@ -89,19 +89,19 @@ export const CroppersWizard: FC = () => {
 			},
 			features: ['Custom Navigation', 'Styling'],
 			icon: <FixedCropperIcon />,
-			settings: [],
+			settings: ['size'],
 		},
 	];
 
 	const images: Image[] = [
 		{
-			src: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash.jpg',
-			preview: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash-preview.jpg',
-		},
-		{
 			src: 'https://images.pexels.com/photos/876344/pexels-photo-876344.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
 			preview:
 				'https://images.pexels.com/photos/876344/pexels-photo-876344.jpeg?auto=compress&cs=tinysrgb&h=120&w=120',
+		},
+		{
+			src: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash.jpg',
+			preview: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash-preview.jpg',
 		},
 		{
 			src: 'https://images.unsplash.com/photo-1599032909756-5deb82fea3b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
@@ -237,10 +237,14 @@ export const CroppersWizard: FC = () => {
 				{cropper === 'fixed-cropper' && (
 					<FixedCropper
 						key={'fixed-cropper'}
-						wrapperClassName={'croppers-wizard__cropper'}
+						className={'croppers-wizard__cropper'}
 						src={src}
 						stencilProps={stencilProps}
-						imageRestriction={'stencil'}
+						minHeight={minHeight}
+						minWidth={minWidth}
+						maxWidth={maxWidth}
+						maxHeight={maxHeight}
+						stencilType={stencilType}
 					/>
 				)}
 				<button className="croppers-wizard__info-button" onClick={onOpenInfo}>

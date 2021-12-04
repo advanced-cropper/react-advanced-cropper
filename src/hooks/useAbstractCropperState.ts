@@ -91,15 +91,15 @@ type StateModifier = (state: CropperState, settings: CropperSettings) => Cropper
 
 type Callback<Instance> = (instance: Instance) => void;
 
-interface TransitionOptions {
+export interface TransitionOptions {
 	transitions?: boolean;
 }
 
-interface ImmediatelyOptions {
+export interface ImmediatelyOptions {
 	immediately?: boolean;
 }
 
-interface NormalizeOptions {
+export interface NormalizeOptions {
 	normalize?: boolean;
 }
 
@@ -204,9 +204,9 @@ export function useAbstractCropperState<
 					enableTransitions();
 					debouncedDisableTransitions();
 				}
-				return newState;
+				return copyState(newState);
 			} else {
-				return state;
+				return copyState(state);
 			}
 		}, mergeCallbacks([createCallback(onChange, getInstance), ...callbacks.map((callback) => createCallback(callback, getInstance))]));
 	};

@@ -2,7 +2,7 @@ import React, { FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from
 import ScrollContainer from 'react-indiana-drag-scroll';
 import cn from 'classnames';
 import { CloseIcon } from '@site/src/components/icons/CloseIcon';
-import { CropperDescription, CropperSettings } from './CroppersWizard';
+import { CropperSettings } from './CroppersWizard';
 import { FreeAspectRatioIcon } from './icons/settings/FreeAspectRatioIcon';
 import { SquareAspectRatioIcon } from './icons/settings/SquareAspectRatioIcon';
 import { VerticalAspectRatioIcon } from './icons/settings/VerticalAspectRatioIcon';
@@ -132,30 +132,32 @@ export const CroppersWizardSettings: FC<Props> = (props) => {
 			<button className="croppers-wizard-settings__close-button" onClick={onCloseInternal}>
 				<CloseIcon />
 			</button>
-			<div className="croppers-wizard-settings__property">
-				<div className="croppers-wizard-settings__property-title">Aspect Ratio</div>
-				<ScrollContainer className="croppers-wizard-settings__property-values">
-					{aspectRatios.map((ratio, index) => {
-						const { maxAspectRatio, minAspectRatio, aspectRatio } = ratio;
-						const active =
-							settings.maxAspectRatio === maxAspectRatio &&
-							settings.minAspectRatio === minAspectRatio &&
-							settings.aspectRatio === aspectRatio;
-						return (
-							<div
-								key={index}
-								className={cn(
-									'croppers-wizard-settings__icon',
-									active && 'croppers-wizard-settings__icon--active',
-								)}
-								onClick={() => updateSettings({ maxAspectRatio, minAspectRatio, aspectRatio })}
-							>
-								{ratio.icon}
-							</div>
-						);
-					})}
-				</ScrollContainer>
-			</div>
+			{sections.indexOf('aspectRatio') !== -1 && (
+				<div className="croppers-wizard-settings__property">
+					<div className="croppers-wizard-settings__property-title">Aspect Ratio</div>
+					<ScrollContainer className="croppers-wizard-settings__property-values">
+						{aspectRatios.map((ratio, index) => {
+							const { maxAspectRatio, minAspectRatio, aspectRatio } = ratio;
+							const active =
+								settings.maxAspectRatio === maxAspectRatio &&
+								settings.minAspectRatio === minAspectRatio &&
+								settings.aspectRatio === aspectRatio;
+							return (
+								<div
+									key={index}
+									className={cn(
+										'croppers-wizard-settings__icon',
+										active && 'croppers-wizard-settings__icon--active',
+									)}
+									onClick={() => updateSettings({ maxAspectRatio, minAspectRatio, aspectRatio })}
+								>
+									{ratio.icon}
+								</div>
+							);
+						})}
+					</ScrollContainer>
+				</div>
+			)}
 			{sections.indexOf('imageRestriction') !== -1 && (
 				<div className="croppers-wizard-settings__property">
 					<div className="croppers-wizard-settings__property-title">Image Restriction</div>

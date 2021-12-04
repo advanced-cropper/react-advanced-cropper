@@ -1,84 +1,61 @@
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, forwardRef, useRef } from 'react';
 import cn from 'classnames';
-import { CropperRef, CropperProps, Cropper } from 'react-advanced-cropper';
-import { getAbsoluteZoom, getVisibleAreaSize } from './algorithms';
-import { Navigation } from './components/Navigation';
+import { CropperRef, CropperProps, Cropper, CircleStencil, RectangleStencil, mergeRefs } from 'react-advanced-cropper';
+import { Wrapper } from './components/Wrapper';
 import './FixedCropper.scss';
 
 export interface FixedCropperProps extends Omit<CropperProps, 'defaultSize' | 'defaultCoordinates' | 'stencilSize'> {
-	wrapperClassName?: string;
+	stencilType?: 'circle' | 'rectangle';
 }
 
 export type FixedCropperMethods = CropperRef;
 
-export const FixedCropper: FC<FixedCropperProps> = ({ wrapperClassName, className, onChange, stencilProps, ...props }) => {
-	const [absoluteZoom, setAbsoluteZoom] = useState(0);
-	const [navigationWidth, setNavigationWidth] = useState(0);
+export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperMethods, FixedCropperProps>(
+	({ className, stencilProps, stencilType, ...props }: FixedCropperProps, ref) => {
+		const cropperRef = useRef<CropperRef>(null);
 
-	const cropperRef = useRef<CropperRef>();
-
-	const defaultSize = ({ imageSize, visibleArea }) => {
-		return {
-			width: (visibleArea || imageSize).width,
-			height: (visibleArea || imageSize).height,
+		const defaultSize = ({ imageSize, visibleArea }) => {
+			return {
+				width: (visibleArea || imageSize).width,
+				height: (visibleArea || imageSize).height,
+			};
 		};
-	};
 
-	const stencilSize = ({ boundary }) => {
-		return {
-			width: Math.min(boundary.height, boundary.width) - 80,
-			height: Math.min(boundary.height, boundary.width) - 80,
+		const stencilSize = ({ boundary }) => {
+			return {
+				width: Math.min(boundary.height, boundary.width) - 80,
+				height: Math.min(boundary.height, boundary.width) - 80,
+			};
 		};
-	};
 
-	const onZoom = (value: number, transitions?: boolean) => {
-		const cropper = cropperRef.current;
-		if (cropper) {
-			cropper.zoomImage(
-				getVisibleAreaSize(cropper.getState(), cropper.getSettings(), absoluteZoom) /
-					getVisibleAreaSize(cropper.getState(), cropper.getSettings(), value),
-				{
-					transitions: !!transitions,
-				},
-			);
-		}
-	};
-
-	const onChangeInternal = (cropper: CropperRef) => {
-		const state = cropper.getState();
-
-		setAbsoluteZoom(getAbsoluteZoom(state, cropper.getSettings()));
-		setNavigationWidth(Math.min(state.boundary.height, state.boundary.width) - 40)
-
-		if (onChange) {
-			onChange(cropper);
-		}
-	};
-
-	return (
-		<div className={cn('fixed-cropper', wrapperClassName)}>
+		return (
 			<Cropper
-				onChange={onChangeInternal}
-				className={cn('fixed-cropper__cropper', className)}
+				ref={mergeRefs([ref, cropperRef])}
+				className={cn('fixed-cropper', className)}
 				defaultSize={defaultSize}
-				ref={cropperRef}
 				stencilSize={stencilSize}
+				imageRestriction={'stencil'}
 				stencilProps={{
-					previewClassName: 'fixed-cropper-stencil__preview',
-					overlayClassName: 'fixed-cropper-stencil__overlay',
+					previewClassName: cn(
+						'fixed-cropper-stencil__preview',
+						stencilType === 'circle' && 'fixed-cropper-stencil__preview--circle',
+					),
+					overlayClassName: cn(
+						'fixed-cropper-stencil__overlay',
+						stencilType === 'circle' && 'fixed-cropper-stencil__overlay--circle',
+					),
 					handlers: {},
 					lines: {},
 					movable: false,
 					resizable: false,
 					...stencilProps,
 				}}
+				stencilComponent={stencilType === 'circle' ? CircleStencil : RectangleStencil}
+				wrapperComponent={Wrapper}
 				{...props}
 			/>
-			<div className="fixed-cropper__navigation" style={{ width: navigationWidth }}>
-				<Navigation zoom={absoluteZoom} onZoom={onZoom} />
-			</div>
-		</div>
-	);
-};
+		);
+	},
+);
 
 FixedCropper.displayName = 'FixedCropper';

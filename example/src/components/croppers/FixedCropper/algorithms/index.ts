@@ -1,28 +1,160 @@
-import { getSizeRestrictions, CropperSettings, CropperState } from 'react-advanced-cropper';
+import {
+	ImageRestriction,
+	StencilSize,
+	ratio,
+	getSizeRestrictions,
+	getMinimumSize,
+	CropperSettings,
+	CropperState,
+	isGreater,
+} from 'react-advanced-cropper';
 
-export function getAbsoluteZoom(state: CropperState, settings: CropperSettings) {
-	const { imageSize, coordinates } = state;
+function getMinimumVisibleAreaSize(
+	state: CropperState,
+	settings: CropperSettings & {
+		imageRestriction?: ImageRestriction;
+		adjustStencil?: boolean;
+		stencilSize?: StencilSize;
+		minWidth?: number;
+		minHeight?: number;
+	},
+) {
+	const minimumSize = getMinimumSize(state);
+
+	// Extend the basic settings
+	settings = {
+		...settings,
+		minWidth: Math.max(minimumSize, settings.minWidth || 0),
+		minHeight: Math.max(minimumSize, settings.minHeight || 0),
+	};
+
+	const { coordinates, visibleArea } = state;
+
+	const { adjustStencil, stencilSize } = settings;
+
+	const aspectRatio = ratio(coordinates);
 
 	const sizeRestrictions = getSizeRestrictions(state, settings);
 
-	// The minimum size is the minimum size of the coordinates (it's the safe assumption because `adjustStencil` is on by default
-	// What side of coordinates is considered as "size" doesn't matter, because it's the circle
-	let minSize = Math.max(sizeRestrictions.minHeight || 10, sizeRestrictions.minWidth  || 10);
-
-	// The maximum size depends on boundaries size.
-	// If the image is horizontally fitted to boundaries, it's its original width
-	// Else if the image is vertically fitted to boundaries, it's its original height
-	let size, maxSize;
-	if (imageSize.width / imageSize.height < coordinates.width / coordinates.height) {
-		// The current size is the visible area size.
-		// When it has the maximum value it's equal to the original image size
-		// When it has the minimum value it's equal to the cropper size
-		size = coordinates.width;
-		maxSize = imageSize.width;
-	} else {
-		size = coordinates.height;
-		maxSize = imageSize.height;
+	if (sizeRestrictions.minWidth > 0 && sizeRestrictions.minHeight > 0) {
+		if (isGreater(aspectRatio, sizeRestrictions.minWidth / sizeRestrictions.minHeight)) {
+			sizeRestrictions.minWidth = sizeRestrictions.minHeight * aspectRatio;
+		} else {
+			sizeRestrictions.minHeight = sizeRestrictions.minWidth / aspectRatio;
+		}
 	}
+
+	const viewRatio = isGreater(ratio(visibleArea), ratio(coordinates))
+		? visibleArea.height / coordinates.height
+		: visibleArea.width / coordinates.width;
+
+	let minSize = isGreater(ratio(visibleArea), sizeRestrictions.minWidth / sizeRestrictions.minHeight)
+		? sizeRestrictions.minHeight
+		: sizeRestrictions.minWidth;
+
+	if (!adjustStencil || stencilSize) {
+		minSize = minSize * viewRatio;
+	}
+
+	return minSize;
+}
+
+function getMaximumVisibleAreaSize(
+	state: CropperState,
+	settings: CropperSettings & {
+		imageRestriction?: ImageRestriction;
+		adjustStencil?: boolean;
+		stencilSize?: StencilSize;
+		minWidth?: number;
+		minHeight?: number;
+	},
+) {
+	const { imageSize, boundary, coordinates, visibleArea } = state;
+
+	const { imageRestriction, adjustStencil, stencilSize } = settings;
+
+	const aspectRatio = ratio(coordinates);
+
+	const sizeRestrictions = getSizeRestrictions(state, settings);
+
+	if (sizeRestrictions.maxWidth < Infinity && sizeRestrictions.maxHeight < Infinity) {
+		if (isGreater(sizeRestrictions.maxWidth / sizeRestrictions.maxHeight, aspectRatio)) {
+			sizeRestrictions.maxWidth = sizeRestrictions.maxHeight * aspectRatio;
+		} else {
+			sizeRestrictions.maxHeight = sizeRestrictions.maxWidth / aspectRatio;
+		}
+	}
+
+	let maximumVisibleAreaSize = {
+		width: Infinity,
+		height: Infinity,
+	};
+
+	const viewRatio = isGreater(ratio(visibleArea), ratio(coordinates))
+		? visibleArea.height / coordinates.height
+		: visibleArea.width / coordinates.width;
+
+	if (imageRestriction === 'fillArea') {
+		if (isGreater(ratio(imageSize), ratio(boundary))) {
+			maximumVisibleAreaSize.height = imageSize.height;
+			maximumVisibleAreaSize.width = maximumVisibleAreaSize.height * ratio(boundary);
+		} else {
+			maximumVisibleAreaSize.width = imageSize.width;
+			maximumVisibleAreaSize.height = maximumVisibleAreaSize.width / ratio(boundary);
+		}
+	} else if (imageRestriction === 'fitArea') {
+		if (isGreater(ratio(imageSize), ratio(boundary))) {
+			maximumVisibleAreaSize.width = imageSize.width;
+			maximumVisibleAreaSize.height = maximumVisibleAreaSize.width / ratio(imageSize);
+		} else {
+			maximumVisibleAreaSize.height = imageSize.height;
+			maximumVisibleAreaSize.width = maximumVisibleAreaSize.height * ratio(imageSize);
+		}
+	} else {
+		if (isGreater(ratio(imageSize), ratio(coordinates))) {
+			maximumVisibleAreaSize.height = sizeRestrictions.maxHeight * viewRatio;
+			maximumVisibleAreaSize.width = maximumVisibleAreaSize.height * ratio(imageSize);
+		} else {
+			maximumVisibleAreaSize.width = sizeRestrictions.maxWidth * viewRatio;
+			maximumVisibleAreaSize.height = maximumVisibleAreaSize.width / ratio(imageSize);
+		}
+	}
+
+	let maxSize = isGreater(ratio(visibleArea), sizeRestrictions.maxWidth / sizeRestrictions.maxHeight)
+		? sizeRestrictions.maxHeight
+		: sizeRestrictions.maxWidth;
+
+	if (!adjustStencil || stencilSize) {
+		maxSize = maxSize * viewRatio;
+	}
+
+	maxSize = Math.min(
+		maxSize,
+		isGreater(ratio(visibleArea), ratio(coordinates))
+			? maximumVisibleAreaSize.height
+			: maximumVisibleAreaSize.width,
+	);
+
+	return maxSize;
+}
+
+export function getAbsoluteZoom(
+	state: CropperState,
+	settings: CropperSettings & {
+		imageRestriction?: ImageRestriction;
+		adjustStencil?: boolean;
+		stencilSize?: StencilSize;
+		minWidth?: number;
+		minHeight?: number;
+	},
+) {
+	const { coordinates, visibleArea } = state;
+
+	let size = ratio(visibleArea) > ratio(coordinates) ? visibleArea.height : visibleArea.width;
+
+	const minSize = getMinimumVisibleAreaSize(state, settings);
+	const maxSize = getMaximumVisibleAreaSize(state, settings);
+
 	// This simple linear formula defines that absolute zoom is equal:
 	// - 0 when `size` is equal to `maxSize`
 	// - 1 when `size` is equal to `minSize`
@@ -30,15 +162,8 @@ export function getAbsoluteZoom(state: CropperState, settings: CropperSettings) 
 }
 
 export function getVisibleAreaSize(state: CropperState, settings: CropperSettings, absoluteZoom: number) {
-	const { imageSize, boundary } = state;
-
-	const sizeRestrictions = getSizeRestrictions(state, settings);
-
-	// It's the reverse of formula above for calculation of absolute size
-	let minSize = Math.max(sizeRestrictions.minHeight || 10, sizeRestrictions.minWidth  || 10);
-
-	let maxSize =
-		imageSize.width / imageSize.height > boundary.width / boundary.height ? imageSize.width : imageSize.height;
+	const minSize = getMinimumVisibleAreaSize(state, settings);
+	const maxSize = getMaximumVisibleAreaSize(state, settings);
 
 	return maxSize - absoluteZoom * (maxSize - minSize);
 }
