@@ -13,7 +13,7 @@ interface Props {
 	onLeave?: () => void;
 	onEnter?: () => void;
 	disabled?: boolean;
-	position: HorizontalCardinalDirection | VerticalCardinalDirection;
+	position?: HorizontalCardinalDirection | VerticalCardinalDirection;
 }
 
 export const LineWrapper = ({
@@ -28,7 +28,7 @@ export const LineWrapper = ({
 }: Props) => {
 	return (
 		<DraggableElement
-			className={classnames(['react-line-wrapper', `react-line-wrapper--${position}`, className])}
+			className={classnames(['react-line-wrapper', position && `react-line-wrapper--${position}`, className])}
 			disabled={disabled}
 			onDrag={onDrag}
 			onDragEnd={onDragEnd}

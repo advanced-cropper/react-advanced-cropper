@@ -166,20 +166,24 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		unloadTime: 500,
 		canvas,
 		onLoad() {
-			onReady && onReady(cropperRef.current);
+			if (cropperRef.current) {
+				onReady && onReady(cropperRef.current);
+			}
 		},
 		onError() {
-			onError && onError(cropperRef.current);
+			if (cropperRef.current) {
+				onError && onError(cropperRef.current);
+			}
 		},
 	});
 
 	// Additional variable to give the possibility to change an image without resetting the state
-	const [currentImage, setCurrentImage] = useState<CropperImage>(null);
+	const [currentImage, setCurrentImage] = useState<CropperImage | null>(null);
 
 	const resetCropper = () => {
 		if (boundaryRef.current) {
 			boundaryRef.current.stretchTo(image).then((boundary) => {
-				if (boundary) {
+				if (boundary && image) {
 					cropper.reset(boundary, image);
 				} else {
 					cropper.clear();
@@ -192,7 +196,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	const refreshCropper = () => {
 		if (boundaryRef.current) {
 			boundaryRef.current.stretchTo(image).then((boundary) => {
-				if (boundary) {
+				if (boundary && image) {
 					if (cropper.state) {
 						cropper.setBoundary(boundary);
 					} else {
@@ -227,7 +231,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 			refreshCropper();
 		},
 		getCanvas: (options?: DrawOptions) => {
-			if (imageRef.current && canvasRef.current) {
+			if (imageRef.current && canvasRef.current && cropper.state) {
 				return canvasRef.current.draw(cropper.state, imageRef.current, options);
 			} else {
 				return null;
@@ -269,11 +273,11 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	return (
 		<WrapperComponent
 			{...wrapperProps}
+			className={cn('react-advanced-cropper', className)}
+			loaded={loaded && currentImage === image}
 			cropper={cropper}
 			loading={loading}
-			loaded={loaded && currentImage === image}
 			style={style}
-			className={cn('react-advanced-cropper', className)}
 		>
 			<CropperBoundary
 				ref={boundaryRef}

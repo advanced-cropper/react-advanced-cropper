@@ -18,7 +18,7 @@ interface Props {
 }
 
 export interface CropperBoundaryMethods {
-	stretchTo: (size: Size) => Promise<Size | null>;
+	stretchTo: (size: Size | null) => Promise<Size | null>;
 	reset: () => void;
 }
 
@@ -35,8 +35,8 @@ export const CropperBoundary = forwardRef(
 		}: Props,
 		ref,
 	) => {
-		const stretcherRef = useRef<HTMLDivElement>();
-		const boundaryRef = useRef<HTMLDivElement>();
+		const stretcherRef = useRef<HTMLDivElement>(null);
+		const boundaryRef = useRef<HTMLDivElement>(null);
 
 		useImperativeHandle(ref, () => ({
 			reset: () => {
@@ -46,7 +46,7 @@ export const CropperBoundary = forwardRef(
 					stretcher.style.width = '';
 				}
 			},
-			stretchTo: (size: Size) => {
+			stretchTo: (size: Size | null) => {
 				const stretcher = stretcherRef.current;
 				const boundary = boundaryRef.current;
 

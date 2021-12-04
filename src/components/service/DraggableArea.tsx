@@ -27,7 +27,7 @@ export class DraggableArea extends PureComponent<Props> {
 		useAnchor: true,
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.touches = [];
@@ -101,17 +101,17 @@ export class DraggableArea extends PureComponent<Props> {
 		this.processEnd();
 	};
 
-	onTouchMove = (e) => {
+	onTouchMove = (e: TouchEvent) => {
 		if (this.touches.length >= 1) {
 			if (this.started) {
-				this.processMove(e.touches);
+				this.processMove(Array.from(e.touches));
 				e.preventDefault();
 				e.stopPropagation();
 			} else if (
 				distance(
 					{ x: this.touches[0].clientX, y: this.touches[0].clientY },
 					{ x: e.touches[0].clientX, y: e.touches[0].clientY },
-				) > this.props.activationDistance
+				) > (this.props.activationDistance || 0)
 			) {
 				this.initAnchor({
 					clientX: e.touches[0].clientX,
@@ -137,7 +137,7 @@ export class DraggableArea extends PureComponent<Props> {
 		}
 	};
 
-	onMouseMove = (e) => {
+	onMouseMove = (e: MouseEvent) => {
 		if (this.touches.length) {
 			this.processMove([
 				{

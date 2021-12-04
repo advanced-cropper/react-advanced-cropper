@@ -31,15 +31,15 @@
     "deploy": "gh-pages -d example/build"
   },
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0 || ^17.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0 || ^17.0.0"
+    "react": "^16.8.0 || ^17.0.0",
+    "react-dom": "^16.8.0 || ^17.0.0"
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^20.0.0",
     "@rollup/plugin-node-resolve": "^13.0.5",
     "@rollup/plugin-replace": "^3.0.0",
-    "@rollup/plugin-typescript": "^8.2.5",
+    "@rollup/plugin-typescript": "^8.3.0",
     "@rollup/plugin-url": "^6.1.0",
     "@types/debounce": "^1.2.0",
     "@types/jest": "^27.0.3",
@@ -71,13 +71,13 @@
     "rollup-plugin-terser": "^7.0.2",
     "rollup-plugin-visualizer": "^5.5.2",
     "ts-jest": "^27.0.7",
-    "typescript": "^4.0.5"
+    "typescript": "^4.5.2"
   },
   "files": [
     "dist"
   ],
   "dependencies": {
-    "advanced-cropper": "0.3.0",
+    "advanced-cropper": "0.3.1",
     "classnames": "^2.2.6",
     "debounce": "^1.2.0",
     "tslib": "^2.0.3"

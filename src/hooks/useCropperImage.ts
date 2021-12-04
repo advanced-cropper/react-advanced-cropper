@@ -20,13 +20,13 @@ export function useCropperImage(options: CropperImageHookSettings) {
 	const { src, onLoadingStart, onLoadingEnd, onError, onLoad, crossOrigin, checkOrientation, canvas } = options;
 	const [loading, setLoading] = useState(false);
 	const [loaded, setLoaded] = useState(false);
-	const [image, setImage] = useState<CropperImage>(null);
+	const [image, setImage] = useState<CropperImage | null>(null);
 
-	const currentSrc = useRef<string>(null);
+	const currentSrc = useRef<string | null>(null);
 
 	useEffect(() => {
 		if (currentSrc.current !== src) {
-			currentSrc.current = src;
+			currentSrc.current = src || null;
 			setLoaded(false);
 			if (src) {
 				setLoading(true);
@@ -44,7 +44,8 @@ export function useCropperImage(options: CropperImageHookSettings) {
 					promises.push(promiseTimeout(options.minimumLoadingTime));
 				}
 				Promise.all(promises)
-					.then(([image]: [CropperImage]) => {
+					.then((responses) => {
+						const [image] = responses as [CropperImage];
 						if (currentSrc.current === src) {
 							setImage(image);
 							if (onLoad) {

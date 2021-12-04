@@ -1254,7 +1254,7 @@
     "@rollup/pluginutils" "^3.1.0"
     magic-string "^0.25.7"
 
-"@rollup/plugin-typescript@^8.2.5":
+"@rollup/plugin-typescript@^8.3.0":
   version "8.3.0"
   resolved "https://registry.yarnpkg.com/@rollup/plugin-typescript/-/plugin-typescript-8.3.0.tgz#bc1077fa5897b980fc27e376c4e377882c63e68b"
   integrity sha512-I5FpSvLbtAdwJ+naznv+B4sjXZUcIvLLceYpITAn7wAP8W0wqc5noLdGIp9HGVntNhRWXctwPYrSSFQxtl0FPA==
@@ -1864,10 +1864,10 @@ address@^1.0.1:
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
   integrity sha512-aT6camzM4xEA54YVJYSqxz1kv4IHnQZRtThJJHhUMRExaU5spC7jX5ugSwTaTgJliIgs4VhZOk7htClvQ/LmRA==
 
-advanced-cropper@0.3.0:
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/advanced-cropper/-/advanced-cropper-0.3.0.tgz#96ec42f00b639ebe53c0013f904d226f3da9e14e"
-  integrity sha512-YDp+V20jvugTy4Kt43y1cz3+quyz4WbpRJKGzk8R+VW4V8vrNAPp5hX6SPgiHKMm40FYe9QuCKqR/Ya80ZsAoQ==
+advanced-cropper@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/advanced-cropper/-/advanced-cropper-0.3.1.tgz#d49cc6761e1873b1021127315173cb90acc8a51f"
+  integrity sha512-+Lo9POof4GUyjELv4jL0ttn9G2gARHdV/9VL855Ldy2D//ypqvEz55PoJs3aLUw2WNem/Zqbjm7n463gCNapgA==
   dependencies:
     tslib "^2.0.1"
 
@@ -11767,10 +11767,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.0.5:
-  version "4.4.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.4.4.tgz#2cd01a1a1f160704d3101fd5a58ff0f9fcb8030c"
-  integrity sha512-DqGhF5IKoBl8WNf8C1gu8q0xZSInh9j1kJJMqT3a94w1JzVaBU4EXOSMrz9yDqMT0xt3selp83fuFMQ0uzv6qA==
+typescript@^4.5.2:
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.2.tgz#8ac1fba9f52256fdb06fb89e4122fa6a346c2998"
+  integrity sha512-5BlMof9H1yGt0P8/WF+wPNw6GfctgGjXp5hkblpyT+8rkASSmkUKMXrxR0Xg8ThVCi/JnHQiKXeBaEwCeQwMFw==
 
 ua-parser-js@^0.7.27:
   version "0.7.30"

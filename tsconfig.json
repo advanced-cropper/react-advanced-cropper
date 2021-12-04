@@ -6,24 +6,25 @@
       "dom.iterable",
       "es2015"
     ],
-		"declarationDir": "",
-		"declaration": true,
-		"noEmitHelpers": true,
-		"importHelpers": true,
-		"allowJs": true,
-		"allowSyntheticDefaultImports": true,
-		"esModuleInterop": true,
-		"forceConsistentCasingInFileNames": true,
-		"isolatedModules": true,
-		"jsx": "react",
-		"module": "esnext",
-		"moduleResolution": "node",
-		"noEmit": true,
-		"resolveJsonModule": true,
-		"downlevelIteration": true,
-		"skipLibCheck": true
+    "declarationDir": "",
+    "declaration": true,
+    "noEmitHelpers": true,
+    "importHelpers": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "jsx": "react",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "downlevelIteration": true,
+    "skipLibCheck": true,
+    "strict": true
   },
   "include": [
-    "src"
-  ]
+    "src/**/*.ts","src/**/*.tsx"
+	]
 }

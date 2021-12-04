@@ -17,8 +17,8 @@ import { SimpleHandler } from '../handlers/SimpleHandler';
 import { ArtificialTransition } from './ArtificialTransition';
 import './BoundingBox.scss';
 
-const HORIZONTAL_DIRECTIONS = ['east', 'west', null];
-const VERTICAL_DIRECTIONS = ['south', 'north', null];
+const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
+const VERTICAL_DIRECTIONS = ['south', 'north', null] as const;
 
 type HandlerComponent = ComponentType<any>;
 
@@ -48,7 +48,7 @@ interface Props {
 	lineClassNames?: LinesClassNames;
 	lineWrapperClassNames?: LinesClassNames;
 	resizable?: boolean;
-	onResize?: (directions: ResizeDirections, options?: ResizeOptions) => void;
+	onResize?: (directions: ResizeDirections, options: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
 	width?: number;
@@ -57,15 +57,34 @@ interface Props {
 }
 
 interface HandlerNode {
-	name: string;
+	name: OrdinalDirection;
 	component: HandlerComponent;
 	className: string;
-	wrapperClassName: string;
-	hoverClassName: string;
+	wrapperClassName?: string;
+	hoverClassName?: string;
 	style?: CSSProperties;
-	verticalPosition: VerticalCardinalDirection;
-	horizontalPosition: HorizontalCardinalDirection;
+	verticalPosition: VerticalCardinalDirection | null;
+	horizontalPosition: HorizontalCardinalDirection | null;
 	disabled: boolean;
+}
+
+interface LineNode {
+	name: CardinalDirection;
+	component: HandlerComponent;
+	className: string;
+	wrapperClassName?: string;
+	hoverClassName?: string;
+	style?: CSSProperties;
+	verticalPosition: VerticalCardinalDirection | null;
+	horizontalPosition: HorizontalCardinalDirection | null;
+	disabled: boolean;
+}
+
+interface PointNode {
+	name: CardinalDirection;
+	className: string;
+	verticalPosition: VerticalCardinalDirection | null;
+	horizontalPosition: HorizontalCardinalDirection | null;
 }
 
 export const BoundingBox = ({
@@ -102,7 +121,7 @@ export const BoundingBox = ({
 	transitions,
 }: Props) => {
 	const points = useMemo(() => {
-		const result = [];
+		const result: PointNode[] = [];
 		HORIZONTAL_DIRECTIONS.forEach((hDirection) => {
 			VERTICAL_DIRECTIONS.forEach((vDirection) => {
 				if (hDirection !== vDirection) {
@@ -120,18 +139,18 @@ export const BoundingBox = ({
 	}, []);
 
 	const lineNodes = useMemo(() => {
-		const result = [];
+		const result: LineNode[] = [];
 		points.forEach((point) => {
 			if ((!point.horizontalPosition || !point.verticalPosition) && lines[point.name]) {
 				result.push({
 					name: point.name,
 					component: lineComponent,
-					class: classnames(
+					className: classnames(
 						lineClassNames.default,
 						lineClassNames[point.name],
 						!resizable && lineClassNames.disabled,
 					),
-					wrapperClass: classnames(
+					wrapperClassName: classnames(
 						lineWrapperClassNames.default,
 						lineWrapperClassNames[point.name],
 						!resizable && lineWrapperClassNames.disabled,
@@ -171,7 +190,10 @@ export const BoundingBox = ({
 	}, [height, width, points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, resizable]);
 
 	const onHandlerDrag =
-		(horizontalDirection: HorizontalCardinalDirection, verticalDirection: VerticalCardinalDirection) =>
+		(
+			horizontalDirection: HorizontalCardinalDirection | null,
+			verticalDirection: VerticalCardinalDirection | null,
+		) =>
 		({ left, top }: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => {
 			const directions = {
 				left: 0,
@@ -191,7 +213,7 @@ export const BoundingBox = ({
 				directions.bottom += top;
 			}
 
-			let respectDirection;
+			let respectDirection: 'width' | 'height' | undefined;
 			if (!verticalDirection && horizontalDirection) {
 				respectDirection = 'width';
 			} else if (verticalDirection && !horizontalDirection) {

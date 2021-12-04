@@ -4,7 +4,7 @@ import { MoveDirections, Point, SimpleTouch } from 'advanced-cropper/types';
 interface Props {
 	className?: string;
 	children?: ReactNode;
-	onDrag?: (directions: MoveDirections, nativeEvent?: MouseEvent | TouchEvent) => void;
+	onDrag?: (directions: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => void;
 	onDragEnd?: () => void;
 	onLeave?: () => void;
 	onEnter?: () => void;
@@ -21,7 +21,7 @@ export class DraggableElement extends Component<Props> {
 		disabled: false,
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.touches = [];
@@ -134,7 +134,7 @@ export class DraggableElement extends Component<Props> {
 	onTouchEnd = () => {
 		this.processEnd();
 	};
-	onTouchMove = (e) => {
+	onTouchMove = (e: TouchEvent) => {
 		if (this.touches.length) {
 			this.processMove(e, [...e.touches]);
 			if (e.preventDefault) {
@@ -157,7 +157,7 @@ export class DraggableElement extends Component<Props> {
 			e.stopPropagation();
 		}
 	};
-	onMouseMove = (e) => {
+	onMouseMove = (e: MouseEvent) => {
 		if (this.touches.length) {
 			this.processMove(e, [
 				{

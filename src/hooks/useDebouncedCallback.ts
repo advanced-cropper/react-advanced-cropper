@@ -12,6 +12,8 @@ export function useDebouncedCallback(callback: Callback, time = 0) {
 	}, []);
 
 	return () => {
-		debouncedCallback.current();
+		if (debouncedCallback.current) {
+			debouncedCallback.current();
+		}
 	};
 }

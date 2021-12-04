@@ -46,8 +46,8 @@ interface DesiredCropperRef {
 }
 
 interface Props {
-	cropper?: DesiredCropperRef | null;
-	image?: CropperImage | null;
+	cropper: DesiredCropperRef;
+	image: CropperImage | null;
 	handlerComponent?: HandlerComponent;
 	handlers?: Partial<Record<OrdinalDirection, boolean>>;
 	handlerClassNames?: HandlersClassNames;

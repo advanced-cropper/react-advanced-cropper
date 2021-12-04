@@ -7,12 +7,12 @@ import { isUndefined } from 'advanced-cropper/utils';
 import './Preview.scss';
 
 interface Props {
+	state: CropperState | null;
+	image: CropperImage | null;
 	className?: string;
 	imageClassName?: string;
 	wrapperClassName?: string;
-	state: CropperState | null;
-	image: CropperImage | null;
-	transitions?: CropperTransitions | null;
+	transitions?: CropperTransitions;
 	width?: number;
 	height?: number;
 	fill?: unknown;
@@ -29,11 +29,11 @@ export const Preview = ({
 	height,
 	fill,
 }: Props) => {
-	const rootRef = useRef<HTMLDivElement>();
+	const rootRef = useRef<HTMLDivElement>(null);
 
-	const wrapperRef = useRef<HTMLDivElement>();
+	const wrapperRef = useRef<HTMLDivElement>(null);
 
-	const imageRef = useRef<HTMLImageElement>();
+	const imageRef = useRef<HTMLImageElement>(null);
 
 	const [calculatedSize, setCalculatedSize] = useState<Partial<Size>>({});
 
@@ -67,10 +67,10 @@ export const Preview = ({
 
 	const wrapperStyle = (() => {
 		const result: CSSProperties = {
-			width: `${size.width}px`,
-			height: `${size.height}px`,
-			left: `calc(50% - ${size.width / 2}px)`,
-			top: `calc(50% - ${size.height / 2}px)`,
+			width: `${size.width || 0}px`,
+			height: `${size.height || 0}px`,
+			left: `calc(50% - ${(size.width || 0) / 2}px)`,
+			top: `calc(50% - ${(size.height || 0) / 2}px)`,
 		};
 		if (transitionsActive) {
 			result.transition = `${transitions.duration}ms ${transitions.timingFunction}`;
@@ -83,11 +83,13 @@ export const Preview = ({
 	const refresh = () => {
 		const root = rootRef.current;
 		const result: Partial<Size> = {};
-		if (!width) {
-			result.width = root.clientWidth;
-		}
-		if (!height) {
-			result.height = root.clientHeight;
+		if (root) {
+			if (!width) {
+				result.width = root.clientWidth;
+			}
+			if (!height) {
+				result.height = root.clientHeight;
+			}
 		}
 		setCalculatedSize(result);
 	};
@@ -104,7 +106,7 @@ export const Preview = ({
 			<div ref={wrapperRef} className={cn(wrapperClassName, 'react-preview__wrapper')} style={wrapperStyle}>
 				<img
 					ref={imageRef}
-					src={image && image.src}
+					src={image ? image.src : undefined}
 					className={cn(
 						imageClassName,
 						'react-preview__image',

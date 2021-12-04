@@ -40,7 +40,7 @@ export class TransformableImage extends Component<Props> {
 		timeout: 500,
 	};
 
-	constructor(props) {
+	constructor(props: Props) {
 		super(props);
 
 		this.transforming = false;
@@ -54,7 +54,7 @@ export class TransformableImage extends Component<Props> {
 		this.debouncedProcessEnd = debounce(this.processEnd, props.timeout);
 	}
 
-	processMove = (newTouches) => {
+	processMove = (newTouches: SimpleTouch[]) => {
 		const { onTransform, touchResize, touchMove, touchRotate } = this.props;
 		const container = this.container.current;
 		if (container && onTransform) {
@@ -131,7 +131,7 @@ export class TransformableImage extends Component<Props> {
 			}
 		}
 	};
-	onTouchEnd = (event) => {
+	onTouchEnd = (event: TouchEvent) => {
 		if (event.touches.length === 0) {
 			this.touches = [];
 			this.processEnd();
@@ -167,7 +167,7 @@ export class TransformableImage extends Component<Props> {
 		}
 	};
 
-	onMouseMove = (event) => {
+	onMouseMove = (event: MouseEvent) => {
 		if (this.touches.length) {
 			if (this.processEvent(event)) {
 				this.processMove([

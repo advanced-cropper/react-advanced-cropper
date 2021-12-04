@@ -60,7 +60,6 @@ export const SimpleHandler = ({
 		>
 			<div
 				className={cn('react-simple-handler', defaultClassName, hover && hoverClassName, {
-					[hoverClassName]: hoverClassName && hover,
 					[`react-simple-handler--${verticalPosition}`]: !!verticalPosition,
 					[`react-simple-handler--${horizontalPosition}`]: !!horizontalPosition,
 					[`react-simple-handler--${horizontalPosition}-${verticalPosition}`]:

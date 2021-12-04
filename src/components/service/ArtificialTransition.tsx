@@ -33,15 +33,16 @@ export const ArtificialTransition: FC<Props> = ({
 
 	useLayoutEffect(() => {
 		if (state.width !== width || state.height !== height || state.left !== left || state.top !== top) {
-			setState(
-				(state, progress) => ({
-					left: state.left + (left - state.left) * progress,
-					top: state.top + (top - state.top) * progress,
-					width: state.width + (width - state.width) * progress,
-					height: state.height + (height - state.height) * progress,
-				}),
-				transitions,
-			);
+			setState((state, progress) => {
+				const result = { ...state };
+
+				result.left = result.left && left ? result.left + (left - result.left) * progress : left;
+				result.top = result.top && top ? result.top + (top - result.top) * progress : top;
+				result.width = result.width && width ? result.width + (width - result.width) * progress : width;
+				result.height = result.height && height ? result.height + (height - result.height) * progress : height;
+
+				return result;
+			}, transitions);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [width, height, top, left, transitions]);

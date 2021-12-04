@@ -15,7 +15,7 @@ import {
 	Rotate,
 	PostprocessAction,
 } from 'advanced-cropper/types';
-import { getOptions, isArray, isFunction } from 'advanced-cropper/utils';
+import { emptyCoordinates, getOptions, isArray, isFunction } from 'advanced-cropper/utils';
 
 import {
 	copyState,
@@ -87,7 +87,7 @@ export interface AbstractCropperStateSettings<Cropper = unknown> {
 	priority?: Priority;
 }
 
-type StateModifier = (state: CropperState, settings: CropperSettings) => CropperState;
+type StateModifier = (state: CropperState | null, settings: CropperSettings) => CropperState | null;
 
 type Callback<Instance> = (instance: Instance) => void;
 
@@ -155,7 +155,7 @@ export function useAbstractCropperState<
 	onInteractionEnd,
 	...settings
 }: Settings & AbstractCropperStateCallbacks<Instance>) {
-	const [state, setState] = useStateWithCallback<CropperState>(null);
+	const [state, setState] = useStateWithCallback<CropperState | null>(null);
 
 	const [transitionsActive, setTransitionsActive] = useStateWithCallback(false);
 
@@ -191,9 +191,9 @@ export function useAbstractCropperState<
 	};
 
 	const updateState = (
-		modifier: StateModifier | CropperState,
+		modifier: StateModifier | CropperState | null,
 		options: CropperMethodOptions = {},
-		callbacks: Callback<ReturnType<typeof getInstance>>[] = [],
+		callbacks: (Callback<Instance> | undefined)[] = [],
 	) => {
 		const { transitions = false } = options;
 		// TODO: check, that's the best approach
@@ -247,35 +247,31 @@ export function useAbstractCropperState<
 	};
 
 	const resetState = (boundary: Boundary, image: CropperImage) => {
-		if (boundary) {
-			updateState(
-				applyPostProcess(
+		updateState(
+			applyPostProcess(
+				{
+					name: 'create',
+					immediately: true,
+					transitions: false,
+				},
+				(createStateAlgorithm || createState)(
 					{
-						name: 'create',
-						immediately: true,
-						transitions: false,
+						boundary,
+						imageSize: { width: image.width, height: image.height },
+						transforms: image.transforms,
+						priority,
 					},
-					(createStateAlgorithm || createState)(
-						{
-							boundary,
-							imageSize: { width: image.width, height: image.height },
-							transforms: image.transforms,
-							priority,
-						},
-						settings,
-					),
+					settings,
 				),
-			);
-		} else {
-			updateState(null);
-		}
+			),
+		);
 	};
 
 	const cropper = {
 		state,
 		transitions: transitionsOptions,
 		clear: () => {
-			setState(null);
+			updateState(null);
 		},
 		reconcileState: () => {
 			updateState(
@@ -563,21 +559,29 @@ export function useAbstractCropperState<
 			return getStencilCoordinates(state);
 		},
 		getCoordinates(options: { round?: boolean } = {}) {
-			const { round = true } = options;
-			if (round) {
-				return roundCoordinates(state, settings);
+			if (state) {
+				const { round = true } = options;
+				if (round) {
+					return roundCoordinates(state, settings);
+				} else {
+					return { ...state.coordinates };
+				}
 			} else {
-				return { ...state.coordinates };
+				return emptyCoordinates();
 			}
 		},
 		getVisibleArea() {
-			return { ...state.visibleArea };
+			if (state) {
+				return { ...state.visibleArea };
+			} else {
+				return emptyCoordinates();
+			}
 		},
 		getSettings() {
 			return { ...settings };
 		},
 		getState() {
-			return state && copyState(state);
+			return copyState(state);
 		},
 		getTransitions() {
 			return {
