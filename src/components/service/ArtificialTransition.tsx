@@ -1,5 +1,6 @@
 import React, { CSSProperties, FC, useLayoutEffect } from 'react';
 import { CropperTransitions } from 'advanced-cropper/types';
+import { isNumber } from 'advanced-cropper/utils';
 import classnames from 'classnames';
 import { useAnimatedState } from '../../hooks/useAnimatedState';
 import './ArtificialTransition.scss';
@@ -14,46 +15,46 @@ interface Props {
 	top?: number;
 }
 
-export const ArtificialTransition: FC<Props> = ({
-	className,
-	style,
-	transitions,
-	width,
-	height,
-	left,
-	top,
-	children,
-}) => {
-	const [state, setState, animation] = useAnimatedState({
-		width,
-		height,
-		top,
-		left,
-	});
+export const ArtificialTransition: FC<Props> = ({ className, style, transitions, children, ...values }) => {
+	const [state, setState, animation] = useAnimatedState(values);
 
 	useLayoutEffect(() => {
-		if (state.width !== width || state.height !== height || state.left !== left || state.top !== top) {
+		if (
+			state.width !== values.width ||
+			state.height !== values.height ||
+			state.left !== values.left ||
+			state.top !== values.top
+		) {
 			setState((state, progress) => {
 				const result = { ...state };
 
-				result.left = result.left && left ? result.left + (left - result.left) * progress : left;
-				result.top = result.top && top ? result.top + (top - result.top) * progress : top;
-				result.width = result.width && width ? result.width + (width - result.width) * progress : width;
-				result.height = result.height && height ? result.height + (height - result.height) * progress : height;
+				const properties = ['left', 'top', 'height', 'width'] as const;
+
+				properties.forEach((property) => {
+					const currentValue = result[property];
+					const desiredValue = values[property];
+					result[property] =
+						isNumber(currentValue) && isNumber(desiredValue)
+							? currentValue + (desiredValue - currentValue) * progress
+							: desiredValue;
+				});
 
 				return result;
 			}, transitions);
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [width, height, top, left, transitions]);
+	}, [values.width, values.height, values.top, values.left, transitions]);
+
 	return (
 		<div
 			className={classnames('react-artificial-transition', className)}
 			style={{
 				...style,
-				width: `${animation ? state.width : width}px`,
-				height: `${animation ? state.height : height}px`,
-				transform: `translate3d(${animation ? state.left : left}px, ${animation ? state.top : top}px, 0px)`,
+				width: `${animation ? state.width : values.width}px`,
+				height: `${animation ? state.height : values.height}px`,
+				transform: `translate3d(${animation ? state.left : values.left}px, ${
+					animation ? state.top : values.top
+				}px, 0px)`,
 				left: 0,
 				top: 0,
 			}}
