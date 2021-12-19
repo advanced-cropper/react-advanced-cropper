@@ -97,8 +97,8 @@ This section still in the development. Stay up to date.
 
 	```js
 	{
-		width: 100,
-		height: 100,
+    width: 100,
+    height: 100,
 	}
 	```
 
@@ -109,11 +109,11 @@ This section still in the development. Stay up to date.
 
 	```js
 	(state, settings) => {
-		const { boundary } = state;
-		return {
-			width: boundary.width - 100,
-			height: boundary.height - 100,
-		}
+    const { boundary } = state;
+    return {
+    	width: boundary.width - 100,
+    	height: boundary.height - 100,
+    }
 	}
 	```
 
@@ -165,10 +165,10 @@ This section still in the development. Stay up to date.
 interface ResizeImageSettings {
 	touch?: boolean;
 	wheel?:
-		| boolean
-		| {
-				ratio?: number;
-		  };
+    | boolean
+    | {
+        ratio?: number;
+      };
 	adjustStencil?: boolean;
 }
 ```
@@ -181,11 +181,11 @@ interface ResizeImageSettings {
 	This prop is either boolean flag or object settings. The default object used when `true` is passed to `resizeImage`:
 	```js
 	{
-		touch: true,
-		wheel: {
-			ratio: 0.1
-		},
-		adjustStencil: true
+    touch: true,
+    wheel: {
+    	ratio: 0.1
+    },
+    adjustStencil: true
 	}
 	```
 
@@ -215,12 +215,12 @@ interface MoveImageSettings {
 - **Details:**
 
 	This prop is either boolean flag or object settings. The default object:
-    ```js
+    `js
     {
     	touch: true,
     	mouse: true
     }
-    ```
+    `
 
     The fields:
     - `touch` is a flag that checks if image should be moved by a touch
@@ -278,113 +278,6 @@ interface RotateImageSettings {
 - **Details:**
 
 	The maximum height of the cropped coordinates in pixels
-
-
-### `onChange`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on change.
-
-### `onReady`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on load image.
-
-### `onError`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on error during the image loading.
-
-### `onTransitionsStart`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on start transitions.
-
-### `onTransitionsEnd`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on end transitions.
-
-### `onResizeEnd`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on resize end.
-
-### `onMoveEnd`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on move end.
-
-### `onMove`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on move start.
-
-### `onResize`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on resize.
-
-### `onTransformImage`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on the transform image (wheel scroll, touch and mouse move, touch resize)
-
-### `onTransformImageEnd`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on the end of transform image (wheel scroll, touch and mouse move, touch resize)
-
-### `onInteractionStart`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on start any of the interaction with a cropper.
-
-### `onInteractionEnd`
-
-- **Type**: ``(cropper: CropperRef) => void`
-
-- **Details**
-
-Callback that called on end of all the interactions with a cropper.
-
-
 
 ### `wrapperComponent`
 
@@ -499,7 +392,6 @@ interface TransitionsSettings {
 	will know nothing about coordinates.
 
 
-
 ### `defaultPosition`
 
 - **Type:** `Position | ((state: CropperState, settings: CropperSettings) => Position);`
@@ -513,8 +405,8 @@ interface TransitionsSettings {
 	The object should correspond the following scheme:
 	```js
 	{
-		left: 142,
-		top: 73
+    left: 142,
+    top: 73
 	}
 	```
 
@@ -526,10 +418,10 @@ interface TransitionsSettings {
 
 	```js
 	({ visibleArea, coordinates, imageSize }, settings) => {
-		return {
-			left: imageSize.width / 2 - coordinates.width / 2,
-			top: imageSize.height / 2 - coordinates.height / 2,
-		}
+    return {
+    	left: imageSize.width / 2 - coordinates.width / 2,
+    	top: imageSize.height / 2 - coordinates.height / 2,
+    }
 	}
 	```
 
@@ -548,8 +440,8 @@ interface TransitionsSettings {
 	The object should correspond the following scheme:
 	```js
 	{
-		width: 142,
-		height: 73
+    width: 142,
+    height: 73
 	}
 	```
 
@@ -561,10 +453,10 @@ interface TransitionsSettings {
 
 	```js
 	({ visibleArea, imageSize, stencilRatio, sizeRestrictions }, settings) => {
-		return {
-			width: imageSize.width,
-			height: imageSize.height,
-		}
+    return {
+    	width: imageSize.width,
+    	height: imageSize.height,
+    }
 	}
 	```
 	**See also: [Example](/docs/guides/advanced-recipes#default-size-and-position)**
@@ -588,10 +480,10 @@ interface TransitionsSettings {
 	The object should correspond the following scheme:
 	```js
 	{
-		width: 200,
-		height: 200,
-		left: 0,
-		top: 0
+    width: 200,
+    height: 200,
+    left: 0,
+    top: 0
 	}
 	```
 
@@ -602,12 +494,12 @@ interface TransitionsSettings {
 	It should return an object with the coordinates of visible area:
 	```js
 	({ coordinates, boundaries, imageSize }, settings) => {
-		return {
-			left: coordinates.left - 50,
-			top: coordinates.top - 50,
-			width: coordinates.width + 100,
-			height: coordinates.height + 100,
-		}
+    return {
+    	left: coordinates.left - 50,
+    	top: coordinates.top - 50,
+    	width: coordinates.width + 100,
+    	height: coordinates.height + 100,
+    }
 	}
 	```
 	**See also: [Example](/docs/guides/advanced-recipes#default-visible-area)**
@@ -647,10 +539,10 @@ type BoundarySizeAlgorithm = ({ boundary, size }: {
 
 	```js
 	({ boundary, size  }) => {
-		return {
-			width: boundary.clientWidth,
-			height: boundary.clientHeight,
-		}
+    return {
+    	width: boundary.clientWidth,
+    	height: boundary.clientHeight,
+    }
 	}
 	```
 
@@ -694,10 +586,10 @@ interface SizeRestrictions {
 	It should return the object with restrictions for the stencil, e.g.:
 	```tsx
 	{
-		minWidth: 0,
-		minHeight: 0,
-		maxWidth: 100,
-		maxHeight: 100
+    minWidth: 0,
+    minHeight: 0,
+    maxWidth: 100,
+    maxHeight: 100
 	}
 	```
 
@@ -956,26 +848,26 @@ typing use `CropperRef` type.
 	const cropperRef = useRef<CropperRef>();
 
 	useEffect(() => {
-		console.log(cropperRef.current.getState());
+    console.log(cropperRef.current.getState());
 	})
 
 	return (
-		<Cropper
-			ref={cropperRef}
-		/>
+    <Cropper
+    	ref={cropperRef}
+    />
 	)
 	```
 
 	#### Callback
 	```tsx
 	const onChange = (cropper: CropperRef) => {
-		console.log(cropper.current.getState());
+    console.log(cropper.current.getState());
 	}
 
 	return (
-		<Cropper
-			onChange={onChange}
-		/>
+    <Cropper
+    	onChange={onChange}
+    />
 	)
 	```
 
@@ -1006,9 +898,9 @@ typing use `CropperRef` type.
 	The cropper transforms:
 	```tsx
 	interface CropperTransitions {
-		timingFunction: string;
-		duration: number;
-		active: boolean;
+    timingFunction: string;
+    duration: number;
+    active: boolean;
 	}
 	```
 
@@ -1038,12 +930,12 @@ typing use `CropperRef` type.
 	The cropper image:
 	```tsx
 	interface CropperImage {
-		src: string;
-		revoke: boolean;
-		transforms: Transforms;
-		arrayBuffer: ArrayBuffer | null;
-		width: number;
-		height: number;
+    src: string;
+    revoke: boolean;
+    transforms: Transforms;
+    arrayBuffer: ArrayBuffer | null;
+    width: number;
+    height: number;
 	}
 	```
 
@@ -1061,7 +953,7 @@ typing use `CropperRef` type.
 - **Arguments:**
 
   `options: DrawOptions`
-  ```tsx
+  `tsx
   interface DrawOptions {
     	imageSmoothingQuality?: 'low' | 'medium' | 'high';
     	imageSmoothingEnabled?: boolean;
@@ -1074,7 +966,7 @@ typing use `CropperRef` type.
     	maxHeight?: number;
     	maxArea?: number;
   }
-  ```
+  `
 
 - **Usage:**
 
@@ -1090,7 +982,7 @@ typing use `CropperRef` type.
 	`options: CropperMethodOptions`
 	```tsx
 	interface CropperMethodOptions {
-		transitions?: boolean;
+    transitions?: boolean;
 	}
 	```
 
@@ -1118,13 +1010,13 @@ typing use `CropperRef` type.
   `transform: CoordinatesTransform | CoordinatesTransform[]`
 	```tsx
 	type CoordinatesTransform =
-		((state: CropperState, settings: CropperSettings) => Partial<Coordinates>) | Partial<Coordinates>;
+    ((state: CropperState, settings: CropperSettings) => Partial<Coordinates>) | Partial<Coordinates>;
 	```
 
 	`options: CropperMethodOptions`
 	```tsx
 	interface CropperMethodOptions {
-		transitions?: boolean;
+    transitions?: boolean;
 	}
 	```
 
@@ -1139,10 +1031,10 @@ typing use `CropperRef` type.
 
 	```tsx
 	cropper.setCoordinates({
-		width: 32,
-		height: 42,
-		left: 102,
-		top: 74
+    width: 32,
+    height: 42,
+    left: 102,
+    top: 74
 	})
 	```
 
@@ -1153,16 +1045,16 @@ typing use `CropperRef` type.
 	1. Center stencil:
 	```tsx
 	cropper.setCoordinates(({ coordinates, imageSize }) => ({
-		left: imageSize.width/2 - coordinates.width/2,
-		top: imageSize.height/2 - coordinates.height/2
+    left: imageSize.width/2 - coordinates.width/2,
+    top: imageSize.height/2 - coordinates.height/2
 	}))
 	```
 
 	2. Maximize stencil:
 	```tsx
 	cropper.setCoordinates(({ coordinates, imageSize }) => ({
-		width: imageSize.width,
-		height: imageSize.height
+    width: imageSize.width,
+    height: imageSize.height
 	}))
 	```
 
@@ -1173,10 +1065,10 @@ typing use `CropperRef` type.
 	That can appear to be superfluous, because you can set coordinates and size simultaneosly:
 	```js
 	cropper.setCoordinates(({ coordinates, imageSize }) => ({
-		width: newWidth,
-		height: newHeight,
-		left: imageSize.width/2 - newWidth.width/2,
-		top: imageSize.height/2 - newHeight.height/2
+    width: newWidth,
+    height: newHeight,
+    left: imageSize.width/2 - newWidth.width/2,
+    top: imageSize.height/2 - newHeight.height/2
 	}))
 	```
 
@@ -1185,15 +1077,15 @@ typing use `CropperRef` type.
 	So the right way is do multiple consequence transforms:
 	```js
 	cropper.setCoordinates([
-		({ coordinates, imageSize }) => ({
-			width: newWidth,
-			height: newHeight,
-		}),
-		// There will be state after the first transformation
-		({ coordinates, imageSize }) => ({
-			left: imageSize.width/2 - coordinates.width/2,
-			top: imageSize.height/2 - coordinates.height/2
-		}),
+    ({ coordinates, imageSize }) => ({
+    	width: newWidth,
+    	height: newHeight,
+    }),
+    // There will be state after the first transformation
+    ({ coordinates, imageSize }) => ({
+    	left: imageSize.width/2 - coordinates.width/2,
+    	top: imageSize.height/2 - coordinates.height/2
+    }),
 	])
 	```
 
@@ -1217,18 +1109,18 @@ typing use `CropperRef` type.
 
 	```tsx
 	interface Scale {
-		factor: number;
-		center?: {
-			left: number;
-			top: number;
-		};
+    factor: number;
+    center?: {
+    	left: number;
+    	top: number;
+    };
 	}
 	```
 
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1252,7 +1144,7 @@ typing use `CropperRef` type.
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1272,18 +1164,18 @@ typing use `CropperRef` type.
 
 	```tsx
 	interface Rotate {
-		angle: number;
-		center?: {
-			left: number;
-			top: number;
-		};
+    angle: number;
+    center?: {
+    	left: number;
+    	top: number;
+    };
 	}
 	```
 
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1306,7 +1198,7 @@ typing use `CropperRef` type.
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1327,13 +1219,13 @@ typing use `CropperRef` type.
 
 	```tsx
 	interface ImageTransform {
-		scale?: number | Scale;
-		move?: {
-			left?: number;
-			top?: number;
-		};
-		rotate?: number | Rotate;
-		flip?: Flip;
+    scale?: number | Scale;
+    move?: {
+    	left?: number;
+    	top?: number;
+    };
+    rotate?: number | Rotate;
+    flip?: Flip;
 	}
 	```
 
@@ -1342,7 +1234,7 @@ typing use `CropperRef` type.
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1361,7 +1253,7 @@ typing use `CropperRef` type.
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
 	}
 	```
@@ -1379,15 +1271,15 @@ typing use `CropperRef` type.
 
 	```tsx
 	interface MoveDirections {
-		left: number;
-		top: number;
+    left: number;
+    top: number;
 	}
 	```
 
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1405,7 +1297,7 @@ typing use `CropperRef` type.
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
 	}
 	```
@@ -1423,27 +1315,27 @@ typing use `CropperRef` type.
 
 	```tsx
 	interface ResizeDirections {
-		left: number;
-		top: number;
-		bottom: number;
-		right: number;
+    left: number;
+    top: number;
+    bottom: number;
+    right: number;
 	}
 	```
 
 	`resizeOptions: ResizeOptions`
 	```tsx
 	interface ResizeOptions {
-		compensate?: boolean;
-		preserveRatio?: boolean;
-		allowedDirections?: ResizeDirections;
-		respectDirection?: 'width' | 'height';
+    compensate?: boolean;
+    preserveRatio?: boolean;
+    allowedDirections?: ResizeDirections;
+    respectDirection?: 'width' | 'height';
 	}
 	```
 
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
     normalize?: boolean;
 	}
@@ -1461,7 +1353,7 @@ typing use `CropperRef` type.
 	`options: Options`
 	```tsx
 	interface Options {
-		immediately?: boolean;
+    immediately?: boolean;
     transitions?: boolean;
 	}
 	```
@@ -1477,3 +1369,110 @@ typing use `CropperRef` type.
 
 	This method resets the cropper to the initial state.
 
+## Callbacks
+
+
+### `onChange`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on change.
+
+### `onReady`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on load image.
+
+### `onError`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on error during the image loading.
+
+### `onTransitionsStart`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on start transitions.
+
+### `onTransitionsEnd`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on end transitions.
+
+
+### `onResize`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on resize.
+
+### `onResizeEnd`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on resize end.
+
+### `onMove`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on move start.
+
+### `onMoveEnd`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on move end.
+
+### `onTransformImage`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on the transform image (wheel scroll, touch and mouse move, touch resize)
+
+### `onTransformImageEnd`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on the end of transform image (wheel scroll, touch and mouse move, touch resize)
+
+### `onInteractionStart`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on start any of the interaction with a cropper.
+
+### `onInteractionEnd`
+
+- **Type**: `(cropper: CropperRef) => void`
+
+- **Details**
+
+Callback that called on end of all the interactions with a cropper.

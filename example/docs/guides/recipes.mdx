@@ -94,47 +94,10 @@ The examples below are written for `RectangleStencil`.
 
 ## Getting the result
 
-### First method
+### First approach
 
-You can get the coordinates of stencil and canvas with cropped image by processing `change` event.
-
-:::tip
-Cropper will call `onChange` callback on any change of the state.
-:::
-
-<GettingResultExample/>
-
-```jsx
-import { Cropper, CropperRef } from 'react-advanced-cropper';
-
-export const Example = () => {
-	const [coordinates, setCoordinates] = useState(null);
-	const [image, setImage] = useState(null);
-
-	const [src] = useState(
-		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
-	);
-
-	const onChange = (cropper: CropperRef) => {
-		setCoordinates(cropper.getCoordinates());
-		// You able to do different manipulations at a canvas
-		// but there we just get a cropped image, that can be used
-		// as src for <img/> to preview result
-		setImage(cropper.getCanvas().toDataURL());
-	};
-
-	return (
-		<Cropper
-			src={src}
-			onChange={onChange}
-		/>;
-	)
-};
-```
-
-### Second method
-
-Also there is alternative to get the cropper result. You can call the cropper method `getResult` to get current stencil coordinates and canvas with cropped image.
+To get the current stencil coordinates and canvas with cropped image
+you can call the cropper methods `getCoordinates` and `getCanvas` respectively.
 
 Click at the button **Crop Image** below to see this method in action
 <GettingResultManualExample/>
@@ -156,6 +119,9 @@ export const Example = () => {
 	const onCrop = () => {
 		if (cropperRef.current) {
 			setCoordinates(cropperRef.current.getCoordinates());
+			// You are able to do different manipulations at a canvas
+			// but there we just get a cropped image, that can be used
+			// as src for <img/> to preview result
 			setPreview(cropperRef.current.getCanvas().toDataURL());
 		}
 	};
@@ -168,6 +134,47 @@ export const Example = () => {
 	)
 };
 ```
+
+### Second approach
+
+Also there is alternative to get the cropper result. You can get the coordinates of stencil and canvas with cropped image by processing one of
+[numerous callbacks](/docs/components/cropper/#callbacks).
+
+The example below shows processing the `onChange` event.
+
+
+:::tip
+Though, be careful. Getting the canvas result in `onChange` callback can heavily affect the performance, it's better to use this approach to
+get the coordinates, transitions and other plain properties. If you still need to get the canvas result in this callback, use [debounce](https://www.npmjs.com/package/debounce).
+:::
+
+<GettingResultExample/>
+
+```jsx
+import { Cropper, CropperRef } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const [coordinates, setCoordinates] = useState(null);
+	const [image, setImage] = useState(null);
+
+	const [src] = useState(
+		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
+	);
+
+	const onChange = (cropper: CropperRef) => {
+		setCoordinates(cropper.getCoordinates());
+		setImage(cropper.getCanvas().toDataURL());
+	};
+
+	return (
+		<Cropper
+			src={src}
+			onChange={onChange}
+		/>;
+	)
+};
+```
+
 
 ## Resize the result
 

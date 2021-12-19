@@ -109,6 +109,11 @@ export const CroppersWizard: FC = () => {
 			preview:
 				'https://images.unsplash.com/photo-1599032909756-5deb82fea3b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=120&q=80',
 		},
+		{
+			src: 'https://images.unsplash.com/photo-1639141700803-e5836ba39b4b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1800&q=80',
+			preview:
+				'https://images.unsplash.com/photo-1639141700803-e5836ba39b4b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=120&q=80',
+		},
 	];
 
 	const [cropper, setCropper] = useHashState(

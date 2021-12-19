@@ -10,7 +10,7 @@ export const GettingResultExample = () => {
 	const [preview, setPreview] = useState(null);
 
 	const [image] = useState(
-		'https://images.unsplash.com/photo-1586083718719-019f9dc6ca94?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=80',
+		'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1049&q=80',
 	);
 
 	const onChange = useDebouncedCallback((cropper: CropperRef) => {

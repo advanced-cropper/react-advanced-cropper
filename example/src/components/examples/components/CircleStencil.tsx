@@ -12,7 +12,6 @@ import './CircleStencil.scss';
 
 export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(({ cropper }: BasicStencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
-
 	const transitions = cropper.getTransitions();
 
 	useImperativeHandle(ref, () => ({
@@ -27,10 +26,10 @@ export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(({ croppe
 	const onResize = (shift: MoveDirections) => {
 		cropper.resizeCoordinates(
 			{
-				left: shift.left,
-				right: shift.left,
-				top: shift.top,
-				bottom: shift.top,
+				left: -shift.top,
+				right: -shift.top,
+				top: -shift.top,
+				bottom: -shift.top,
 			},
 			{
 				compensate: true,
