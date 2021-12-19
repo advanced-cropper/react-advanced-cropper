@@ -559,7 +559,7 @@ export function useAbstractCropperState<
 			return getStencilCoordinates(state);
 		},
 		getCoordinates(options: { round?: boolean } = {}) {
-			if (state) {
+			if (state && state.coordinates) {
 				const { round = true } = options;
 				if (round) {
 					return roundCoordinates(state, settings);
