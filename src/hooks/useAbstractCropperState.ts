@@ -505,7 +505,7 @@ export function useAbstractCropperState<
 		},
 		resizeCoordinates: (
 			directions: Partial<ResizeDirections>,
-			parameters: Record<string, unknown>,
+			parameters: Record<string, unknown> = {},
 			options: ImmediatelyOptions & NormalizeOptions & TransitionOptions = {},
 		) => {
 			const { transitions = false, immediately = false, normalize = true } = options;

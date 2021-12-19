@@ -35,10 +35,8 @@ export interface MoveImageSettings {
 }
 
 export interface BasicStencilProps<Cropper = CropperRef> {
-	state: CropperState | null;
-	image: CropperImage | null;
-	transitions: CropperTransitions | null;
-	cropper?: Cropper;
+	transitions?: CropperTransitions;
+	cropper: Cropper;
 }
 
 export interface BasicCropperRef {
