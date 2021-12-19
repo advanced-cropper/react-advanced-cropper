@@ -64,6 +64,7 @@ export interface CropperProps extends CropperStateSettings, CropperStateCallback
 	style?: CSSProperties;
 	onReady?: (cropper: CropperRef) => void;
 	onError?: (cropper: CropperRef) => void;
+	unloadTime?: number;
 }
 
 export interface CropperRef extends BasicCropperRef {
@@ -117,6 +118,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		onReady,
 		onError,
 		stateSettings,
+		unloadTime = 500,
 		...cropperSettings
 	} = props;
 
@@ -162,8 +164,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		src,
 		crossOrigin,
 		checkOrientation,
-		minimumLoadingTime: 500,
-		unloadTime: 500,
+		unloadTime,
 		canvas,
 		onLoad() {
 			if (cropperRef.current) {

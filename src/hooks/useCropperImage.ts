@@ -12,7 +12,6 @@ export interface CropperImageHookSettings {
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 	checkOrientation?: boolean;
 	canvas?: string | boolean;
-	minimumLoadingTime?: number;
 	unloadTime?: number;
 }
 
@@ -40,8 +39,8 @@ export function useCropperImage(options: CropperImageHookSettings) {
 					}),
 				];
 
-				if (options.minimumLoadingTime) {
-					promises.push(promiseTimeout(options.minimumLoadingTime));
+				if (loaded && options.unloadTime) {
+					promises.push(promiseTimeout(options.unloadTime));
 				}
 				Promise.all(promises)
 					.then((responses) => {

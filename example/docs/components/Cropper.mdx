@@ -802,21 +802,17 @@ interface MoveDirections {
 
 	The function that redefines the default move image algorithm.
 
+### `unloadTime`
 
+- **Type:** `number`
 
+This property defines two aspects:
 
+1. The time between the image clearing  (and setting `loaded` to false) and the actual setting of `image` to `null`;
 
+2. The minimum loading time, i.e. time before an one image changes an another image.
 
-
-
-
-
-
-
-
-
-
-
+It's useful to make custom transitions in [`CropperWrapper`](/docs/components/CropperWrapper).
 
 ## Methods
 
