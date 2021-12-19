@@ -6,6 +6,7 @@ import { touchesToImageTransform, wheelEventToImageTransform } from 'advanced-cr
 interface Props {
 	onTransform?: (transform: ImageTransform) => void;
 	onTransformEnd?: () => void;
+	frozen?: boolean;
 	touchMove?: boolean;
 	mouseMove?: boolean;
 	touchResize?: boolean;
@@ -85,19 +86,20 @@ export class TransformableImage extends Component<Props> {
 	};
 
 	processEvent = (nativeEvent: Event) => {
-		const { eventsFilter } = this.props;
+		const { eventsFilter, frozen } = this.props;
 		if (eventsFilter) {
-			return eventsFilter(nativeEvent, this.transforming) !== false;
+			return eventsFilter(nativeEvent, this.transforming) !== false && !frozen;
 		} else {
 			nativeEvent.preventDefault();
 			nativeEvent.stopPropagation();
-			return true;
+			return !frozen;
 		}
 	};
 
 	onWheel = (event: WheelEvent) => {
 		const { onTransform, wheelResize } = this.props;
 		const container = this.container.current;
+
 		if (wheelResize) {
 			if (this.processEvent(event)) {
 				this.processStart();

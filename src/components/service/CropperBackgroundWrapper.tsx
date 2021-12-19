@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode } from 'react';
+import React, { CSSProperties, ReactNode, useCallback } from 'react';
 import { CropperTransitions, ImageTransform } from 'advanced-cropper/types';
 import { TransformableImage } from './TransformableImage';
 
@@ -35,6 +35,8 @@ export const CropperBackgroundWrapper = ({
 	style,
 	cropper,
 }: CropperBackgroundWrapperProps) => {
+	const transitions = cropper.getTransitions();
+
 	return (
 		<TransformableImage
 			className={className}
@@ -46,6 +48,7 @@ export const CropperBackgroundWrapper = ({
 			touchResize={touchResize}
 			wheelResize={wheelResize}
 			touchRotate={touchRotate}
+			frozen={transitions.active}
 		>
 			{children}
 		</TransformableImage>
