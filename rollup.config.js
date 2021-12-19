@@ -39,7 +39,7 @@ export default {
 		globals: {
 			react: 'React',
 		},
-		sourcemap: process.env.NODE_ENV !== 'production',
+		sourcemap: true,
 	})),
 	plugins: [
 		external(),
@@ -54,10 +54,16 @@ export default {
 		resolve(),
 		commonjs(),
 		typescript({ tsconfig: './tsconfig.json' }),
-		terser(),
+		terser({
+			format: {
+				comments: false,
+			},
+		}),
 		replace({
 			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
 		}),
-		visualizer()
+		visualizer({
+			gzipSize: true,
+		}),
 	],
 };
