@@ -7,7 +7,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 	module.exports = {
 		title: 'React Advanced Cropper',
 		tagline: 'Create the cropper you desire',
-		url: 'https://norserium.github.io/react-advanced-cropper/',
+		url: 'https://norserium.github.io',
 		baseUrl: '/react-advanced-cropper/',
 		onBrokenLinks: 'ignore',
 		onBrokenMarkdownLinks: 'warn',
@@ -48,6 +48,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 						lightIcon: ' ',
 					},
 				},
+				image: 'img/og-image.png',
 				navbar: {
 					title: 'Advanced Cropper',
 					logo: {
