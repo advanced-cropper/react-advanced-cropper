@@ -32,6 +32,7 @@ import {
 import { mergeRefs } from '../service/react';
 import { useUpdateEffect } from '../hooks/useUpdateEffect';
 import { useRotateImageOptions } from '../hooks/useRotateImageOptions';
+import { useStateWithCallback } from '../hooks/useStateWithCallback';
 import { CropperBoundary, CropperBoundaryMethods } from './service/CropperBoundary';
 import { CropperWrapper } from './service/CropperWrapper';
 import { CropperBackgroundImage } from './service/CropperBackgroundImage';
@@ -179,17 +180,18 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	});
 
 	// Additional variable to give the possibility to change an image without resetting the state
-	const [currentImage, setCurrentImage] = useState<CropperImage | null>(null);
+	const [currentImage, setCurrentImage] = useStateWithCallback<CropperImage | null>(null);
 
 	const resetCropper = () => {
 		if (boundaryRef.current) {
 			boundaryRef.current.stretchTo(image).then((boundary) => {
-				if (boundary && image) {
-					cropper.reset(boundary, image);
-				} else {
-					cropper.clear();
-				}
-				setCurrentImage(image);
+				setCurrentImage(image, () => {
+					if (boundary && image) {
+						cropper.reset(boundary, image);
+					} else {
+						cropper.clear();
+					}
+				});
 			});
 		}
 	};
