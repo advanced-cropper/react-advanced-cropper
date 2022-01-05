@@ -48,7 +48,7 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 						lightIcon: ' ',
 					},
 				},
-				image: 'img/og-image.png',
+				image: 'img/og-image.jpg',
 				navbar: {
 					title: 'Advanced Cropper',
 					logo: {
