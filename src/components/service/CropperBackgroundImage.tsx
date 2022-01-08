@@ -1,7 +1,7 @@
 import React, { forwardRef, useMemo } from 'react';
 import cn from 'classnames';
 import { CropperTransitions, CropperImage, CropperState } from 'advanced-cropper/types';
-import { getImageStyle } from 'advanced-cropper/image';
+import { getBackgroundStyle } from 'advanced-cropper/image';
 import { preventDefault } from '../../service/events';
 
 import './CropperBackgroundImage.scss';
@@ -17,7 +17,7 @@ interface Props {
 export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
 	({ className, image, state, transitions, crossOrigin }: Props, ref) => {
 		const style = useMemo(
-			() => (image && state ? getImageStyle(image, state, transitions) : {}),
+			() => (image && state ? getBackgroundStyle(image, state, transitions) : {}),
 			[image, state, transitions],
 		);
 

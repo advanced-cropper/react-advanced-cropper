@@ -1,9 +1,12 @@
-import React, { CSSProperties, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 import { CropperImage, CropperState, CropperTransitions, Size } from 'advanced-cropper/types';
 import { getPreviewStyle } from 'advanced-cropper/image';
-import { isUndefined } from 'advanced-cropper/utils';
-
+import { isLower } from 'advanced-cropper/utils';
+import { ratio } from 'advanced-cropper/service';
+import { StretchParams } from 'advanced-cropper/html';
+import { DefaultBoundaryParams } from 'advanced-cropper/defaults';
+import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
 import './Preview.scss';
 
 interface Props {
@@ -11,101 +14,97 @@ interface Props {
 	image: CropperImage | null;
 	className?: string;
 	imageClassName?: string;
-	wrapperClassName?: string;
+	contentClassName?: string;
 	transitions?: CropperTransitions;
 	width?: number;
 	height?: number;
 	fill?: unknown;
 }
 
-export const Preview = ({
-	className,
-	wrapperClassName,
-	imageClassName,
-	state,
-	image,
-	transitions,
-	width,
-	height,
-	fill,
-}: Props) => {
-	const rootRef = useRef<HTMLDivElement>(null);
+export const Preview = ({ className, contentClassName, imageClassName, state, image, transitions }: Props) => {
+	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 
-	const wrapperRef = useRef<HTMLDivElement>(null);
+	const [size, setSize] = useState<Size | null>(null);
 
-	const imageRef = useRef<HTMLImageElement>(null);
+	const [coefficient, setCoefficient] = useState(1);
 
-	const [calculatedSize, setCalculatedSize] = useState<Partial<Size>>({});
-
-	const transitionsActive = transitions && transitions.active;
-
-	const size = useMemo(
-		() => ({
-			width: isUndefined(width) ? calculatedSize.width : width,
-			height: isUndefined(height) ? calculatedSize.height : height,
-		}),
-		[width, height, calculatedSize.width, calculatedSize.height],
-	);
-
-	const style = (() => {
-		if (!fill) {
-			const result: CSSProperties = {};
-			if (width) {
-				result.width = `${size.width}px`;
-			}
-			if (height) {
-				result.height = `${size.height}px`;
-			}
-			if (transitionsActive) {
-				result.transition = `${transitions.duration}ms ${transitions.timingFunction}`;
-			}
-			return result;
-		} else {
-			return {};
-		}
-	})();
-
-	const wrapperStyle = (() => {
-		const result: CSSProperties = {
-			width: `${size.width || 0}px`,
-			height: `${size.height || 0}px`,
-			left: `calc(50% - ${(size.width || 0) / 2}px)`,
-			top: `calc(50% - ${(size.height || 0) / 2}px)`,
-		};
-		if (transitionsActive) {
-			result.transition = `${transitions.duration}ms ${transitions.timingFunction}`;
-		}
-		return result;
-	})();
-
-	const imageStyle = state && image ? getPreviewStyle(image, state, transitions, size) : {};
+	const imageStyle =
+		state && state.coordinates && image && size ? getPreviewStyle(image, state, transitions, coefficient) : {};
 
 	const refresh = () => {
-		const root = rootRef.current;
-		const result: Partial<Size> = {};
-		if (root) {
-			if (!width) {
-				result.width = root.clientWidth;
-			}
-			if (!height) {
-				result.height = root.clientHeight;
-			}
+		if (boundaryRef.current && state?.coordinates) {
+			boundaryRef.current.stretchTo(state.coordinates).then((size) => {
+				if (size && state.coordinates) {
+					if (!isLower(ratio(state.coordinates), ratio(size))) {
+						setSize({
+							width: size.width,
+							height: size.width / ratio(state.coordinates),
+						});
+						setCoefficient(state.coordinates.width / size.width);
+					} else {
+						setSize({
+							width: size.height * ratio(state.coordinates),
+							height: size.height,
+						});
+						setCoefficient(state.coordinates.height / size.height);
+					}
+				} else {
+					setSize(null);
+				}
+			});
 		}
-		setCalculatedSize(result);
 	};
 
-	useEffect(() => {
-		if (image && (image.width || image.height)) {
+	const sizeAlgorithm = function ({ boundary }: DefaultBoundaryParams) {
+		const { width, height } = boundary.getBoundingClientRect();
+
+		return {
+			width,
+			height,
+		};
+	};
+
+	const stretchAlgorithm = function ({ boundary, stretcher, size }: StretchParams) {
+		// Reset stretcher
+		stretcher.style.width = `0px`;
+		stretcher.style.height = `0px`;
+
+		// Stretch the boundary with respect to its width
+		const width = Math.max(boundary.clientWidth, size.width);
+		stretcher.style.width = `${width}px`;
+		stretcher.style.height = `${width / ratio(size)}px`;
+
+		// If the height of boundary larger than current stretcher height
+		// stretch the boundary with respect to its height
+		if (stretcher.clientHeight < boundary.clientHeight) {
+			stretcher.style.height = `${boundary.clientHeight}px`;
+			stretcher.style.width = `${stretcher.clientHeight * ratio(size)}px`;
+		}
+	};
+
+	const contentStyle = size
+		? {
+				width: `${size.width}px`,
+				height: `${size.height}px`,
+		  }
+		: {};
+
+	useLayoutEffect(() => {
+		if (state?.coordinates) {
 			refresh();
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [image?.src]);
+	}, [image?.src, state?.coordinates]);
 
 	return (
-		<div ref={rootRef} className={cn(className, 'react-preview')} style={style}>
-			<div ref={wrapperRef} className={cn(wrapperClassName, 'react-preview__wrapper')} style={wrapperStyle}>
+		<StretchableBoundary
+			ref={boundaryRef}
+			sizeAlgorithm={sizeAlgorithm}
+			stretchAlgorithm={stretchAlgorithm}
+			className={cn(className, 'react-preview')}
+		>
+			<div className={cn(contentClassName, 'react-preview__content')} style={contentStyle}>
 				<img
-					ref={imageRef}
 					src={image ? image.src : undefined}
 					className={cn(
 						imageClassName,
@@ -115,6 +114,6 @@ export const Preview = ({
 					style={imageStyle}
 				/>
 			</div>
-		</div>
+		</StretchableBoundary>
 	);
 };

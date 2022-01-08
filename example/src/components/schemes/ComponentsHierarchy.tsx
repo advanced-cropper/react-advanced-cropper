@@ -21,7 +21,7 @@ export const ComponentsHierarchy: FC = () => {
 				/>
 
 				<HierarchyElement to={'CropperWrapper'} type={'custom-component'} title={'CropperWrapper'}>
-					<HierarchyElement to={'CropperBoundary'} type={'component'} title={'CropperBoundary'}>
+					<HierarchyElement to={'StretchableBoundary'} type={'component'} title={'StretchableBoundary'}>
 						<HierarchyElement
 							to={'CropperBackgroundWrapper'}
 							type={'custom-component'}

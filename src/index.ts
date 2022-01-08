@@ -4,7 +4,7 @@ export * from './components/stencils/CircleStencil';
 export * from './components/service/BoundingBox';
 export * from './components/service/CropperCanvas';
 export * from './components/service/CropperBackgroundImage';
-export * from './components/service/CropperBoundary';
+export * from './components/service/StretchableBoundary';
 export * from './components/service/CropperWrapper';
 export * from './components/service/StencilOverlay';
 export * from './components/service/StencilWrapper';

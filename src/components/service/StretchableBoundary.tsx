@@ -5,7 +5,7 @@ import { updateStretcher, StretchAlgorithm } from 'advanced-cropper/html';
 import { fillBoundary, fitBoundary } from 'advanced-cropper/defaults';
 import { isFunction } from 'advanced-cropper/utils';
 
-import './CropperBoundary.scss';
+import './StretchableBoundary.scss';
 
 interface Props {
 	className?: string;
@@ -17,12 +17,12 @@ interface Props {
 	children?: ReactNode;
 }
 
-export interface CropperBoundaryMethods {
+export interface StretchableBoundaryMethods {
 	stretchTo: (size: Size | null) => Promise<Size | null>;
 	reset: () => void;
 }
 
-export const CropperBoundary = forwardRef(
+export const StretchableBoundary = forwardRef(
 	(
 		{
 			className,
@@ -95,4 +95,4 @@ export const CropperBoundary = forwardRef(
 	},
 );
 
-CropperBoundary.displayName = 'CropperBoundary';
+StretchableBoundary.displayName = 'StretchableBoundary';

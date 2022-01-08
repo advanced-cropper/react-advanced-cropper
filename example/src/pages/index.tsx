@@ -1,6 +1,6 @@
 import React from 'react';
-import 'react-advanced-cropper/dist/style.css';
 import 'react-mobile-cropper/dist/style.css';
+import 'react-advanced-cropper/dist/style.css';
 import Navbar from '@theme/Navbar';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';

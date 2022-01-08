@@ -33,7 +33,7 @@ import { mergeRefs } from '../service/react';
 import { useUpdateEffect } from '../hooks/useUpdateEffect';
 import { useRotateImageOptions } from '../hooks/useRotateImageOptions';
 import { useStateWithCallback } from '../hooks/useStateWithCallback';
-import { CropperBoundary, CropperBoundaryMethods } from './service/CropperBoundary';
+import { StretchableBoundary, StretchableBoundaryMethods } from './service/StretchableBoundary';
 import { CropperWrapper } from './service/CropperWrapper';
 import { CropperBackgroundImage } from './service/CropperBackgroundImage';
 import { CropperCanvas, CropperCanvasMethods } from './service/CropperCanvas';
@@ -125,7 +125,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 
 	const stencilRef = useRef<StencilComponent>(null);
 	const imageRef = useRef<HTMLImageElement>(null);
-	const boundaryRef = useRef<CropperBoundaryMethods>(null);
+	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 	const canvasRef = useRef<CropperCanvasMethods>(null);
 	const cropperRef = useRef<CropperRef>(null);
 
@@ -282,7 +282,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 			loading={loading}
 			style={style}
 		>
-			<CropperBoundary
+			<StretchableBoundary
 				ref={boundaryRef}
 				stretchAlgorithm={stretchAlgorithm}
 				sizeAlgorithm={boundarySizeAlgorithm}
@@ -314,7 +314,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 					<StencilComponent {...stencilProps} ref={stencilRef} cropper={cropper} image={currentImage} />
 				</BackgroundWrapperComponent>
 				{canvas && <CropperCanvas ref={canvasRef} />}
-			</CropperBoundary>
+			</StretchableBoundary>
 		</WrapperComponent>
 	);
 });
