@@ -208,7 +208,7 @@ to resize image ([pica](https://github.com/nodeca/pica), [downscale](https://git
 
 ## Preview the result
 
-To implement real-time preview of cropping result you can use [`Preview`](/components/preview.html) component.
+To implement real-time preview of cropping result you can use [`CropperPreview`](/docs/components/CropperPreview) component.
 
 <PreviewResultExample/>
 
@@ -217,7 +217,7 @@ import React, { useRef, useState } from 'react';
 import {
 	CropperRef,
 	Cropper,
-	Preview,
+	CropperPreview,
 	CropperImage,
 	CropperState,
 	CropperTransitions,
@@ -251,7 +251,7 @@ export const Example = () => {
 				onTransitionsStart={onTransitionsChange}
 				onTransitionsEnd={onTransitionsChange}
 			/>
-			<Preview
+			<CropperPreview
 				className="preview"
 				image={image}
 				state={state}

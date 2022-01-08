@@ -13,7 +13,7 @@ export * from './components/service/DraggableElement';
 export * from './components/service/TransformableImage';
 export * from './components/service/CropperFade';
 export * from './components/service/CropperBackgroundWrapper';
-export * from './components/helpers/Preview';
+export * from './components/helpers/CropperPreview';
 export * from './components/lines/SimpleLine';
 export * from './components/handlers/SimpleHandler';
 export * from './types';

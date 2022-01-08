@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { CropperRef, Cropper, Preview, CropperImage, CropperState, CropperTransitions } from 'react-advanced-cropper';
+import { CropperRef, Cropper, CropperPreview, CropperImage, CropperState, CropperTransitions } from 'react-advanced-cropper';
 import './PreviewResultExample.scss';
 import { SquareButton } from '../../components/examples/components/SquareButton';
 import { RotateLeftIcon } from '../../components/icons/RotateLeftIcon';
@@ -42,13 +42,13 @@ export const PreviewResultExample = () => {
 				onTransitionsEnd={onTransitionsChange}
 			/>
 			<div className="preview-result-example__previews">
-				<Preview
+				<CropperPreview
 					className="preview-result-example__preview"
 					image={image}
 					state={state}
 					transitions={transitions}
 				/>
-				<Preview
+				<CropperPreview
 					className="preview-result-example__preview preview-result-example__preview--small"
 					state={state}
 					image={image}

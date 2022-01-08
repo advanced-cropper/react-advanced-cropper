@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CircleStencil, CropperRef, Cropper } from 'react-advanced-cropper';
+import { CircleStencil, Cropper } from 'react-advanced-cropper';
 import './CustomPreviewExample.scss';
 
 export const CustomPreviewExample = () => {

@@ -7,7 +7,7 @@ import { ratio } from 'advanced-cropper/service';
 import { StretchParams } from 'advanced-cropper/html';
 import { DefaultBoundaryParams } from 'advanced-cropper/defaults';
 import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
-import './Preview.scss';
+import './CropperPreview.scss';
 
 interface Props {
 	state: CropperState | null;
@@ -21,7 +21,7 @@ interface Props {
 	fill?: unknown;
 }
 
-export const Preview = ({ className, contentClassName, imageClassName, state, image, transitions }: Props) => {
+export const CropperPreview = ({ className, contentClassName, imageClassName, state, image, transitions }: Props) => {
 	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 
 	const [size, setSize] = useState<Size | null>(null);
@@ -101,15 +101,15 @@ export const Preview = ({ className, contentClassName, imageClassName, state, im
 			ref={boundaryRef}
 			sizeAlgorithm={sizeAlgorithm}
 			stretchAlgorithm={stretchAlgorithm}
-			className={cn(className, 'react-preview')}
+			className={cn(className, 'react-cropper-preview')}
 		>
-			<div className={cn(contentClassName, 'react-preview__content')} style={contentStyle}>
+			<div className={cn(contentClassName, 'react-cropper-preview__content')} style={contentStyle}>
 				<img
 					src={image ? image.src : undefined}
 					className={cn(
 						imageClassName,
-						'react-preview__image',
-						image && image.src && 'react-preview__image--visible',
+						'react-cropper-preview__image',
+						image && image.src && 'react-cropper-preview__image--visible',
 					)}
 					style={imageStyle}
 				/>
