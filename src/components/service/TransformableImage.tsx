@@ -9,9 +9,9 @@ interface Props {
 	frozen?: boolean;
 	touchMove?: boolean;
 	mouseMove?: boolean;
-	touchResize?: boolean;
+	touchScale?: boolean;
 	touchRotate?: boolean;
-	wheelResize?:
+	wheelScale?:
 		| boolean
 		| {
 				ratio: number;
@@ -20,10 +20,10 @@ interface Props {
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
-	eventsFilter?: (nativeEvent: Event, transforming: boolean) => boolean | void;
+	eventsFilter?: (nativeEvent: Event, transforming: boolean) => unknown;
 }
 
-export type TransformImageType = 'touchTransform' | 'mouseMove' | 'wheelResize';
+export type TransformImageType = 'touchTransform' | 'mouseMove' | 'wheelScale';
 
 export class TransformableImage extends Component<Props> {
 	touches: (SimpleTouch & { identifier?: number })[];
@@ -35,9 +35,9 @@ export class TransformableImage extends Component<Props> {
 	static defaultProps = {
 		touchMove: true,
 		mouseMove: true,
-		touchResize: true,
+		touchScale: true,
 		touchRotate: false,
-		wheelResize: true,
+		wheelScale: true,
 		timeout: 500,
 	};
 
@@ -56,12 +56,12 @@ export class TransformableImage extends Component<Props> {
 	}
 
 	processMove = (newTouches: SimpleTouch[]) => {
-		const { onTransform, touchResize, touchMove, touchRotate } = this.props;
+		const { onTransform, touchScale, touchMove, touchRotate } = this.props;
 		const container = this.container.current;
 		if (container && onTransform) {
 			onTransform(
 				touchesToImageTransform(newTouches, this.touches, container, {
-					scale: touchResize,
+					scale: touchScale,
 					rotate: touchRotate,
 					move: touchMove,
 				}),
@@ -97,15 +97,15 @@ export class TransformableImage extends Component<Props> {
 	};
 
 	onWheel = (event: WheelEvent) => {
-		const { onTransform, wheelResize } = this.props;
+		const { onTransform, wheelScale } = this.props;
 		const container = this.container.current;
 
-		if (wheelResize) {
+		if (wheelScale) {
 			if (this.processEvent(event)) {
 				this.processStart();
 				if (onTransform && container) {
 					onTransform(
-						wheelEventToImageTransform(event, container, wheelResize === true ? 0.1 : wheelResize.ratio),
+						wheelEventToImageTransform(event, container, wheelScale === true ? 0.1 : wheelScale.ratio),
 					);
 				}
 
@@ -116,8 +116,8 @@ export class TransformableImage extends Component<Props> {
 		}
 	};
 	onTouchStart = (event: TouchEvent) => {
-		const { touchMove, touchResize, touchRotate } = this.props;
-		if (event.cancelable && (touchMove || ((touchResize || touchRotate) && event.touches.length > 1))) {
+		const { touchMove, touchScale, touchRotate } = this.props;
+		if (event.cancelable && (touchMove || ((touchScale || touchRotate) && event.touches.length > 1))) {
 			if (this.processEvent(event)) {
 				const container = this.container.current;
 				if (container) {

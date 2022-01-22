@@ -15,7 +15,7 @@ export interface TransitionsSettings {
 	duration?: number;
 }
 
-export interface ResizeImageSettings {
+export interface ScaleImageSettings {
 	touch?: boolean;
 	wheel?:
 		| boolean

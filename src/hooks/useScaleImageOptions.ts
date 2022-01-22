@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { getOptions } from 'advanced-cropper/utils';
-import { ResizeImageSettings } from '../types';
+import { ScaleImageSettings } from '../types';
 
-interface UseResizeImageOptions {
+interface UseScaleImageOptions {
 	touch: boolean;
 	wheel:
 		| boolean
@@ -12,11 +12,11 @@ interface UseResizeImageOptions {
 	adjustStencil: boolean;
 }
 
-export function useResizeImageOptions(resizeImage: ResizeImageSettings | boolean) {
-	return useMemo<UseResizeImageOptions>(
+export function useScaleImageOptions(scaleImage: ScaleImageSettings | boolean) {
+	return useMemo<UseScaleImageOptions>(
 		() =>
 			getOptions(
-				resizeImage,
+				scaleImage,
 				{
 					touch: true,
 					wheel: {
@@ -30,6 +30,6 @@ export function useResizeImageOptions(resizeImage: ResizeImageSettings | boolean
 					adjustStencil: false,
 				},
 			),
-		[resizeImage],
+		[scaleImage],
 	);
 }

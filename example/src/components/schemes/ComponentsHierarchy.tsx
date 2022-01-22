@@ -15,9 +15,9 @@ export const ComponentsHierarchy: FC = () => {
 				<HierarchyElement to={'/docs/hooks/useCropperImage'} type={'hook'} title={'useCropperImage'} />
 				<HierarchyElement to={'/docs/hooks/useMoveImageOptions'} type={'hook'} title={'useMoveImageOptions'} />
 				<HierarchyElement
-					to={'/docs/hooks/useResizeImageOptions'}
+					to={'/docs/hooks/useScaleImageOptions'}
 					type={'hook'}
-					title={'useResizeImageOptions'}
+					title={'useScaleImageOptions'}
 				/>
 
 				<HierarchyElement to={'CropperWrapper'} type={'custom-component'} title={'CropperWrapper'}>

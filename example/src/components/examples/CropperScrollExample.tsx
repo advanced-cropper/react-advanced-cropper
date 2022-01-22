@@ -17,7 +17,7 @@ export const CropperScrollExample = () => {
 				handlers: {},
 				lines: {},
 			}}
-			resizeImage={{
+			scaleImage={{
 				adjustStencil: false,
 			}}
 			imageRestriction={'stencil'}

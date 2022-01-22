@@ -12,9 +12,9 @@ export interface CropperBackgroundWrapperProps {
 	cropper: DesiredCropperRef;
 	touchMove?: boolean;
 	mouseMove?: boolean;
-	touchResize?: boolean;
+	touchScale?: boolean;
 	touchRotate?: boolean;
-	wheelResize?:
+	wheelScale?:
 		| boolean
 		| {
 				ratio: number;
@@ -27,8 +27,8 @@ export interface CropperBackgroundWrapperProps {
 export const CropperBackgroundWrapper = ({
 	touchMove,
 	mouseMove,
-	touchResize,
-	wheelResize,
+	touchScale,
+	wheelScale,
 	touchRotate,
 	children,
 	className,
@@ -45,8 +45,8 @@ export const CropperBackgroundWrapper = ({
 			onTransformEnd={cropper.transformImageEnd}
 			touchMove={touchMove}
 			mouseMove={mouseMove}
-			touchResize={touchResize}
-			wheelResize={wheelResize}
+			touchScale={touchScale}
+			wheelScale={wheelScale}
 			touchRotate={touchRotate}
 			frozen={transitions.active}
 		>

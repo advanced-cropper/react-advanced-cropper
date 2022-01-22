@@ -158,11 +158,11 @@ This section still in the development. Stay up to date.
 
 	**See also: [Example](/docs/guides/advanced-recipes#different-image-restrictions)**
 
-### `resizeImage`
+### `scaleImage`
 
-- **Type:** `boolean | ResizeImageSettings`
+- **Type:** `boolean | ScaleImageSettings`
 ```tsx
-interface ResizeImageSettings {
+interface ScaleImageSettings {
 	touch?: boolean;
 	wheel?:
     | boolean
@@ -178,7 +178,7 @@ interface ResizeImageSettings {
 
 - **Details:**
 
-	This prop is either boolean flag or object settings. The default object used when `true` is passed to `resizeImage`:
+	This prop is either boolean flag or object settings. The default object used when `true` is passed to `scaleImage`:
 	```js
 	{
     touch: true,

@@ -33,7 +33,7 @@ export const AdjustStencilExample = () => {
 			<Cropper
 				ref={cropperRef}
 				className={'adjust-stencil-example__cropper'}
-				resizeImage={{
+				scaleImage={{
 					adjustStencil,
 				}}
 				priority={'visibleArea'}

@@ -235,7 +235,7 @@ export const CroppersWizard: FC = () => {
 						stencilProps={stencilProps}
 						imageRestriction={imageRestriction}
 						stencilComponent={stencilType === 'circle' ? CircleStencil : RectangleStencil}
-						resizeImage={{
+						scaleImage={{
 							adjustStencil: imageRestriction !== 'stencil' && imageRestriction !== 'none',
 						}}
 					/>

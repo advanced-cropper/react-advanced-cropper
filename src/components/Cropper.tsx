@@ -15,14 +15,14 @@ import {
 	CropperBackgroundWrapperComponent,
 	CropperWrapperComponent,
 	MoveImageSettings,
-	ResizeImageSettings,
+	ScaleImageSettings,
 	RotateImageSettings,
 	StencilComponent,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
 import { useMoveImageOptions } from '../hooks/useMoveImageOptions';
-import { useResizeImageOptions } from '../hooks/useResizeImageOptions';
+import { useScaleImageOptions } from '../hooks/useScaleImageOptions';
 import {
 	CropperStateCallbacks,
 	CropperStateHook,
@@ -58,7 +58,7 @@ export interface CropperProps extends CropperStateSettings, CropperStateCallback
 	canvas?: boolean;
 	crossOrigin?: 'anonymous' | 'use-credentials';
 	rotateImage?: boolean | RotateImageSettings;
-	resizeImage?: boolean | ResizeImageSettings;
+	scaleImage?: boolean | ScaleImageSettings;
 	moveImage?: boolean | MoveImageSettings;
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm | string;
 	stretchAlgorithm?: StretchAlgorithm;
@@ -111,7 +111,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		crossOrigin = true,
 		checkOrientation = true,
 		canvas = true,
-		resizeImage = true,
+		scaleImage = true,
 		moveImage = true,
 		rotateImage = false,
 		style,
@@ -130,13 +130,13 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	const cropperRef = useRef<CropperRef>(null);
 
 	const rotateImageOptions = useRotateImageOptions(rotateImage);
-	const resizeImageOptions = useResizeImageOptions(resizeImage);
+	const scaleImageOptions = useScaleImageOptions(scaleImage);
 	const moveImageOptions = useMoveImageOptions(moveImage);
 
 	const cropper = useCropperState({
 		...stateSettings,
 		...cropperSettings,
-		adjustStencil: resizeImageOptions.adjustStencil,
+		adjustStencil: scaleImageOptions.adjustStencil,
 		getInstance() {
 			return cropperRef.current;
 		},
@@ -293,8 +293,8 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 					{...backgroundWrapperProps}
 					cropper={cropper}
 					className={'react-advanced-cropper__background-wrapper'}
-					wheelResize={resizeImageOptions.wheel}
-					touchResize={resizeImageOptions.touch}
+					wheelScale={scaleImageOptions.wheel}
+					touchScale={scaleImageOptions.touch}
 					touchMove={moveImageOptions.touch}
 					mouseMove={moveImageOptions.mouse}
 					touchRotate={rotateImageOptions.touch}
