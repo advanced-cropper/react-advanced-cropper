@@ -504,6 +504,43 @@ interface TransitionsSettings {
 	```
 	**See also: [Example](/docs/guides/advanced-recipes#default-visible-area)**
 
+### `defaultTransforms`
+
+- **Type:** `PartialTransforms | ((image: CropperImage) => PartialTransforms)`
+
+
+- **Details:**
+
+	It's either an object or static function.
+
+	#### `Object`
+
+	The object should have `PartialTransforms` type.
+	```tsx
+	interface PartialTransforms {
+		rotate?: number;
+		flip?: {
+			horizontal?: boolean;
+			vertical?: boolean;
+		};
+	}
+	```
+
+	#### `Function`
+
+	The static function can accept the one argument: `image.
+
+	It should return an object with `PartialTransforms` type.
+	```js
+	(image) => {
+    return {
+    	...image.transforms,
+    	rotate: image.transforms.rotate + 90,
+    }
+	}
+	```
+	**See also: [Example](/docs/guides/advanced-recipes#default-transforms)**
+
 
 ### `boundarySizeAlgorithm`
 

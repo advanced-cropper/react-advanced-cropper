@@ -105,6 +105,7 @@ export const GettingStartedExample = () => {
 | imageRestriction          | `string`             | Set restrictions for image position ('fillArea' 'fitArea', 'stencil', 'none')    | `'fillArea'`
 | defaultSize               | `object`, `Function` | The function that returns the default size of the stencil or object              |
 | defaultPosition           | `object`, `Function` | The function that returns the default position of the stencil or object          |
+| defaultTransforms         | `object`, `Function` | The function that returns the default image transforms or object           |
 | wrapperComponent          | `Component`          | The wrapper component                                           			      | `CropperWrapper`
 | wrapperProps              | `object`             | The props for the wrapper component                             			      | `{}`
 | backgroundWrapperComponent| `Component`          | The background wrapper component                                           | `CropperBackgroundWrapper`

@@ -15,6 +15,7 @@ import { SetCoordinatesExample } from '../../src/components/examples/SetCoordina
 import { CustomRestrictionsExample } from '../../src/components/examples/CustomRestrictionsExample';
 import { RefreshExample } from '../../src/components/examples/RefreshExample';
 import { CropperScrollExample } from '../../src/components/examples/CropperScrollExample';
+import { DefaultTransformsExample } from '../../src/components/examples/DefaultTransformsExample';
 
 # Advanced Recipes
 
@@ -26,7 +27,7 @@ There is the example of a fixed stencil below, that may be useful for mobile dev
 
 ```tsx
 <Cropper
-	src={'https://images.unsplash.com/photo-1527137342181-19aab11a8ee8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80'}
+	src={'https://images.pexels.com/photos/5006465/pexels-photo-5006465.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260'}
 	stencilSize={{
 		width: 300,
 		height: 300
@@ -340,6 +341,35 @@ export const Example = () => {
 };
 ```
 
+## Default transforms
+
+There are situations when you need to save the image transforms. In this case `defaultTransforms` can be useful.
+
+It can be either a function or an object.
+
+<DefaultTransformsExample/>
+
+```tsx
+import React from 'react';
+import { Cropper, CropperRef, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
+
+export const Example = () => {
+	const defaultTransforms = {
+		rotate: 90,
+		flip: {
+			horizontal: false,
+			vertical: false,
+		}
+	};
+
+	return (
+		<Cropper
+			defaultTransforms={defaultTransforms}
+			src={'https://images.pexels.com/photos/1758144/pexels-photo-1758144.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'}
+		/>
+	);
+};
+```
 
 ## Dynamic cropper size
 

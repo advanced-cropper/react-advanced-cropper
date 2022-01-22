@@ -1,4 +1,4 @@
-import { CropperState, CropperImage, CropperTransitions, AspectRatio } from 'advanced-cropper/types';
+import { CropperImage, CropperTransitions, AspectRatio, PartialTransforms } from 'advanced-cropper/types';
 import { CropperBackgroundWrapperProps } from './components/service/CropperBackgroundWrapper';
 import { CropperWrapperProps } from './components/service/CropperWrapper';
 import { CropperStateHook } from './hooks/useCropperState';
@@ -57,3 +57,5 @@ export interface BasicCropperRef {
 export interface StencilRef {
 	aspectRatio: () => AspectRatio;
 }
+
+export type DefaultTransforms = PartialTransforms | ((image: CropperImage) => PartialTransforms);

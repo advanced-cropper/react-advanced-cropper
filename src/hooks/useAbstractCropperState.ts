@@ -14,6 +14,7 @@ import {
 	ResizeDirections,
 	Rotate,
 	PostprocessAction,
+	PartialTransforms,
 } from 'advanced-cropper/types';
 import { emptyCoordinates, getOptions, isArray, isFunction } from 'advanced-cropper/utils';
 
@@ -46,7 +47,7 @@ import {
 	fillMoveDirections,
 	fillResizeDirections,
 } from 'advanced-cropper/service';
-import { TransitionsSettings } from '../types';
+import { DefaultTransforms, TransitionsSettings } from '../types';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
 import { useDebouncedCallback } from './useDebouncedCallback';
@@ -84,6 +85,7 @@ export interface AbstractCropperStateSettings<Cropper = unknown> {
 	createStateAlgorithm?: CreateStateAlgorithm;
 	reconcileStateAlgorithm?: ReconcileStateAlgorithm;
 	moveImageAlgorithm?: (state: CropperState, settings: CropperSettings, left?: number, top?: number) => CropperState;
+	defaultTransforms?: DefaultTransforms;
 	priority?: Priority;
 }
 
@@ -153,6 +155,7 @@ export function useAbstractCropperState<
 	onTransformImageEnd,
 	onInteractionStart,
 	onInteractionEnd,
+	defaultTransforms,
 	...settings
 }: Settings & AbstractCropperStateCallbacks<Instance>) {
 	const [state, setState] = useStateWithCallback<CropperState | null>(null);
@@ -247,6 +250,11 @@ export function useAbstractCropperState<
 	};
 
 	const resetState = (boundary: Boundary, image: CropperImage) => {
+		let transforms: PartialTransforms = image.transforms;
+		if (defaultTransforms) {
+			transforms = isFunction(defaultTransforms) ? defaultTransforms(image) : defaultTransforms;
+		}
+
 		updateState(
 			applyPostProcess(
 				{
@@ -258,7 +266,7 @@ export function useAbstractCropperState<
 					{
 						boundary,
 						imageSize: { width: image.width, height: image.height },
-						transforms: image.transforms,
+						transforms,
 						priority,
 					},
 					settings,
