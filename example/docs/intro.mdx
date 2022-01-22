@@ -8,7 +8,7 @@ import { GettingStartedExample } from '../src/components/examples/GettingStarted
 
 ## Package installation
 
-To use the package you should install it with npm or yarn.
+To use the library you should install it with `npm` or `yarn`
 
 ```shell
 npm install -S react-advanced-cropper
@@ -18,7 +18,7 @@ npm install -S react-advanced-cropper
 yarn add react-advanced-cropper
 ```
 
-Then you should add somewhere in your script file or block the import of Cropper component:
+Then import the `Cropper` component and the styles somewhere:
 
 ```ts
 import { Cropper } from 'react-advanced-cropper'
@@ -26,7 +26,7 @@ import 'react-advanced-cropper/dist/style.css';
 ```
 ## Minimal working example
 
-The following example is demonstrating the using of the cropper in a custom component:
+The following example shows the usage of the cropper in a custom component:
 
 <GettingStartedExample/>
 
@@ -53,4 +53,6 @@ export const GettingStartedExample = () => {
 	)
 };
 ```
-If you need to change the behavior of cropper (for example, you want to create a fixed one for mobile devices), please read this detailed article about different types of croppers.
+
+If you need to change the behavior of the cropper (for example, you want to create a fixed one for mobile devices),
+please read [this detailed article](/docs/guides/cropper-types) about the different variants of croppers.

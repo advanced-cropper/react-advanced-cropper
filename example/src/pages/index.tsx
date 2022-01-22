@@ -1,5 +1,7 @@
 import React from 'react';
 import 'react-advanced-cropper/dist/style.css';
+import './index.scss';
+
 import Navbar from '@theme/Navbar';
 import CodeBlock from '@theme/CodeBlock';
 import Link from '@docusaurus/Link';
@@ -8,7 +10,6 @@ import useTheme from '@theme/hooks/useTheme';
 import { InstallationBlock } from '@site/src/components/InstallationBlock';
 import Layout from '../components/layout/Layout';
 import { CroppersWizard } from '../components/CroppersWizard';
-import './index.scss';
 
 const example = `
 import React, { useState } from 'react';
@@ -49,9 +50,9 @@ export default function Home(): JSX.Element {
 						</div>
 						<h1 className="main-page__landing-title">Create the cropper you desire</h1>
 						<div className="main-page__section-text">
-							The react cropper library that gives the possibility to create croppers that exactly suited
+							This react cropper library gives you the possibility to create croppers that exactly suited
 							for your website design. Not only the appearance, but the behavior alike. Don’t limit
-							yourself: rotate, zoom, transitions, autozoom and many other features included.
+							yourself. Rotate, zoom, transitions, autozoom and many other features included.
 						</div>
 						<div className="main-page__family">
 							<span className="main-page__family-item main-page__family-item--active">React</span>
@@ -84,8 +85,8 @@ export default function Home(): JSX.Element {
 								<div className="main-page__feature">
 									<div className="main-page__feature-title">Mobile Support</div>
 									<div className="main-page__feature-text">
-										React Advanced Cropper supports desktop and mobile devices alike. Built in support
-										for touch events, cropper resizing, etc.
+										React Advanced Cropper supports desktop and mobile devices alike. Built-in
+										support of touch events, cropper resizing, etc.
 									</div>
 								</div>
 							</div>
@@ -93,14 +94,14 @@ export default function Home(): JSX.Element {
 								<div className="main-page__feature">
 									<div className="main-page__feature-title">Canvas / Coordinates</div>
 									<div className="main-page__feature-text">
-										This Cropper can be used to create a canvas with a cropped area or just
+										This react cropper can be used to create a canvas with a cropped area or just
 										coordinates relative to the original image to crop it server-side in the future.
 									</div>
 								</div>
 								<div className="main-page__feature">
 									<div className="main-page__feature-title">Advanced Features</div>
 									<div className="main-page__feature-text">
-										Set minimum and maximum aspect ratios, customizie minimum and maximum height and
+										Set minimum and maximum aspect ratios, customize minimum and maximum height and
 										width, etc.
 									</div>
 								</div>
