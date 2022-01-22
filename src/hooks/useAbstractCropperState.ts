@@ -212,13 +212,13 @@ export function useAbstractCropperState<
 	};
 
 	const actions = useRef({
-		move: false,
-		resize: false,
+		moveCoordinates: false,
+		resizeCoordinates: false,
 		transformImage: false,
 	});
 
 	const startAction = (action: keyof typeof actions.current) => {
-		if (!actions.current.move && !actions.current.resize && !actions.current.transformImage) {
+		if (!actions.current.moveCoordinates && !actions.current.resizeCoordinates && !actions.current.transformImage) {
 			runCallback(onInteractionStart, getInstance);
 		}
 		actions.current[action] = true;
@@ -226,7 +226,7 @@ export function useAbstractCropperState<
 
 	const endAction = (action: keyof typeof actions.current) => {
 		actions.current[action] = false;
-		if (!actions.current.move && !actions.current.resize && !actions.current.transformImage) {
+		if (!actions.current.moveCoordinates && !actions.current.resizeCoordinates && !actions.current.transformImage) {
 			updateState(
 				() =>
 					state &&
@@ -471,16 +471,16 @@ export function useAbstractCropperState<
 					: fillMoveDirections(directions);
 
 				let result = applyPostProcess(
-					{ name: 'move', immediately, transitions },
+					{ name: 'moveCoordinates', immediately, transitions },
 					(moveCoordinatesAlgorithm || moveCoordinates)(state, settings, normalizedDirections),
 				);
 				callbacks.push(onMove);
 
 				if (immediately) {
-					result = applyPostProcess({ name: 'moveEnd', immediately, transitions }, result);
+					result = applyPostProcess({ name: 'moveCoordinatesEnd', immediately, transitions }, result);
 					callbacks.push(onMoveEnd);
 				} else {
-					startAction('move');
+					startAction('moveCoordinates');
 				}
 
 				updateState(
@@ -495,13 +495,13 @@ export function useAbstractCropperState<
 		moveCoordinatesEnd: (options: ImmediatelyOptions & TransitionOptions = {}) => {
 			const { transitions = true, immediately = false } = options;
 			updateState(
-				() => state && applyPostProcess({ name: 'moveEnd', transitions, immediately }, state),
+				() => state && applyPostProcess({ name: 'moveCoordinatesEnd', transitions, immediately }, state),
 				{
 					transitions,
 				},
 				[onMoveEnd],
 			);
-			endAction('move');
+			endAction('moveCoordinates');
 		},
 		resizeCoordinates: (
 			directions: Partial<ResizeDirections>,
@@ -518,7 +518,7 @@ export function useAbstractCropperState<
 					: fillResizeDirections(directions);
 
 				let result = applyPostProcess(
-					{ name: 'resize', immediately, transitions },
+					{ name: 'resizeCoordinates', immediately, transitions },
 					(resizeCoordinatesAlgorithm || resizeCoordinates)(
 						state,
 						settings,
@@ -529,10 +529,10 @@ export function useAbstractCropperState<
 				callbacks.push(onResize);
 
 				if (immediately) {
-					result = applyPostProcess({ name: 'resizeEnd', immediately, transitions }, result);
+					result = applyPostProcess({ name: 'resizeCoordinatesEnd', immediately, transitions }, result);
 					callbacks.push(onResizeEnd);
 				} else {
-					startAction('resize');
+					startAction('resizeCoordinates');
 				}
 
 				updateState(
@@ -547,13 +547,13 @@ export function useAbstractCropperState<
 		resizeCoordinatesEnd: (options: ImmediatelyOptions & TransitionOptions = {}) => {
 			const { transitions = true, immediately = false } = options;
 			updateState(
-				() => state && applyPostProcess({ name: 'resizeEnd', transitions, immediately }, state),
+				() => state && applyPostProcess({ name: 'resizeCoordinatesEnd', transitions, immediately }, state),
 				{
 					transitions,
 				},
 				[onResizeEnd],
 			);
-			endAction('resize');
+			endAction('resizeCoordinates');
 		},
 		getStencilCoordinates() {
 			return getStencilCoordinates(state);
