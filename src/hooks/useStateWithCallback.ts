@@ -7,20 +7,19 @@ export function useStateWithCallback<S>(initialState?: S | (() => S)): [S, Dispa
 export function useStateWithCallback<S = undefined>(): [S | undefined, DispatchWithCallback<S  | undefined>];
 export function useStateWithCallback<S = undefined>(initialState?: S | (() => S)): [S | undefined, DispatchWithCallback<S | undefined>]  {
 	const [state, setState] = useState(initialState);
-
-	const callbackRef = useRef<Function>();
+	const [callback, setCallback] = useState<Function>()
 
 	useUpdateEffect(() => {
-		if (callbackRef.current) {
-			callbackRef.current();
+		if (callback) {
+			callback();
 		}
-	}, [state])
+	}, [callback])
 
 	return [
 		state,
 		(value: SetStateAction<S | undefined>, callback?: Function) => {
 			setState(value);
-			callbackRef.current = callback;
+			setCallback(callback);
 		}
 	]
 }

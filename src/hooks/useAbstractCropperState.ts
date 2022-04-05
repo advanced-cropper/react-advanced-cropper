@@ -16,7 +16,7 @@ import {
 	PostprocessAction,
 	PartialTransforms,
 } from 'advanced-cropper/types';
-import { emptyCoordinates, getOptions, isArray, isFunction } from 'advanced-cropper/utils';
+import { getOptions, isArray, isFunction } from 'advanced-cropper/utils';
 
 import {
 	copyState,
@@ -48,6 +48,7 @@ import {
 	fillResizeDirections,
 } from 'advanced-cropper/service';
 import { DefaultTransforms, TransitionsSettings } from '../types';
+import { TimingFunction } from '../../../Advanced Cropper/dist/animation';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
 import { useDebouncedCallback } from './useDebouncedCallback';
@@ -162,7 +163,7 @@ export function useAbstractCropperState<
 
 	const [transitionsActive, setTransitionsActive] = useStateWithCallback(false);
 
-	const transitionsOptions = useMemo<{ timingFunction: string; duration: number; active: boolean }>(
+	const transitionsOptions = useMemo<{ timingFunction: TimingFunction; duration: number; active: boolean }>(
 		() => ({
 			...getOptions(transitions, {
 				timingFunction: 'ease-in-out',
@@ -575,14 +576,14 @@ export function useAbstractCropperState<
 					return { ...state.coordinates };
 				}
 			} else {
-				return emptyCoordinates();
+				return null;
 			}
 		},
 		getVisibleArea() {
 			if (state) {
 				return { ...state.visibleArea };
 			} else {
-				return emptyCoordinates();
+				return null;
 			}
 		},
 		getSettings() {

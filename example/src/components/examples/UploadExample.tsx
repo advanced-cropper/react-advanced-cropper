@@ -10,15 +10,17 @@ export const UploadExample = () => {
 	);
 
 	const onUpload = () => {
-		const canvas = cropperRef.current.getCanvas();
+		const canvas = cropperRef.current?.getCanvas();
 		if (canvas) {
 			const form = new FormData();
 			canvas.toBlob((blob) => {
-				form.append('file', blob);
-				fetch('http://example.com/upload/', {
-					method: 'POST',
-					body: form,
-				});
+				if (blob) {
+					form.append('file', blob);
+					fetch('http://example.com/upload/', {
+						method: 'POST',
+						body: form,
+					});
+				}
 			}, 'image/jpeg');
 		}
 	};

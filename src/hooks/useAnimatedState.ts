@@ -8,13 +8,13 @@ export function useAnimatedState<T>(value: T): [T, (modifier: (state: T, progres
 	const animation = useRef<Animation>();
 	return [
 		state,
-		(modifier: (state: T, progress: number) => T, transition?: CropperTransitions) => {
-			if (transition && transition.active) {
+		(modifier: (state: T, progress: number) => T, transitions: CropperTransitions | null = null) => {
+			if (transitions && transitions.active) {
 				if (animation.current) {
 					animation.current.stop();
 				}
 				animation.current = new Animation({
-					...transition,
+					...transitions,
 					onStart() {
 						setAnimationActive(true)
 					},

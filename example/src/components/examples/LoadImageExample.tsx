@@ -10,10 +10,10 @@ interface Image {
 }
 
 export const LoadImageExample = () => {
-	const cropperRef = useRef<CropperRef>();
-	const inputRef = useRef<HTMLInputElement>();
+	const cropperRef = useRef<CropperRef>(null);
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	const [image, setImage] = useState<Image>(null);
+	const [image, setImage] = useState<Image | null>(null);
 
 	const onUpload = () => {
 		if (inputRef.current) {
@@ -22,10 +22,12 @@ export const LoadImageExample = () => {
 	};
 
 	const onCrop = () => {
-		const canvas = cropperRef.current.getCanvas();
-		canvas.toBlob((blob) => {
-			saveAs(blob);
-		}, image?.type);
+		const canvas = cropperRef.current?.getCanvas();
+		if (canvas) {
+			canvas.toBlob((blob) => {
+				saveAs(blob);
+			}, image?.type);
+		}
 	};
 
 	const onClear = () => {
@@ -63,7 +65,7 @@ export const LoadImageExample = () => {
 					// Read image as base64 and set it as src:
 					src: blob,
 					// Determine the image type to preserve it during the extracting the image from canvas:
-					type: getMimeType(e.target.result, typeFallback),
+					type: getMimeType(e.target?.result, typeFallback),
 				});
 			};
 			// Start the reader job - read file as a data url (base64 format) and get the real file type

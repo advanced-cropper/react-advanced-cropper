@@ -1,22 +1,17 @@
 import React, { useState, useRef } from 'react';
-import {
-	Cropper,
-	CropperRef,
-	getTransformedImageSize,
-	retrieveSizeRestrictions,
-} from 'react-advanced-cropper';
+import { Cropper, CropperRef, getTransformedImageSize, retrieveSizeRestrictions } from 'react-advanced-cropper';
 import { onInputChange } from '../..//service/react';
 import './CustomRestrictionsExample.scss';
 
 export const CustomRestrictionsExample = () => {
 	const cropperRef = useRef<CropperRef>();
-	const inputRef = useRef<HTMLInputElement>();
+	const inputRef = useRef<HTMLInputElement>(null);
 	const [src, setSrc] = useState(
 		'https://images.unsplash.com/photo-1494205577727-d32e58564756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80',
 	);
 
+	const [minWidth, setMinWidth] = useState<number>(50);
 	const [maxWidth, setMaxWidth] = useState<number>();
-	const [minWidth, setMinWidth] = useState<number>();
 	const [maxHeight, setMaxHeight] = useState<number>();
 	const [minHeight, setMinHeight] = useState<number>();
 
@@ -36,7 +31,9 @@ export const CustomRestrictionsExample = () => {
 	const onDownloadResult = () => {
 		if (cropperRef.current) {
 			const newTab = window.open();
-			newTab.document.body.innerHTML = `<img src="${cropperRef.current.getCanvas().toDataURL()}"></img>`;
+			if (newTab) {
+				newTab.document.body.innerHTML = `<img src="${cropperRef.current.getCanvas()?.toDataURL()}"/>`;
+			}
 		}
 	};
 
@@ -50,7 +47,9 @@ export const CustomRestrictionsExample = () => {
 		if (target.files && target.files[0]) {
 			const reader = new FileReader();
 			reader.onload = (event) => {
-				setSrc(event.target.result as string);
+				if (event.target) {
+					setSrc(event.target.result as string);
+				}
 			};
 			reader.readAsDataURL(target.files[0]);
 		}
@@ -63,10 +62,10 @@ export const CustomRestrictionsExample = () => {
 				className="custom-restrictions-example__cropper"
 				sizeRestrictions={percentsRestriction}
 				src={src}
-				minWidth={minWidth}
-				minHeight={minHeight}
-				maxWidth={maxWidth}
-				maxHeight={maxHeight}
+				minWidth={Number(minWidth)}
+				minHeight={Number(minHeight)}
+				maxWidth={Number(maxWidth)}
+				maxHeight={Number(maxHeight)}
 			/>
 			<div className="custom-restrictions-example__panel">
 				<div className="custom-restrictions-example__panel-left">

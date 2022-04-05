@@ -104,13 +104,13 @@ Click at the button **Crop Image** below to see this method in action
 
 ```tsx
 import React, { useState, useRef } from 'react';
-import { Cropper, CropperRef } from 'react-advanced-cropper';
+import { Cropper, CropperRef, Coordinates } from 'react-advanced-cropper';
 
 export const Example = () => {
 	const cropperRef = useRef<CropperRef>();
 
-	const [coordinates, setCoordinates] = useState(null);
-	const [image, setImage] = useState(null);
+	const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+	const [image, setImage] = useState<string>();
 
 	const [src, setSrc] = useState(
 		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
@@ -122,7 +122,7 @@ export const Example = () => {
 			// You are able to do different manipulations at a canvas
 			// but there we just get a cropped image, that can be used
 			// as src for <img/> to preview result
-			setPreview(cropperRef.current.getCanvas().toDataURL());
+			setImage(cropperRef.current.getCanvas()?.toDataURL());
 		}
 	};
 
@@ -154,8 +154,8 @@ get the coordinates, transitions and other plain properties. If you still need t
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const [coordinates, setCoordinates] = useState(null);
-	const [image, setImage] = useState(null);
+	const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
+	const [image, setImage] = useState<string>();
 
 	const [src] = useState(
 		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
@@ -163,7 +163,7 @@ export const Example = () => {
 
 	const onChange = (cropper: CropperRef) => {
 		setCoordinates(cropper.getCoordinates());
-		setImage(cropper.getCanvas().toDataURL());
+		setPreview(cropper.getCanvas()?.toDataURL());
 	};
 
 	return (
@@ -224,9 +224,9 @@ import {
 } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const [state, setState] = useState<CropperState>(null);
-	const [image, setImage] = useState<CropperImage>(null);
-	const [transitions, setTransitions] = useState<CropperTransitions>(null);
+	const [state, setState] = useState<CropperState | null>(null);
+	const [image, setImage] = useState<CropperImage | null>(null);
+	const [transitions, setTransitions] = useState<CropperTransitions | null>(null);
 
 	const [src, setSrc] = useState(
 		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
@@ -278,9 +278,9 @@ import { CropperRef, Cropper, getMimeType } from 'react-advanced-cropper';
 
 
 export const UploadExample = () => {
-	const inputRef = useRef<HTMLInputElement>();
+	const inputRef = useRef<HTMLInputElement>(null);
 
-	const [image, setImage] = useState<Image>(null);
+	const [image, setImage] = useState<Image | null>(null);
 
 	const onUpload = () => {
 		if (inputRef.current) {
@@ -319,7 +319,7 @@ export const UploadExample = () => {
 					// Read image as base64 and set it as src:
 					src: blob,
 					// Determine the image type to preserve it during the extracting the image from canvas:
-					type: getMimeType(e.target.result, typeFallback),
+					type: getMimeType(e.target?.result, typeFallback),
 				});
 			};
 			// Start the reader job - read file as a data url (base64 format) and get the real file type
@@ -377,15 +377,17 @@ export const UploadExample = () => {
 	);
 
 	const onUpload = () => {
-		const canvas = cropperRef.current.getCanvas();
+		const canvas = cropperRef.current?.getCanvas();
 		if (canvas) {
 			const form = new FormData();
 			canvas.toBlob((blob) => {
-				form.append('file', blob);
-				fetch('http://example.com/upload/', {
-					method: 'POST',
-					body: form,
-				});
+				if (blob) {
+					form.append('file', blob);
+					fetch('http://example.com/upload/', {
+						method: 'POST',
+						body: form,
+					});
+				}
 			}, 'image/jpeg');
 		}
 	};

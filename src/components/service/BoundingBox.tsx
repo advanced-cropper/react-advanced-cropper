@@ -10,7 +10,7 @@ import {
 	ResizeDirections,
 	MoveDirections,
 } from 'advanced-cropper/types';
-import { getDirectionNames } from 'advanced-cropper/utils';
+import { getDirectionNames, isCardinalDirection } from 'advanced-cropper/utils';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -81,7 +81,7 @@ interface LineNode {
 }
 
 interface PointNode {
-	name: CardinalDirection;
+	name: OrdinalDirection;
 	className: string;
 	verticalPosition: VerticalCardinalDirection | null;
 	horizontalPosition: HorizontalCardinalDirection | null;
@@ -126,12 +126,14 @@ export const BoundingBox = ({
 			VERTICAL_DIRECTIONS.forEach((vDirection) => {
 				if (hDirection !== vDirection) {
 					let { snakeCase, camelCase } = getDirectionNames(hDirection, vDirection);
-					result.push({
-						name: camelCase,
-						className: snakeCase,
-						verticalPosition: vDirection,
-						horizontalPosition: hDirection,
-					});
+					if (snakeCase && camelCase) {
+						result.push({
+							name: camelCase,
+							className: snakeCase,
+							verticalPosition: vDirection,
+							horizontalPosition: hDirection,
+						});
+					}
 				}
 			});
 		});
@@ -141,7 +143,7 @@ export const BoundingBox = ({
 	const lineNodes = useMemo(() => {
 		const result: LineNode[] = [];
 		points.forEach((point) => {
-			if ((!point.horizontalPosition || !point.verticalPosition) && lines[point.name]) {
+			if (isCardinalDirection(point.name) && point.name in lines) {
 				result.push({
 					name: point.name,
 					component: lineComponent,
@@ -163,7 +165,7 @@ export const BoundingBox = ({
 			}
 		});
 		return result;
-	}, [points, lines, lineComponent, lineClassNames, lineWrapperClassNames, resizable]);
+	}, [points, lineComponent, lineClassNames, lineWrapperClassNames, resizable]);
 
 	const handlerNodes = useMemo(() => {
 		const result: HandlerNode[] = [];

@@ -3,7 +3,7 @@ import { Cropper, ImageRestriction } from 'react-advanced-cropper';
 import './DefaultTransformsExample.scss';
 
 export const DefaultTransformsExample = () => {
-	const inputRef = useRef<HTMLInputElement>();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const [src, setSrc] = useState<string>(
 		'https://images.pexels.com/photos/5006465/pexels-photo-5006465.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',

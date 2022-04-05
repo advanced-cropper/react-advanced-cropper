@@ -7,11 +7,11 @@ import { RotateLeftIcon } from '../../components/icons/RotateLeftIcon';
 export const PreviewResultExample = () => {
 	const cropperRef = useRef<CropperRef>();
 
-	const [state, setState] = useState<CropperState>(null);
-	const [image, setImage] = useState<CropperImage>(null);
-	const [transitions, setTransitions] = useState<CropperTransitions>(null);
+	const [state, setState] = useState<CropperState | null>(null);
+	const [image, setImage] = useState<CropperImage | null>(null);
+	const [transitions, setTransitions] = useState<CropperTransitions | null>(null);
 
-	const [src, setSrc] = useState(
+	const [src] = useState(
 		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
 	);
 

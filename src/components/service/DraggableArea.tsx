@@ -109,8 +109,8 @@ export class DraggableArea extends PureComponent<Props> {
 				e.stopPropagation();
 			} else if (
 				distance(
-					{ x: this.touches[0].clientX, y: this.touches[0].clientY },
-					{ x: e.touches[0].clientX, y: e.touches[0].clientY },
+					{ left: this.touches[0].clientX, top: this.touches[0].clientY },
+					{ left: e.touches[0].clientX, top: e.touches[0].clientY },
 				) > (this.props.activationDistance || 0)
 			) {
 				this.initAnchor({

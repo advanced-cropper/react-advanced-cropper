@@ -11,7 +11,9 @@ export const ImageRestrictionExample = () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
 			const newTab = window.open();
-			newTab.document.body.innerHTML = `<img src="${cropper.getCanvas().toDataURL()}"></img>`;
+			if (newTab) {
+				newTab.document.body.innerHTML = `<img src="${cropper.getCanvas()?.toDataURL()}"></img>`;
+			}
 		}
 	};
 

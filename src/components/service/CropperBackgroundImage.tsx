@@ -10,12 +10,12 @@ interface Props {
 	className?: string;
 	image: CropperImage | null;
 	state: CropperState | null;
-	transitions?: CropperTransitions;
+	transitions?: CropperTransitions | null;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 }
 
 export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
-	({ className, image, state, transitions, crossOrigin }: Props, ref) => {
+	({ className, image, state, crossOrigin, transitions = null }: Props, ref) => {
 		const style = useMemo(
 			() => (image && state ? getBackgroundStyle(image, state, transitions) : {}),
 			[image, state, transitions],

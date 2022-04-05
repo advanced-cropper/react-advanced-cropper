@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Cropper, CropperState, CropperRef } from 'react-advanced-cropper';
+import { VisibleArea } from '../../../../../Advanced Cropper/dist/types';
 import './AdjustStencilExample.scss';
 
 export const AdjustStencilExample = () => {
@@ -15,16 +16,18 @@ export const AdjustStencilExample = () => {
 	};
 
 	const defaultSize = (state: CropperState) => {
+		const visibleArea = state.visibleArea as VisibleArea;
 		return {
-			width: state.visibleArea.width * 0.8,
-			height: state.visibleArea.height * 0.8,
+			width: visibleArea.width * 0.8,
+			height: visibleArea.height * 0.8,
 		};
 	};
 
 	const defaultPosition = (state: CropperState) => {
+		const visibleArea = state.visibleArea as VisibleArea;
 		return {
-			left: state.visibleArea.left + 0.1 * state.visibleArea.width,
-			top: state.visibleArea.top + 0.1 * state.visibleArea.height,
+			left: visibleArea.left + 0.1 * visibleArea.width,
+			top: visibleArea.top + 0.1 * visibleArea.height,
 		};
 	};
 

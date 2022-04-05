@@ -12,16 +12,23 @@ import './CropperPreview.scss';
 interface Props {
 	state: CropperState | null;
 	image: CropperImage | null;
+	transitions?: CropperTransitions | null;
 	className?: string;
 	imageClassName?: string;
 	contentClassName?: string;
-	transitions?: CropperTransitions;
 	width?: number;
 	height?: number;
 	fill?: unknown;
 }
 
-export const CropperPreview = ({ className, contentClassName, imageClassName, state, image, transitions }: Props) => {
+export const CropperPreview = ({
+	className,
+	contentClassName,
+	imageClassName,
+	state,
+	image,
+	transitions = null,
+}: Props) => {
 	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 
 	const [size, setSize] = useState<Size | null>(null);
@@ -29,7 +36,7 @@ export const CropperPreview = ({ className, contentClassName, imageClassName, st
 	const [coefficient, setCoefficient] = useState(1);
 
 	const imageStyle =
-		state && state.coordinates && image && size ? getPreviewStyle(image, state, transitions, coefficient) : {};
+		state && state.coordinates && image && size ? getPreviewStyle(image, state, coefficient, transitions) : {};
 
 	const refresh = () => {
 		if (boundaryRef.current && state?.coordinates) {

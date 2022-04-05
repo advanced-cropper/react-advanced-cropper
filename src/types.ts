@@ -1,3 +1,4 @@
+import { ComponentType } from 'react';
 import { CropperImage, CropperTransitions, AspectRatio, PartialTransforms } from 'advanced-cropper/types';
 import { CropperBackgroundWrapperProps } from './components/service/CropperBackgroundWrapper';
 import { CropperWrapperProps } from './components/service/CropperWrapper';
@@ -6,9 +7,9 @@ import { CropperRef } from './components/Cropper';
 
 export type StencilComponent = any;
 
-export type CropperWrapperComponent = React.ComponentType<CropperWrapperProps>;
+export type CropperWrapperComponent = ComponentType<CropperWrapperProps>;
 
-export type CropperBackgroundWrapperComponent = React.ComponentType<CropperBackgroundWrapperProps>;
+export type CropperBackgroundWrapperComponent = ComponentType<CropperBackgroundWrapperProps>;
 
 export interface TransitionsSettings {
 	timingFunction?: string;

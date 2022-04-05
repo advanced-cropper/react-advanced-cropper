@@ -1,4 +1,4 @@
-import React, { forwardRef, useImperativeHandle, useRef, CSSProperties, useState } from 'react';
+import React, { forwardRef, useImperativeHandle, useRef, CSSProperties } from 'react';
 import cn from 'classnames';
 import { DrawOptions } from 'advanced-cropper/canvas';
 import { StretchAlgorithm } from 'advanced-cropper/html';
@@ -41,7 +41,33 @@ import { RectangleStencil } from './stencils/RectangleStencil';
 import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
 import './Cropper.scss';
 
-export interface CropperProps extends CropperStateSettings, CropperStateCallbacks<CropperRef | null> {
+export interface CropperRef extends BasicCropperRef {
+	reset: () => void;
+	refresh: () => void;
+	setCoordinates: CropperStateHook['setCoordinates'];
+	setState: CropperStateHook['setState'];
+	flipImage: CropperStateHook['flipImage'];
+	zoomImage: CropperStateHook['zoomImage'];
+	rotateImage: CropperStateHook['rotateImage'];
+	moveImage: CropperStateHook['moveImage'];
+	moveCoordinates: CropperStateHook['moveCoordinates'];
+	moveCoordinatesEnd: CropperStateHook['moveCoordinatesEnd'];
+	resizeCoordinates: CropperStateHook['resizeCoordinates'];
+	resizeCoordinatesEnd: CropperStateHook['resizeCoordinatesEnd'];
+	transformImage: CropperStateHook['transformImage'];
+	transformImageEnd: CropperStateHook['transformImageEnd'];
+	getCoordinates: CropperStateHook['getCoordinates'];
+	getVisibleArea: CropperStateHook['getVisibleArea'];
+	getTransforms: CropperStateHook['getTransforms'];
+	getStencilCoordinates: CropperStateHook['getStencilCoordinates'];
+	getCanvas: (options?: DrawOptions) => HTMLCanvasElement | null;
+	getSettings: () => CropperSettings;
+	getImage: () => CropperImage | null;
+	getState: () => CropperState | null;
+	getTransitions: () => CropperTransitions;
+}
+
+export interface CropperProps extends CropperStateSettings, CropperStateCallbacks<CropperRef> {
 	src?: string | null;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
 	backgroundWrapperProps?: Record<string | number | symbol, unknown>;
@@ -66,32 +92,6 @@ export interface CropperProps extends CropperStateSettings, CropperStateCallback
 	onReady?: (cropper: CropperRef) => void;
 	onError?: (cropper: CropperRef) => void;
 	unloadTime?: number;
-}
-
-export interface CropperRef extends BasicCropperRef {
-	reset: () => void;
-	refresh: () => void;
-	setCoordinates: CropperStateHook['setCoordinates'];
-	setState: CropperStateHook['setState'];
-	flipImage: CropperStateHook['flipImage'];
-	zoomImage: CropperStateHook['zoomImage'];
-	rotateImage: CropperStateHook['rotateImage'];
-	moveImage: CropperStateHook['moveImage'];
-	moveCoordinates: CropperStateHook['moveCoordinates'];
-	moveCoordinatesEnd: CropperStateHook['moveCoordinatesEnd'];
-	resizeCoordinates: CropperStateHook['resizeCoordinates'];
-	resizeCoordinatesEnd: CropperStateHook['resizeCoordinatesEnd'];
-	transformImage: CropperStateHook['transformImage'];
-	transformImageEnd: CropperStateHook['transformImageEnd'];
-	getCoordinates: CropperStateHook['getCoordinates'];
-	getVisibleArea: CropperStateHook['getVisibleArea'];
-	getTransforms: CropperStateHook['getTransforms'];
-	getStencilCoordinates: CropperStateHook['getStencilCoordinates'];
-	getCanvas: (options?: DrawOptions) => HTMLCanvasElement | null;
-	getSettings: () => CropperSettings;
-	getImage: () => CropperImage;
-	getState: () => CropperState;
-	getTransitions: () => CropperTransitions;
 }
 
 export const Cropper = forwardRef((props: CropperProps, ref) => {
@@ -138,7 +138,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		...cropperSettings,
 		adjustStencil: scaleImageOptions.adjustStencil,
 		getInstance() {
-			return cropperRef.current;
+			return cropperRef.current as CropperRef;
 		},
 		aspectRatio() {
 			let minimum, maximum;

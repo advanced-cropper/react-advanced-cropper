@@ -194,6 +194,8 @@ export const CircleStencil = forwardRef<Methods, Props>(
 						lineWrapperClassNames={lineWrapperClassNames}
 						onResize={onResize}
 						onResizeEnd={onResizeEnd}
+						width={width}
+						height={height}
 					>
 						<DraggableArea
 							movable={movable}

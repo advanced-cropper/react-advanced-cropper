@@ -1,4 +1,4 @@
-import React, { CSSProperties, ReactNode, useCallback } from 'react';
+import React, { CSSProperties, ReactNode } from 'react';
 import { CropperTransitions, ImageTransform } from 'advanced-cropper/types';
 import { TransformableImage } from './TransformableImage';
 
