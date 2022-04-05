@@ -22,6 +22,7 @@
     "classnames": "^2.3.1",
     "clsx": "^1.1.1",
     "docusaurus-plugin-sass": "^0.2.1",
+    "dotenv": "^8.2.0",
     "file-loader": "^6.2.0",
     "file-saver": "^2.0.5",
     "prism-react-renderer": "^1.2.1",
@@ -30,7 +31,7 @@
     "react-advanced-cropper": "link:..",
     "react-dom": "^17.0.1",
     "react-indiana-drag-scroll": "^2.0.1",
-    "react-mobile-cropper": "0.1.2",
+    "react-mobile-cropper": "^0.4.1",
     "sass": "^1.42.1",
     "url-loader": "^4.1.1"
   },

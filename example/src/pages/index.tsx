@@ -1,5 +1,4 @@
 import React from 'react';
-import 'react-advanced-cropper/dist/style.css';
 import './index.scss';
 
 import Navbar from '@theme/Navbar';
