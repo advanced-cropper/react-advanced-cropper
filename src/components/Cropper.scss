@@ -14,6 +14,7 @@
 	&__boundary {
 		flex-grow: 1;
 		min-height: 0;
+		min-width: 0;
 	}
 	&__wrapper, &__background-wrapper {
 		left: 0;
