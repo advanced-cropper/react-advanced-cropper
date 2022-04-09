@@ -1,6 +1,7 @@
 import React, { forwardRef, useImperativeHandle, useRef, CSSProperties } from 'react';
 import cn from 'classnames';
 import { DrawOptions } from 'advanced-cropper/canvas';
+import { calculateAspectRatio } from 'advanced-cropper/service';
 import { StretchAlgorithm } from 'advanced-cropper/html';
 import {
 	BoundarySizeAlgorithm,
@@ -9,7 +10,6 @@ import {
 	CropperState,
 	CropperTransitions,
 } from 'advanced-cropper/types';
-import { isUndefined } from 'advanced-cropper/utils';
 import {
 	BasicCropperRef,
 	CropperBackgroundWrapperComponent,
@@ -138,26 +138,10 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		...cropperSettings,
 		adjustStencil: scaleImageOptions.adjustStencil,
 		getInstance() {
-			return cropperRef.current as CropperRef;
+			return cropperRef.current;
 		},
 		aspectRatio() {
-			let minimum, maximum;
-			const { aspectRatio, minAspectRatio, maxAspectRatio } = stencilProps;
-
-			if (stencilRef.current && stencilRef.current.aspectRatio) {
-				({ minimum, maximum } = stencilRef.current.aspectRatio() || {});
-			}
-
-			if (isUndefined(minimum)) {
-				minimum = !isUndefined(aspectRatio) ? aspectRatio : minAspectRatio;
-			}
-			if (isUndefined(maximum)) {
-				maximum = !isUndefined(aspectRatio) ? aspectRatio : maxAspectRatio;
-			}
-			return {
-				minimum,
-				maximum,
-			};
+			return calculateAspectRatio(stencilRef.current?.aspectRatio?.(), stencilProps);
 		},
 	});
 
@@ -169,48 +153,47 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		canvas,
 		onLoad() {
 			if (cropperRef.current) {
-				onReady && onReady(cropperRef.current);
+				onReady?.(cropperRef.current);
 			}
 		},
 		onError() {
 			if (cropperRef.current) {
-				onError && onError(cropperRef.current);
+				onError?.(cropperRef.current);
 			}
 		},
 	});
 
-	// Additional variable to give the possibility to change an image without resetting the state
 	const [currentImage, setCurrentImage] = useStateWithCallback<CropperImage | null>(null);
 
 	const resetCropper = () => {
-		if (boundaryRef.current) {
-			boundaryRef.current.stretchTo(image).then((boundary) => {
-				setCurrentImage(image, () => {
-					if (boundary && image) {
-						cropper.reset(boundary, image);
-					} else {
-						cropper.clear();
-					}
-				});
-			});
-		}
-	};
-
-	const refreshCropper = () => {
-		if (boundaryRef.current) {
-			boundaryRef.current.stretchTo(image).then((boundary) => {
+		boundaryRef.current?.stretchTo(image).then((boundary) => {
+			setCurrentImage(image, () => {
 				if (boundary && image) {
-					if (cropper.state) {
-						cropper.setBoundary(boundary);
-					} else {
-						cropper.reset(boundary, image);
-					}
+					cropper.reset(boundary, image);
 				} else {
 					cropper.clear();
 				}
 			});
-		}
+		});
 	};
+
+	const refreshCropper = () => {
+		boundaryRef.current?.stretchTo(image).then((boundary) => {
+			if (boundary && image) {
+				if (cropper.state) {
+					cropper.setBoundary(boundary);
+				} else {
+					cropper.reset(boundary, image);
+				}
+			} else {
+				cropper.clear();
+			}
+		});
+	};
+
+	useWindowResize(() => {
+		refreshCropper();
+	});
 
 	useUpdateEffect(() => {
 		cropper.reconcileState();
@@ -221,10 +204,6 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 		resetCropper();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [image]);
-
-	useWindowResize(() => {
-		refreshCropper();
-	});
 
 	useImperativeHandle(mergeRefs([ref, cropperRef]), () => ({
 		reset: () => {

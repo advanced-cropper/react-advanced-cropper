@@ -47,7 +47,7 @@ import {
 	fillMoveDirections,
 	fillResizeDirections,
 } from 'advanced-cropper/service';
-import { DefaultTransforms, TransitionsSettings } from '../types';
+import { DefaultTransforms, Nullable, TransitionsSettings } from '../types';
 import { TimingFunction } from '../../../Advanced Cropper/dist/animation';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
@@ -59,19 +59,21 @@ export interface CropperMethodOptions {
 	normalize?: boolean;
 }
 
+export type CropperCallback<Instance> = (instance: NonNullable<Instance>) => void;
+
 export interface AbstractCropperStateCallbacks<Instance = unknown> {
-	getInstance?: () => Instance;
-	onTransitionsStart?: (cropper: Instance) => void;
-	onTransitionsEnd?: (cropper: Instance) => void;
-	onChange?: (cropper: Instance) => void;
-	onResizeEnd?: (cropper: Instance) => void;
-	onMoveEnd?: (cropper: Instance) => void;
-	onMove?: (cropper: Instance) => void;
-	onResize?: (cropper: Instance) => void;
-	onTransformImage?: (cropper: Instance) => void;
-	onTransformImageEnd?: (cropper: Instance) => void;
-	onInteractionStart?: (cropper: Instance) => void;
-	onInteractionEnd?: (cropper: Instance) => void;
+	getInstance?: () => Nullable<Instance>;
+	onTransitionsStart?: CropperCallback<Instance>;
+	onTransitionsEnd?: CropperCallback<Instance>;
+	onChange?: CropperCallback<Instance>;
+	onResizeEnd?: CropperCallback<Instance>;
+	onMoveEnd?: CropperCallback<Instance>;
+	onMove?: CropperCallback<Instance>;
+	onResize?: CropperCallback<Instance>;
+	onTransformImage?: CropperCallback<Instance>;
+	onTransformImageEnd?: CropperCallback<Instance>;
+	onInteractionStart?: CropperCallback<Instance>;
+	onInteractionEnd?: CropperCallback<Instance>;
 }
 
 export interface AbstractCropperStateSettings<Cropper = unknown> {
@@ -92,8 +94,6 @@ export interface AbstractCropperStateSettings<Cropper = unknown> {
 
 type StateModifier = (state: CropperState | null, settings: CropperSettings) => CropperState | null;
 
-type Callback<Instance> = (instance: Instance) => void;
-
 export interface TransitionOptions {
 	transitions?: boolean;
 }
@@ -106,27 +106,30 @@ export interface NormalizeOptions {
 	normalize?: boolean;
 }
 
-function runCallback<Instance>(callback?: (instance: Instance) => void, getInstance?: () => Instance) {
+interface InternalState {
+	state: CropperState | null;
+	transitions: boolean;
+}
+
+function runCallback<Instance>(callback?: CropperCallback<Instance>, getInstance?: () => Nullable<Instance>) {
 	if (callback && getInstance) {
 		const instance = getInstance();
 		if (instance) {
-			callback(instance);
+			callback(instance as NonNullable<Instance>);
 		}
 	}
 }
 
-function createCallback<Instance>(callback?: Callback<Instance>, getInstance?: () => Instance) {
+function createCallback<Instance>(callback?: CropperCallback<Instance>, getInstance?: () => Nullable<Instance>) {
 	return () => {
 		runCallback(callback, getInstance);
 	};
 }
 
-function mergeCallbacks<Instance>(callbacks: Function[]) {
-	return () => {
-		callbacks.forEach((callback) => {
-			callback();
-		});
-	};
+function runCallbacks<Instance>(callbacks: Function[]) {
+	callbacks.forEach((callback) => {
+		callback();
+	});
 }
 
 export function useAbstractCropperState<
@@ -159,9 +162,10 @@ export function useAbstractCropperState<
 	defaultTransforms,
 	...settings
 }: Settings & AbstractCropperStateCallbacks<Instance>) {
-	const [state, setState] = useStateWithCallback<CropperState | null>(null);
-
-	const [transitionsActive, setTransitionsActive] = useStateWithCallback(false);
+	const [core, setCore] = useStateWithCallback<InternalState>({
+		state: null,
+		transitions: false,
+	});
 
 	const transitionsOptions = useMemo<{ timingFunction: TimingFunction; duration: number; active: boolean }>(
 		() => ({
@@ -169,20 +173,22 @@ export function useAbstractCropperState<
 				timingFunction: 'ease-in-out',
 				duration: 350,
 			}),
-			active: transitionsActive,
+			active: core.transitions,
 		}),
-		[transitionsActive, transitions],
+		[core.transitions, transitions],
 	);
 
-	const enableTransitions = () => {
-		setTransitionsActive(true, createCallback(onTransitionsStart, getInstance));
-	};
+	const debouncedDisableTransitions = useDebouncedCallback(() => {
+		setCore(
+			(core) => ({
+				...core,
+				transitions: false,
+			}),
+			createCallback(onTransitionsEnd, getInstance),
+		);
+	}, transitionsOptions.duration);
 
-	const disableTransitions = () => {
-		setTransitionsActive(false, createCallback(onTransitionsEnd, getInstance));
-	};
-
-	const debouncedDisableTransitions = useDebouncedCallback(disableTransitions, transitionsOptions.duration);
+	const { state } = core;
 
 	const applyPostProcess = (action: PostprocessAction, state: CropperState) => {
 		if (isArray(postProcess)) {
@@ -197,22 +203,31 @@ export function useAbstractCropperState<
 	const updateState = (
 		modifier: StateModifier | CropperState | null,
 		options: CropperMethodOptions = {},
-		callbacks: (Callback<Instance> | undefined)[] = [],
+		callbacks: (CropperCallback<Instance> | undefined)[] = [],
 	) => {
 		const { transitions = false } = options;
-		// TODO: check, that's the best approach
-		setState((state) => {
-			const newState = isFunction(modifier) ? modifier(state, settings) : modifier;
-			if (!isEqualStates(state, newState)) {
-				if (transitions) {
-					enableTransitions();
+		setCore(
+			(core) => {
+				const newState = isFunction(modifier) ? modifier(core.state, settings) : modifier;
+				const changed = !isEqualStates(core.state, newState);
+				if (transitions && changed) {
 					debouncedDisableTransitions();
 				}
-				return copyState(newState);
-			} else {
-				return copyState(state);
-			}
-		}, mergeCallbacks([createCallback(onChange, getInstance), ...callbacks.map((callback) => createCallback(callback, getInstance))]));
+				return {
+					state: changed ? copyState(newState) : copyState(core.state),
+					transitions: transitions && changed ? true : core.transitions,
+				};
+			},
+			(state: InternalState, previousState: InternalState) => {
+				if (state.transitions && !previousState.transitions) {
+					runCallback(onTransitionsStart, getInstance);
+				}
+				runCallbacks([
+					createCallback(onChange, getInstance),
+					...callbacks.map((callback) => createCallback(callback, getInstance)),
+				]);
+			},
+		);
 	};
 
 	const actions = useRef({
@@ -411,7 +426,7 @@ export function useAbstractCropperState<
 		reset: (boundary: Boundary, image: CropperImage) => {
 			resetState(boundary, image);
 		},
-		setState: (newState: Partial<CropperState>, options: TransitionOptions = {}) => {
+		setState: (newState: Partial<CropperState> | null, options: TransitionOptions = {}) => {
 			const { transitions = true } = options;
 			updateState(() => state && { ...state, ...newState }, {
 				transitions,
@@ -474,14 +489,14 @@ export function useAbstractCropperState<
 
 			const callbacks = [];
 
-			if (!transitionsActive && state) {
+			if (!core.transitions && core.state) {
 				const normalizedDirections = normalize
-					? normalizeMoveDirections(state, directions)
+					? normalizeMoveDirections(core.state, directions)
 					: fillMoveDirections(directions);
 
 				let result = applyPostProcess(
 					{ name: 'moveCoordinates', immediately, transitions },
-					(moveCoordinatesAlgorithm || moveCoordinates)(state, settings, normalizedDirections),
+					(moveCoordinatesAlgorithm || moveCoordinates)(core.state, settings, normalizedDirections),
 				);
 				callbacks.push(onMove);
 

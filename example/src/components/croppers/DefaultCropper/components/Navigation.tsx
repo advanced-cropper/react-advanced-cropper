@@ -10,7 +10,7 @@ import './Navigation.scss';
 
 interface Props {
 	onRotate?: (angle: number) => void;
-	onFlip?: (horizontal: boolean, vertical?: boolean) => void;
+	onFlip?: (horizontal: boolean, vertical: boolean) => void;
 	onReset?: () => void;
 	changed?: boolean;
 	className?: string;
@@ -32,7 +32,7 @@ export const Navigation: FC<Props> = ({ className, disabled, changed, onReset, o
 
 	const flipHorizontal = () => {
 		if (onFlip && !disabled) {
-			onFlip(true);
+			onFlip(true, false);
 		}
 	};
 

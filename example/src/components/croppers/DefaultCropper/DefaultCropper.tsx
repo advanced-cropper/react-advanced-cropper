@@ -24,10 +24,12 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 					boundary: state.boundary,
 					imageSize: state.imageSize,
 					priority: props.priority,
-					transforms: image.transforms,
+					transforms: image?.transforms,
 				},
 				cropper.getSettings(),
 			);
+		} else {
+			return null;
 		}
 	};
 
@@ -44,14 +46,15 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 	};
 
 	const onReset = () => {
-		if (cropperRef.current) {
-			cropperRef.current.setState(getDefaultState(cropperRef.current));
+		const cropper = cropperRef.current;
+		if (cropper) {
+			cropper.setState(getDefaultState(cropper));
 		}
 	};
 	const onChange = (cropper: CropperRef) => {
 		const state = cropper.getState();
 
-		setChanged(state && !isEqualStates(state, getDefaultState(cropper)));
+		setChanged(state ? !isEqualStates(state, getDefaultState(cropper)) : false);
 	};
 
 	return (

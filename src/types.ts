@@ -35,11 +35,6 @@ export interface MoveImageSettings {
 	mouse?: boolean;
 }
 
-export interface BasicStencilProps<Cropper = CropperRef> {
-	transitions?: CropperTransitions;
-	cropper: Cropper;
-}
-
 export interface BasicCropperRef {
 	setCoordinates: CropperStateHook['setCoordinates'];
 	setState: CropperStateHook['setState'];
@@ -60,3 +55,5 @@ export interface StencilRef {
 }
 
 export type DefaultTransforms = PartialTransforms | ((image: CropperImage) => PartialTransforms);
+
+export type Nullable<T> = T | null | undefined;
