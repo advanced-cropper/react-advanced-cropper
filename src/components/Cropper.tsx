@@ -18,17 +18,14 @@ import {
 	ScaleImageSettings,
 	RotateImageSettings,
 	StencilComponent,
+	BasicCropperCallbacks,
+	BasicCropperProps,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
 import { useMoveImageOptions } from '../hooks/useMoveImageOptions';
 import { useScaleImageOptions } from '../hooks/useScaleImageOptions';
-import {
-	CropperStateCallbacks,
-	CropperStateHook,
-	CropperStateSettings,
-	useCropperState,
-} from '../hooks/useCropperState';
+import { CropperStateHook, useCropperState } from '../hooks/useCropperState';
 import { mergeRefs } from '../service/react';
 import { useUpdateEffect } from '../hooks/useUpdateEffect';
 import { useRotateImageOptions } from '../hooks/useRotateImageOptions';
@@ -67,7 +64,7 @@ export interface CropperRef extends BasicCropperRef {
 	getTransitions: () => CropperTransitions;
 }
 
-export interface CropperProps extends Omit<CropperStateSettings, 'scaleImage'>, CropperStateCallbacks<CropperRef> {
+export interface CropperProps extends BasicCropperProps, BasicCropperCallbacks<CropperRef> {
 	src?: string | null;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
 	backgroundWrapperProps?: Record<string | number | symbol, unknown>;
@@ -136,8 +133,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	const cropper = useCropperState({
 		...stateSettings,
 		...cropperSettings,
-		scaleImage: scaleImageOptions.enabled,
-		adjustStencil: scaleImageOptions.adjustStencil,
+		scaleImage: scaleImageOptions,
 		getInstance() {
 			return cropperRef.current;
 		},

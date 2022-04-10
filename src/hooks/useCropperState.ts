@@ -17,7 +17,6 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 	settings: Settings & CropperStateCallbacks<Instance>,
 ) {
 	const {
-		adjustStencil,
 		imageRestriction = ImageRestriction.fitArea,
 		minWidth,
 		minHeight,
@@ -58,7 +57,6 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 			maxHeight,
 			imageRestriction,
 			scaleImage,
-			adjustStencil,
 		}),
 		onInteractionEnd,
 		onInteractionStart,

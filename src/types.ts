@@ -2,7 +2,7 @@ import { ComponentType } from 'react';
 import { CropperImage, CropperTransitions, AspectRatio, PartialTransforms } from 'advanced-cropper/types';
 import { CropperBackgroundWrapperProps } from './components/service/CropperBackgroundWrapper';
 import { CropperWrapperProps } from './components/service/CropperWrapper';
-import { CropperStateHook } from './hooks/useCropperState';
+import { CropperStateCallbacks, CropperStateHook, CropperStateSettings } from './hooks/useCropperState';
 import { CropperRef } from './components/Cropper';
 
 export type StencilComponent = any;
@@ -49,6 +49,10 @@ export interface BasicCropperRef {
 	getTransforms: CropperStateHook['getTransforms'];
 	getTransitions: () => CropperTransitions;
 }
+
+export type BasicCropperProps = Omit<CropperStateSettings, 'scaleImage'>;
+
+export type BasicCropperCallbacks<Instance> = CropperStateCallbacks<Instance>;
 
 export interface StencilRef {
 	aspectRatio: () => AspectRatio;
