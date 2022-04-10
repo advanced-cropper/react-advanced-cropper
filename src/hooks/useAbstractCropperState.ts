@@ -47,8 +47,8 @@ import {
 	fillMoveDirections,
 	fillResizeDirections,
 } from 'advanced-cropper/service';
+import { TimingFunction } from 'advanced-cropper/animation';
 import { DefaultTransforms, Nullable, TransitionsSettings } from '../types';
-import { TimingFunction } from '../../../Advanced Cropper/dist/animation';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
 import { useDebouncedCallback } from './useDebouncedCallback';

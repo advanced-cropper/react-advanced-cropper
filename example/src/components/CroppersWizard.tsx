@@ -1,5 +1,5 @@
 import React, { FC, useRef, useState } from 'react';
-import { CircleStencil, RectangleStencil, ImageRestriction } from 'react-advanced-cropper';
+import { CircleStencil, RectangleStencil, ImageRestriction, Priority } from 'react-advanced-cropper';
 import { Cropper as MobileCropper } from 'react-mobile-cropper';
 import cn from 'classnames';
 import { useToggle } from '@site/src/service/useToggle';
@@ -31,6 +31,7 @@ export interface CropperSettings {
 	maxWidth?: number;
 	minHeight?: number;
 	maxHeight?: number;
+	scaleImage?: boolean;
 }
 
 export interface CropperDescription {
@@ -45,18 +46,19 @@ export interface CropperDescription {
 }
 
 export const CroppersWizard: FC = () => {
-	const inputRef = useRef<HTMLInputElement>();
+	const inputRef = useRef<HTMLInputElement>(null);
 
 	const [settings, setSettings] = useState<CropperSettings>({
 		aspectRatio: undefined,
 		minAspectRatio: undefined,
 		maxAspectRatio: undefined,
-		imageRestriction: 'fitArea',
+		imageRestriction: ImageRestriction.fitArea,
 		stencilType: 'rectangle',
 		minWidth: 0,
 		maxWidth: undefined,
 		minHeight: 0,
 		maxHeight: undefined,
+		scaleImage: true,
 	});
 
 	const croppers = [
@@ -68,7 +70,7 @@ export const CroppersWizard: FC = () => {
 			},
 			features: ['Custom Navigation', 'Styling'],
 			icon: <DefaultCropperIcon />,
-			settings: ['aspectRatio', 'imageRestriction', 'stencil', 'size'],
+			settings: ['aspectRatio', 'imageRestriction', 'stencil', 'size', 'scaleImage'],
 		},
 		{
 			key: 'mobile-cropper',
@@ -183,6 +185,7 @@ export const CroppersWizard: FC = () => {
 		minAspectRatio,
 		imageRestriction,
 		stencilType,
+		scaleImage,
 	} = settings;
 
 	const stencilProps = {
@@ -229,15 +232,19 @@ export const CroppersWizard: FC = () => {
 						minWidth={minWidth}
 						maxWidth={maxWidth}
 						maxHeight={maxHeight}
-						priority={imageRestriction === 'fillArea' ? 'visibleArea' : 'coordinates'}
+						priority={
+							imageRestriction === ImageRestriction.fillArea ? Priority.visibleArea : Priority.coordinates
+						}
 						wrapperClassName={'croppers-wizard__cropper'}
 						src={src}
 						stencilProps={stencilProps}
 						imageRestriction={imageRestriction}
 						stencilComponent={stencilType === 'circle' ? CircleStencil : RectangleStencil}
-						scaleImage={{
-							adjustStencil: imageRestriction !== 'stencil' && imageRestriction !== 'none',
-						}}
+						scaleImage={
+							scaleImage && {
+								adjustStencil: imageRestriction !== 'stencil' && imageRestriction !== 'none',
+							}
+						}
 					/>
 				)}
 				{cropper === 'fixed-cropper' && (

@@ -186,6 +186,12 @@ export class DraggableArea extends PureComponent<Props> {
 		}
 	}
 
+	componentDidUpdate(prevProps: Readonly<Props>) {
+		if (!this.props.movable && prevProps.movable) {
+			this.touches = [];
+		}
+	}
+
 	render() {
 		const { children, className } = this.props;
 		return (

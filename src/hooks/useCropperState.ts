@@ -45,6 +45,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		onTransformImageEnd,
 		onInteractionEnd,
 		onInteractionStart,
+		scaleImage,
 		...cropperSettings
 	} = settings;
 
@@ -56,6 +57,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 			maxWidth,
 			maxHeight,
 			imageRestriction,
+			scaleImage,
 			adjustStencil,
 		}),
 		onInteractionEnd,
@@ -85,7 +87,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 	useUpdateEffect(() => {
 		cropper.reconcileState();
 		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [imageRestriction, minWidth, minHeight, maxWidth, maxHeight]);
+	}, [imageRestriction, minWidth, minHeight, maxWidth, maxHeight, scaleImage]);
 
 	return cropper;
 }

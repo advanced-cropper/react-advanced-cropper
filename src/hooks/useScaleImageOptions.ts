@@ -3,6 +3,7 @@ import { getOptions } from 'advanced-cropper/utils';
 import { ScaleImageSettings } from '../types';
 
 interface UseScaleImageOptions {
+	enabled: boolean;
 	touch: boolean;
 	wheel:
 		| boolean
@@ -18,6 +19,7 @@ export function useScaleImageOptions(scaleImage: ScaleImageSettings | boolean) {
 			getOptions(
 				scaleImage,
 				{
+					enabled: true,
 					touch: true,
 					wheel: {
 						ratio: 0.1,
@@ -25,6 +27,7 @@ export function useScaleImageOptions(scaleImage: ScaleImageSettings | boolean) {
 					adjustStencil: true,
 				},
 				{
+					enabled: false,
 					touch: false,
 					wheel: false,
 					adjustStencil: false,

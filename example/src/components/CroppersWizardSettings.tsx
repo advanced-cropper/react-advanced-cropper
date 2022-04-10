@@ -1,8 +1,9 @@
 import React, { FC, useEffect, useState } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
+import { ImageRestriction } from 'react-advanced-cropper';
 import cn from 'classnames';
 import { CloseIcon } from '@site/src/components/icons/CloseIcon';
-import { ImageRestriction } from '../../../../Advanced Cropper/dist/types';
+import { SettingsCheckbox } from '@site/src/components/SettingsCheckbox';
 import { CropperSettings } from './CroppersWizard';
 import { FreeAspectRatioIcon } from './icons/settings/FreeAspectRatioIcon';
 import { SquareAspectRatioIcon } from './icons/settings/SquareAspectRatioIcon';
@@ -213,6 +214,15 @@ export const CroppersWizardSettings: FC<Props> = (props) => {
 					</div>
 				))}
 			</ScrollContainer>
+			{sections.indexOf('scaleImage') !== -1 && (
+				<div className="croppers-wizard-settings__property">
+					<SettingsCheckbox
+						value={settings.scaleImage}
+						onChange={(value?: boolean) => updateSettings({ scaleImage: value })}
+						label={'Scale Image'}
+					/>
+				</div>
+			)}
 		</div>
 	);
 };

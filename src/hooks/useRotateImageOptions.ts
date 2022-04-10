@@ -8,9 +8,11 @@ export function useRotateImageOptions(rotateImage: RotateImageSettings | boolean
 			getOptions(
 				rotateImage,
 				{
+					enabled: true,
 					touch: true,
 				},
 				{
+					enabled: false,
 					touch: false,
 				},
 			),

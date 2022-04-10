@@ -1,6 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { Cropper, CropperState, CropperRef } from 'react-advanced-cropper';
-import { VisibleArea } from '../../../../../Advanced Cropper/dist/types';
+import { ImageRestriction, Priority, Cropper, CropperState, CropperRef, VisibleArea } from 'react-advanced-cropper';
 import './AdjustStencilExample.scss';
 
 export const AdjustStencilExample = () => {
@@ -39,8 +38,8 @@ export const AdjustStencilExample = () => {
 				scaleImage={{
 					adjustStencil,
 				}}
-				priority={'visibleArea'}
-				imageRestriction={'fitArea'}
+				priority={Priority.visibleArea}
+				imageRestriction={ImageRestriction.fitArea}
 				defaultSize={defaultSize}
 				defaultPosition={defaultPosition}
 				defaultVisibleArea={{

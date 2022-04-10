@@ -67,7 +67,7 @@ export interface CropperRef extends BasicCropperRef {
 	getTransitions: () => CropperTransitions;
 }
 
-export interface CropperProps extends CropperStateSettings, CropperStateCallbacks<CropperRef> {
+export interface CropperProps extends Omit<CropperStateSettings, 'scaleImage'>, CropperStateCallbacks<CropperRef> {
 	src?: string | null;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
 	backgroundWrapperProps?: Record<string | number | symbol, unknown>;
@@ -136,6 +136,7 @@ export const Cropper = forwardRef((props: CropperProps, ref) => {
 	const cropper = useCropperState({
 		...stateSettings,
 		...cropperSettings,
+		scaleImage: scaleImageOptions.enabled,
 		adjustStencil: scaleImageOptions.adjustStencil,
 		getInstance() {
 			return cropperRef.current;

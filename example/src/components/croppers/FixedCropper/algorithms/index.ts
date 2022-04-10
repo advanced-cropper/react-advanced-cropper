@@ -5,12 +5,12 @@ import {
 	getSizeRestrictions,
 	getMinimumSize,
 	CropperSettings,
-	CropperState,
+	InitializedCropperState,
 	isGreater,
 } from 'react-advanced-cropper';
 
 function getMinimumVisibleAreaSize(
-	state: CropperState,
+	state: InitializedCropperState,
 	settings: CropperSettings & {
 		imageRestriction?: ImageRestriction;
 		adjustStencil?: boolean;
@@ -60,7 +60,7 @@ function getMinimumVisibleAreaSize(
 }
 
 function getMaximumVisibleAreaSize(
-	state: CropperState,
+	state: InitializedCropperState,
 	settings: CropperSettings & {
 		imageRestriction?: ImageRestriction;
 		adjustStencil?: boolean;
@@ -139,7 +139,7 @@ function getMaximumVisibleAreaSize(
 }
 
 export function getAbsoluteZoom(
-	state: CropperState,
+	state: InitializedCropperState,
 	settings: CropperSettings & {
 		imageRestriction?: ImageRestriction;
 		adjustStencil?: boolean;
@@ -161,7 +161,7 @@ export function getAbsoluteZoom(
 	return Math.min(1, Math.max(0, 1 - (size - minSize) / (maxSize - minSize)));
 }
 
-export function getVisibleAreaSize(state: CropperState, settings: CropperSettings, absoluteZoom: number) {
+export function getVisibleAreaSize(state: InitializedCropperState, settings: CropperSettings, absoluteZoom: number) {
 	const minSize = getMinimumVisibleAreaSize(state, settings);
 	const maxSize = getMaximumVisibleAreaSize(state, settings);
 

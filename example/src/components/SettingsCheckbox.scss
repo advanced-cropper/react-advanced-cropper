@@ -1,0 +1,37 @@
+@import '../css/mixins';
+
+.settings-checkbox {
+	display: flex;
+	cursor: pointer;
+	align-items: center;
+	&__label {
+		font-size: 16px;
+		opacity: 0.8;
+	}
+	&__icon {
+		width: 8px;
+		height: 8px;
+		transition: opacity 0.5s;
+		&--hidden {
+			opacity: 0;
+		}
+	}
+	&__icon-wrapper {
+		width: 16px;
+		height: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: solid 1px white;
+		border-radius: 2px;
+		margin-right: 12px;
+		fill: transparent;
+		transition: 0.5s;
+		&--checked {
+			fill: #61DAFB;
+		}
+	}
+	&__input {
+		display: none;
+	}
+}
