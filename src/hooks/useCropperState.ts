@@ -1,4 +1,5 @@
 import { autoZoom, ExtendedCropperSettings, withDefaults } from 'advanced-cropper/defaults';
+import { ImageRestriction } from 'advanced-cropper/types';
 import {
 	AbstractCropperStateCallbacks,
 	AbstractCropperStateSettings,
@@ -17,7 +18,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 ) {
 	const {
 		adjustStencil,
-		imageRestriction = 'fitArea',
+		imageRestriction = ImageRestriction.fitArea,
 		minWidth,
 		minHeight,
 		maxWidth,
