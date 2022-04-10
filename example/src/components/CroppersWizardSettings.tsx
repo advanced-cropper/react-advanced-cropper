@@ -1,7 +1,8 @@
-import React, { FC, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import ScrollContainer from 'react-indiana-drag-scroll';
 import cn from 'classnames';
 import { CloseIcon } from '@site/src/components/icons/CloseIcon';
+import { ImageRestriction } from '../../../../Advanced Cropper/dist/types';
 import { CropperSettings } from './CroppersWizard';
 import { FreeAspectRatioIcon } from './icons/settings/FreeAspectRatioIcon';
 import { SquareAspectRatioIcon } from './icons/settings/SquareAspectRatioIcon';
@@ -66,19 +67,19 @@ export const CroppersWizardSettings: FC<Props> = (props) => {
 	const imageRestrictions = [
 		{
 			icon: <FitAreaIcon />,
-			imageRestriction: 'fitArea' as const,
+			imageRestriction: ImageRestriction.fitArea,
 		},
 		{
 			icon: <FillAreaIcon />,
-			imageRestriction: 'fillArea' as const,
+			imageRestriction: ImageRestriction.fillArea,
 		},
 		{
 			icon: <StencilIcon />,
-			imageRestriction: 'stencil' as const,
+			imageRestriction: ImageRestriction.stencil,
 		},
 		{
 			icon: <NoneIcon />,
-			imageRestriction: 'none' as const,
+			imageRestriction: ImageRestriction.none,
 		},
 	];
 
