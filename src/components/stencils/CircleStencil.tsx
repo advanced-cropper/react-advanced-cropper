@@ -194,11 +194,12 @@ export const CircleStencil = forwardRef<Methods, Props>(
 						lineWrapperClassNames={lineWrapperClassNames}
 						onResize={onResize}
 						onResizeEnd={onResizeEnd}
+						transitions={transitions}
 						width={width}
 						height={height}
 					>
 						<DraggableArea
-							movable={movable}
+							movable={movable && !transitions.active}
 							onMove={onMove}
 							onMoveEnd={onMoveEnd}
 							className={cn('react-circle-stencil__draggable-area', draggableAreaClassName)}
