@@ -106,7 +106,7 @@ export interface NormalizeOptions {
 	normalize?: boolean;
 }
 
-interface InternalState {
+interface Core {
 	state: CropperState | null;
 	transitions: boolean;
 }
@@ -162,7 +162,7 @@ export function useAbstractCropperState<
 	defaultTransforms,
 	...settings
 }: Settings & AbstractCropperStateCallbacks<Instance>) {
-	const [core, setCore] = useStateWithCallback<InternalState>({
+	const [core, setCore] = useStateWithCallback<Core>({
 		state: null,
 		transitions: false,
 	});
@@ -218,8 +218,8 @@ export function useAbstractCropperState<
 					transitions: transitions && changed ? true : core.transitions,
 				};
 			},
-			(state: InternalState, previousState: InternalState) => {
-				if (state.transitions && !previousState.transitions) {
+			(core: Core, previousCore: Core) => {
+				if (core.transitions && !previousCore.transitions) {
 					runCallback(onTransitionsStart, getInstance);
 				}
 				runCallbacks([
@@ -434,16 +434,16 @@ export function useAbstractCropperState<
 		},
 		setCoordinates: (
 			transforms: CoordinatesTransform | CoordinatesTransform[],
-			options: TransitionOptions = {},
+			options: ImmediatelyOptions & TransitionOptions = {},
 		) => {
-			const { transitions = true } = options;
+			const { transitions = true, immediately = true } = options;
 			updateState(
 				() =>
 					state &&
 					applyPostProcess(
 						{
 							name: 'setCoordinates',
-							immediately: true,
+							immediately,
 							transitions,
 						},
 						(setCoordinatesAlgorithm || setCoordinates)(state, settings, transforms, false),
@@ -453,13 +453,13 @@ export function useAbstractCropperState<
 				},
 			);
 		},
-		setVisibleArea: (visibleArea: VisibleArea, options: TransitionOptions = {}) => {
-			const { transitions = true } = options;
+		setVisibleArea: (visibleArea: VisibleArea, options: ImmediatelyOptions & TransitionOptions = {}) => {
+			const { transitions = true, immediately = true } = options;
 			updateState(
 				() =>
 					state &&
 					applyPostProcess(
-						{ name: 'setVisibleArea', immediately: true, transitions },
+						{ name: 'setVisibleArea', immediately, transitions },
 						(setVisibleAreaAlgorithm || setVisibleArea)(state, settings, visibleArea),
 					),
 				{
@@ -467,13 +467,14 @@ export function useAbstractCropperState<
 				},
 			);
 		},
-		setBoundary: (boundary: Boundary) => {
+		setBoundary: (boundary: Boundary, options: ImmediatelyOptions & TransitionOptions = {}) => {
+			const { transitions = false, immediately = true } = options;
 			if (boundary) {
 				updateState(
 					() =>
 						state &&
 						applyPostProcess(
-							{ name: 'setBoundary', immediately: true, transitions: false },
+							{ name: 'setBoundary', immediately, transitions },
 							(setBoundaryAlgorithm || setBoundary)(state, settings, boundary),
 						),
 				);
