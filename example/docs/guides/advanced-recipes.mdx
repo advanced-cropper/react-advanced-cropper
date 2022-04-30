@@ -188,12 +188,12 @@ export const Example = () => {
 	const cropperRef = useRef<CropperRef>();
 	const zoom = () => {
 		if (cropperRef.current) {
-			cropperRef.current.zoom(1);
+			cropperRef.current.zoom(2); // zoom-in 2x
 		}
 	};
 	const move = () => {
 		if (cropperRef.current) {
-			cropperRef.current.move(100, 100);
+			cropperRef.current.move(50, 100); // move x = 50, y = 100
 		}
 	};
 	return (
