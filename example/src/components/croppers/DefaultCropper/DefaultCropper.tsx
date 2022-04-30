@@ -19,12 +19,27 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 		const state = cropper.getState();
 		if (state) {
 			const image = cropper.getImage();
+			const transforms = cropper.getTransforms();
+
+			const k = (transforms.rotate > 0 ? Math.floor : Math.ceil)(transforms.rotate / 360);
+
 			return (props.createStateAlgorithm || createState)(
 				{
 					boundary: state.boundary,
 					imageSize: state.imageSize,
 					priority: props.priority,
-					transforms: image?.transforms,
+					transforms: image
+						? {
+								...image.transforms,
+								rotate: k * 360 + image.transforms.rotate,
+						  }
+						: {
+								flip: {
+									horizontal: false,
+									vertical: false,
+								},
+								rotate: k * 360,
+						  },
 				},
 				cropper.getSettings(),
 			);
@@ -40,8 +55,13 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 	};
 
 	const onFlip = (horizontal: boolean, vertical: boolean) => {
-		if (cropperRef.current) {
-			cropperRef.current.flipImage(horizontal, vertical);
+		const cropper = cropperRef.current;
+		if (cropper) {
+			if (cropper.getTransforms().rotate % 180 !== 0) {
+				cropper.flipImage(!horizontal, !vertical);
+			} else {
+				cropper.flipImage(horizontal, vertical);
+			}
 		}
 	};
 
