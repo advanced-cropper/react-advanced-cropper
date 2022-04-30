@@ -23,15 +23,18 @@ export const TransformImageExample = () => {
 	const move = (direction: string) => () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
-			const { width, height } = cropper.getCoordinates();
-			if (direction === 'left') {
-				cropper.moveImage(-width / 4);
-			} else if (direction === 'right') {
-				cropper.moveImage(width / 4);
-			} else if (direction === 'top') {
-				cropper.moveImage(0, -height / 4);
-			} else if (direction === 'bottom') {
-				cropper.moveImage(0, height / 4);
+			const coordinates = cropper.getCoordinates();
+			if (coordinates) {
+				const { width, height } = coordinates;
+				if (direction === 'left') {
+					cropper.moveImage(-width / 4);
+				} else if (direction === 'right') {
+					cropper.moveImage(width / 4);
+				} else if (direction === 'top') {
+					cropper.moveImage(0, -height / 4);
+				} else if (direction === 'bottom') {
+					cropper.moveImage(0, height / 4);
+				}
 			}
 		}
 	};
