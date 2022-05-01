@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Cropper, CropperRef, getTransformedImageSize, retrieveSizeRestrictions } from 'react-advanced-cropper';
+import { Cropper, CropperSettings, CropperState, CropperRef, getTransformedImageSize, retrieveSizeRestrictions } from 'react-advanced-cropper';
 import { onInputChange } from '../..//service/react';
 import './CustomRestrictionsExample.scss';
 
 export const CustomRestrictionsExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [src, setSrc] = useState(
 		'https://images.unsplash.com/photo-1494205577727-d32e58564756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80',
@@ -15,7 +15,7 @@ export const CustomRestrictionsExample = () => {
 	const [maxHeight, setMaxHeight] = useState<number>();
 	const [minHeight, setMinHeight] = useState<number>();
 
-	const percentsRestriction = (state, settings) => {
+	const percentsRestriction = (state: CropperState, settings: CropperSettings) => {
 		const { minWidth, minHeight, maxWidth, maxHeight } = retrieveSizeRestrictions(settings);
 
 		const imageSize = getTransformedImageSize(state);

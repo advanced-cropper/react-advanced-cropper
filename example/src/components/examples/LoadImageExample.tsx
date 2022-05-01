@@ -5,7 +5,7 @@ import { ClearIcon } from '../../components/icons/ClearIcon';
 import './LoadImageExample.scss';
 
 interface Image {
-	type: string;
+	type?: string;
 	src: string;
 }
 

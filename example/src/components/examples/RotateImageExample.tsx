@@ -10,7 +10,7 @@ import { FlipVerticalIcon } from '@site/src/components/icons/FlipVerticalIcon';
 import { DownloadIcon } from '@site/src/components/icons/DownloadIcon';
 
 export const RotateImageExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const flip = (horizontal: boolean, vertical: boolean) => () => {
 		const cropper = cropperRef.current;
@@ -33,9 +33,11 @@ export const RotateImageExample = () => {
 	const download = () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
-			const result = cropper.getCanvas().toDataURL();
+			const result = cropper.getCanvas()?.toDataURL();
 			const newTab = window.open();
-			newTab.document.body.innerHTML = `<img src="${result}"></img>`;
+			if (newTab && result) {
+				newTab.document.body.innerHTML = `<img src="${result}"></img>`;
+			}
 		}
 	};
 

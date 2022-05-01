@@ -5,7 +5,7 @@ import { SquareButton } from '../../components/examples/components/SquareButton'
 import { RotateLeftIcon } from '../../components/icons/RotateLeftIcon';
 
 export const PreviewResultExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const [state, setState] = useState<CropperState | null>(null);
 	const [image, setImage] = useState<CropperImage | null>(null);

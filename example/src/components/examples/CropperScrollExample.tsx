@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Cropper } from 'react-advanced-cropper';
+import { Cropper, ImageRestriction } from 'react-advanced-cropper';
 import { BackgroundWrapperWithNotifications } from '@site/src/components/examples/components/BackgroundWrapperWithNotifications';
 import './CropperScrollExample.scss';
 
@@ -17,10 +17,10 @@ export const CropperScrollExample = () => {
 				handlers: {},
 				lines: {},
 			}}
-			scaleImage={{
+			transformImage={{
 				adjustStencil: false,
 			}}
-			imageRestriction={'stencil'}
+			imageRestriction={ImageRestriction.stencil}
 			backgroundWrapperComponent={BackgroundWrapperWithNotifications}
 			src={image}
 		/>

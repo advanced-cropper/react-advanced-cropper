@@ -16,10 +16,7 @@ interface Props {
 
 export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
 	({ className, image, state, crossOrigin, transitions = null }: Props, ref) => {
-		const style = useMemo(
-			() => (image && state ? getBackgroundStyle(image, state, transitions) : {}),
-			[image, state, transitions],
-		);
+		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
 
 		const src = image ? image.src : undefined;
 

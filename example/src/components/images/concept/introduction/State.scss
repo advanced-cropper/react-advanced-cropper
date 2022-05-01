@@ -1,0 +1,12 @@
+@import '../../../../css/mixins';
+
+.introduction-state {
+	float: right;
+	margin-left: 16px;
+	display: block;
+	@include mobile() {
+		float: none;
+		margin: 0 auto;
+		margin-bottom: 16px;
+	}
+}

@@ -8,12 +8,10 @@ export function useMoveImageOptions(moveImage: MoveImageSettings | boolean) {
 			getOptions(
 				moveImage,
 				{
-					enabled: true,
 					touch: true,
 					mouse: true,
 				},
 				{
-					enabled: false,
 					touch: false,
 					mouse: false,
 				},

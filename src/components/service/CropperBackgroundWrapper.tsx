@@ -1,5 +1,9 @@
 import React, { CSSProperties, ReactNode } from 'react';
 import { CropperTransitions, ImageTransform } from 'advanced-cropper/types';
+import { useRotateImageOptions } from '../../hooks/useRotateImageOptions';
+import { useScaleImageOptions } from '../../hooks/useScaleImageOptions';
+import { useMoveImageOptions } from '../../hooks/useMoveImageOptions';
+import { MoveImageSettings, RotateImageSettings, ScaleImageSettings } from '../../types';
 import { TransformableImage } from './TransformableImage';
 
 interface DesiredCropperRef {
@@ -10,26 +14,18 @@ interface DesiredCropperRef {
 
 export interface CropperBackgroundWrapperProps {
 	cropper: DesiredCropperRef;
-	touchMove?: boolean;
-	mouseMove?: boolean;
-	touchScale?: boolean;
-	touchRotate?: boolean;
-	wheelScale?:
-		| boolean
-		| {
-				ratio: number;
-		  };
+	rotateImage?: boolean | RotateImageSettings;
+	scaleImage?: boolean | ScaleImageSettings;
+	moveImage?: boolean | MoveImageSettings;
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
 }
 
 export const CropperBackgroundWrapper = ({
-	touchMove,
-	mouseMove,
-	touchScale,
-	wheelScale,
-	touchRotate,
+	scaleImage = true,
+	moveImage = true,
+	rotateImage = false,
 	children,
 	className,
 	style,
@@ -37,18 +33,22 @@ export const CropperBackgroundWrapper = ({
 }: CropperBackgroundWrapperProps) => {
 	const transitions = cropper.getTransitions();
 
+	const rotateImageOptions = useRotateImageOptions(rotateImage);
+	const scaleImageOptions = useScaleImageOptions(scaleImage);
+	const moveImageOptions = useMoveImageOptions(moveImage);
+
 	return (
 		<TransformableImage
 			className={className}
 			style={style}
 			onTransform={cropper.transformImage}
 			onTransformEnd={cropper.transformImageEnd}
-			touchMove={touchMove}
-			mouseMove={mouseMove}
-			touchScale={touchScale}
-			wheelScale={wheelScale}
-			touchRotate={touchRotate}
-			frozen={transitions.active}
+			touchMove={moveImageOptions.touch}
+			mouseMove={moveImageOptions.mouse}
+			touchScale={scaleImageOptions.touch}
+			wheelScale={scaleImageOptions.wheel}
+			touchRotate={rotateImageOptions.touch}
+			disabled={transitions.active}
 		>
 			{children}
 		</TransformableImage>

@@ -1,5 +1,5 @@
 ---
-title: Basic
+title: State
 sidebar_position: 1
 ---
 
@@ -95,7 +95,6 @@ interface Transforms {
 ```
 They can include flip (horizontal , vertical) and rotate.
 
-
 ## State Modifiers
 
 The state is useless itself. It just a bunch of data. To make it useful there are plenty of different
@@ -113,60 +112,3 @@ They are [pure functions](https://en.wikipedia.org/wiki/Pure_function) that rece
 return the new `state` value.
 
 Also, there are two auxiliary functions: [`createState`](/docs/concept/modifiers/#createstate) and [`copyState`](/docs/concept/modifiers/#copystate) that in some sense similar to modifiers.
-
-## Settings
-
-To use  [the default modifiers](/docs/concept/modifiers) described above you should define `settings` before.
-This object may be considered as props in a some component framework.
-
-[The settings](/docs/concept/settings) are the most basic constraints that applies to the state, they includes:
-- default coordinates
-- default visible area
-- area position restrictions
-- area size restrictions
-- size restrictions
-- positions restrictions
-- aspect ratio
-
-By defining this settings in different ways you can create a lot of different cropper behaviors without even creating your own
-modifiers. However, it's pretty complicated to define them all on your own, so this library provides special
-function `withDefaults` that add to  an object all that methods. They are described in [the corresponding section](/docs/concept/defaults).
-
-
-## Image
-
-Image is the another basic concept of this library. According to the convention it should have `CropperImage` type:
-```tsx
-interface CropperImage {
-	src: string;
-	revoke: boolean;
-	transforms: Transforms;
-	arrayBuffer: ArrayBuffer | null;
-	width: number;
-	height: number;
-}
-```
-
-The meaning of the fields are the following:
-
-- `src` - the link to the image
-- `width` - the image width
-- `height` - the image height
-- `transforms` - the transforms applied to the image
-- `revoke` - flag that indicates should be the image revoked (by `window/revokeObjectURL`)
-- `arrayBuffer` - the content of the image in bytes
-
-
-Usually, it's gotten by [`loadImage`](/docs/concept/utils#load-image) function.
-
-## Transitions
-
-Transitions is the object describes the current transitions.
-According to the convention it should have `CropperTransitions` type:
-```tsx
-interface CropperTransitions {
-	timingFunction: string;
-	duration: number;
-	active: boolean;
-}
-```

@@ -3,7 +3,7 @@ import { ImageRestriction, Priority, Cropper, CropperState, CropperRef, VisibleA
 import './AdjustStencilExample.scss';
 
 export const AdjustStencilExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const [adjustStencil, setAdjustStencil] = useState(false);
 
@@ -35,7 +35,7 @@ export const AdjustStencilExample = () => {
 			<Cropper
 				ref={cropperRef}
 				className={'adjust-stencil-example__cropper'}
-				scaleImage={{
+				transformImage={{
 					adjustStencil,
 				}}
 				priority={Priority.visibleArea}

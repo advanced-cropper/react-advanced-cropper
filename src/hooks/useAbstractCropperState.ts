@@ -1,6 +1,5 @@
 import { useRef, useMemo } from 'react';
 import {
-	CropperSettings,
 	PostprocessFunction,
 	Priority,
 	CropperImage,
@@ -15,8 +14,11 @@ import {
 	Rotate,
 	PostprocessAction,
 	PartialTransforms,
+	CoreSettings,
+	ModifiersSettings,
 } from 'advanced-cropper/types';
 import { getOptions, isArray, isFunction } from 'advanced-cropper/utils';
+import { DefaultSettings } from 'advanced-cropper/defaults';
 
 import {
 	copyState,
@@ -47,19 +49,21 @@ import {
 	fillMoveDirections,
 	fillResizeDirections,
 } from 'advanced-cropper/service';
-import { TimingFunction } from 'advanced-cropper/animation';
+import { TimingFunction } from 'advanced-cropper/types';
 import { DefaultTransforms, Nullable, TransitionsSettings } from '../types';
 import { useCropperState } from './useCropperState';
 import { useStateWithCallback } from './useStateWithCallback';
 import { useDebouncedCallback } from './useDebouncedCallback';
 
-export interface CropperMethodOptions {
+interface CropperMethodOptions {
 	transitions?: boolean;
 	immediately?: boolean;
 	normalize?: boolean;
 }
 
-export type CropperCallback<Instance> = (instance: NonNullable<Instance>) => void;
+type CropperCallback<Instance> = (instance: NonNullable<Instance>) => void;
+
+export type AbstractCropperSettings = DefaultSettings & ModifiersSettings;
 
 export interface AbstractCropperStateCallbacks<Instance = unknown> {
 	getInstance?: () => Nullable<Instance>;
@@ -76,23 +80,22 @@ export interface AbstractCropperStateCallbacks<Instance = unknown> {
 	onInteractionEnd?: CropperCallback<Instance>;
 }
 
-export interface AbstractCropperStateSettings<Cropper = unknown> {
+export interface AbstractCropperStateParameters<Settings extends CoreSettings> {
 	transitions?: TransitionsSettings | boolean;
-	postProcess?: PostprocessFunction | PostprocessFunction[];
-	setCoordinatesAlgorithm?: SetCoordinatesAlgorithm;
-	setVisibleAreaAlgorithm?: SetVisibleAreaAlgorithm;
-	setBoundaryAlgorithm?: SetBoundaryAlgorithm;
-	transformImageAlgorithm?: TransformImageAlgorithm;
-	moveCoordinatesAlgorithm?: MoveAlgorithm;
-	resizeCoordinatesAlgorithm?: ResizeAlgorithm;
-	createStateAlgorithm?: CreateStateAlgorithm;
-	reconcileStateAlgorithm?: ReconcileStateAlgorithm;
-	moveImageAlgorithm?: (state: CropperState, settings: CropperSettings, left?: number, top?: number) => CropperState;
+	postProcess?: PostprocessFunction<Settings> | PostprocessFunction<Settings>[];
+	setCoordinatesAlgorithm?: SetCoordinatesAlgorithm<Settings>;
+	setVisibleAreaAlgorithm?: SetVisibleAreaAlgorithm<Settings>;
+	setBoundaryAlgorithm?: SetBoundaryAlgorithm<Settings>;
+	transformImageAlgorithm?: TransformImageAlgorithm<Settings>;
+	moveCoordinatesAlgorithm?: MoveAlgorithm<Settings>;
+	resizeCoordinatesAlgorithm?: ResizeAlgorithm<Settings>;
+	createStateAlgorithm?: CreateStateAlgorithm<Settings>;
+	reconcileStateAlgorithm?: ReconcileStateAlgorithm<Settings>;
 	defaultTransforms?: DefaultTransforms;
 	priority?: Priority;
 }
 
-type StateModifier = (state: CropperState | null, settings: CropperSettings) => CropperState | null;
+type StateModifier = (state: CropperState | null, settings: CoreSettings) => CropperState | null;
 
 export interface TransitionOptions {
 	transitions?: boolean;
@@ -132,10 +135,7 @@ function runCallbacks<Instance>(callbacks: Function[]) {
 	});
 }
 
-export function useAbstractCropperState<
-	Settings extends AbstractCropperStateSettings & CropperSettings,
-	Instance = unknown,
->({
+export function useAbstractCropperState<Settings extends AbstractCropperSettings, Instance = unknown>({
 	getInstance,
 	transitions,
 	postProcess,
@@ -160,8 +160,11 @@ export function useAbstractCropperState<
 	onInteractionStart,
 	onInteractionEnd,
 	defaultTransforms,
-	...settings
-}: Settings & AbstractCropperStateCallbacks<Instance>) {
+	settings,
+}: AbstractCropperStateParameters<Settings> &
+	AbstractCropperStateCallbacks<Instance> & {
+		settings: Settings;
+	}) {
 	const [core, setCore] = useStateWithCallback<Core>({
 		state: null,
 		transitions: false,

@@ -11,10 +11,10 @@ import {
 	MoveDirections,
 } from 'advanced-cropper/types';
 import { getDirectionNames, isCardinalDirection } from 'advanced-cropper/utils';
+import { getTransitionStyle } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
-import { ArtificialTransition } from './ArtificialTransition';
 import './BoundingBox.scss';
 
 const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
@@ -47,7 +47,7 @@ interface Props {
 	lineComponent?: LineComponent;
 	lineClassNames?: LinesClassNames;
 	lineWrapperClassNames?: LinesClassNames;
-	resizable?: boolean;
+	disabled?: boolean;
 	onResize?: (directions: ResizeDirections, options: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
@@ -115,7 +115,7 @@ export const BoundingBox = ({
 	lineComponent = SimpleLine,
 	lineClassNames = {},
 	lineWrapperClassNames = {},
-	resizable = true,
+	disabled = false,
 	width,
 	height,
 	transitions,
@@ -150,22 +150,22 @@ export const BoundingBox = ({
 					className: classnames(
 						lineClassNames.default,
 						lineClassNames[point.name],
-						!resizable && lineClassNames.disabled,
+						disabled && lineClassNames.disabled,
 					),
 					wrapperClassName: classnames(
 						lineWrapperClassNames.default,
 						lineWrapperClassNames[point.name],
-						!resizable && lineWrapperClassNames.disabled,
+						disabled && lineWrapperClassNames.disabled,
 					),
 					hoverClassName: lineClassNames.hover,
 					verticalPosition: point.verticalPosition,
 					horizontalPosition: point.horizontalPosition,
-					disabled: !resizable,
+					disabled,
 				});
 			}
 		});
 		return result;
-	}, [points, lineComponent, lineClassNames, lineWrapperClassNames, resizable]);
+	}, [points, lineComponent, lineClassNames, lineWrapperClassNames, disabled]);
 
 	const handlerNodes = useMemo(() => {
 		const result: HandlerNode[] = [];
@@ -184,12 +184,12 @@ export const BoundingBox = ({
 					hoverClassName: handlerClassNames.hover,
 					verticalPosition: point.verticalPosition,
 					horizontalPosition: point.horizontalPosition,
-					disabled: !resizable,
+					disabled,
 				});
 			}
 		});
 		return result;
-	}, [height, width, points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, resizable]);
+	}, [height, width, points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, disabled]);
 
 	const onHandlerDrag =
 		(
@@ -222,7 +222,7 @@ export const BoundingBox = ({
 				respectDirection = 'height';
 			}
 
-			if (resizable) {
+			if (!disabled) {
 				if (onResize) {
 					onResize(directions, {
 						allowedDirections: {
@@ -278,15 +278,18 @@ export const BoundingBox = ({
 						const top =
 							verticalPosition === 'south' ? height : verticalPosition === 'north' ? 0 : height / 2;
 						return (
-							<ArtificialTransition
+							<div
 								key={handler.name}
 								className={'react-bounding-box__handler-wrapper'}
-								transitions={transitions}
-								left={left}
-								top={top}
+								style={{
+									...style,
+									top: `${top}px`,
+									left: `${left}px`,
+									transition: getTransitionStyle(transitions),
+								}}
 							>
 								{handlerElement}
-							</ArtificialTransition>
+							</div>
 						);
 					} else {
 						return handlerElement;

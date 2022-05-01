@@ -7,6 +7,7 @@ import { MoveDirections, SimpleTouch, Point } from 'advanced-cropper/types';
 interface Props {
 	className?: string;
 	movable?: boolean;
+	disabled?: boolean;
 	activationDistance?: number;
 	children?: ReactNode;
 	onMove?: (directions: MoveDirections) => void;
@@ -23,6 +24,7 @@ export class DraggableArea extends PureComponent<Props> {
 
 	static defaultProps = {
 		movable: true,
+		disabled: false,
 		activationDistance: 30,
 		useAnchor: true,
 	};
@@ -54,14 +56,14 @@ export class DraggableArea extends PureComponent<Props> {
 							newTouches[0].clientY -
 							(this.props.useAnchor ? top + this.anchor.top : this.touches[0].clientY),
 					});
-					this.touches = newTouches;
+					this.touches = [...newTouches];
 				}
 			}
 		}
 	};
 
 	processEnd = () => {
-		if (this.touches.length) {
+		if (!this.props.disabled && this.touches.length) {
 			if (this.props.onMoveEnd) {
 				this.props.onMoveEnd();
 			}
@@ -82,7 +84,7 @@ export class DraggableArea extends PureComponent<Props> {
 
 	onTouchStart = (e: TouchEvent) => {
 		if (e.cancelable) {
-			const shouldStartMove = this.props.movable && e.touches.length === 1;
+			const shouldStartMove = !this.props.disabled && e.touches.length === 1;
 			if (shouldStartMove) {
 				this.touches = Array.from(e.touches);
 				if (this.props.onMoveStart) {
@@ -123,7 +125,7 @@ export class DraggableArea extends PureComponent<Props> {
 	};
 
 	onMouseDown = (e: MouseEvent) => {
-		if (this.props.movable && e.button === 0) {
+		if (!this.props.disabled && e.button === 0) {
 			const touch = {
 				clientX: e.clientX,
 				clientY: e.clientY,
@@ -138,7 +140,7 @@ export class DraggableArea extends PureComponent<Props> {
 	};
 
 	onMouseMove = (e: MouseEvent) => {
-		if (this.touches.length) {
+		if (!this.props.disabled && this.touches.length) {
 			this.processMove([
 				{
 					clientX: e.clientX,
@@ -187,7 +189,7 @@ export class DraggableArea extends PureComponent<Props> {
 	}
 
 	componentDidUpdate(prevProps: Readonly<Props>) {
-		if (!this.props.movable && prevProps.movable) {
+		if (this.props.disabled && !prevProps.disabled) {
 			this.touches = [];
 		}
 	}

@@ -3,6 +3,7 @@
 	height: 100%;
 	width: 100%;
 	&__handler-wrapper {
+		will-change: transform;
 		position: absolute;
 	}
 	&__handler {

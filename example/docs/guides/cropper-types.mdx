@@ -3,6 +3,7 @@ title: Cropper Types
 ---
 
 import { CropperTypesExample } from '../../src/components/examples/CropperTypesExample';
+import { FixedCropperTypeExample } from '../../src/components/examples/FixedCropperTypeExample';
 
 # Cropper Types
 
@@ -40,7 +41,7 @@ The most basic cropper configuration will give you the **classic** cropper, that
 
 The fixed cropper has the static stencil. It doesn't have handlers, it can't be moved or resized and it have a fixed size. An user can only change the image size and position.
 
-<CropperTypesExample
+<FixedCropperTypeExample
 	size={'medium'}
 	src="https://images.unsplash.com/photo-1583172332547-c768b4e2f5ff?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=900&q=80"
 	stencilProps={{
@@ -62,7 +63,10 @@ Examples: [Twitter](https://www.twitter.com), [Instagram](https://www.instagram.
 
 The recommended implementation is presented below:
 ```tsx
-<CropperTypesExample
+import { FixedCropper, ImageRestriction } from 'react-advanced-cropper'
+```
+```tsx
+<FixedCropper
 	src={img}
 	stencilProps={{
 		handlers: {},
@@ -74,7 +78,7 @@ The recommended implementation is presented below:
 		width: 300,
 		height: 300
 	}}
-	imageRestriction="stencil"
+	imageRestriction={ImageRestriction.stencil}
 />
 ```
 
@@ -85,7 +89,7 @@ Let's describe the changes:
 2. The setting stencil size is the most reliable way to make stencil preserve it position, size and aspect ratio.
 It defines a real stencil size in pixels of the stencil element, so be sure, that the cropper container is always bigger than the specified size.
 
-3. Image restriction is set to `stencil` to allow the user to crop any part of image. If you leave it default ('fit-area') the user will be not able
+3. Image restriction is set to `ImageRestriction.stencil` (`"stencil"`) to allow the user to crop any part of image. If you leave it default ('fit-area') the user will be not able
 to crop some image areas.
 
 ## Hybrid Cropper
@@ -99,43 +103,27 @@ Examples: [Telegram](https://www.telegram.org).
 
 ### Implementation
 
-To implement the hybrid cropper we will use the fragments of recommended implementations and just add `autoZoom`
-prop to them.
-
-#### Classic Hybrid
-
-The **classic hybrid** is the cropper type, that is very similar to the **classic cropper**, but its stencil is
-automatically resized and moved. It makes it more closer to static cropper, because its stencil tries to be static.
-```tsx
-<Cropper
-	src={img}
-	autoZoom={true}
- />
-```
-
-<CropperTypesExample
-	size="medium"
-	src="https://images.unsplash.com/photo-1586598901893-8ac605430b78?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80"
-	autoZoom={true}
-/>
 
 #### Fixed Hybrid
 
 The **fixed hybrid** is the cropper type, that is very similar to the **fixed cropper**, but user is able to change
 the size and position of cropper.
+
+To implement the hybrid cropper just remove `stencilProps` from the previous example:
+
 ```tsx
-<Cropper
+<FixedCropper
 	src={img}
 	autoZoom={true}
 	stencilSize={{
 		width: 280,
 		height: 280
 	}}
-	imageRestriction="stencil"
+	imageRestriction={ImageRestriction.stencil}
 />
 ```
 
-<CropperTypesExample
+<FixedCropperTypeExample
 	src="https://images.unsplash.com/photo-1583853287541-6e82b3d5ea12?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=2048&q=80"
 	autoZoom={true}
 	stencilSize={{

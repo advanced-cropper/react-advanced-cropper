@@ -1,18 +1,24 @@
 import React, { FC, forwardRef, useRef } from 'react';
 import cn from 'classnames';
-import { CropperRef, CropperProps, Cropper, CircleStencil, RectangleStencil, mergeRefs } from 'react-advanced-cropper';
+import AdvancedCropper, {
+	FixedCropper as InternalCropper,
+	CircleStencil,
+	RectangleStencil,
+	ImageRestriction,
+	mergeRefs,
+} from 'react-advanced-cropper';
 import { Wrapper } from './components/Wrapper';
 import './FixedCropper.scss';
 
-export interface FixedCropperProps extends Omit<CropperProps, 'defaultSize' | 'defaultCoordinates' | 'stencilSize'> {
+export interface FixedCropperProps extends Omit<AdvancedCropper.FixedCropperProps, 'stencilSize'> {
 	stencilType?: 'circle' | 'rectangle';
 }
 
-export type FixedCropperMethods = CropperRef;
+export type FixedCropperRef = AdvancedCropper.FixedCropperRef;
 
-export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperMethods, FixedCropperProps>(
+export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperRef, FixedCropperProps>(
 	({ className, stencilProps, stencilType, ...props }: FixedCropperProps, ref) => {
-		const cropperRef = useRef<CropperRef>(null);
+		const cropperRef = useRef<FixedCropperRef>(null);
 
 		const defaultSize = ({ imageSize, visibleArea }) => {
 			return {
@@ -29,12 +35,12 @@ export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperMethod
 		};
 
 		return (
-			<Cropper
+			<InternalCropper
 				ref={mergeRefs([ref, cropperRef])}
 				className={cn('fixed-cropper', className)}
-				defaultSize={defaultSize}
 				stencilSize={stencilSize}
-				imageRestriction={'stencil'}
+				defaultSize={defaultSize}
+				imageRestriction={ImageRestriction.stencil}
 				stencilProps={{
 					previewClassName: cn(
 						'fixed-cropper-stencil__preview',

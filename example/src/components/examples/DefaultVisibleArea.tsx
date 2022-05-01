@@ -1,5 +1,5 @@
 import React from 'react';
-import { Cropper } from 'react-advanced-cropper';
+import { Cropper, Priority } from 'react-advanced-cropper';
 import './DefaultVisibleArea.scss';
 
 export const DefaultVisibleArea = () => {
@@ -16,7 +16,7 @@ export const DefaultVisibleArea = () => {
 				'https://images.unsplash.com/photo-1602718571797-49d5e9d54563?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjcyNTgzfQ&auto=format&fit=crop&w=1024&q=80'
 			}
 			defaultVisibleArea={defaultVisibleArea}
-			priority={'visibleArea'}
+			priority={Priority.visibleArea}
 		/>
 	);
 };

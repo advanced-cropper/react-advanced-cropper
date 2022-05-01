@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Cropper, CropperRef, ImageRestriction } from 'react-advanced-cropper';
 import './ImageRestrictionExample.scss';
 
 export const ImageRestrictionExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
-	const [restrictionType, setRestrictionType] = useState<ImageRestriction>('none');
+	const [restrictionType, setRestrictionType] = useState<ImageRestriction>(ImageRestriction.none);
 
 	const showImage = () => {
 		const cropper = cropperRef.current;

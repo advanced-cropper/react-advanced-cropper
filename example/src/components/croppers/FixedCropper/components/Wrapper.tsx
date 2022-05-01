@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { CSSProperties, FC } from 'react';
 import { CropperRef, CropperFade, isInitializedState } from 'react-advanced-cropper';
 import cn from 'classnames';
 import { getAbsoluteZoom, getVisibleAreaSize } from '../algorithms';
@@ -7,9 +7,10 @@ import './Wrapper.scss';
 
 interface Props {
 	cropper: CropperRef;
-	loading?: boolean;
-	loaded?: boolean;
+	loading: boolean;
+	loaded: boolean;
 	className?: string;
+	style?: CSSProperties;
 }
 
 export const Wrapper: FC<Props> = ({ cropper, children, loaded, className }) => {

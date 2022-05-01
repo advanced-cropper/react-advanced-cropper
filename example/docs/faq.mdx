@@ -1,0 +1,83 @@
+---
+sidebar_position: 6
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+
+# FAQ
+
+## I want to add the additional setting to the cropper. How to do it?
+
+It depends on what kind of setting you want to add.
+
+### Cropper's parts
+
+<Tabs>
+<TabItem value="stencil" label="Stencil" default>
+
+```tsx
+<Cropper
+	stencilComponent={CustomStencil}
+	stencilProps={{
+		color: 'red'
+	}}
+/>
+```
+
+The prop `color` will be passed into `CustomStencil`.
+
+</TabItem>
+<TabItem value="wrapper" label="Wrapper">
+
+```tsx
+<Cropper
+	wrapperComponent={CustomWrapper}
+	wrapperProps={{
+		navigation: true
+	}}
+/>
+```
+
+The prop `navigation` will be passed into `CustomWrapper`.
+
+</TabItem>
+<TabItem value="backgroundWrapper" label="BackgroundWrapper">
+
+```tsx
+<Cropper
+	backgroundWrapperComponent={CustomBackgroundWrapper}
+	backgroundWrapperProps={{
+		smooth: true
+	}}
+/>
+```
+
+The prop `smooth` will be passed into `CustomBackgroundWrapper`.
+
+</TabItem>
+</Tabs>
+
+
+### Cropper's settings
+
+If you want to add the custom cropper's setting field, that will be used in its internal algorithms (such as `defaultSize`, `sizeRestrictions`, etc.)
+you can use generic nature of cropper components:
+```tsx
+import { CropperSettings } from 'react-advanced-cropper';
+
+interface CustomSettings extends CropperSettings {
+	stencilType: string;
+}
+```
+```tsx
+<Cropper<CustomSettings>
+	stencilType={'circle'}
+	defaultSize={(state, settings) => {
+		if (settings.stencilType === 'circle') {
+			// something
+		}
+	}}
+/>
+```

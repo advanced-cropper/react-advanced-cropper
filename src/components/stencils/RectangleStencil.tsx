@@ -204,9 +204,10 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 						transitions={transitions}
 						width={width}
 						height={height}
+						disabled={!resizable}
 					>
 						<DraggableArea
-							movable={movable && !transitions.active}
+							disabled={!movable}
 							onMove={onMove}
 							onMoveEnd={onMoveEnd}
 							className={cn('react-rectangle-stencil__draggable-area', draggableAreaClassName)}

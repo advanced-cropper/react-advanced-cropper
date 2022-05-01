@@ -4,7 +4,7 @@ import { PreviewResults } from '../../components/examples/components/PreviewResu
 import './GettingResultManualExample.scss';
 
 export const GettingResultManualExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
 

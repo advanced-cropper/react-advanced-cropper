@@ -11,7 +11,7 @@ import { CenterIcon } from '@site/src/components/icons/CenterIcon';
 import './SetCoordinatesExample.scss';
 
 export const SetCoordinatesExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const resize =
 		(width = 1, height = 1) =>
@@ -19,27 +19,32 @@ export const SetCoordinatesExample = () => {
 			if (cropperRef.current) {
 				const initialCoordinates = cropperRef.current.getCoordinates();
 
-				cropperRef.current.setCoordinates([
-					({ coordinates, imageSize }) => {
-						return {
-							width: coordinates.width * width,
-							height: coordinates.height * height,
-						};
-					},
-					({ coordinates, imageSize }) => ({
-						left: initialCoordinates.left + (initialCoordinates.width - coordinates.width) / 2,
-						top: initialCoordinates.top + (initialCoordinates.height - coordinates.height) / 2,
-					}),
-				]);
+				if (initialCoordinates) {
+					cropperRef.current.setCoordinates([
+						({ coordinates }) =>
+							coordinates && {
+								width: coordinates.width * width,
+								height: coordinates.height * height,
+							},
+						({ coordinates }) =>
+							coordinates && {
+								left: initialCoordinates.left + (initialCoordinates.width - coordinates.width) / 2,
+								top: initialCoordinates.top + (initialCoordinates.height - coordinates.height) / 2,
+							},
+					]);
+				}
 			}
 		};
 
 	const center = () => {
 		if (cropperRef.current) {
-			cropperRef.current.setCoordinates(({ coordinates, imageSize }) => ({
-				left: imageSize.width / 2 - coordinates.width / 2,
-				top: imageSize.height / 2 - coordinates.height / 2,
-			}));
+			cropperRef.current.setCoordinates(
+				({ coordinates, imageSize }) =>
+					coordinates && {
+						left: imageSize.width / 2 - coordinates.width / 2,
+						top: imageSize.height / 2 - coordinates.height / 2,
+					},
+			);
 		}
 	};
 

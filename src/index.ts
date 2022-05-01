@@ -1,4 +1,5 @@
 export * from './components/Cropper';
+export * from './components/FixedCropper';
 export * from './components/stencils/RectangleStencil';
 export * from './components/stencils/CircleStencil';
 export * from './components/service/BoundingBox';
@@ -45,3 +46,8 @@ export {
 	isMouseEvent,
 	isTouchEvent,
 } from 'advanced-cropper/utils';
+
+export * from 'advanced-cropper/extensions/constraints';
+export * from 'advanced-cropper/extensions/mimes';
+
+export type { StencilSize } from 'advanced-cropper/extensions/stencilSize';

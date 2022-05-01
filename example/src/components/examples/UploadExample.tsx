@@ -3,7 +3,7 @@ import { CropperRef, Cropper } from 'react-advanced-cropper';
 import './UploadExample.scss';
 
 export const UploadExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const [image] = useState(
 		'https://images.unsplash.com/photo-1604335079441-274c03ad99a1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1024&q=80',

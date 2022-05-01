@@ -1,6 +1,7 @@
 import {
 	ImageRestriction,
 	StencilSize,
+	DefaultSettings,
 	ratio,
 	getSizeRestrictions,
 	getMinimumSize,
@@ -11,7 +12,7 @@ import {
 
 function getMinimumVisibleAreaSize(
 	state: InitializedCropperState,
-	settings: CropperSettings & {
+	settings: DefaultSettings & {
 		imageRestriction?: ImageRestriction;
 		adjustStencil?: boolean;
 		stencilSize?: StencilSize;

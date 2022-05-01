@@ -1,19 +1,31 @@
 import React, { useState } from 'react';
-import { CropperBackgroundWrapperProps, TransformableImage, isTouchEvent, isWheelEvent } from 'react-advanced-cropper';
+import {
+	CropperBackgroundWrapperProps,
+	TransformableImage,
+	isTouchEvent,
+	isWheelEvent,
+	useMoveImageOptions,
+	useScaleImageOptions,
+} from 'react-advanced-cropper';
 import { useDebouncedCallback } from 'use-debounce';
 import './BackgroundWrapperWithNotifications.scss';
 import cn from 'classnames';
+import { TransformableImageEvent } from '../../../../../src';
 
 export const BackgroundWrapperWithNotifications = ({
 	cropper,
-	touchMove,
-	mouseMove,
-	touchResize,
-	wheelResize,
+	scaleImage = true,
+	moveImage = true,
 	children,
 	className,
 	style,
 }: CropperBackgroundWrapperProps) => {
+	const moveImageOptions = useMoveImageOptions(moveImage);
+
+	const scaleImageOptions = useScaleImageOptions(scaleImage);
+
+	const transitions = cropper.getTransitions();
+
 	const [notificationType, setNotificationType] = useState<'touch' | 'wheel'>('wheel');
 
 	const [notificationVisible, setNotificationVisible] = useState(false);
@@ -22,30 +34,30 @@ export const BackgroundWrapperWithNotifications = ({
 		setNotificationVisible(false);
 	}, 1500);
 
-	const eventsFilter = (nativeEvent: Event, transforming: boolean) => {
+	const eventsHandler = (event: TransformableImageEvent, nativeEvent: Event) => {
 		if (isTouchEvent(nativeEvent)) {
-			if (nativeEvent.touches.length === 1 && !transforming) {
+			if (nativeEvent.touches.length === 1 && !event.active) {
 				setNotificationVisible(true);
 				setNotificationType('touch');
 				debouncedHideNotification();
-				return false;
+				event.preventDefault();
 			} else {
 				setNotificationVisible(false);
 			}
 		} else if (isWheelEvent(nativeEvent)) {
-			if (!transforming && !nativeEvent.ctrlKey) {
+			if (!event.active && !nativeEvent.ctrlKey) {
 				setNotificationVisible(true);
 				setNotificationType('wheel');
 				debouncedHideNotification();
-				return false;
+				event.preventDefault();
 			} else {
 				setNotificationVisible(false);
 			}
 		}
-		nativeEvent.preventDefault();
-		nativeEvent.stopPropagation();
-
-		return !cropper.getTransitions().active;
+		if (!event.defaultPrevented) {
+			nativeEvent.preventDefault();
+			nativeEvent.stopPropagation();
+		}
 	};
 
 	return (
@@ -54,14 +66,14 @@ export const BackgroundWrapperWithNotifications = ({
 			style={style}
 			onTransform={cropper.transformImage}
 			onTransformEnd={cropper.transformImageEnd}
-			touchMove={touchMove}
-			mouseMove={mouseMove}
-			touchResize={touchResize}
-			wheelResize={wheelResize}
-			eventsFilter={eventsFilter}
+			onEvent={eventsHandler}
+			touchMove={moveImageOptions.touch}
+			mouseMove={moveImageOptions.mouse}
+			touchScale={scaleImageOptions.touch}
+			wheelScale={scaleImageOptions.wheel}
+			disabled={transitions.active}
 		>
 			{children}
-
 			<div
 				className={cn(
 					'cropper-event-notification',

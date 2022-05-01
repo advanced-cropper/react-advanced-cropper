@@ -1,10 +1,10 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import { BoundingBox, CropperRef, Cropper, useWindowResize, ResizeDirections } from 'react-advanced-cropper';
+import { ImageRestriction, BoundingBox, CropperRef, Cropper, useWindowResize, ResizeDirections } from 'react-advanced-cropper';
 import './RefreshExample.scss';
 
 export const RefreshExample = () => {
-	const cropperRef = useRef<CropperRef>();
-	const containerRef = useRef<HTMLDivElement>();
+	const cropperRef = useRef<CropperRef>(null);
+	const containerRef = useRef<HTMLDivElement>(null);
 
 	const [width, setWidth] = useState(0);
 	const [height, setHeight] = useState(0);
@@ -94,7 +94,7 @@ export const RefreshExample = () => {
 					}}
 					minWidth={200}
 					minHeight={300}
-					imageRestriction={'fillArea'}
+					imageRestriction={ImageRestriction.fillArea}
 				/>
 			</BoundingBox>
 		</div>

@@ -11,7 +11,7 @@ import { SquareButton } from '@site/src/components/examples/components/SquareBut
 import { VerticalButtons } from '@site/src/components/examples/components/VerticalButtons';
 
 export const TransformImageExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const zoom = (factor: number) => () => {
 		const cropper = cropperRef.current;

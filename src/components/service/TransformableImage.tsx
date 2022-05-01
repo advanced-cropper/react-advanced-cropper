@@ -2,11 +2,13 @@ import React, { ReactNode, CSSProperties, Component, RefObject, createRef } from
 import debounce from 'debounce';
 import { ImageTransform, Point, SimpleTouch } from 'advanced-cropper/types';
 import { touchesToImageTransform, wheelEventToImageTransform } from 'advanced-cropper/transforms';
+import { preventDefault } from '../../service/events';
 
 interface Props {
 	onTransform?: (transform: ImageTransform) => void;
 	onTransformEnd?: () => void;
-	frozen?: boolean;
+	onEvent?: (transformEvent: TransformableImageEvent, nativeEvent: Event) => unknown;
+	disabled?: boolean;
 	touchMove?: boolean;
 	mouseMove?: boolean;
 	touchScale?: boolean;
@@ -20,10 +22,21 @@ interface Props {
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
-	eventsFilter?: (nativeEvent: Event, transforming: boolean) => unknown;
 }
 
 export type TransformImageType = 'touchTransform' | 'mouseMove' | 'wheelScale';
+
+export class TransformableImageEvent {
+	constructor({ active }: { active: boolean }) {
+		this.active = active;
+		this.defaultPrevented = false;
+	}
+	preventDefault() {
+		this.defaultPrevented = true;
+	}
+	defaultPrevented: boolean;
+	active: boolean;
+}
 
 export class TransformableImage extends Component<Props> {
 	touches: (SimpleTouch & { identifier?: number })[];
@@ -86,14 +99,17 @@ export class TransformableImage extends Component<Props> {
 	};
 
 	processEvent = (nativeEvent: Event) => {
-		const { eventsFilter, frozen } = this.props;
-		if (eventsFilter) {
-			return eventsFilter(nativeEvent, this.transforming) !== false && !frozen;
+		const { onEvent, disabled } = this.props;
+		const transformEvent = new TransformableImageEvent({ active: this.transforming });
+
+		if (onEvent) {
+			onEvent(transformEvent, nativeEvent);
 		} else {
 			nativeEvent.preventDefault();
 			nativeEvent.stopPropagation();
-			return !frozen;
 		}
+
+		return !disabled && !transformEvent.defaultPrevented;
 	};
 
 	onWheel = (event: WheelEvent) => {

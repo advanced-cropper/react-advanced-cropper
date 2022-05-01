@@ -26,7 +26,10 @@ There is the example of a fixed stencil below, that may be useful for mobile dev
 <FixedSizeExample/>
 
 ```tsx
-<Cropper
+import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
+```
+```tsx
+<FixedCropper
 	src={'https://images.pexels.com/photos/5006465/pexels-photo-5006465.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260'}
 	stencilSize={{
 		width: 300,
@@ -38,7 +41,7 @@ There is the example of a fixed stencil below, that may be useful for mobile dev
 		movable: false,
 		resizable: false
 	}}
-  imageRestriction="stencil"
+	imageRestriction={ImageRestriction.stencil}
 />
 ```
 
@@ -152,7 +155,7 @@ to set default size and default position by yourself (default algorithms handle 
 
 ```jsx
 import React from 'react';
-import { Cropper } from 'react-advanced-cropper';
+import { Cropper, Priority } from 'react-advanced-cropper';
 
 export const Example = () => {
 	const defaultVisibleArea = {
@@ -167,7 +170,7 @@ export const Example = () => {
 				'https://images.unsplash.com/photo-1602718571797-49d5e9d54563?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjcyNTgzfQ&auto=format&fit=crop&w=1024&q=80'
 			}
 			defaultVisibleArea={defaultVisibleArea}
-			priority={'visibleArea'}
+			priority={Priority.visibleArea}
 		/>
 	);
 };
@@ -185,7 +188,7 @@ import React from 'react';
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 	const zoom = () => {
 		if (cropperRef.current) {
 			cropperRef.current.zoom(2); // zoom-in 2x
@@ -227,7 +230,7 @@ import React from 'react';
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 	const flip = (horizontal: boolean, vertical: boolean) => {
 		if (cropperRef.current) {
 			cropperRef.current.flip(horizontal, vertical);
@@ -284,7 +287,7 @@ import React from 'react';
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const resize(width, height, left, top) => {
 		if (cropperRef.current) {
@@ -319,7 +322,7 @@ import React from 'react';
 import { Cropper, CropperRef, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const percentsRestriction = (state, settings) => {
+	const percentsRestriction = (state: CropperState, settings: CropperSettings) => {
 		const { minWidth, minHeight, maxWidth, maxHeight } = retrieveSizeRestrictions(settings);
 
 		const imageSize = getTransformedImageSize(state);

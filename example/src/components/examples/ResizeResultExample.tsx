@@ -4,7 +4,7 @@ import { onInputChange } from '../../service/react';
 import './ResizeResultExample.scss';
 
 export const ResizeResultExample = () => {
-	const cropperRef = useRef<CropperRef>();
+	const cropperRef = useRef<CropperRef>(null);
 
 	const [height, setHeight] = useState<number>();
 	const [width, setWidth] = useState<number>();
@@ -26,17 +26,15 @@ export const ResizeResultExample = () => {
 				maxArea,
 			});
 			const newTab = window.open();
-			newTab.document.body.innerHTML = `<img src="${canvas.toDataURL()}"></img>`;
+			if (newTab && canvas) {
+				newTab.document.body.innerHTML = `<img src="${canvas.toDataURL()}"></img>`;
+			}
 		}
 	};
 
 	return (
 		<div className={'resize-result-example'}>
-			<Cropper
-				ref={cropperRef}
-				className={'resize-result-example__cropper'}
-				src={image}
-			/>
+			<Cropper ref={cropperRef} className={'resize-result-example__cropper'} src={image} />
 			<div className="resize-result-example-panel">
 				<div className="resize-result-example-panel__left">
 					<div className="resize-result-example-panel__input">
