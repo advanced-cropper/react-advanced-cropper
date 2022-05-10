@@ -83,7 +83,6 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 				onChange={onChange}
 				className={cn('default-cropper__cropper', className)}
 				ref={cropperRef}
-				testing2={true}
 				{...props}
 			/>
 			<div className="default-cropper__navigation">

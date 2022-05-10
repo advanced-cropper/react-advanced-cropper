@@ -1,5 +1,12 @@
 import React, { FC, useRef, useState } from 'react';
-import { CircleStencil, RectangleStencil, ImageRestriction, Priority } from 'react-advanced-cropper';
+import {
+	CircleStencil,
+	RectangleStencil,
+	ImageRestriction,
+	Priority,
+	preventZoom,
+	defaultPostprocess,
+} from 'react-advanced-cropper';
 import { Cropper as MobileCropper } from 'react-mobile-cropper';
 import cn from 'classnames';
 import { useToggle } from '@site/src/service/useToggle';
@@ -240,11 +247,13 @@ export const CroppersWizard: FC = () => {
 						stencilProps={stencilProps}
 						imageRestriction={imageRestriction}
 						stencilComponent={stencilType === 'circle' ? CircleStencil : RectangleStencil}
-						scaleImage={
-							scaleImage && {
-								adjustStencil: imageRestriction !== 'stencil' && imageRestriction !== 'none',
-							}
-						}
+						transformImage={{
+							adjustStencil: imageRestriction !== 'stencil' && imageRestriction !== 'none',
+						}}
+						postProcess={scaleImage ? defaultPostprocess : preventZoom}
+						backgroundWrapperProps={{
+							scaleImage,
+						}}
 					/>
 				)}
 				{cropper === 'fixed-cropper' && (
