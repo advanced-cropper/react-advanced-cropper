@@ -1,7 +1,7 @@
 .react-stencil-overlay {
 	box-sizing: content-box;
-	//border: solid 1000px rgba(0, 0, 0, 0.5);
-	box-shadow: 0 0 0 1000px rgba(0, 0, 0, 0.5);
+	color: rgba(black, 0.5);
+	box-shadow: 0 0 0 1000px currentColor;
 	pointer-events: none;
 	width: 100%;
 	height: 100%;

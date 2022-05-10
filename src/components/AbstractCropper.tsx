@@ -14,15 +14,12 @@ import {
 import {
 	CropperBackgroundWrapperComponent,
 	CropperWrapperComponent,
-	MoveImageSettings,
-	ScaleImageSettings,
-	RotateImageSettings,
 	StencilComponent,
+	CropperBackgroundComponent,
+	ArbitraryProps,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
-import { useMoveImageOptions } from '../hooks/useMoveImageOptions';
-import { useScaleImageOptions } from '../hooks/useScaleImageOptions';
 import {
 	CropperStateHook,
 	CropperStateSettings,
@@ -31,7 +28,6 @@ import {
 } from '../hooks/useCropperState';
 import { mergeRefs } from '../service/react';
 import { useUpdateEffect } from '../hooks/useUpdateEffect';
-import { useRotateImageOptions } from '../hooks/useRotateImageOptions';
 import { useStateWithCallback } from '../hooks/useStateWithCallback';
 import { AbstractCropperStateCallbacks, AbstractCropperStateParameters } from '../hooks/useAbstractCropperState';
 import { createCropper } from '../service/cropper';
@@ -52,6 +48,7 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 	refresh: () => void;
 	setCoordinates: CropperStateHook['setCoordinates'];
 	setState: CropperStateHook['setState'];
+	setImage: (image: CropperImage) => void;
 	flipImage: CropperStateHook['flipImage'];
 	zoomImage: CropperStateHook['zoomImage'];
 	rotateImage: CropperStateHook['rotateImage'];
@@ -77,12 +74,14 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	extends AbstractCropperStateParameters<Settings>,
 		AbstractCropperStateCallbacks<AbstractCropperRef<Settings>> {
 	src?: string | null;
+	backgroundComponent?: CropperBackgroundComponent;
+	backgroundProps?: ArbitraryProps;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
-	backgroundWrapperProps?: Record<string | number | symbol, unknown>;
+	backgroundWrapperProps?: ArbitraryProps;
 	wrapperComponent?: CropperWrapperComponent;
-	wrapperProps?: Record<string | number | symbol, unknown>;
+	wrapperProps?: ArbitraryProps;
 	stencilComponent?: StencilComponent;
-	stencilProps?: Record<string | number | symbol, unknown>;
+	stencilProps?: ArbitraryProps;
 	className?: string;
 	imageClassName?: string;
 	boundaryClassName?: string;
@@ -90,7 +89,6 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	checkOrientation?: boolean;
 	canvas?: boolean;
 	crossOrigin?: 'anonymous' | 'use-credentials';
-
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm | string;
 	stretchAlgorithm?: StretchAlgorithm;
 	style?: CSSProperties;
@@ -112,8 +110,11 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 	const {
 		src,
 		stencilComponent = RectangleStencil,
+		stencilProps = {},
 		wrapperComponent = CropperWrapper,
 		wrapperProps = {},
+		backgroundComponent = CropperBackgroundImage,
+		backgroundProps = {},
 		backgroundWrapperComponent = CropperBackgroundWrapper,
 		backgroundWrapperProps = {},
 		imageClassName,
@@ -126,7 +127,6 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 		checkOrientation = true,
 		canvas = true,
 		style,
-		stencilProps = {},
 		onReady,
 		onError,
 		unloadTime = 500,
@@ -135,7 +135,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 	} = props;
 
 	const stencilRef = useRef<StencilComponent>(null);
-	const imageRef = useRef<HTMLImageElement>(null);
+	const imageRef = useRef<HTMLImageElement | HTMLCanvasElement>(null);
 	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 	const canvasRef = useRef<CropperCanvasMethods>(null);
 	const cropperRef = useRef<AbstractCropperRef<Settings>>(null);
@@ -260,11 +260,13 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 
 	const BackgroundWrapperComponent = backgroundWrapperComponent;
 
+	const BackgroundComponent = backgroundComponent;
+
 	return (
 		<WrapperComponent
 			{...wrapperProps}
 			className={cn('react-advanced-cropper', className)}
-			loaded={loaded && currentImage === image}
+			loaded={loaded}
 			cropper={cropper}
 			loading={loading}
 			style={style}
@@ -283,7 +285,8 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 				>
 					<div className={cn('react-advanced-cropper__background', backgroundClassName)}>
 						{cropper.state && (
-							<CropperBackgroundImage
+							<BackgroundComponent
+								{...backgroundProps}
 								ref={imageRef}
 								crossOrigin={crossOrigin}
 								image={currentImage}

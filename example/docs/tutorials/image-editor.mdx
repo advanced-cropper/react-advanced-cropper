@@ -2,12 +2,417 @@
 title: Image Editor
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {ImageEditor} from '../../src/components/tutorials/ImageEditor/ImageEditor.tsx'
+
 ## The Idea
 
 This tutorial is not designated to describe the creating image editor from the scratch.
 All components already created and provided here. This tutorial is about the creating basic
 image editor functionality and integration one with the cropper.
 
-:::note
-This section has not been documented yet. Stay up to date.
-:::
+<ImageEditor/>
+
+## Template
+
+<Tabs>
+<TabItem value="tsx" label="TSX" default>
+
+The used components are available in [the documentation repository](https://github.com/Norserium/react-advanced-cropper/tree/master/example/src/components/tutorials/ImageEditor/).
+
+```tsx
+import React, { useState } from 'react';
+import { Navigation } from './components/Navigation';
+import { Slider } from './components/Slider';
+import './ImageEditor.scss';
+
+export const ImageEditor = () => {
+	const [mode, setMode] = useState('crop');
+	const [adjustments, setAdjustments] = useState({
+		brightness: 0,
+		hue: 0,
+		saturation: 0,
+		contrast: 0,
+	});
+
+	const onChangeValue = (value: number) => {
+		if (mode in adjustments) {
+			setAdjustments((previousValue) => ({
+				...previousValue,
+				[mode]: value,
+			}));
+		}
+	};
+
+	return (
+		<div className={'image-editor'}>
+			<div className="image-editor__cropper">
+				{mode !== 'crop' && (
+					<Slider className="image-editor__slider" value={adjustments[mode]} onChange={onChangeValue} />
+				)}
+			</div>
+			<Navigation mode={mode} onChange={setMode} />
+		</div>
+	);
+};
+```
+
+</TabItem>
+<TabItem value="styles" label="Styles">
+
+```scss
+.image-editor {
+	color: #61DAFB;
+	border: solid 1px #2b2a30;
+	&__cropper {
+		background: #0f0e13;
+		height: 500px;
+		max-height: 100vh;
+		position: relative;
+	}
+	&__slider {
+		width: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		bottom: 20px;
+		position: absolute;
+	}
+}
+```
+
+</TabItem>
+</Tabs>
+
+## Integrate the cropper
+
+Let's add the cropper to the template above. It's trivial, but we need to block the cropper if an user
+choice any other mode than `crop`.
+
+
+<Tabs>
+<TabItem value="tsx" label="TSX" default>
+
+The used components are available in [the documentation repository](https://github.com/Norserium/react-advanced-cropper/tree/master/example/src/components/tutorials/ImageEditor/).
+
+```tsx
+import React, { useState } from 'react';
+import { Cropper } from 'react-advanced-cropper';
+import { Navigation } from './components/Navigation';
+import { Slider } from './components/Slider';
+import './ImageEditor.scss';
+
+export const ImageEditor = () => {
+	const [src, setSrc] = useState(
+		'https://images.pexels.com/photos/12051260/pexels-photo-12051260.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
+	);
+	const [mode, setMode] = useState('crop');
+	const [adjustments, setAdjustments] = useState({
+		brightness: 0,
+		hue: 0,
+		saturation: 0,
+		contrast: 0,
+	});
+
+	const onChangeValue = (value: number) => {
+		if (mode in adjustments) {
+			setAdjustments((previousValue) => ({
+				...previousValue,
+				[mode]: value,
+			}));
+		}
+	};
+
+	const onUpload = (blob: string) => {
+		setAdjustments({
+			brightness: 0,
+			hue: 0,
+			saturation: 0,
+			contrast: 0,
+		});
+		setMode('crop');
+		setSrc(blob);
+	};
+
+	const onDownload = () => {
+		if (cropperRef.current) {
+			const newTab = window.open();
+			if (newTab) {
+				newTab.document.body.innerHTML = `<img src="${cropperRef.current.getCanvas()?.toDataURL()}"/>`;
+			}
+		}
+	};
+
+	const cropperEnabled = mode === 'crop';
+
+	return (
+		<div className={'image-editor'}>
+			<div className="image-editor__cropper">
+				<Cropper
+					src={src}
+					stencilProps={{
+						movable: cropperEnabled,
+						resizable: cropperEnabled,
+						lines: cropperEnabled,
+						handlers: cropperEnabled,
+						overlayClassName: cn(
+							'image-editor__cropper-overlay',
+							!cropperEnabled && 'image-editor__cropper-overlay--faded',
+						),
+					}}
+					backgroundWrapperProps={{
+						scaleImage: cropperEnabled,
+						moveImage: cropperEnabled,
+					}}
+				/>
+				{mode !== 'crop' && (
+					<Slider className="image-editor__slider" value={adjustments[mode]} onChange={onChangeValue} />
+				)}
+			</div>
+			<Navigation mode={mode} onChange={setMode} onUpload={onUpload} onDownload={onDownload} />
+		</div>
+	);
+};
+```
+
+</TabItem>
+<TabItem value="styles" label="Styles">
+
+```scss
+.image-editor {
+	color: #61DAFB;
+	border: solid 1px #2b2a30;
+	&__cropper {
+		background: #0f0e13;
+		height: 500px;
+		max-height: 100vh;
+		position: relative;
+	}
+	&__slider {
+		width: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+		bottom: 20px;
+		position: absolute;
+	}
+	&__cropper-overlay {
+		transition: 0.5s;
+		&--faded {
+			color: rgba(black, 0.9);
+		}
+	}
+}
+```
+
+</TabItem>
+</Tabs>
+
+But how we will adjust an uploaded image? That's a tough question.
+
+1. We can change `src` and pass to it the Blob or DataURL of changed images.
+The problem here that cropper will reset all of our changes. The performance of this solution will be terrible alike.
+
+2. We can replace `src` by using of `setImage` method. If you use this method to change the actual cropper image it won't reset the changes, so it solves one of the problems. But performance will be still awful.
+
+3. The right way is the replacing the default background component by a custom one.
+
+### Custom background component
+
+The background component is the special component that uses by the cropper to:
+- display the current image
+- retrieve the ref to content (`HTMLImageElement` or `HTMLCanvasElement`) to pass it to its own canvas and crop it
+
+The default background component is `CropperBackgroundImage`. It's pretty straightforward.
+
+
+<Tabs>
+<TabItem value="tsx" label="TSX" default>
+
+
+```tsx
+import React, { forwardRef, Event } from 'react';
+import cn from 'classnames';
+import {
+	CropperTransitions,
+	CropperImage,
+	CropperState,
+	getBackgroundStyle
+} from 'react-advanced-cropper'
+
+interface Props {
+	className?: string;
+	image: CropperImage | null;
+	state: CropperState | null;
+	transitions?: CropperTransitions;
+	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
+}
+
+export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
+	({ className, image, state, crossOrigin, transitions}: Props, ref) => {
+		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
+
+		const src = image ? image.src : undefined;
+
+		return src ? (
+			<img
+				key={src}
+				ref={ref}
+				className={cn('react-cropper-background-image', className)}
+				src={src}
+				crossOrigin={crossOrigin === true ? 'anonymous' : crossOrigin || undefined}
+				style={style}
+				onMouseDown={(e: Event) => e.preventDefault()}
+			/>
+		) : null;
+	},
+);
+
+CropperBackgroundImage.displayName = 'CropperBackgroundImage';
+```
+
+</TabItem>
+<TabItem value="styles" label="Styles">
+
+```scss
+.react-cropper-background-image {
+	user-select: none;
+	position: absolute;
+	transform-origin: center;
+	pointer-events: none;
+	// Workaround to prevent bugs at the websites with max-width
+	// rule applied to img (Vuepress for example)
+	max-width: none !important;
+}
+```
+
+</TabItem>
+</Tabs>
+
+Like we said before, we can forward ref to either `HTMLImageElement` or `HTMLCanvasElement` elements. The last one can be used to draw image with all adjustments
+that we made. It's performant and very flexible way.
+
+Let's do it.
+
+<Tabs>
+<TabItem value="tsx" label="TSX" default>
+
+
+```tsx
+import React, { forwardRef, useEffect, useRef } from 'react';
+import cn from 'classnames';
+import { getBackgroundStyle, mergeRefs, CropperTransitions, CropperImage, CropperState } from 'react-advanced-cropper';
+
+import './AdjustableImage.scss';
+
+interface Props {
+	className?: string;
+	image: CropperImage | null;
+	state: CropperState | null;
+	transitions?: CropperTransitions;
+	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
+	brightness?: number;
+	saturation?: number;
+	hue?: number;
+	contrast?: number;
+}
+
+export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
+	(
+		{
+			className,
+			image,
+			state,
+			crossOrigin,
+			transitions,
+			brightness = 0,
+			saturation = 0,
+			hue = 0,
+			contrast = 0,
+		}: Props,
+		ref,
+	) => {
+		const imageRef = useRef<HTMLImageElement>(null);
+
+		const canvasRef = useRef<HTMLCanvasElement>(null);
+
+		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
+
+		const src = image ? image.src : undefined;
+
+		const drawImage = () => {
+			const image = imageRef.current;
+			const canvas = canvasRef.current;
+			if (canvas && image && image.complete) {
+				const ctx = canvas.getContext('2d');
+				canvas.width = image.naturalWidth;
+				canvas.height = image.naturalHeight;
+
+				if (ctx) {
+					ctx.filter = [
+						`brightness(${100 + brightness * 100}%)`,
+						`contrast(${100 + contrast * 100}%)`,
+						`saturate(${100 + saturation * 100}%)`,
+						`hue-rotate(${hue * 360}deg)`,
+					].join(' ');
+
+					ctx.drawImage(image, 0, 0, image.naturalWidth, image.naturalHeight);
+				}
+			}
+		};
+
+		useEffect(() => {
+			drawImage();
+		}, [brightness, saturation, hue, contrast]);
+
+		return (
+			<>
+				<canvas
+					ref={mergeRefs([ref, canvasRef])}
+					className={cn('adjustable-image-canvas', className)}
+					style={style}
+				/>
+				{src ? (
+					<img
+						key={src}
+						ref={imageRef}
+						className={'adjustable-image-source'}
+						src={src}
+						crossOrigin={crossOrigin === true ? 'anonymous' : crossOrigin || undefined}
+						onLoad={drawImage}
+					/>
+				) : null}
+			</>
+		);
+	},
+);
+
+AdjustableImage.displayName = 'AdjustableImage';
+```
+
+</TabItem>
+<TabItem value="styles" label="Styles">
+
+```scss
+.adjustable-image-source {
+	display: none;
+}
+```
+
+</TabItem>
+</Tabs>
+
+Let's use the created background component in our image editor:
+
+
+```tsx
+<Cropper
+	...
+	backgroundComponent={AdjustableImage}
+	backgroundProps={adjustments}
+/>
+```
+
+After that you will get the same image editor like you see in the start of tutorial. The full source code of the image editor is available in the following sandbox.
+
+
+

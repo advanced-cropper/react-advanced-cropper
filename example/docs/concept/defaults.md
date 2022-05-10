@@ -26,12 +26,12 @@ It's pretty complicated task, however the setting of this limitations can custom
 rang.
 
 Hopefully, you can do it only when you need to do it, because this library provides the set of flexible default
-functions. They all are exported, but the recommended way to use them are the `withDefaults` / `defaultState` functions.
+functions. They all are exported, but the recommended way to use them is the `createDefaultSettings` function.
 
 
 ###  Default settings
 
-The `withDefaults` function accepts the only one argument: the object. It can be empty or contain fields described above (that will be redefine defaults if you define them) and
+The `createDefaultSettings` function accepts the only one argument: the object. It can be empty or contain fields described above (that will be redefine defaults if you define them) and
 new optional properties:
 ```ts
 {
@@ -43,15 +43,11 @@ new optional properties:
 	defaultPosition?: DefaultPosition;
 	defaultVisibleArea: DefaultVisibleArea;
 	stencilSize?: StencilSize;
-	imageRestriction?: 'fill-area' | 'fit-area' | 'stencil' | 'none';
+	imageRestriction?: ImageRestriction;
 }
 ```
 
-Conceptually, this function is used to extend existing settings. If you have no your custom settings you can use `defaultSettings`
-function. It is synonym to `withDefaults({})`.
-
-
-The using this functions let you forget about the defining `settings` completely.
+The using of this function let you forget about the defining `settings` completely.
 ```ts
 const state = createState({
 	boundaries: {
@@ -62,7 +58,7 @@ const state = createState({
 		width: 50,
 		height: 100,
 	},
-	settings: defaultSettings()
+	settings: createDefaultSettings()
 })
 ```
 

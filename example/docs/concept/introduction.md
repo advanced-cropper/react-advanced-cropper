@@ -25,11 +25,11 @@ Generally, it can be an arbitrary functions, but it's recommended to describe th
 function stateModifier(state: CropperState, settings: CropperSettings, ...otherArguments): CropperState
 ```
 
-What's **[the settings](/docs/concept/settings)**? This is the another concept that you should know to use this library.
+It accept state, settings and perhaps some arguments and return the updated state. What's **[the settings](/docs/concept/settings)**? This is the another concept that you should know to use this library.
 
 ### Settings
 
-**The settings** is a bunch of parameters that used by the state modifiers and different helpers. Not random one.
+**The settings** is a bunch of parameters that used by the state modifiers and the different helpers. Not random one.
 It should be the minimal set of parameters that can be used to make the most operations on the cropper state.
 
 The developer of this library summarized them into `CoreSettings`. It contains the following parameters:
@@ -64,7 +64,7 @@ Will the parameters be used by different modifiers? Are you not able to get acce
 ### Default Settings
 
 The defining of all settings is a tedious task. To make it easier there is the `createDefaultSettings` function that give
-you possibility to create the default settings in a moment.
+you the possibility to create the default settings in a moment.
 
 It returns `DefaultSettings`, the extension of `CoreSettings` that has the following additional parameters:
 

@@ -1,0 +1,105 @@
+@import '../../../../css/constants';
+
+.image-editor-slider {
+	width: 100%;
+	height: 20px;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	justify-content: center;
+	border-radius: 10px;
+	cursor: pointer;
+	max-width: 380px;
+	background: rgba(#1B1A21, 0.4);
+	padding-left: 16px;
+	padding-right: 16px;
+
+	&__wrapper {
+		display: flex;
+		align-items: center;
+		max-width: 400px;
+		width: 100%;
+	}
+
+	&__line {
+		background: rgba(white, 0.5);
+		height: 2px;
+		width: 100%;
+		display: flex;
+		position: relative;
+		align-items: center;
+	}
+
+	&__fill {
+		background: white;
+		align-self: stretch;
+		flex-basis: auto;
+		flex-direction: column;
+		flex-shrink: 0;
+		position: absolute;
+		height: 2px;
+	}
+
+	&__dot {
+		height: 8px;
+		width: 8px;
+		border-radius: 50%;
+		background: white;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	&__value {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		transition-duration: 0.5s;
+		transition-property: font-size, opacity;
+		color: white;
+		font-size: 10px;
+		font-weight: 500;
+		top: -20px;
+		vertical-align: bottom;
+		transform: translate(-50%);
+	}
+
+	&__handler {
+		width: 2px;
+		height: 8px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: absolute;
+		transition-duration: 0.2s;
+		transition-property: height;
+		background-color: white;
+
+		&:hover {
+			height: 10px;
+		}
+		&--focus {
+			height: 10px;
+		}
+		&--hidden {
+			height: 4px;
+		}
+	}
+
+	&__inner-circle {
+		width: 15px;
+		height: 15px;
+		border-radius: 50%;
+		background-color: $theme-color;
+		transform: scale(1);
+		transition-duration: 0.1s;
+		transition-property: transform;
+		box-shadow: rgba($theme-color, 0.2) 0px 0px 7px, rgba($theme-color, 0.15) 0px 1px 3px 1px;
+
+		&--focus {
+			transform: scale(1.2);
+		}
+	}
+}

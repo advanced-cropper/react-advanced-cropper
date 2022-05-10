@@ -27,7 +27,7 @@ import React from 'react';
 
 export const CircleStencil = () => {
 	return (
-		<div class="circle-stencil"></div>
+		<div className="circle-stencil"></div>
 	)
 }
 ```
@@ -67,12 +67,12 @@ That's how it can be done:
 
 ```tsx
 import React from 'react';
-import { getStencilCoordinates, BasicStencilProps } from 'react-advanced-cropper';
+import { StencilProps } from 'react-advanced-cropper';
 
-export const CircleStencil = ({ cropper }: BasicStencilProps) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	return (
-		<div class="circle-stencil"></div>
+		<div className="circle-stencil"></div>
 	)
 }
 ```
@@ -83,30 +83,28 @@ Transitions can be received in the similar way:
 
 ```tsx
 import React from 'react';
-import { getStencilCoordinates, BasicStencilProps } from 'react-advanced-cropper';
+import { StencilProps } from 'react-advanced-cropper';
 
-export const CircleStencil = ({ cropper }: BasicStencilProps) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 	return (
-		<div class="circle-stencil"></div>
+		<div className="circle-stencil"></div>
 	)
 }
 ```
 ## Applying the stencil coordinates
 
-You can compute the style himself, but it's recommended to use `StencilWrapper` component, that gives
-also the artificial transitions with theoretically better performance.
+You can compute the style himself, but it's recommended to use `StencilWrapper` component.
 
 ```tsx
 import React from 'react';
 import {
-	getStencilCoordinates,
-	BasicStencilProps,
+	StencilProps,
 	StencilWrapper
 } from 'react-advanced-cropper';
 
-export const CircleStencil = ({ cropper }: BasicStencilProps) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 	return (
@@ -131,13 +129,12 @@ Therefore the functional component should be wrapped in `forwardRef` method.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	getStencilCoordinates,
 	StencilRef,
-	BasicStencilProps,
+	StencilProps,
 	StencilWrapper
 } from 'react-advanced-cropper';
 
-export const CircleStencil = forwardRef<StencilRef, BasicStencilProps> (({ cropper }: BasicStencilProps, ref) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps> (({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
@@ -179,14 +176,13 @@ techniques, but they can produce some glitches during the transitions.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	getStencilCoordinates,
 	StencilRef,
-	BasicStencilProps,
+	StencilProps,
 	StencilWrapper,
 	StencilOverlay
 } from 'react-advanced-cropper';
 
-export const CircleStencil = forwardRef<StencilRef, BasicStencilProps> (({ cropper }: BasicStencilProps, ref) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps> (({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
@@ -227,16 +223,16 @@ Let's add the handler to resize the stencil:
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	getStencilCoordinates,
 	StencilRef,
-	BasicStencilProps,
-	StencilWrapper
+	StencilProps,
+	StencilWrapper,
+  StencilOverlay
 } from 'react-advanced-cropper';
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = forwardRef<StencilRef, BasicStencilProps> (
-	({ cropper }: BasicStencilProps, ref) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps> (
+	({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
@@ -295,16 +291,16 @@ You may handle drag events himself, but this library provides two very useful co
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	getStencilCoordinates,
 	StencilRef,
-	BasicStencilProps,
-	StencilWrapper
+	StencilProps,
+	StencilWrapper,
+  StencilOverlay
 } from 'react-advanced-cropper';
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(
-	({ cropper }: BasicStencilProps, ref) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps>(
+	({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
@@ -355,7 +351,7 @@ We should transform it to resize directions:
 
 The draft of `onResize` method is represented below
 ```tsx
-const onResizeHandler = (event: DragEvent) => {
+const onResizeHandler = (shift: MoveDirections) => {
 	cropper.resizeCoordinates(
 		{
 			left: shift.left,
@@ -394,16 +390,15 @@ Fortunately, they are trivial. We just pass the default cropper methods to them.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	getStencilCoordinates,
 	StencilRef,
-	BasicStencilProps,
+	StencilProps,
 	StencilWrapper
 } from 'react-advanced-cropper';
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(
-	({ cropper }: BasicStencilProps, ref) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps>(
+	({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 

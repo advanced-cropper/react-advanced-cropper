@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { forwardRef } from 'react';
 import cn from 'classnames';
 import { CropperTransitions, CropperImage, CropperState } from 'advanced-cropper/types';
 import { getBackgroundStyle } from 'advanced-cropper/image';
@@ -10,12 +10,12 @@ interface Props {
 	className?: string;
 	image: CropperImage | null;
 	state: CropperState | null;
-	transitions?: CropperTransitions | null;
+	transitions?: CropperTransitions;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 }
 
 export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
-	({ className, image, state, crossOrigin, transitions = null }: Props, ref) => {
+	({ className, image, state, crossOrigin, transitions}: Props, ref) => {
 		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
 
 		const src = image ? image.src : undefined;

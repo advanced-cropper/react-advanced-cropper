@@ -1,4 +1,4 @@
-import { ComponentType, CSSProperties, ReactNode } from 'react';
+import { ComponentType, CSSProperties, ReactNode, Ref } from 'react';
 import {
 	CropperImage,
 	CropperTransitions,
@@ -8,6 +8,7 @@ import {
 	CoreSettings,
 	ModifiersSettings,
 	BivarianceConstraint,
+	CropperState,
 } from 'advanced-cropper/types';
 import { DefaultSettings } from 'advanced-cropper/defaults';
 import { CropperStateHook, CropperStateSettings } from './hooks/useCropperState';
@@ -19,6 +20,7 @@ import {
 	AbstractCropperSettingsProp,
 } from './components/AbstractCropper';
 import { FixedCropperSettings } from './components/FixedCropper';
+import { CropperRef } from './components/Cropper';
 
 export type StencilComponent = any;
 
@@ -29,6 +31,17 @@ export type CropperWrapperComponent = ComponentType<{
 	className?: string;
 	style?: CSSProperties;
 }>;
+
+export interface CropperBackgroundProps {
+	className?: string;
+	ref: Ref<HTMLImageElement | HTMLCanvasElement>;
+	image: CropperImage | null;
+	state: CropperState | null;
+	transitions?: CropperTransitions;
+	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
+}
+
+export type CropperBackgroundComponent = any;
 
 export type CropperBackgroundWrapperComponent = ComponentType<{
 	cropper: any;
@@ -85,3 +98,10 @@ export type Nullable<T> = T | null | undefined;
 export interface StencilRef {
 	aspectRatio: () => AspectRatio;
 }
+
+export interface StencilProps<Cropper = CropperRef> {
+	cropper: Cropper;
+	image: CropperImage | null;
+}
+
+export type ArbitraryProps = Record<string, unknown>;

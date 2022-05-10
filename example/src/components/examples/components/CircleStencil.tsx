@@ -2,7 +2,7 @@ import React, { useImperativeHandle, forwardRef } from 'react';
 import { MoveDirections } from 'advanced-cropper/types';
 import {
 	StencilRef,
-	BasicStencilProps,
+	StencilProps,
 	StencilWrapper,
 	StencilOverlay,
 	DraggableElement,
@@ -10,7 +10,7 @@ import {
 } from 'react-advanced-cropper';
 import './CircleStencil.scss';
 
-export const CircleStencil = forwardRef<StencilRef, BasicStencilProps>(({ cropper }: BasicStencilProps, ref) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 

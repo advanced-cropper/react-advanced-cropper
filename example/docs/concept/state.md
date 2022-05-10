@@ -94,21 +94,3 @@ interface Transforms {
 }
 ```
 They can include flip (horizontal , vertical) and rotate.
-
-## State Modifiers
-
-The state is useless itself. It just a bunch of data. To make it useful there are plenty of different
-[modifiers](/docs/concept/modifiers):
-- transform image
-- flip image
-- rotate image
-- set boundary
-- set coordinates
-- set visible area
-- move coordinates
-- resize coordinates
-
-They are [pure functions](https://en.wikipedia.org/wiki/Pure_function) that receives the `state` and the cropper `settings` and
-return the new `state` value.
-
-Also, there are two auxiliary functions: [`createState`](/docs/concept/modifiers/#createstate) and [`copyState`](/docs/concept/modifiers/#copystate) that in some sense similar to modifiers.

@@ -17,6 +17,8 @@ export function splitAbstractCropperProps<Props extends object>(props: Props) {
 		'imageClassName',
 		'boundaryClassName',
 		'backgroundClassName',
+		'backgroundComponent',
+		'backgroundProps',
 		'checkOrientation',
 		'canvas',
 		'crossOrigin',

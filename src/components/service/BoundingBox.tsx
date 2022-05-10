@@ -10,7 +10,7 @@ import {
 	ResizeDirections,
 	MoveDirections,
 } from 'advanced-cropper/types';
-import { getDirectionNames, isCardinalDirection } from 'advanced-cropper/utils';
+import { getDirectionNames, isCardinalDirection, isObject } from 'advanced-cropper/utils';
 import { getTransitionStyle } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
@@ -40,10 +40,10 @@ interface Props {
 	style?: CSSProperties;
 	className?: string;
 	handlerComponent?: HandlerComponent;
-	handlers?: Partial<Record<OrdinalDirection, boolean>>;
+	handlers?: boolean | Partial<Record<OrdinalDirection, boolean>>;
 	handlerClassNames?: HandlersClassNames;
 	handlerWrapperClassNames?: HandlersClassNames;
-	lines?: Partial<Record<CardinalDirection, boolean>>;
+	lines?: boolean | Partial<Record<CardinalDirection, boolean>>;
 	lineComponent?: LineComponent;
 	lineClassNames?: LinesClassNames;
 	lineWrapperClassNames?: LinesClassNames;
@@ -143,7 +143,7 @@ export const BoundingBox = ({
 	const lineNodes = useMemo(() => {
 		const result: LineNode[] = [];
 		points.forEach((point) => {
-			if (isCardinalDirection(point.name) && point.name in lines) {
+			if (isCardinalDirection(point.name) && (isObject(lines) ? lines[point.name] : lines)) {
 				result.push({
 					name: point.name,
 					component: lineComponent,
@@ -170,7 +170,7 @@ export const BoundingBox = ({
 	const handlerNodes = useMemo(() => {
 		const result: HandlerNode[] = [];
 		points.forEach((point) => {
-			if (handlers[point.name]) {
+			if (isObject(handlers) ? handlers[point.name] : handlers) {
 				result.push({
 					name: point.name,
 					component: handlerComponent,
