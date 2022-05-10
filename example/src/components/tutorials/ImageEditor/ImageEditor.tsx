@@ -1,9 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import cn from 'classnames';
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 import { Navigation } from './components/Navigation';
 import { Slider } from './components/Slider';
 import { AdjustableImage } from './components/AdjustableImage';
+import { Button } from './components/Button';
+import { ResetIcon } from './icons/ResetIcon';
 import './ImageEditor.scss';
 
 export const ImageEditor = () => {
@@ -31,13 +33,17 @@ export const ImageEditor = () => {
 		}
 	};
 
-	const onUpload = (blob: string) => {
+	const onReset = () => {
 		setAdjustments({
 			brightness: 0,
 			hue: 0,
 			saturation: 0,
 			contrast: 0,
 		});
+	};
+
+	const onUpload = (blob: string) => {
+		onReset();
 		setMode('crop');
 		setSrc(blob);
 	};
@@ -50,6 +56,8 @@ export const ImageEditor = () => {
 			}
 		}
 	};
+
+	const changed = Object.values(adjustments).some((el) => Math.floor(el * 100));
 
 	const cropperEnabled = mode === 'crop';
 
@@ -79,6 +87,12 @@ export const ImageEditor = () => {
 				{mode !== 'crop' && (
 					<Slider className="image-editor__slider" value={adjustments[mode]} onChange={onChangeValue} />
 				)}
+				<Button
+					className={cn('image-editor__reset-button', !changed && 'image-editor__reset-button--hidden')}
+					onClick={onReset}
+				>
+					<ResetIcon />
+				</Button>
 			</div>
 			<Navigation mode={mode} onChange={setMode} onUpload={onUpload} onDownload={onDownload} />
 		</div>

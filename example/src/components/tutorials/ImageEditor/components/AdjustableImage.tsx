@@ -4,11 +4,15 @@ import { getBackgroundStyle, mergeRefs, CropperTransitions, CropperImage, Croppe
 
 import './AdjustableImage.scss';
 
+interface DesiredCropperRef {
+	getState: () => CropperState;
+	getTransitions: () => CropperTransitions;
+	getImage: () => CropperImage;
+}
+
 interface Props {
 	className?: string;
-	image: CropperImage | null;
-	state: CropperState | null;
-	transitions?: CropperTransitions;
+	cropper: DesiredCropperRef;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 	brightness?: number;
 	saturation?: number;
@@ -17,20 +21,11 @@ interface Props {
 }
 
 export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
-	(
-		{
-			className,
-			image,
-			state,
-			crossOrigin,
-			transitions,
-			brightness = 0,
-			saturation = 0,
-			hue = 0,
-			contrast = 0,
-		}: Props,
-		ref,
-	) => {
+	({ className, cropper, crossOrigin, brightness = 0, saturation = 0, hue = 0, contrast = 0 }: Props, ref) => {
+		const state = cropper.getState();
+		const transitions = cropper.getTransitions();
+		const image = cropper.getImage();
+
 		const imageRef = useRef<HTMLImageElement>(null);
 
 		const canvasRef = useRef<HTMLCanvasElement>(null);

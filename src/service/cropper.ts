@@ -12,6 +12,7 @@ export function splitAbstractCropperProps<Props extends object>(props: Props) {
 		'wrapperComponent',
 		'wrapperProps',
 		'stencilComponent',
+		'stencilConstraints',
 		'stencilProps',
 		'className',
 		'imageClassName',

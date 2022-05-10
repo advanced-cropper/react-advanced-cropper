@@ -65,6 +65,13 @@ export const Navigation: FC<Props> = ({ className, onChange, onUpload, onDownloa
 				</Button>
 				<Button
 					className={'image-editor-navigation__button'}
+					active={mode === 'saturation'}
+					onClick={setMode('saturation')}
+				>
+					<SaturationIcon />
+				</Button>
+				<Button
+					className={'image-editor-navigation__button'}
 					active={mode === 'brightness'}
 					onClick={setMode('brightness')}
 				>
@@ -76,13 +83,6 @@ export const Navigation: FC<Props> = ({ className, onChange, onUpload, onDownloa
 					onClick={setMode('contrast')}
 				>
 					<ContrastIcon />
-				</Button>
-				<Button
-					className={'image-editor-navigation__button'}
-					active={mode === 'saturation'}
-					onClick={setMode('saturation')}
-				>
-					<SaturationIcon />
 				</Button>
 				<Button className={'image-editor-navigation__button'} active={mode === 'hue'} onClick={setMode('hue')}>
 					<HueIcon />

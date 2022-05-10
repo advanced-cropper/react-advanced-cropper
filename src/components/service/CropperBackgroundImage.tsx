@@ -6,16 +6,24 @@ import { preventDefault } from '../../service/events';
 
 import './CropperBackgroundImage.scss';
 
+interface DesiredCropperRef {
+	getState: () => CropperState;
+	getTransitions: () => CropperTransitions;
+	getImage: () => CropperImage;
+}
+
 interface Props {
 	className?: string;
-	image: CropperImage | null;
-	state: CropperState | null;
-	transitions?: CropperTransitions;
+	cropper: DesiredCropperRef;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 }
 
 export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
-	({ className, image, state, crossOrigin, transitions}: Props, ref) => {
+	({ className, cropper, crossOrigin }: Props, ref) => {
+		const state = cropper.getState();
+		const transitions = cropper.getTransitions();
+		const image = cropper.getImage();
+
 		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
 
 		const src = image ? image.src : undefined;

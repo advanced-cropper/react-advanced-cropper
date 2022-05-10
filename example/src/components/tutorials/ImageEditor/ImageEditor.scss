@@ -27,4 +27,17 @@
 		left: -100%;
 		position: absolute;
 	}
+	&__reset-button {
+		position: absolute;
+		right: 20px;
+		top: 20px;
+		background: rgba(white, 0.1);
+		&:hover {
+			fill: $theme-color;
+			background: rgba(white, 0.2);
+		}
+		&--hidden {
+			opacity: 0;
+		}
+	}
 }

@@ -1,4 +1,4 @@
-import React, { FC, forwardRef, useRef } from 'react';
+import React, { FC, forwardRef, useEffect, useRef } from 'react';
 import cn from 'classnames';
 import AdvancedCropper, {
 	FixedCropper as InternalCropper,
@@ -29,10 +29,14 @@ export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperRef, F
 
 		const stencilSize = ({ boundary }) => {
 			return {
-				width: Math.min(boundary.height, boundary.width) - 80,
-				height: Math.min(boundary.height, boundary.width) - 80,
+				width: boundary.width - 80,
+				height: boundary.height - 80,
 			};
 		};
+
+		useEffect(() => {
+			cropperRef.current?.refresh();
+		}, [stencilType]);
 
 		return (
 			<InternalCropper

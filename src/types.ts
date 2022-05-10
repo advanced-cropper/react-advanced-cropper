@@ -74,6 +74,13 @@ export interface ScaleImageSettings {
 	adjustStencil?: boolean;
 }
 
+export type StencilOptions = Record<string, unknown>;
+
+export type StencilConstraints<Settings extends {}> = (
+	settings: Settings,
+	stencilOptions: StencilOptions,
+) => Partial<Settings>;
+
 export interface RotateImageSettings {
 	touch?: boolean;
 }

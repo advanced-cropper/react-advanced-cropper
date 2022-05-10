@@ -5,6 +5,7 @@ import {
 	aspectRatio,
 	fixedStencil,
 	StencilSize,
+	fixedStencilConstraints,
 } from 'advanced-cropper/extensions/stencilSize';
 import { withDefaultSizeRestrictions } from 'advanced-cropper/defaults';
 import { CustomCropperProps, CustomCropperRef, CustomCropperSettings } from '../types';
@@ -33,6 +34,7 @@ const FixedCropperComponent = <Settings extends FixedCropperSettings = FixedCrop
 		<AbstractCropper<FixedCropperSettings>
 			ref={ref}
 			postProcess={fixedStencil}
+			stencilConstraints={fixedStencilConstraints}
 			{...parameters}
 			settings={{
 				defaultSize: defaultSize,

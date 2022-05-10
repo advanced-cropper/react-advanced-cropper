@@ -1,9 +1,8 @@
-import React, { useImperativeHandle, useRef, CSSProperties, Ref } from 'react';
+import React, { useImperativeHandle, useRef, CSSProperties, Ref, useState } from 'react';
 import cn from 'classnames';
 import { DrawOptions } from 'advanced-cropper/canvas';
-import { calculateAspectRatio } from 'advanced-cropper/service';
 import { StretchAlgorithm } from 'advanced-cropper/html';
-import { DefaultSettings } from 'advanced-cropper/defaults';
+import { DefaultSettings, defaultStencilConstraints } from 'advanced-cropper/defaults';
 import {
 	BoundarySizeAlgorithm,
 	CropperImage,
@@ -17,6 +16,8 @@ import {
 	StencilComponent,
 	CropperBackgroundComponent,
 	ArbitraryProps,
+	StencilConstraints,
+	StencilOptions,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
@@ -31,6 +32,7 @@ import { useUpdateEffect } from '../hooks/useUpdateEffect';
 import { useStateWithCallback } from '../hooks/useStateWithCallback';
 import { AbstractCropperStateCallbacks, AbstractCropperStateParameters } from '../hooks/useAbstractCropperState';
 import { createCropper } from '../service/cropper';
+import { useStencil } from '../hooks/useStencil';
 import { StretchableBoundary, StretchableBoundaryMethods } from './service/StretchableBoundary';
 import { CropperWrapper } from './service/CropperWrapper';
 import { CropperBackgroundImage } from './service/CropperBackgroundImage';
@@ -49,9 +51,12 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 	setCoordinates: CropperStateHook['setCoordinates'];
 	setState: CropperStateHook['setState'];
 	setImage: (image: CropperImage) => void;
+	setStencilOptions: (options: StencilOptions) => void;
+	getStencilOptions: () => StencilOptions;
 	flipImage: CropperStateHook['flipImage'];
 	zoomImage: CropperStateHook['zoomImage'];
 	rotateImage: CropperStateHook['rotateImage'];
+	reconcileState: CropperStateHook['reconcileState'];
 	moveImage: CropperStateHook['moveImage'];
 	moveCoordinates: CropperStateHook['moveCoordinates'];
 	moveCoordinatesEnd: CropperStateHook['moveCoordinatesEnd'];
@@ -82,6 +87,7 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	wrapperProps?: ArbitraryProps;
 	stencilComponent?: StencilComponent;
 	stencilProps?: ArbitraryProps;
+	stencilConstraints?: StencilConstraints<AbstractCropperSettingsProp<Settings>>;
 	className?: string;
 	imageClassName?: string;
 	boundaryClassName?: string;
@@ -110,6 +116,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 	const {
 		src,
 		stencilComponent = RectangleStencil,
+		stencilConstraints = defaultStencilConstraints,
 		stencilProps = {},
 		wrapperComponent = CropperWrapper,
 		wrapperProps = {},
@@ -134,11 +141,12 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 		...parameters
 	} = props;
 
-	const stencilRef = useRef<StencilComponent>(null);
 	const imageRef = useRef<HTMLImageElement | HTMLCanvasElement>(null);
 	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 	const canvasRef = useRef<CropperCanvasMethods>(null);
 	const cropperRef = useRef<AbstractCropperRef<Settings>>(null);
+
+	const stencil = useStencil(stencilComponent);
 
 	const cropper = useCropperState({
 		...parameters,
@@ -146,10 +154,8 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 			return cropperRef.current;
 		},
 		settings: {
-			aspectRatio() {
-				return calculateAspectRatio(stencilRef.current?.aspectRatio?.(), stencilProps);
-			},
 			...settings,
+			...stencilConstraints(settings, stencil.options),
 		},
 	});
 
@@ -199,21 +205,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 		});
 	};
 
-	useWindowResize(() => {
-		refreshCropper();
-	});
-
-	useUpdateEffect(() => {
-		cropper.reconcileState();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [stencilComponent, stencilProps.aspectRatio, stencilProps.maxAspectRatio, stencilProps.minAspectRatio]);
-
-	useUpdateEffect(() => {
-		resetCropper();
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [image]);
-
-	useImperativeHandle(mergeRefs([ref, cropperRef]), () => ({
+	const cropperInterface = {
 		reset: () => {
 			resetCropper();
 		},
@@ -233,6 +225,13 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 		setImage: (image: CropperImage) => {
 			setCurrentImage(image);
 		},
+		getStencilOptions: () => {
+			return stencil.options;
+		},
+		setStencilOptions: (options: StencilOptions) => {
+			stencil.setOptions(options);
+		},
+		reconcileState: cropper.reconcileState,
 		moveCoordinates: cropper.moveCoordinates,
 		moveCoordinatesEnd: cropper.moveCoordinatesEnd,
 		resizeCoordinates: cropper.resizeCoordinates,
@@ -252,9 +251,23 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 		getTransitions: cropper.getTransitions,
 		getSettings: cropper.getSettings,
 		getState: cropper.getState,
-	}));
+	};
 
-	const StencilComponent = stencilComponent;
+	useWindowResize(() => {
+		refreshCropper();
+	});
+
+	useUpdateEffect(() => {
+		cropper.reconcileState();
+	}, [stencil.options]);
+
+	useUpdateEffect(() => {
+		resetCropper();
+	}, [image]);
+
+	useImperativeHandle(mergeRefs([ref, cropperRef]), () => cropperInterface);
+
+	const StencilComponent = stencil.component;
 
 	const WrapperComponent = wrapperComponent;
 
@@ -267,7 +280,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 			{...wrapperProps}
 			className={cn('react-advanced-cropper', className)}
 			loaded={loaded}
-			cropper={cropper}
+			cropper={cropperInterface}
 			loading={loading}
 			style={style}
 		>
@@ -280,7 +293,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 			>
 				<BackgroundWrapperComponent
 					{...backgroundWrapperProps}
-					cropper={cropper}
+					cropper={cropperInterface}
 					className={'react-advanced-cropper__background-wrapper'}
 				>
 					<div className={cn('react-advanced-cropper__background', backgroundClassName)}>
@@ -289,14 +302,12 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 								{...backgroundProps}
 								ref={imageRef}
 								crossOrigin={crossOrigin}
-								image={currentImage}
-								state={cropper.state}
-								transitions={cropper.transitions}
+								cropper={cropperInterface}
 								className={cn('react-advanced-cropper__image', imageClassName)}
 							/>
 						)}
 					</div>
-					<StencilComponent {...stencilProps} ref={stencilRef} cropper={cropper} image={currentImage} />
+					<StencilComponent {...stencilProps} cropper={cropperInterface} image={currentImage} />
 				</BackgroundWrapperComponent>
 				{canvas && <CropperCanvas ref={canvasRef} />}
 			</StretchableBoundary>
