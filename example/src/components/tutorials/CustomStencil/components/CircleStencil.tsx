@@ -1,27 +1,23 @@
-import React, { useImperativeHandle, forwardRef } from 'react';
-import { MoveDirections } from 'advanced-cropper/types';
+import React, { useEffect } from 'react';
 import {
-	StencilRef,
 	StencilProps,
 	StencilWrapper,
 	StencilOverlay,
 	DraggableElement,
 	DraggableArea,
+	MoveDirections,
 } from 'react-advanced-cropper';
 import './CircleStencil.scss';
 
-export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: StencilProps, ref) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
-	}));
+	useEffect(() => {
+		cropper.setStencilOptions({
+			aspectRatio: 1,
+		});
+	}, []);
 
 	const onResize = (shift: MoveDirections) => {
 		cropper.resizeCoordinates(
@@ -60,6 +56,4 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: 
 			</DraggableArea>
 		</StencilWrapper>
 	);
-});
-
-CircleStencil.displayName = 'CircleStencil';
+};

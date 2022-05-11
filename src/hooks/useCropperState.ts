@@ -1,5 +1,5 @@
 import { createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
-import { setCoordinatesSafety } from 'advanced-cropper/extensions/constraints';
+import { defaultPostprocess } from 'advanced-cropper/extensions/constraints';
 import { ImageRestriction, ModifiersSettings } from 'advanced-cropper/types';
 import { useUpdateEffect } from './useUpdateEffect';
 import {
@@ -26,7 +26,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		},
 ) {
 	const {
-		postProcess = setCoordinatesSafety,
+		postProcess = defaultPostprocess,
 		transitions = true,
 		createStateAlgorithm,
 		defaultTransforms,

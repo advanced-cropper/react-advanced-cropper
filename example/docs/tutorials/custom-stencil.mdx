@@ -2,7 +2,7 @@
 title: Custom Stencil
 ---
 
-import {CustomStencilExample} from '../../src/components/examples/CustomStencilExample';
+import { CustomStencil } from '../../src/components/tutorials/CustomStencil/CustomStencil';
 
 ## Idea
 
@@ -34,7 +34,7 @@ export const CircleStencil = () => {
 
 Let's define basic requirements to a typical stencil:
 - it should be inscribed to box is represented by coordinates (width, height, left, top)
-- if stencil has aspect ratios it should provide `aspectRatios` method to inform the cropper resize algorithm about it (this method should return object with minimum and maximum aspect ratio values)
+- if stencil has aspect ratios it should set the stencil option `aspectRatio` to inform the cropper resize algorithm about it
 - it should call the corresponding cropper methods when user interact with the stencil (`moveCoordinates`, `moveCoordinatesEnd`, `resizeCoordinates`, `resizeCoordinatesEnd`, )
 - it should display the cropped part of a image
 - it should display the overlay around the stencil
@@ -116,55 +116,51 @@ export const CircleStencil = ({ cropper }: StencilProps) => {
 
 ## Aspect ratios
 
-The stencil should provide the possibility to call `aspectRatio` method, that will return the object:
+The stencil should inform the cropper that he has aspect ratio limitation. There is the `cropper.setStencilOptions` method for this.
+You should pass the object with the following structure:
 ```
 {
-	minimum?: number;
-	maximum?: number;
+	aspectRatio: number | {
+		minimum?: number;
+		maximum?: number;
+	}
 }
 ```
 
-Therefore the functional component should be wrapped in `forwardRef` method.
+This method should be called on each options change and on component mount, so it's naturally to use `useEffect` hook for that.
 
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	StencilRef,
 	StencilProps,
 	StencilWrapper
 } from 'react-advanced-cropper';
 
-export const CircleStencil = forwardRef<StencilRef, StencilProps> (({ cropper }: StencilProps, ref) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
-	}));
+	useEffect(() => {
+		cropper.setStencilOptions({
+			aspectRatio: 1,
+		});
+	}, []);
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
 		</StencilWrapper>
 	)
-})
+}
 ```
 
 :::tip
-Notice, that in this example `aspectRatio` method return the following object:
-
-For this stencil this method should return the object:
+Notice, that in this example `aspectRatio` is equal to `1`. That's because it should be always a circle. It will be converted lately into:
 ```tsx
 {
 	minimum: 1,
 	maximum: 1
 }
 ```
-That's because it should be always a circle.
 :::
 
 
@@ -176,31 +172,27 @@ techniques, but they can produce some glitches during the transitions.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	StencilRef,
 	StencilProps,
 	StencilWrapper,
 	StencilOverlay
 } from 'react-advanced-cropper';
 
-export const CircleStencil = forwardRef<StencilRef, StencilProps> (({ cropper }: StencilProps, ref) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
-	}));
+	useEffect(() => {
+		cropper.setStencilOptions({
+			aspectRatio: 1,
+		});
+	}, []);
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
 			<StencilOverlay className="circle-stencil__overlay" />
 		</StencilWrapper>
 	)
-})
+}
 ```
 
 It's time to add some styling now to make the stencil overlay round and add the little border to it:
@@ -211,7 +203,7 @@ It's time to add some styling now to make the stencil overlay round and add the 
     border: dashed 2px white;
     box-sizing: border-box;
 		border-radius: 50%;
-	}_
+	}
 }
 ```
 
@@ -223,7 +215,6 @@ Let's add the handler to resize the stencil:
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	StencilRef,
 	StencilProps,
 	StencilWrapper,
   StencilOverlay
@@ -231,19 +222,15 @@ import {
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = forwardRef<StencilRef, StencilProps> (
-	({ cropper }: StencilProps, ref) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
-	}));
+	useEffect(() => {
+		cropper.setStencilOptions({
+			aspectRatio: 1,
+		});
+	}, []);
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
@@ -251,7 +238,7 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps> (
 			<StencilOverlay className="circle-stencil__overlay" />
 		</StencilWrapper>
 	)
-})
+}
 ```
 
 ```scss
@@ -299,19 +286,15 @@ import {
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = forwardRef<StencilRef, StencilProps>(
-	({ cropper }: StencilProps, ref) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
-	}));
+	useEffect(() => {
+		cropper.setStencilOptions({
+			aspectRatio: 1,
+		});
+	}, []);
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
@@ -323,7 +306,7 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(
 			</DraggableArea>
 		</StencilWrapper>
 	)
-})
+}
 ```
 
 Notice, that we still didn't callbacks for the used components. It's time to do it.
@@ -390,26 +373,25 @@ Fortunately, they are trivial. We just pass the default cropper methods to them.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
-	StencilRef,
 	StencilProps,
-	StencilWrapper
+	StencilWrapper,
+  StencilOverlay,
+  DraggableElement,
+  DraggableArea,
+	MoveDirections,
 } from 'react-advanced-cropper';
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = forwardRef<StencilRef, StencilProps>(
-	({ cropper }: StencilProps, ref) => {
+export const CircleStencil = ({ cropper }: StencilProps) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
-	}));
+	useEffect(() => {
+		cropper.setStencilOptions({
+			aspectRatio: 1,
+		});
+	}, []);
 
 	const onResize = (shift: MoveDirections) => {
 		cropper.resizeCoordinates(
@@ -443,11 +425,11 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(
 			</DraggableArea>
 		</StencilWrapper>
 	)
-})
+}
 ```
 
 ## Result
 
 The full ready-to-use source code of this example is [here](https://codesandbox.io/s/react-circle-cropper-v3l5z).
 
-<CustomStencilExample />
+<CustomStencil />
