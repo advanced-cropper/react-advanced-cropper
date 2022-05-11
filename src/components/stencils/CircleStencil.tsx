@@ -19,6 +19,7 @@ import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
 import './CircleStencil.scss';
 import { StencilOptions } from '../../types';
+import { aspectRatio } from '../../../../Advanced Cropper/dist/extensions/stencilSize';
 
 type HandlerComponent = ComponentType<any>;
 
@@ -74,138 +75,142 @@ interface Methods {
 	aspectRatio: number;
 }
 
-export const CircleStencil = ({
-	cropper,
-	handlerComponent = SimpleHandler,
-	handlers = {
-		eastNorth: true,
-		westNorth: true,
-		westSouth: true,
-		eastSouth: true,
-	},
-	handlerClassNames = {},
-	handlerWrapperClassNames = {},
-	lines = {
-		west: true,
-		north: true,
-		east: true,
-		south: true,
-	},
-	lineComponent = SimpleLine,
-	lineClassNames = {},
-	lineWrapperClassNames = {},
-	resizable = true,
-	movable = true,
-	movingClassName,
-	resizingClassName,
-	previewClassName,
-	boundingBoxClassName,
-	overlayClassName,
-	draggableAreaClassName,
-}: Props) => {
-	const [moving, setMoving] = useState(false);
+export const CircleStencil = forwardRef<Methods, Props>(
+	(
+		{
+			cropper,
+			handlerComponent = SimpleHandler,
+			handlers = {
+				eastNorth: true,
+				westNorth: true,
+				westSouth: true,
+				eastSouth: true,
+			},
+			handlerClassNames = {},
+			handlerWrapperClassNames = {},
+			lines = {
+				west: true,
+				north: true,
+				east: true,
+				south: true,
+			},
+			lineComponent = SimpleLine,
+			lineClassNames = {},
+			lineWrapperClassNames = {},
+			resizable = true,
+			movable = true,
+			movingClassName,
+			resizingClassName,
+			previewClassName,
+			boundingBoxClassName,
+			overlayClassName,
+			draggableAreaClassName,
+		}: Props,
+		ref,
+	) => {
+		const [moving, setMoving] = useState(false);
 
-	const [resizing, setResizing] = useState(false);
+		const [resizing, setResizing] = useState(false);
 
-	const state = cropper.getState();
+		const state = cropper.getState();
 
-	const transitions = cropper.getTransitions();
+		const transitions = cropper.getTransitions();
 
-	useEffect(() => {
-		cropper.setStencilOptions({
+		useImperativeHandle(ref, () => ({
 			aspectRatio: 1,
-		});
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, []);
+		}));
 
-	const onMove = (directions: MoveDirections) => {
-		if (movable && cropper) {
-			cropper.moveCoordinates(directions);
-			setMoving(true);
-		}
-	};
-
-	const onMoveEnd = () => {
-		if (cropper) {
-			cropper.moveCoordinatesEnd();
-		}
-		setMoving(false);
-	};
-
-	const onResize = (directions: ResizeDirections, options: ResizeOptions) => {
-		if (resizable) {
-			if (cropper) {
-				cropper.resizeCoordinates(directions, options);
+		const onMove = (directions: MoveDirections) => {
+			if (movable && cropper) {
+				cropper.moveCoordinates(directions);
+				setMoving(true);
 			}
-			setResizing(true);
-		}
-	};
+		};
 
-	const onResizeEnd = () => {
-		if (cropper) {
-			cropper.resizeCoordinatesEnd();
-		}
-		setResizing(false);
-	};
+		const onMoveEnd = () => {
+			if (cropper) {
+				cropper.moveCoordinatesEnd();
+			}
+			setMoving(false);
+		};
 
-	const { width, height, left, top } = getStencilCoordinates(state);
+		const onResize = (directions: ResizeDirections, options: ResizeOptions) => {
+			if (resizable) {
+				if (cropper) {
+					cropper.resizeCoordinates(directions, options);
+				}
+				setResizing(true);
+			}
+		};
 
-	const style: CSSProperties = {
-		width: `${width}px`,
-		height: `${height}px`,
-		left: `${left}px`,
-		top: `${top}px`,
-		transition: '0ms',
-	};
+		const onResizeEnd = () => {
+			if (cropper) {
+				cropper.resizeCoordinatesEnd();
+			}
+			setResizing(false);
+		};
 
-	return (
-		state && (
-			<StencilWrapper
-				style={style}
-				className={cn(
-					'react-circle-stencil',
-					movable && 'react-circle-stencil--movable',
-					moving && 'react-circle-stencil--moving',
-					resizable && 'react-circle-stencil--resizable',
-					resizing && 'react-circle-stencil--resizing',
-					moving && movingClassName,
-					resizing && resizingClassName,
-				)}
-				width={width}
-				height={height}
-				left={left}
-				top={top}
-				transitions={transitions}
-			>
-				<BoundingBox
-					className={cn(boundingBoxClassName, 'react-circle-stencil__bounding-box')}
-					handlers={handlers}
-					handlerComponent={handlerComponent}
-					handlerClassNames={handlerClassNames}
-					handlerWrapperClassNames={handlerWrapperClassNames}
-					lines={lines}
-					lineComponent={lineComponent}
-					lineClassNames={lineClassNames}
-					lineWrapperClassNames={lineWrapperClassNames}
-					onResize={onResize}
-					onResizeEnd={onResizeEnd}
-					transitions={transitions}
-					disabled={!resizable}
+		const { width, height, left, top } = getStencilCoordinates(state);
+
+		const style: CSSProperties = {
+			width: `${width}px`,
+			height: `${height}px`,
+			left: `${left}px`,
+			top: `${top}px`,
+			transition: '0ms',
+		};
+
+		return (
+			state && (
+				<StencilWrapper
+					style={style}
+					className={cn(
+						'react-circle-stencil',
+						movable && 'react-circle-stencil--movable',
+						moving && 'react-circle-stencil--moving',
+						resizable && 'react-circle-stencil--resizable',
+						resizing && 'react-circle-stencil--resizing',
+						moving && movingClassName,
+						resizing && resizingClassName,
+					)}
 					width={width}
 					height={height}
+					left={left}
+					top={top}
+					transitions={transitions}
 				>
-					<DraggableArea
-						disabled={!movable}
-						onMove={onMove}
-						onMoveEnd={onMoveEnd}
-						className={cn('react-circle-stencil__draggable-area', draggableAreaClassName)}
+					<BoundingBox
+						className={cn(boundingBoxClassName, 'react-circle-stencil__bounding-box')}
+						handlers={handlers}
+						handlerComponent={handlerComponent}
+						handlerClassNames={handlerClassNames}
+						handlerWrapperClassNames={handlerWrapperClassNames}
+						lines={lines}
+						lineComponent={lineComponent}
+						lineClassNames={lineClassNames}
+						lineWrapperClassNames={lineWrapperClassNames}
+						onResize={onResize}
+						onResizeEnd={onResizeEnd}
+						transitions={transitions}
+						disabled={!resizable}
+						width={width}
+						height={height}
 					>
-						<StencilOverlay className={cn('react-circle-stencil__overlay', overlayClassName)}>
-							<div className={cn('react-circle-stencil__preview', previewClassName)} />
-						</StencilOverlay>
-					</DraggableArea>
-				</BoundingBox>
-			</StencilWrapper>
-		)
-	);
-};
+						<DraggableArea
+							disabled={!movable}
+							onMove={onMove}
+							onMoveEnd={onMoveEnd}
+							className={cn('react-circle-stencil__draggable-area', draggableAreaClassName)}
+						>
+							<StencilOverlay className={cn('react-circle-stencil__overlay', overlayClassName)}>
+								<div className={cn('react-circle-stencil__preview', previewClassName)} />
+							</StencilOverlay>
+						</DraggableArea>
+					</BoundingBox>
+				</StencilWrapper>
+			)
+		);
+	},
+);
+
+CircleStencil.displayName = 'CircleStencil';

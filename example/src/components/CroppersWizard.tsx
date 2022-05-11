@@ -261,7 +261,6 @@ export const CroppersWizard: FC = () => {
 						key={'fixed-cropper'}
 						className={'croppers-wizard__cropper'}
 						src={src}
-						stencilProps={stencilProps}
 						minHeight={minHeight}
 						minWidth={minWidth}
 						maxWidth={maxWidth}

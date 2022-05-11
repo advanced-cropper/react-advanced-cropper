@@ -20,7 +20,6 @@ export * from './components/handlers/SimpleHandler';
 export * from './types';
 export * from './hooks/useCropperState';
 export * from './hooks/useCropperImage';
-export * from './hooks/useAbstractCropperState';
 export * from './hooks/useMoveImageOptions';
 export * from './hooks/useScaleImageOptions';
 export * from './hooks/useUpdateEffect';

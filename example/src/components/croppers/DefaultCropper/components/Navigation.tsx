@@ -1,5 +1,4 @@
-import React, { FC, useLayoutEffect, useMemo, useState } from 'react';
-import { CropperMethodOptions } from 'react-advanced-cropper';
+import React, { FC } from 'react';
 import cn from 'classnames';
 import { FlipHorizontalIcon } from '../../../icons/FlipHorizontalIcon';
 import { RotateRightIcon } from '../../../icons/RotateRightIcon';
