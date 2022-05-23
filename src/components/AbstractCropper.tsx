@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef, CSSProperties, Ref, useState } from 'react';
+import React, { useImperativeHandle, useRef, CSSProperties, Ref } from 'react';
 import cn from 'classnames';
 import { DrawOptions } from 'advanced-cropper/canvas';
 import { StretchAlgorithm } from 'advanced-cropper/html';
@@ -8,8 +8,9 @@ import {
 	CropperImage,
 	CropperState,
 	CropperTransitions,
-	ModifiersSettings,
+	ModifierSettings,
 } from 'advanced-cropper/types';
+import { AbstractCropperCallbacks, AbstractCropperParameters } from 'advanced-cropper/instance';
 import {
 	CropperBackgroundWrapperComponent,
 	CropperWrapperComponent,
@@ -17,7 +18,6 @@ import {
 	CropperBackgroundComponent,
 	ArbitraryProps,
 	StencilConstraints,
-	StencilOptions,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
@@ -30,7 +30,6 @@ import {
 import { mergeRefs } from '../service/react';
 import { useUpdateEffect } from '../hooks/useUpdateEffect';
 import { useStateWithCallback } from '../hooks/useStateWithCallback';
-import { AbstractCropperStateCallbacks, AbstractCropperStateParameters } from '../hooks/useAbstractCropperState';
 import { createCropper } from '../service/cropper';
 import { StretchableBoundary, StretchableBoundaryMethods } from './service/StretchableBoundary';
 import { CropperWrapper } from './service/CropperWrapper';
@@ -39,12 +38,10 @@ import { CropperCanvas, CropperCanvasMethods } from './service/CropperCanvas';
 import { RectangleStencil } from './stencils/RectangleStencil';
 import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
 import './AbstractCropper.scss';
-import { getAspectRatio } from '../../../Advanced Cropper/dist/service';
-import { useDelayedCallback } from '../hooks/useDelayedCallback';
 
 export type AbstractCropperSettingsProp<Settings extends CropperStateSettings> = CropperStateSettingsProp<Settings>;
 
-export type AbstractCropperSettings = DefaultSettings & ModifiersSettings;
+export type AbstractCropperSettings = DefaultSettings & ModifierSettings;
 
 export interface AbstractCropperRef<Settings extends AbstractCropperSettings = AbstractCropperSettings> {
 	reset: () => void;
@@ -75,8 +72,8 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 }
 
 export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
-	extends AbstractCropperStateParameters<Settings>,
-		AbstractCropperStateCallbacks<AbstractCropperRef<Settings>> {
+	extends AbstractCropperParameters<Settings>,
+		AbstractCropperCallbacks<AbstractCropperRef<Settings>> {
 	src?: string | null;
 	backgroundComponent?: CropperBackgroundComponent;
 	backgroundProps?: ArbitraryProps;
@@ -146,7 +143,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 	const canvasRef = useRef<CropperCanvasMethods>(null);
 	const cropperRef = useRef<AbstractCropperRef<Settings>>(null);
 
-	const cropper = useCropperState({
+	const cropper = useCropperState(() => ({
 		...parameters,
 		getInstance() {
 			return cropperRef.current;
@@ -158,7 +155,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 				...stencilRef.current,
 			}),
 		},
-	});
+	}));
 
 	const { image, loaded, loading } = useCropperImage({
 		src,

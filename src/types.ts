@@ -4,22 +4,13 @@ import {
 	CropperTransitions,
 	AspectRatio,
 	PartialTransforms,
-	ExtensionOf,
-	CoreSettings,
-	ModifiersSettings,
-	BivarianceConstraint,
 	CropperState,
 } from 'advanced-cropper/types';
-import { DefaultSettings } from 'advanced-cropper/defaults';
-import { CropperStateHook, CropperStateSettings } from './hooks/useCropperState';
 import {
 	AbstractCropperIntrinsicProps,
-	AbstractCropperProps,
 	AbstractCropperRef,
 	AbstractCropperSettings,
-	AbstractCropperSettingsProp,
 } from './components/AbstractCropper';
-import { FixedCropperSettings } from './components/FixedCropper';
 import { CropperRef } from './components/Cropper';
 
 export type StencilComponent = any;
