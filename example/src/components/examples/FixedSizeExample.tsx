@@ -3,7 +3,6 @@ import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
 import './FixedSizeExample.scss';
 
 export const FixedSizeExample = () => {
-
 	return (
 		<FixedCropper
 			className={'fixed-size-example'}

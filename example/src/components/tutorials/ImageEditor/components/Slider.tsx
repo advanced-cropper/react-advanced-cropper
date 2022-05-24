@@ -59,8 +59,6 @@ export class Slider extends PureComponent<Props> {
 			if (line) {
 				const { left, width } = line.getBoundingClientRect();
 
-				console.log({ position, left, width, value: (2 * (position - left - width / 2)) / width });
-
 				if (onChange) {
 					onChange(Math.max(-1, Math.min(1, (2 * (position - left - width / 2)) / width)));
 				}
