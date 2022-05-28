@@ -1,11 +1,5 @@
 import { ComponentType, CSSProperties, ReactNode, Ref } from 'react';
-import {
-	CropperImage,
-	CropperTransitions,
-	AspectRatio,
-	PartialTransforms,
-	CropperState,
-} from 'advanced-cropper/types';
+import { CropperImage, CropperTransitions, AspectRatio, CropperState } from 'advanced-cropper/types';
 import {
 	AbstractCropperIntrinsicProps,
 	AbstractCropperRef,
@@ -88,10 +82,6 @@ export type CustomCropperProps<Settings extends CustomCropperSettings> = Abstrac
 export type CustomCropperRef<Settings extends CustomCropperSettings> = AbstractCropperRef<Settings>;
 
 export type CustomCropperSettings = AbstractCropperSettings;
-
-export type DefaultTransforms = PartialTransforms | ((image: CropperImage) => PartialTransforms);
-
-export type Nullable<T> = T | null | undefined;
 
 export interface StencilRef {
 	aspectRatio: () => AspectRatio;

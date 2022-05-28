@@ -1,7 +1,7 @@
 import React, { CSSProperties, FC } from 'react';
-import { CropperRef, CropperFade, isInitializedState } from 'react-advanced-cropper';
+import { CropperRef, CropperFade } from 'react-advanced-cropper';
+import { getAbsoluteZoom, getZoomFactor } from 'advanced-cropper/extensions/absoluteZoom';
 import cn from 'classnames';
-import { getAbsoluteZoom, getVisibleAreaSize } from '../algorithms';
 import { Navigation } from './Navigation';
 import './Wrapper.scss';
 
@@ -18,18 +18,15 @@ export const Wrapper: FC<Props> = ({ cropper, children, loaded, className }) => 
 
 	const settings = cropper.getSettings();
 
-	const absoluteZoom = isInitializedState(state) ? getAbsoluteZoom(state, cropper.getSettings()) : 0;
+	const absoluteZoom = getAbsoluteZoom(state, settings);
 
 	const navigationWidth = state ? Math.min(state.boundary.height, state.boundary.width) - 40 : 0;
 
 	const onZoom = (value: number, transitions?: boolean) => {
-		if (cropper && isInitializedState(state)) {
-			cropper.zoomImage(
-				getVisibleAreaSize(state, settings, absoluteZoom) / getVisibleAreaSize(state, settings, value),
-				{
-					transitions: !!transitions,
-				},
-			);
+		if (cropper) {
+			cropper.zoomImage(getZoomFactor(state, settings, value), {
+				transitions: !!transitions,
+			});
 		}
 	};
 

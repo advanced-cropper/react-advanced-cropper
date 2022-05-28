@@ -1,5 +1,4 @@
-import { createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
-import { defaultPostprocess } from 'advanced-cropper/extensions/constraints';
+import { defaultPostprocess, createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
 import { ImageRestriction, ModifierSettings } from 'advanced-cropper/types';
 import { useEffect, useRef } from 'react';
 import { CropperInstance, AbstractCropperParameters, AbstractCropperCallbacks } from 'advanced-cropper/instance';

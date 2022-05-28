@@ -34,6 +34,7 @@ export const ImageEditor = () => {
 	};
 
 	const onReset = () => {
+		setMode('crop');
 		setAdjustments({
 			brightness: 0,
 			hue: 0,

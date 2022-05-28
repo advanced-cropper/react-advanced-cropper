@@ -47,6 +47,5 @@ export {
 } from 'advanced-cropper/utils';
 
 export * from 'advanced-cropper/extensions/constraints';
-export * from 'advanced-cropper/extensions/mimes';
 
 export type { StencilSize } from 'advanced-cropper/extensions/stencilSize';
