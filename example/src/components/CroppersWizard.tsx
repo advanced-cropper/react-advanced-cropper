@@ -239,7 +239,6 @@ export const CroppersWizard: FC = () => {
 						wrapperClassName={'croppers-wizard__cropper'}
 						src={src}
 						stencilProps={stencilProps}
-						imageRestriction={imageRestriction}
 						stencilComponent={stencilType === 'circle' ? CircleStencil : RectangleStencil}
 						transformImage={{
 							adjustStencil: imageRestriction !== 'stencil' && imageRestriction !== 'none',
@@ -248,6 +247,7 @@ export const CroppersWizard: FC = () => {
 						backgroundWrapperProps={{
 							scaleImage,
 						}}
+						imageRestriction={ImageRestriction.none}
 					/>
 				)}
 				{cropper === 'fixed-cropper' && (

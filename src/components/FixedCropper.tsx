@@ -8,18 +8,18 @@ import {
 	fixedStencilConstraints,
 } from 'advanced-cropper/extensions/stencilSize';
 import { withDefaultSizeRestrictions } from 'advanced-cropper/defaults';
-import { CustomCropperProps, CustomCropperRef, CustomCropperSettings } from '../types';
+import { CustomCropperProps, CustomCropperRef, CustomCropperSettings, SettingsExtension } from '../types';
 import { createCropper, splitAbstractCropperProps } from '../service/cropper';
 import { AbstractCropper } from './AbstractCropper';
 
 type UnavailableProps = 'sizeRestrictions' | 'aspectRatio';
 
-export interface FixedCropperSettings extends CustomCropperSettings {
+export interface FixedCropperSettings {
 	stencilSize: StencilSize<this>;
 }
 
-export type FixedCropperProps<Settings extends FixedCropperSettings = FixedCropperSettings> = Omit<
-	CustomCropperProps<Settings>,
+export type FixedCropperProps<Extension extends SettingsExtension> = Omit<
+	CustomCropperProps<Extension>,
 	UnavailableProps
 >;
 

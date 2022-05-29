@@ -1,10 +1,15 @@
 import React from 'react';
 import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
 import './FixedSizeExample.scss';
+import { FixedCropperSettings } from "../../../../src";
+
+interface Test extends FixedCropperSettings{
+	x: number;
+}
 
 export const FixedSizeExample = () => {
 	return (
-		<FixedCropper
+		<FixedCropper<Test>
 			className={'fixed-size-example'}
 			src={
 				'https://images.unsplash.com/photo-1527137342181-19aab11a8ee8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80'

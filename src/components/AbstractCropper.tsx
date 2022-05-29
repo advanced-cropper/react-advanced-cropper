@@ -18,6 +18,8 @@ import {
 	CropperBackgroundComponent,
 	ArbitraryProps,
 	StencilConstraints,
+	SettingsExtension,
+	ExtendedSettings,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
@@ -97,7 +99,7 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	onReady?: (cropper: AbstractCropperRef<Settings>) => void;
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;
 	unloadTime?: number;
-	settings: AbstractCropperSettingsProp<Settings>;
+	settings: CropperStateSettingsProp<Settings>;
 }
 
 export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettings> = Omit<
@@ -105,9 +107,9 @@ export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettin
 	'settings'
 >;
 
-const AbstractCropperComponent = <Settings extends AbstractCropperSettings = AbstractCropperSettings>(
-	props: AbstractCropperProps<Settings>,
-	ref: Ref<AbstractCropperRef<Settings>>,
+const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
+	props: AbstractCropperProps<ExtendedSettings<Extension>>,
+	ref: Ref<AbstractCropperRef<ExtendedSettings<Extension>>>,
 ) => {
 	const {
 		src,
@@ -141,15 +143,17 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 	const imageRef = useRef<HTMLImageElement | HTMLCanvasElement>(null);
 	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 	const canvasRef = useRef<CropperCanvasMethods>(null);
-	const cropperRef = useRef<AbstractCropperRef<Settings>>(null);
+	const cropperRef = useRef<AbstractCropperRef<ExtendedSettings<Extension>>>(null);
 
 	const cropper = useCropperState(() => ({
 		...parameters,
 		getInstance() {
 			return cropperRef.current;
 		},
+		/// @ts-ignore
 		settings: {
 			...settings,
+			/// @ts-ignore
 			...stencilConstraints(settings, {
 				...stencilProps,
 				...stencilRef.current,
@@ -259,6 +263,7 @@ const AbstractCropperComponent = <Settings extends AbstractCropperSettings = Abs
 		resetCropper();
 	}, [image]);
 
+	// @ts-ignore
 	useImperativeHandle(mergeRefs([ref, cropperRef]), () => cropperInterface);
 
 	const StencilComponent = stencilComponent;

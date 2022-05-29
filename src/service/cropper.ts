@@ -1,4 +1,4 @@
-import { isUndefined, omit } from 'advanced-cropper/utils';
+import { isUndefined } from 'advanced-cropper/utils';
 import React, { forwardRef } from 'react';
 import { AbstractCropperProps } from '../components/AbstractCropper';
 

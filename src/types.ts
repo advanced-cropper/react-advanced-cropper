@@ -1,7 +1,9 @@
 import { ComponentType, CSSProperties, ReactNode, Ref } from 'react';
-import { CropperImage, CropperTransitions, AspectRatio, CropperState } from 'advanced-cropper/types';
+import { CropperImage, CropperTransitions, AspectRatio, CropperState, ModifierSettings } from 'advanced-cropper/types';
+import { DefaultSettings } from '../../Advanced Cropper/dist/defaults';
 import {
 	AbstractCropperIntrinsicProps,
+	AbstractCropperProps,
 	AbstractCropperRef,
 	AbstractCropperSettings,
 } from './components/AbstractCropper';
@@ -75,11 +77,13 @@ export interface MoveImageSettings {
 	mouse?: boolean;
 }
 
-export type CustomCropperProps<Settings extends CustomCropperSettings> = AbstractCropperIntrinsicProps<Settings> &
-	Partial<Pick<Settings, keyof CustomCropperSettings>> &
-	Omit<Settings, keyof CustomCropperSettings>;
+export type CustomCropperProps<Extension extends SettingsExtension> = AbstractCropperIntrinsicProps<
+	ExtendedSettings<Extension>
+> &
+	Partial<Pick<ExtendedSettings<Extension>, keyof CustomCropperSettings>> &
+	Omit<ExtendedSettings<Extension>, keyof CustomCropperSettings>;
 
-export type CustomCropperRef<Settings extends CustomCropperSettings> = AbstractCropperRef<Settings>;
+export type CustomCropperRef<Extension extends SettingsExtension> = AbstractCropperRef<ExtendedSettings<Extension>>;
 
 export type CustomCropperSettings = AbstractCropperSettings;
 
@@ -93,3 +97,7 @@ export interface StencilProps<Cropper = CropperRef> {
 }
 
 export type ArbitraryProps = Record<string, unknown>;
+
+export type ExtendedSettings<Extension extends {}> = Extension & DefaultSettings & ModifierSettings;
+
+export type SettingsExtension = object;

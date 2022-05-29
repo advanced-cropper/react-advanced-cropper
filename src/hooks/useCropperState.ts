@@ -1,4 +1,4 @@
-import { defaultPostprocess, createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
+import { createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
 import { ImageRestriction, ModifierSettings } from 'advanced-cropper/types';
 import { useEffect, useRef } from 'react';
 import { CropperInstance, AbstractCropperParameters, AbstractCropperCallbacks } from 'advanced-cropper/instance';
@@ -8,9 +8,9 @@ import { useCropperProps } from './useCropperProps';
 export type CropperStateSettings = DefaultSettings & ModifierSettings;
 
 export type CropperStateSettingsProp<Settings extends CropperStateSettings> = Partial<
-	Pick<Settings, keyof CropperStateSettings>
+	Pick<Settings, keyof DefaultSettings>
 > &
-	Omit<Settings, keyof CropperStateSettings>;
+	Omit<Settings, keyof DefaultSettings>;
 
 export function useCropperState<Settings extends CropperStateSettings, Instance = unknown>(
 	props: () => AbstractCropperParameters<Settings> &
@@ -21,99 +21,28 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 	const rerender = useForceRerender();
 
 	const getProps = useCropperProps(() => {
-		const {
-			postProcess = defaultPostprocess,
-			transitions = true,
-			createStateAlgorithm,
-			defaultTransforms,
-			getInstance,
-			moveCoordinatesAlgorithm,
-			onChange,
-			onInteractionEnd,
-			onInteractionStart,
-			onMove,
-			onMoveEnd,
-			onResize,
-			onResizeEnd,
-			onTransformImage,
-			onTransformImageEnd,
-			onTransitionsEnd,
-			onTransitionsStart,
-			priority,
-			reconcileStateAlgorithm,
-			resizeCoordinatesAlgorithm,
-			setBoundaryAlgorithm,
-			setCoordinatesAlgorithm,
-			setVisibleAreaAlgorithm,
-			transformImageAlgorithm,
-			settings: {
-				areaPositionRestrictions,
-				areaSizeRestrictions,
-				aspectRatio,
-				defaultCoordinates,
-				defaultPosition,
-				defaultSize,
-				defaultVisibleArea,
-				maxHeight,
-				maxWidth,
-				minHeight,
-				minWidth,
-				positionRestrictions,
-				sizeRestrictions,
-				imageRestriction = ImageRestriction.fitArea,
-				transformImage = {
-					adjustStencil: true,
-				},
-				...customSettings
+		const { settings, ...parameters } = props();
+
+		const extendedSettings = {
+			imageRestriction: ImageRestriction.fitArea,
+			transformImage: {
+				adjustStencil: true,
 			},
-		} = props();
+			...settings,
+		};
+
+		const extendedParameters = {
+			transitions: true,
+			...parameters,
+		};
 
 		return {
 			settings: {
-				...createDefaultSettings<Settings>({
-					areaPositionRestrictions,
-					areaSizeRestrictions,
-					aspectRatio,
-					defaultCoordinates,
-					defaultPosition,
-					defaultSize,
-					defaultVisibleArea,
-					imageRestriction,
-					maxHeight,
-					maxWidth,
-					minHeight,
-					minWidth,
-					positionRestrictions,
-					sizeRestrictions,
-				}),
-				transformImage,
-				...customSettings,
-				// TypeScript can't defer the type itself, let's help it
+				...extendedSettings,
+				...createDefaultSettings<Settings>(extendedSettings),
+				// It's needed because of nature of settings field
 			} as Settings,
-			createStateAlgorithm,
-			defaultTransforms,
-			getInstance,
-			moveCoordinatesAlgorithm,
-			onChange,
-			onInteractionEnd,
-			onInteractionStart,
-			onMove,
-			onMoveEnd,
-			onResize,
-			onResizeEnd,
-			onTransformImage,
-			onTransformImageEnd,
-			onTransitionsEnd,
-			onTransitionsStart,
-			postProcess,
-			priority,
-			reconcileStateAlgorithm,
-			resizeCoordinatesAlgorithm,
-			setBoundaryAlgorithm,
-			setCoordinatesAlgorithm,
-			setVisibleAreaAlgorithm,
-			transformImageAlgorithm,
-			transitions,
+			...extendedParameters,
 		};
 	});
 

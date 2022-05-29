@@ -46,6 +46,4 @@ export {
 	isTouchEvent,
 } from 'advanced-cropper/utils';
 
-export * from 'advanced-cropper/extensions/constraints';
-
 export type { StencilSize } from 'advanced-cropper/extensions/stencilSize';
