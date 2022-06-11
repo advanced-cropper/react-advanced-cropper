@@ -20,6 +20,7 @@ export class DraggableArea extends PureComponent<Props> {
 	touches: SimpleTouch[];
 	started: boolean;
 	anchor: Point;
+	auxilaryAnchor: Point;
 	container: RefObject<HTMLDivElement>;
 
 	static defaultProps = {
@@ -38,6 +39,7 @@ export class DraggableArea extends PureComponent<Props> {
 			left: 0,
 			top: 0,
 		};
+		this.auxilaryAnchor = this.anchor;
 		this.container = createRef();
 	}
 
@@ -48,14 +50,30 @@ export class DraggableArea extends PureComponent<Props> {
 			const { left, top } = container.getBoundingClientRect();
 			if (this.touches.length === 1 && newTouches.length === 1) {
 				if (this.props.onMove) {
-					this.props.onMove({
+					const movingToAnchor = {
 						left:
-							newTouches[0].clientX -
-							(this.props.useAnchor ? left + this.anchor.left : this.touches[0].clientX),
+							Math.abs(newTouches[0].clientX - this.anchor.left - left) <
+							Math.abs(this.touches[0].clientX - this.anchor.left - left),
 						top:
-							newTouches[0].clientY -
-							(this.props.useAnchor ? top + this.anchor.top : this.touches[0].clientY),
-					});
+							Math.abs(newTouches[0].clientY - this.anchor.top - top) <
+							Math.abs(this.touches[0].clientY - this.anchor.top - top),
+					};
+
+					const direction = {
+						left: 0,
+						top: 0,
+					};
+
+					if (!this.props.useAnchor || !movingToAnchor.left) {
+						direction.left = newTouches[0].clientX - this.touches[0].clientX;
+					}
+
+					if (!this.props.useAnchor || !movingToAnchor.top) {
+						direction.top = newTouches[0].clientY - this.touches[0].clientY;
+					}
+
+					this.props?.onMove(direction);
+
 					this.touches = [...newTouches];
 				}
 			}
@@ -79,6 +97,7 @@ export class DraggableArea extends PureComponent<Props> {
 				left: touch.clientX - left,
 				top: touch.clientY - top,
 			};
+			this.auxilaryAnchor = this.anchor;
 		}
 	};
 

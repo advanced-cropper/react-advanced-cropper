@@ -42,12 +42,29 @@ export class DraggableElement extends Component<Props> {
 				if (onDrag) {
 					const { left, top } = container.getBoundingClientRect();
 
-					const shift = {
-						left: newTouches[0].clientX - left - this.anchor.left,
-						top: newTouches[0].clientY - top - this.anchor.top,
+					const movingToAnchor = {
+						left:
+							Math.abs(newTouches[0].clientX - this.anchor.left - left) <
+							Math.abs(this.touches[0].clientX - this.anchor.left - left),
+						top:
+							Math.abs(newTouches[0].clientY - this.anchor.top - top) <
+							Math.abs(this.touches[0].clientY - this.anchor.top - top),
 					};
 
-					onDrag(shift, event);
+					const direction = {
+						left: 0,
+						top: 0,
+					};
+
+					if (!movingToAnchor.left) {
+						direction.left = newTouches[0].clientX - this.touches[0].clientX;
+					}
+
+					if (!movingToAnchor.top) {
+						direction.top = newTouches[0].clientY - this.touches[0].clientY;
+					}
+
+					onDrag(direction, event);
 				}
 			}
 			this.touches = newTouches;
