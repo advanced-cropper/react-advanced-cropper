@@ -247,7 +247,7 @@ export const CroppersWizard: FC = () => {
 						backgroundWrapperProps={{
 							scaleImage,
 						}}
-						imageRestriction={ImageRestriction.none}
+						imageRestriction={imageRestriction}
 					/>
 				)}
 				{cropper === 'fixed-cropper' && (

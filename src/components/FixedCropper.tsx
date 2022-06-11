@@ -8,7 +8,7 @@ import {
 	fixedStencilConstraints,
 } from 'advanced-cropper/extensions/stencilSize';
 import { withDefaultSizeRestrictions } from 'advanced-cropper/defaults';
-import { CustomCropperProps, CustomCropperRef, CustomCropperSettings, SettingsExtension } from '../types';
+import { CustomCropperProps, CustomCropperRef } from '../types';
 import { createCropper, splitAbstractCropperProps } from '../service/cropper';
 import { AbstractCropper } from './AbstractCropper';
 
@@ -18,21 +18,20 @@ export interface FixedCropperSettings {
 	stencilSize: StencilSize<this>;
 }
 
-export type FixedCropperProps<Extension extends SettingsExtension> = Omit<
+export type FixedCropperProps<Extension extends FixedCropperSettings = FixedCropperSettings> = Omit<
 	CustomCropperProps<Extension>,
 	UnavailableProps
 >;
 
-export type FixedCropperRef<Settings extends FixedCropperSettings = FixedCropperSettings> = CustomCropperRef<Settings>;
+export type FixedCropperRef<Extension extends FixedCropperSettings = FixedCropperSettings> = CustomCropperRef<Extension>;
 
-const FixedCropperComponent = <Settings extends FixedCropperSettings = FixedCropperSettings>(
-	props: FixedCropperProps<Settings>,
-	ref?: Ref<FixedCropperRef<Settings>>,
+const FixedCropperComponent = <Extension extends FixedCropperSettings = FixedCropperSettings>(
+	props: FixedCropperProps<Extension>,
+	ref?: Ref<FixedCropperRef<Extension>>,
 ) => {
 	const { settings, ...parameters } = splitAbstractCropperProps(props);
 	return (
 		<AbstractCropper<FixedCropperSettings>
-			ref={ref}
 			postProcess={fixedStencil}
 			stencilConstraints={fixedStencilConstraints}
 			{...parameters}
@@ -46,6 +45,7 @@ const FixedCropperComponent = <Settings extends FixedCropperSettings = FixedCrop
 					adjustStencil: false,
 				},
 			}}
+			ref={ref}
 		/>
 	);
 };

@@ -20,6 +20,7 @@ import {
 	StencilConstraints,
 	SettingsExtension,
 	ExtendedSettings,
+	CustomCropperRef,
 } from '../types';
 import { useWindowResize } from '../hooks/useWindowResize';
 import { useCropperImage } from '../hooks/useCropperImage';
@@ -109,7 +110,7 @@ export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettin
 
 const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 	props: AbstractCropperProps<ExtendedSettings<Extension>>,
-	ref: Ref<AbstractCropperRef<ExtendedSettings<Extension>>>,
+	ref: Ref<CustomCropperRef<Extension>>,
 ) => {
 	const {
 		src,
@@ -150,10 +151,8 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		getInstance() {
 			return cropperRef.current;
 		},
-		/// @ts-ignore
 		settings: {
 			...settings,
-			/// @ts-ignore
 			...stencilConstraints(settings, {
 				...stencilProps,
 				...stencilRef.current,

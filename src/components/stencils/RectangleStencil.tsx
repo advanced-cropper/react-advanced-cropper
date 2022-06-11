@@ -3,7 +3,6 @@ import cn from 'classnames';
 import {
 	CardinalDirection,
 	OrdinalDirection,
-	AspectRatio,
 	CropperImage,
 	MoveDirections,
 	ResizeDirections,
@@ -11,7 +10,7 @@ import {
 	CropperTransitions,
 	RawAspectRatio,
 } from 'advanced-cropper/types';
-import { createAspectRatio, getAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
+import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -20,7 +19,6 @@ import { StencilOverlay } from '../service/StencilOverlay';
 import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
 import './RectangleStencil.scss';
-import { StencilOptions } from '../../types';
 
 type HandlerComponent = ComponentType<any>;
 

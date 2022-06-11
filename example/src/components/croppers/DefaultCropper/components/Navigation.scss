@@ -38,6 +38,7 @@
 		outline: none;
 		transition: transform 0.5s;
 		padding: 0;
+		fill: white;
 
 		&:hover, &:focus {
 			transform: scale(1.1);
