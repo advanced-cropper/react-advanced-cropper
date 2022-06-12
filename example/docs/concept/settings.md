@@ -32,7 +32,7 @@ The `defaultCoordinates` is the flexible way to set the initial stencil coordina
 
 It has the following typing:
 ```ts
-type DefaultCoordinates<Settings = CropperSettings> =
+type DefaultCoordinates<Settings = CoreSettings> =
 	| (Transform | Transform[])
 	| ((state: CropperState, settings: Settings) => Transform | Transform[]);
 ```
@@ -48,7 +48,7 @@ default coordinates, or event the array of the functions. This function works ju
 The `defaultVisibleArea` is the flexible way to set the initial visible area value.
 
 ```ts
-type DefaultVisibleArea<Settings = CropperSettings> =
+type DefaultVisibleArea<Settings = CoreSettings> =
 	| VisibleArea
 	| ((state: CropperState, props: Settings) => VisibleArea);
 ```
@@ -59,7 +59,7 @@ I.e. it can be the object with visible area coordinates or the function that ret
 
 The `areaPositionRestrictions` is the limitations of the `visibleArea` position. It should have type:
 ```ts
-AreaPositionRestrictions | ((state: CropperState, settings: CropperSettings) => AreaPositionRestrictions);
+AreaPositionRestrictions | ((state: CropperState, settings: CoreSettings) => AreaPositionRestrictions);
 ```
 
 Where `AreaPositionRestrictions` is:
@@ -78,7 +78,7 @@ If you don't need any restrictions, pass the empty object `{}`
 
 The `areaSizeRestrictions` is the limitations of the `visibleArea` size. It should have type:
 ```ts
-AreaSizeRestrictions | ((state: CropperState, settings: CropperSettings) => AreaSizeRestrictions);
+AreaSizeRestrictions | ((state: CropperState, settings: CoreSettings) => AreaSizeRestrictions);
 ```
 
 Where `AreaSizeRestrictions` is:
@@ -105,7 +105,7 @@ If you don't need any restrictions, pass the following object:
 
 The `positionRestrictions` is the limitations of the `coordinates` position. It should have type:
 ```ts
-PositionRestrictions | ((state: CropperState, settings: CropperSettings) => PositionRestrictions);
+PositionRestrictions | ((state: CropperState, settings: CoreSettings) => PositionRestrictions);
 ```
 
 Where `PositionRestrictions` is:
@@ -125,7 +125,7 @@ If you don't need any restrictions, pass the empty object `{}`
 
 The `sizeRestrictions` is the limitations of the `coordinates` size. It should have type:
 ```ts
-SizeRestrictions | ((state: CropperState, settings: CropperSettings) => SizeRestrictions);
+SizeRestrictions | ((state: CropperState, settings: CoreSettings) => SizeRestrictions);
 ```
 
 Where `SizeRestrictions` is:
@@ -152,7 +152,7 @@ If you don't need any restrictions, pass the following object:
 
 The `aspectRatio` is the limitations for aspect ratio of the coordinates. It has the following type:
 ```ts
-AspectRatio | ((state: CropperState, setting: CropperSettings) => AspectRatio)
+AspectRatio | ((state: CropperState, setting: CoreSettings) => AspectRatio)
 ```
 
 Where `AspectRatio` is:

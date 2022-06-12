@@ -21,7 +21,7 @@ They are not modifiers, but they are very important and they return the state in
 
 The recommended way to create the state is `createState` function.
 ```tsx
-function createState(options: CreateStateOptions, settings: CropperSettings): CropperState;
+function createState(options: CreateStateOptions, settings: CoreSettings): CropperState;
 ```
 
 It returns the initial state
@@ -57,7 +57,7 @@ function copyState(state: CropperState): CropperState;
 ```tsx
 function setCoordinates(
 	state: CropperState,
-	settings: CropperSettings,
+	settings: CoreSettings,
 	transform: CoordinatesTransform | CoordinatesTransform[],
 	safe?: boolean
 ): CropperState;
@@ -66,13 +66,13 @@ function setCoordinates(
 ### Move Coordinates
 
 ```tsx
-function moveCoordinates(state: CropperState, settings: CropperSettings, directions: MoveDirections ): CropperState;
+function moveCoordinates(state: CropperState, settings: CoreSettings, directions: MoveDirections ): CropperState;
 ```
 
 ### Resize Coordinates
 
 ```tsx
-function resizeCoordinates(state: CropperState, settings: CropperSettings, directions: ResizeDirections, options: ResizeOptions): CropperState;
+function resizeCoordinates(state: CropperState, settings: CoreSettings, directions: ResizeDirections, options: ResizeOptions): CropperState;
 ```
 
 ```tsx
@@ -88,7 +88,7 @@ interface ResizeOptions {
 ```tsx
 function transformImage(
 	state: CropperState,
-	settings: CropperSettings & {
+	settings: CoreSettings & {
 		adjustStencil?: boolean;
 	},
 	move: Partial<MoveDirections> = {},
@@ -99,29 +99,29 @@ function transformImage(
 ### Rotate Image
 
 ```tsx
-function rotateImage(state: CropperState, settings: CropperSettings, angle: number): CropperState;
+function rotateImage(state: CropperState, settings: CoreSettings, angle: number): CropperState;
 ```
 
 ### Flip Image
 
 ```tsx
-function flipImage(state: CropperState, settings: CropperSettings, horizontal?: boolean, vertical?: boolean): CropperState;
+function flipImage(state: CropperState, settings: CoreSettings, horizontal?: boolean, vertical?: boolean): CropperState;
 ```
 
 ### Set Visible Area
 
 ```tsx
-function setVisibleArea(state: CropperState, settings: CropperSettings, visibleArea: VisibleArea, safe?: boolean): CropperState;
+function setVisibleArea(state: CropperState, settings: CoreSettings, visibleArea: VisibleArea, safe?: boolean): CropperState;
 ```
 
 ### Set Boundary
 
 ```tsx
-function setBoundary(state: CropperState, settings: CropperSettings, boundary: Boundary): CropperState;
+function setBoundary(state: CropperState, settings: CoreSettings, boundary: Boundary): CropperState;
 ```
 
 ### Reconcile State
 
 ```tsx
-function reconcileState(state: CropperState, settings: CropperSettings): CropperState;
+function reconcileState(state: CropperState, settings: CoreSettings): CropperState;
 ```

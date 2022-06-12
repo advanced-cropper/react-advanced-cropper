@@ -22,7 +22,7 @@ But the state is useless itself. You can use it to display the result to the use
 **[The state modifiers](/docs/concept/modifiers)** is the general name of functions that change the cropper state (preferably by returning its clone).
 Generally, it can be an arbitrary functions, but it's recommended to describe them by the following signature:
 ```tsx
-function stateModifier(state: CropperState, settings: CropperSettings, ...otherArguments): CropperState
+function stateModifier(state: CropperState, settings: CoreSettings, ...otherArguments): CropperState
 ```
 
 It accept state, settings and perhaps some arguments and return the updated state. What's **[the settings](/docs/concept/settings)**? This is the another concept that you should know to use this library.

@@ -110,7 +110,7 @@ export const Example = () => {
 
 ### Fill the image
 
-The `default-size` prop can determine the default size based on `imageSize`, `visibleArea`, `stencilRatio` and `sizeRestrictions`  as mentioned in [its documentation](/components/cropper.html#defaultsize).
+The `default-size` prop can determine the default size based on the `state`  as mentioned in [its documentation](/docs/components/Cropper#defaultsize).
 
 It can be used to force the cropper fills all visible area by default:
 
@@ -322,7 +322,7 @@ import React from 'react';
 import { Cropper, CropperRef, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const percentsRestriction = (state: CropperState, settings: CropperSettings) => {
+	const percentsRestriction = (state: CropperState, settings: CoreSettings) => {
 		const { minWidth, minHeight, maxWidth, maxHeight } = retrieveSizeRestrictions(settings);
 
 		const imageSize = getTransformedImageSize(state);

@@ -85,7 +85,7 @@ This section still in the development. Stay up to date.
 
 ### `stencilSize`
 
-- **Type:** `Size | ((state: CropperState, settings: CropperSettings) => Size)`
+- **Type:** `Size | ((state: CropperState, settings: CoreSettings) => Size)`
 
 - **Details:**
 
@@ -330,7 +330,7 @@ interface RotateImageSettings {
 
 - **Details:**
 
-	The escape hatch to pass the additional parameters to `CropperSettings`, that could be used
+	The escape hatch to pass the additional parameters to `CoreSettings`, that could be used
 	by the custom algorithms.
 
 ### `transitions`
@@ -394,7 +394,7 @@ interface TransitionsSettings {
 
 ### `defaultPosition`
 
-- **Type:** `Position | ((state: CropperState, settings: CropperSettings) => Position);`
+- **Type:** `Position | ((state: CropperState, settings: CoreSettings) => Position);`
 
 - **Details:**
 
@@ -429,7 +429,7 @@ interface TransitionsSettings {
 
 ### `defaultSize`
 
-- **Type:** `Size | ((state: CropperState, settings: CropperSettings) => Size);`
+- **Type:** `Size | ((state: CropperState, settings: CoreSettings) => Size);`
 
 - **Details:**
 
@@ -603,7 +603,7 @@ type StretchAlgorithm = ({ boundary, size }: {
 
 ### `sizeRestrictions`
 
-- **Type:** `SizeRestrictions | ((state: CropperState, settings: ExtendedCropperSettings) => SizeRestrictions)`
+- **Type:** `SizeRestrictions | ((state: CropperState, settings: ExtendedCoreSettings) => SizeRestrictions)`
 
 ```
 interface SizeRestrictions {
@@ -632,7 +632,7 @@ interface SizeRestrictions {
 
 ### `positionRestrictions`
 
-- **Type:** `PositionRestrictions | ((state: CropperState, settings: CropperSettings) => PositionRestrictions)`
+- **Type:** `PositionRestrictions | ((state: CropperState, settings: CoreSettings) => PositionRestrictions)`
 
 ```
 interface PositionRestrictions {
@@ -650,7 +650,7 @@ interface PositionRestrictions {
 
 ### `areaSizeRestrictions`
 
-- **Type:** `SizeRestrictions | ((state: CropperState, settings: ExtendedCropperSettings) => SizeRestrictions)`
+- **Type:** `SizeRestrictions | ((state: CropperState, settings: ExtendedCoreSettings) => SizeRestrictions)`
 
 ```
 interface AreaSizeRestrictions {
@@ -668,7 +668,7 @@ interface AreaSizeRestrictions {
 
 ### `areaPositionRestrictions`
 
-- **Type:** `PositionRestrictions | ((state: CropperState, settings: CropperSettings) => PositionRestrictions)`
+- **Type:** `PositionRestrictions | ((state: CropperState, settings: CoreSettings) => PositionRestrictions)`
 
 ```
 interface PositionRestrictions {
@@ -686,7 +686,7 @@ interface PositionRestrictions {
 
 ### `setCoordinatesAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, , transforms: CoordinatesTransform | CoordinatesTransform[], safe?: boolean) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, , transforms: CoordinatesTransform | CoordinatesTransform[], safe?: boolean) => CropperState`
 
 - **Details**
 
@@ -694,7 +694,7 @@ interface PositionRestrictions {
 
 ### `setVisibleAreaAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, visibleArea: VisibleArea, safe?: boolean) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, visibleArea: VisibleArea, safe?: boolean) => CropperState`
 
 - **Details**
 
@@ -702,7 +702,7 @@ interface PositionRestrictions {
 
 ### `setBoundaryAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, boundary: Boundary) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, boundary: Boundary) => CropperState`
 
 - **Details**
 
@@ -710,7 +710,7 @@ interface PositionRestrictions {
 
 ### `transformImageAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, move?: MoveDirections, scale?: Scale | number) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, move?: MoveDirections, scale?: Scale | number) => CropperState`
 ```tsx
 interface MoveDirections {
     top?: number;
@@ -730,7 +730,7 @@ interface Scale {
 
 ### `resizeCoordinatesAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, directions: ResizeDirections, options: ResizeOptions) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, directions: ResizeDirections, options: ResizeOptions) => CropperState`
 
 ```tsx
 interface ResizeDirections {
@@ -755,7 +755,7 @@ interface ResizeOptions {
 
 ### `createStateAlgorithm`
 
-- **Type:** `(options: CreateStateParams, settings: CropperSettings) => CropperState`
+- **Type:** `(options: CreateStateParams, settings: CoreSettings) => CropperState`
 
 ```tsx
 interface CreateStateParams {
@@ -772,7 +772,7 @@ interface CreateStateParams {
 
 ### `reconcileStateAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings) => CropperState`
 
 - **Details**
 
@@ -780,7 +780,7 @@ interface CreateStateParams {
 
 ### `moveCoordinatesAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, directions: MoveDirections) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, directions: MoveDirections) => CropperState`
 ```tsx
 interface MoveDirections {
     top?: number;
@@ -794,7 +794,7 @@ interface MoveDirections {
 
 ### `flipImageAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, horizontal?: boolean, vertical?: boolean) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, horizontal?: boolean, vertical?: boolean) => CropperState`
 
 - **Details**
 
@@ -802,7 +802,7 @@ interface MoveDirections {
 
 ### `rotateImageAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, angle: number) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, angle: number) => CropperState`
 
 - **Details**
 
@@ -812,7 +812,7 @@ interface MoveDirections {
 
 ### `zoomImageAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, scale: Scale | number) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, scale: Scale | number) => CropperState`
 ```tsx
 interface Scale {
     factor: number;
@@ -827,7 +827,7 @@ interface Scale {
 
 ### `moveImageAlgorithm`
 
-- **Type:** `(state: CropperState, settings: CropperSettings, move: MoveDirections) => CropperState`
+- **Type:** `(state: CropperState, settings: CoreSettings, move: MoveDirections) => CropperState`
 ```tsx
 interface MoveDirections {
     top?: number;
@@ -946,7 +946,7 @@ typing use `CropperRef` type.
 
 - **Returns:**
 
-	The settings for the cropper. By default, it has `CropperSettings` type, but it can contain additional custom fields depends of
+	The settings for the cropper. By default, it has `CoreSettings` type, but it can contain additional custom fields depends of
 	passed settings.
 
 
@@ -1043,7 +1043,7 @@ typing use `CropperRef` type.
   `transform: CoordinatesTransform | CoordinatesTransform[]`
 	```tsx
 	type CoordinatesTransform =
-    ((state: CropperState, settings: CropperSettings) => Partial<Coordinates>) | Partial<Coordinates>;
+    ((state: CropperState, settings: CoreSettings) => Partial<Coordinates>) | Partial<Coordinates>;
 	```
 
 	`options: CropperMethodOptions`

@@ -14,13 +14,13 @@ It's the part of the unstable API. Use it carefully. Everything can be changed i
 ### Fit Coordinates
 
 ```tsx
-function fitCoordinates(state: CropperState, settings: CropperSettings): Coordinates;
+function fitCoordinates(state: CropperState, settings: CoreSettings): Coordinates;
 ```
 
 ### Fit Visible Area
 
 ```tsx
-function fitVisibleArea(state: CropperState, settings: CropperSettings): VisibleArea;
+function fitVisibleArea(state: CropperState, settings: CoreSettings): VisibleArea;
 ```
 
 ### Resize Coordinates Algorithm
@@ -64,7 +64,7 @@ function moveCoordinatesAlgorithm(
 ### Round Coordinates
 
 ```tsx
-function roundCoordinates(state: CropperState, settings: CropperSettings): Coordinates;
+function roundCoordinates(state: CropperState, settings: CoreSettings): Coordinates;
 ```
 
 
@@ -160,25 +160,25 @@ function normalizeResizeEvent(state: CropperState, event: ResizeEvent): ResizeEv
 ### Get area size restrictions
 
 ```tsx
-function getAreaSizeRestrictions(state: CropperState, settings: CropperSettings)
+function getAreaSizeRestrictions(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get area position restrictions
 
 ```tsx
-function getAreaPositionRestrictions(state: CropperState, settings: CropperSettings)
+function getAreaPositionRestrictions(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get size restrictions
 
 ```tsx
-function getSizeRestrictions(state: CropperState, settings: CropperSettings)
+function getSizeRestrictions(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get positions restrictions
 
 ```tsx
-function getPositionRestrictions(state: CropperState, settings: CropperSettings)
+function getPositionRestrictions(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get coefficient
@@ -196,19 +196,19 @@ function getStencilCoordinates(state: CropperState | null)
 ### Get aspect ratio
 
 ```tsx
-function getAspectRatio(state: CropperState, settings: CropperSettings)
+function getAspectRatio(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get default coordinates
 
 ```tsx
-function getDefaultCoordinates(state: CropperState, settings: CropperSettings)
+function getDefaultCoordinates(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get default visible area
 
 ```tsx
-function getDefaultVisibleArea(state: CropperState, settings: CropperSettings)
+function getDefaultVisibleArea(state: CropperState, settings: CoreSettings)
 ```
 
 ### Get area size restrictions

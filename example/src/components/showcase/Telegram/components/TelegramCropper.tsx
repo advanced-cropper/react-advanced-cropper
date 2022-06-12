@@ -4,10 +4,10 @@ import {
 	Cropper,
 	CropperProps,
 	ScaleImageSettings,
-	CropperSettings,
 	CropperRef,
 	mergeRefs,
 	ImageRestriction,
+	joinClassNames,
 } from 'react-advanced-cropper';
 import {
 	autoZoom,
@@ -21,14 +21,15 @@ import { CropperWrapper } from './CropperWrapper';
 import './TelegramCropper.scss';
 
 export interface TelegramCropperProps
-	extends Omit<CropperProps, 'transitions' | 'priority' | 'imageRestriction' | 'stencilSize' | 'transformImage'> {
+	extends Omit<
+		CropperProps,
+		'transitions' | 'priority' | 'imageRestriction' | 'stencilSize' | 'stencilConstraints' | 'transformImage'
+	> {
 	spinnerClassName?: string;
 	resizeImage?: boolean | Omit<ScaleImageSettings, 'adjustStencil'>;
 	navigation?: boolean;
 	navigationProps?: PublicNavigationProps;
 }
-
-export type TelegramCropperSettings = CropperSettings;
 
 export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => {
 	const {
@@ -38,7 +39,6 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 		stencilProps = {},
 		navigationProps = {},
 		wrapperComponent,
-		backgroundWrapperProps,
 		...cropperProps
 	} = props;
 
@@ -52,25 +52,25 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 			ref={mergeRefs([ref, cropperRef])}
 			stencilConstraints={stencilConstraints}
 			stencilProps={{
-				lineClassNames: {
-					default: 'telegram-circle-stencil__line',
-				},
-				handlerWrapperClassNames: {
-					default: 'telegram-circle-stencil__handler-wrapper',
-					westNorth: 'telegram-circle-stencil__handler-wrapper--west-north',
-					eastSouth: 'telegram-circle-stencil__handler-wrapper--east-south',
-					westSouth: 'telegram-circle-stencil__handler-wrapper--west-south',
-					eastNorth: 'telegram-circle-stencil__handler-wrapper--east-north',
-				},
-				handlerClassNames: {
-					default: 'telegram-circle-stencil__handler',
-					hover: 'telegram-circle-stencil__handler--hover',
-					westNorth: 'telegram-circle-stencil__handler--west-north',
-					eastSouth: 'telegram-circle-stencil__handler--east-south',
-					westSouth: 'telegram-circle-stencil__handler--west-south',
-					eastNorth: 'telegram-circle-stencil__handler--east-north',
-				},
-				previewClassName: 'telegram-circle-stencil__preview',
+				lineClassNames: joinClassNames(stencilProps.lineClassNames, {
+					default: 'telegram-stencil__line',
+				}),
+				handlerWrapperClassNames: joinClassNames(stencilProps.handlerWrapperClassNames, {
+					default: 'telegram-stencil__handler-wrapper',
+					westNorth: 'telegram-stencil__handler-wrapper--west-north',
+					eastSouth: 'telegram-stencil__handler-wrapper--east-south',
+					westSouth: 'telegram-stencil__handler-wrapper--west-south',
+					eastNorth: 'telegram-stencil__handler-wrapper--east-north',
+				}),
+				handlerClassNames: joinClassNames(stencilProps.handlerClassNames, {
+					default: 'telegram-stencil__handler',
+					hover: 'telegram-stencil__handler--hover',
+					westNorth: 'telegram-stencil__handler--west-north',
+					eastSouth: 'telegram-stencil__handler--east-south',
+					westSouth: 'telegram-stencil__handler--west-south',
+					eastNorth: 'telegram-stencil__handler--east-north',
+				}),
+				previewClassName: cn(stencilProps.previewClassName, 'telegram-stencil__preview'),
 				...stencilProps,
 				movable: false,
 			}}
@@ -79,10 +79,6 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 				navigationProps,
 				navigation,
 				spinnerClassName,
-			}}
-			backgroundWrapperProps={{
-				timeout: 500,
-				...backgroundWrapperProps,
 			}}
 			imageRestriction={ImageRestriction.none}
 			className={cn('telegram-cropper', className)}

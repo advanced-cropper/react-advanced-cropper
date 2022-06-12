@@ -1,5 +1,4 @@
-@import '../constants';
-@import '../mixins';
+$spinner-color: currentColor;
 
 .telegram-cropper-wrapper {
 	padding: 20px 20px;
@@ -29,11 +28,19 @@
 	}
 
 	&__spinner {
-		@include hideable();
-		stroke: $telegram-base-color;
+		visibility: hidden;
+		opacity: 0;
+		transition: 0.5s;
+		transition-delay: 0s;
+		stroke: $spinner-color;
 		position: absolute;
 		left: 50%;
 		top: 50%;
 		transform: translate(-50%, -50%);
+		&--visible {
+			transition-delay: 0.5s;
+			opacity: 1;
+			visibility: visible;
+		}
 	}
 }

@@ -1,4 +1,5 @@
-@import '../constants.scss';
+$telegram-bar-color: white;
+$telegram-highlighted-bar-color: currentColor;
 
 .telegram-rotate-component {
 	&__bars {
@@ -22,7 +23,7 @@
 		transform: translateY(-50%);
 		background: $telegram-bar-color;
 		&--highlighted {
-			background-color: $telegram-base-color;
+			background-color: $telegram-highlighted-bar-color;
 		}
 		&--zero {
 			height: 20px;
@@ -34,8 +35,8 @@
 		top: 50%;
 		transform: translate(-50%, -50%);
 		width: 3px;
-		background-color: $telegram-base-color;
-		color: $telegram-base-color;
+		background-color: $telegram-highlighted-bar-color;
+		color: $telegram-highlighted-bar-color;
 		height: 25px;
 		border-radius: 2px;
 	}

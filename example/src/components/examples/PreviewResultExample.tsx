@@ -23,7 +23,6 @@ export const PreviewResultExample = () => {
 	);
 
 	const onChange = (cropper: CropperRef) => {
-		console.log('onChange!', cropper.getState(), cropper.getImage());
 		setState(cropper.getState());
 		setImage(cropper.getImage());
 	};

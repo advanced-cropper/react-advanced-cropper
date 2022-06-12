@@ -99,7 +99,7 @@ export interface StencilProps<Cropper = CropperRef> {
 	image: CropperImage | null;
 }
 
-export type ArbitraryProps = Record<string, unknown>;
+export type ArbitraryProps = Record<string, any>;
 
 export type ExtendedSettings<Extension extends {}> = Extension & DefaultSettings & ModifierSettings;
 
