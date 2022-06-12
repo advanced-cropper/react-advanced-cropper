@@ -49,8 +49,8 @@ export const HandlerWrapper = ({
 			<DraggableElement
 				className={'react-handler-wrapper__draggable'}
 				disabled={disabled}
-				onDrag={onDrag}
-				onDragEnd={onDragEnd}
+				onMove={onDrag}
+				onMoveEnd={onDragEnd}
 				onLeave={onLeave}
 				onEnter={onEnter}
 			>

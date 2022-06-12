@@ -1,24 +1,33 @@
 import React, { ReactNode, Component, RefObject, createRef } from 'react';
+import cn from 'classnames';
 import { MoveDirections, Point, SimpleTouch } from 'advanced-cropper/types';
+import { distance } from 'advanced-cropper/utils';
+import './DraggableElement.scss';
 
 interface Props {
 	className?: string;
 	children?: ReactNode;
-	onDrag?: (directions: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => void;
-	onDragEnd?: () => void;
+	disabled?: boolean;
+	onMove?: (directions: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => void;
+	onMoveEnd?: () => void;
+	onMoveStart?: () => void;
 	onLeave?: () => void;
 	onEnter?: () => void;
-	disabled?: boolean;
+	useAnchor?: boolean;
+	activationDistance?: number;
 }
 
 export class DraggableElement extends Component<Props> {
 	touches: SimpleTouch[];
+	started: boolean;
 	hovered: boolean;
 	anchor: Point;
 	container: RefObject<HTMLDivElement>;
 
 	static defaultProps = {
 		disabled: false,
+		activationDistance: 30,
+		useAnchor: true,
 	};
 
 	constructor(props: Props) {
@@ -26,6 +35,7 @@ export class DraggableElement extends Component<Props> {
 
 		this.touches = [];
 		this.hovered = false;
+		this.started = false;
 		this.anchor = {
 			left: 0,
 			top: 0,
@@ -33,15 +43,13 @@ export class DraggableElement extends Component<Props> {
 		this.container = createRef();
 	}
 
-	processMove = (event: MouseEvent | TouchEvent, newTouches: SimpleTouch[]) => {
-		const { onDrag } = this.props;
+	processMove = (e: MouseEvent | TouchEvent, newTouches: SimpleTouch[]) => {
 		const container = this.container.current;
 
 		if (container && this.touches.length) {
+			const { left, top } = container.getBoundingClientRect();
 			if (this.touches.length === 1 && newTouches.length === 1) {
-				if (onDrag) {
-					const { left, top } = container.getBoundingClientRect();
-
+				if (this.props.onMove) {
 					const movingToAnchor = {
 						left:
 							Math.abs(newTouches[0].clientX - this.anchor.left - left) <
@@ -56,32 +64,29 @@ export class DraggableElement extends Component<Props> {
 						top: 0,
 					};
 
-					if (!movingToAnchor.left) {
+					if (!this.props.useAnchor || !movingToAnchor.left) {
 						direction.left = newTouches[0].clientX - this.touches[0].clientX;
 					}
 
-					if (!movingToAnchor.top) {
+					if (!this.props.useAnchor || !movingToAnchor.top) {
 						direction.top = newTouches[0].clientY - this.touches[0].clientY;
 					}
 
-					onDrag(direction, event);
+					this.props?.onMove(direction, e);
+
+					this.touches = [...newTouches];
 				}
 			}
-			this.touches = newTouches;
 		}
 	};
 
 	processEnd = () => {
-		const { onDragEnd, onLeave } = this.props;
-		if (this.touches.length) {
-			if (onDragEnd) {
-				onDragEnd();
-			}
+		const { onMoveEnd, onLeave } = this.props;
+		if (!this.props.disabled && this.touches.length) {
+			onMoveEnd?.();
 		}
 		if (this.hovered) {
-			if (onLeave) {
-				onLeave();
-			}
+			onLeave?.();
 			this.hovered = false;
 		}
 		this.touches = [];
@@ -99,71 +104,69 @@ export class DraggableElement extends Component<Props> {
 	};
 
 	onMouseOver = () => {
-		const { onEnter } = this.props;
-		if (!this.hovered) {
+		const { onEnter, disabled } = this.props;
+		if (!this.hovered && !disabled) {
 			this.hovered = true;
-			if (onEnter) {
-				onEnter();
-			}
+			onEnter?.();
 		}
 	};
+
 	onMouseLeave = () => {
 		const { onLeave } = this.props;
 		if (this.hovered && !this.touches.length) {
 			this.hovered = false;
-			if (onLeave) {
-				onLeave();
-			}
+			onLeave?.();
 		}
 	};
 
 	onTouchStart = (e: TouchEvent) => {
-		const { onEnter, disabled } = this.props;
-		if (e.cancelable && !disabled && e.touches.length === 1) {
+		const { onEnter, onMoveStart, disabled } = this.props;
+		if (e.cancelable) {
 			this.touches = Array.from(e.touches);
 
-			if (!this.hovered) {
-				if (onEnter) {
-					onEnter();
-				}
-				this.hovered = true;
+			const shouldStartMove = !disabled && e.touches.length === 1;
+			if (shouldStartMove) {
+				this.touches = Array.from(e.touches);
+				onMoveStart?.();
 			}
 
-			if (e.touches.length === 1) {
-				this.initAnchor(
-					this.touches.reduce(
-						(mean, touch) => {
-							return {
-								clientX: mean.clientX + touch.clientX / e.touches.length,
-								clientY: mean.clientY + touch.clientY / e.touches.length,
-							};
-						},
-						{ clientX: 0, clientY: 0 },
-					),
-				);
-				if (e.preventDefault) {
-					e.preventDefault();
-				}
+			if (!this.hovered && !disabled) {
+				this.hovered = true;
+				onEnter?.();
+			}
+
+			if (this.started || shouldStartMove) {
+				e.preventDefault();
 				e.stopPropagation();
 			}
 		}
 	};
 	onTouchEnd = () => {
+		this.started = false;
 		this.processEnd();
 	};
 	onTouchMove = (e: TouchEvent) => {
-		if (this.touches.length) {
-			this.processMove(e, [...e.touches]);
-			if (e.preventDefault) {
+		if (this.touches.length >= 1) {
+			if (this.started) {
+				this.processMove(e, Array.from(e.touches));
 				e.preventDefault();
-			}
-			if (e.stopPropagation) {
 				e.stopPropagation();
+			} else if (
+				distance(
+					{ left: this.touches[0].clientX, top: this.touches[0].clientY },
+					{ left: e.touches[0].clientX, top: e.touches[0].clientY },
+				) > (this.props.activationDistance || 0)
+			) {
+				this.initAnchor({
+					clientX: e.touches[0].clientX,
+					clientY: e.touches[0].clientY,
+				});
+				this.started = true;
 			}
 		}
 	};
 	onMouseDown = (e: MouseEvent) => {
-		const { disabled } = this.props;
+		const { onMoveStart, disabled } = this.props;
 		if (!disabled && e.button === 0) {
 			const touch = {
 				clientX: e.clientX,
@@ -172,10 +175,11 @@ export class DraggableElement extends Component<Props> {
 			this.touches = [touch];
 			this.initAnchor(touch);
 			e.stopPropagation();
+			onMoveStart?.();
 		}
 	};
 	onMouseMove = (e: MouseEvent) => {
-		if (this.touches.length) {
+		if (!this.props.disabled && this.touches.length) {
 			this.processMove(e, [
 				{
 					clientX: e.clientX,
@@ -191,10 +195,6 @@ export class DraggableElement extends Component<Props> {
 	onMouseUp = () => {
 		this.processEnd();
 	};
-
-	shouldComponentUpdate(): boolean {
-		return false;
-	}
 
 	componentWillUnmount() {
 		window.removeEventListener('mouseup', this.onMouseUp);
@@ -226,10 +226,16 @@ export class DraggableElement extends Component<Props> {
 		}
 	}
 
+	componentDidUpdate(prevProps: Readonly<Props>) {
+		if (this.props.disabled && !prevProps.disabled) {
+			this.touches = [];
+		}
+	}
+
 	render() {
 		const { children, className } = this.props;
 		return (
-			<div className={className} ref={this.container}>
+			<div className={cn('react-draggable-element', className)} ref={this.container}>
 				{children}
 			</div>
 		);

@@ -30,8 +30,8 @@ export const LineWrapper = ({
 		<DraggableElement
 			className={classnames(['react-line-wrapper', position && `react-line-wrapper--${position}`, className])}
 			disabled={disabled}
-			onDrag={onDrag}
-			onDragEnd={onDragEnd}
+			onMove={onDrag}
+			onMoveEnd={onDragEnd}
 			onLeave={onLeave}
 			onEnter={onEnter}
 		>
