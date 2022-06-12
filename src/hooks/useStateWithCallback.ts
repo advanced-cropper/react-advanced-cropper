@@ -20,8 +20,8 @@ export function useStateWithCallback<S = undefined>(initialState?: S | (() => S)
 		state,
 		(value: SetStateAction<S | undefined>, callback?: Function) => {
 			previousState.current = state;
-			setCallback(() => callback);
 			setState(value);
+			setCallback(() => callback);
 		}
 	]
 }
