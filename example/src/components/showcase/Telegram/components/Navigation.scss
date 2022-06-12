@@ -1,0 +1,27 @@
+.telegram-navigation {
+	display: flex;
+	align-items: center;
+	padding: 20px 15px;
+	&__rotator {
+		width: 100%;
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+	&__button {
+		cursor: pointer;
+		width: 24px;
+		height: 24px;
+		display: flex;
+		align-items: center;
+		flex-shrink: 0;
+		margin: 0 5px;
+		background: none;
+		border: none;
+		outline: none;
+		transition: transform 0.5s;
+		padding: 0;
+		&:hover, &:focus {
+			transform: scale(1.1);
+		}
+	}
+}

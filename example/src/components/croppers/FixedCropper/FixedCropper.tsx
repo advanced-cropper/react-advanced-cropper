@@ -44,7 +44,7 @@ export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperRef, F
 				className={cn('fixed-cropper', className)}
 				stencilSize={stencilSize}
 				defaultSize={defaultSize}
-				imageRestriction={ImageRestriction.none}
+				imageRestriction={ImageRestriction.stencil}
 				stencilProps={{
 					previewClassName: cn(
 						'fixed-cropper-stencil__preview',

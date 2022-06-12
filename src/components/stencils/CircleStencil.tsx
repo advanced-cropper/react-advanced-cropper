@@ -118,6 +118,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 
 		useImperativeHandle(ref, () => ({
 			aspectRatio: 1,
+			boundingBox: 'circle',
 		}));
 
 		const onMove = (directions: MoveDirections) => {

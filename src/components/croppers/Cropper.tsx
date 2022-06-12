@@ -1,11 +1,11 @@
 import React, { Ref } from 'react';
-import { isUndefined } from 'advanced-cropper/utils';
-import { CustomCropperProps, CustomCropperRef, CustomCropperSettings, SettingsExtension } from '../types';
-import { createCropper, splitAbstractCropperProps } from '../service/cropper';
-import { StencilSize } from '../../../Advanced Cropper/dist/extensions/stencilSize';
-import { hybridStencilAutoZoom } from '../deprecated/hybridAutoZoom';
-import { useDeprecationWarning } from '../hooks/useDeprecationWarning';
-import { AbstractCropper } from './AbstractCropper';
+import { isUndefined } from '../Advanced Cropper/dist/utils';
+import { CustomCropperProps, CustomCropperRef, CustomCropperSettings, SettingsExtension } from '../../types';
+import { createCropper, splitAbstractCropperProps } from '../../service/cropper';
+import { StencilSize } from '../../../../Advanced Cropper/dist/extensions/stencilSize';
+import { hybridStencilAutoZoom } from '../../deprecated/hybridAutoZoom';
+import { useDeprecationWarning } from '../../hooks/useDeprecationWarning';
+import { AbstractCropper } from '../AbstractCropper';
 import { FixedCropper, FixedCropperRef, FixedCropperSettings } from './FixedCropper';
 
 interface DeprecatedCropperSettings {

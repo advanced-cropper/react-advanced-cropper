@@ -20,6 +20,7 @@ export interface CropperBackgroundWrapperProps {
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
+	timeout?: number;
 }
 
 export const CropperBackgroundWrapper = ({
@@ -30,6 +31,7 @@ export const CropperBackgroundWrapper = ({
 	className,
 	style,
 	cropper,
+	timeout,
 }: CropperBackgroundWrapperProps) => {
 	const transitions = cropper.getTransitions();
 
@@ -49,6 +51,7 @@ export const CropperBackgroundWrapper = ({
 			wheelScale={scaleImageOptions.wheel}
 			touchRotate={rotateImageOptions.touch}
 			disabled={transitions.active}
+			timeout={timeout}
 		>
 			{children}
 		</TransformableImage>

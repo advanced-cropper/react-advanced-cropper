@@ -1,5 +1,5 @@
-export * from './components/Cropper';
-export * from './components/FixedCropper';
+export * from './components/croppers/Cropper';
+export * from './components/croppers/FixedCropper';
 export * from './components/stencils/RectangleStencil';
 export * from './components/stencils/CircleStencil';
 export * from './components/service/BoundingBox';

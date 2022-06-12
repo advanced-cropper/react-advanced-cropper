@@ -1,5 +1,12 @@
 import React, { useRef, useState } from 'react';
-import { CropperRef, Cropper, CropperPreview, CropperImage, CropperState, CropperTransitions } from 'react-advanced-cropper';
+import {
+	CropperRef,
+	Cropper,
+	CropperPreview,
+	CropperImage,
+	CropperState,
+	CropperTransitions,
+} from 'react-advanced-cropper';
 import './PreviewResultExample.scss';
 import { SquareButton } from '../../components/examples/components/SquareButton';
 import { RotateLeftIcon } from '../../components/icons/RotateLeftIcon';
@@ -16,6 +23,7 @@ export const PreviewResultExample = () => {
 	);
 
 	const onChange = (cropper: CropperRef) => {
+		console.log('onChange!', cropper.getState(), cropper.getImage());
 		setState(cropper.getState());
 		setImage(cropper.getImage());
 	};

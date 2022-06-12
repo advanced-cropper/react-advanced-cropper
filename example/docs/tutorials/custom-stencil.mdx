@@ -34,7 +34,7 @@ export const CircleStencil = () => {
 
 Let's define basic requirements to a typical stencil:
 - it should be inscribed to box is represented by coordinates (width, height, left, top)
-- if stencil has aspect ratios it should set the stencil option `aspectRatio` to inform the cropper resize algorithm about it
+- if stencil has aspect ratios it should provide `aspectRatio` property to inform the cropper resize algorithm about it (this method should return object with minimum and maximum aspect ratio values)
 - it should call the corresponding cropper methods when user interact with the stencil (`moveCoordinates`, `moveCoordinatesEnd`, `resizeCoordinates`, `resizeCoordinatesEnd`, )
 - it should display the cropped part of a image
 - it should display the overlay around the stencil
@@ -114,10 +114,10 @@ export const CircleStencil = ({ cropper }: StencilProps) => {
 }
 ```
 
-## Aspect ratios
+## Aspect ratio
 
-The stencil should inform the cropper that he has aspect ratio limitation. There is the `cropper.setStencilOptions` method for this.
-You should pass the object with the following structure:
+The stencil should inform the cropper that he has aspect ratio limitation.
+You should pass the object with the following type as a ref:
 ```
 {
 	aspectRatio: number | {
@@ -127,8 +127,7 @@ You should pass the object with the following structure:
 }
 ```
 
-This method should be called on each options change and on component mount, so it's naturally to use `useEffect` hook for that.
-
+Therefore the functional component should be wrapped in `forwardRef` method.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
@@ -136,15 +135,13 @@ import {
 	StencilWrapper
 } from 'react-advanced-cropper';
 
-export const CircleStencil = ({ cropper }: StencilProps) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps> (({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useEffect(() => {
-		cropper.setStencilOptions({
-			aspectRatio: 1,
-		});
-	}, []);
+	useImperativeHandle(ref, () => ({
+		aspectRatio: 1,
+	}));
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
@@ -177,15 +174,13 @@ import {
 	StencilOverlay
 } from 'react-advanced-cropper';
 
-export const CircleStencil = ({ cropper }: StencilProps) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps> (({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useEffect(() => {
-		cropper.setStencilOptions({
-			aspectRatio: 1,
-		});
-	}, []);
+	useImperativeHandle(ref, () => ({
+		aspectRatio: 1,
+	}));
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
@@ -222,15 +217,14 @@ import {
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = ({ cropper }: StencilProps) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps> (
+	({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useEffect(() => {
-		cropper.setStencilOptions({
-			aspectRatio: 1,
-		});
-	}, []);
+	useImperativeHandle(ref, () => ({
+		aspectRatio: 1,
+	}));
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
@@ -286,15 +280,14 @@ import {
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = ({ cropper }: StencilProps) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps>(
+	({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useEffect(() => {
-		cropper.setStencilOptions({
-			aspectRatio: 1,
-		});
-	}, []);
+	useImperativeHandle(ref, () => ({
+		aspectRatio: 1,
+	}));
 
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
@@ -383,15 +376,14 @@ import {
 
 const handlerIcon = require('./handler.svg');
 
-export const CircleStencil = ({ cropper }: StencilProps) => {
+export const CircleStencil = forwardRef<StencilRef, StencilProps>(
+	({ cropper }: StencilProps, ref) => {
 	const coordinates = cropper.getStencilCoordinates();
 	const transitions = cropper.getTransitions();
 
-	useEffect(() => {
-		cropper.setStencilOptions({
-			aspectRatio: 1,
-		});
-	}, []);
+	useImperativeHandle(ref, () => ({
+		aspectRatio: 1,
+	}));
 
 	const onResize = (shift: MoveDirections) => {
 		cropper.resizeCoordinates(

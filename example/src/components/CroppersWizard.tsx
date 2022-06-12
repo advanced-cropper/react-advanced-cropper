@@ -1,6 +1,5 @@
 import React, { FC, useRef, useState } from 'react';
 import { CircleStencil, RectangleStencil, ImageRestriction, Priority } from 'react-advanced-cropper';
-import { Cropper as MobileCropper } from 'react-mobile-cropper';
 import { preventZoom } from 'advanced-cropper/extensions/preventZoom';
 import cn from 'classnames';
 import { useToggle } from '@site/src/service/useToggle';
@@ -16,6 +15,7 @@ import { SettingsIcon } from './icons/SettingsIcon';
 import { CroppersWizardInfo } from './CroppersWizardInfo';
 import { CroppersWizardSettings } from './CroppersWizardSettings';
 import './CroppersWizard.scss';
+import { TelegramCropper } from "@site/src/components/showcase/Telegram/components/TelegramCropper";
 
 interface Image {
 	src: string;
@@ -99,13 +99,13 @@ export const CroppersWizard: FC = () => {
 
 	const images: Image[] = [
 		{
+			src: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash.jpg',
+			preview: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash-preview.jpg',
+		},
+		{
 			src: 'https://images.pexels.com/photos/876344/pexels-photo-876344.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
 			preview:
 				'https://images.pexels.com/photos/876344/pexels-photo-876344.jpeg?auto=compress&cs=tinysrgb&h=120&w=120',
-		},
-		{
-			src: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash.jpg',
-			preview: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash-preview.jpg',
 		},
 		{
 			src: 'https://images.unsplash.com/photo-1599032909756-5deb82fea3b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
@@ -214,7 +214,7 @@ export const CroppersWizard: FC = () => {
 			</div>
 			<div className="croppers-wizard__body">
 				{cropper === 'mobile-cropper' && (
-					<MobileCropper
+					<TelegramCropper
 						key={'mobile-cropper'}
 						minHeight={minHeight}
 						minWidth={minWidth}
@@ -222,7 +222,7 @@ export const CroppersWizard: FC = () => {
 						maxHeight={maxHeight}
 						className={'croppers-wizard__cropper'}
 						src={src}
-						stencilType={stencilType}
+						stencilComponent={stencilType === 'circle' ? CircleStencil : RectangleStencil}
 						stencilProps={stencilProps}
 					/>
 				)}

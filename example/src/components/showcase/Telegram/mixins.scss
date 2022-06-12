@@ -1,0 +1,11 @@
+@mixin hideable() {
+	visibility: hidden;
+	opacity: 0;
+	transition: 0.5s;
+	transition-delay: 0s;
+	&--visible {
+		transition-delay: 0.5s;
+		opacity: 1;
+		visibility: visible;
+	}
+}

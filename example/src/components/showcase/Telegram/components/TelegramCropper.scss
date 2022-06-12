@@ -1,0 +1,97 @@
+@import '../constants';
+
+.telegram-cropper {
+	background: black;
+	max-height: 100%;
+	color: $telegram-main-color;
+}
+
+.telegram-rectangle-stencil, .telegram-circle-stencil {
+	&__line {
+		border-color: rgba($telegram-line-color, 0.8);
+	}
+
+	&__handler-wrapper {
+		width: $telegram-handler-wrapper-size;
+		height: $telegram-handler-wrapper-size;
+
+		&--west-north {
+			transform: translate(-$telegram-handler-padding - 1, -$telegram-handler-padding - 1);
+		}
+
+		&--east-south {
+			transform: translate(-$telegram-big-handler-size - $telegram-handler-padding + 1, -$telegram-big-handler-size - $telegram-handler-padding + 1);
+		}
+
+		&--west-south {
+			transform: translate(-$telegram-handler-padding - 1, -$telegram-big-handler-size - $telegram-handler-padding + 1);
+		}
+
+		&--east-north {
+			transform: translate(-$telegram-big-handler-size - $telegram-handler-padding + 1, -$telegram-handler-padding - 1);
+		}
+	}
+
+	&__handler {
+		display: block;
+		position: relative;
+		flex-shrink: 0;
+		transition: opacity 0.5s;
+		border: none;
+		background: $telegram-base-color;
+		top: auto;
+		left: auto;
+		height: $telegram-small-handler-size;
+		width: $telegram-small-handler-size;
+		opacity: 0;
+
+		&--west-north,
+		&--east-south,
+		&--west-south,
+		&--east-north {
+			display: block;
+			height: $telegram-big-handler-size;
+			width: $telegram-big-handler-size;
+			background: none;
+			opacity: 0.7;
+		}
+
+		&--west-north {
+			border-left: solid $telegram-big-handler-width $telegram-base-color;
+			border-top: solid $telegram-big-handler-width $telegram-base-color;
+		}
+
+		&--east-south {
+			border-right: solid $telegram-big-handler-width $telegram-base-color;
+			border-bottom: solid $telegram-big-handler-width $telegram-base-color;
+		}
+
+		&--west-south {
+			border-left: solid $telegram-big-handler-width $telegram-base-color;
+			border-bottom: solid $telegram-big-handler-width $telegram-base-color;
+		}
+
+		&--east-north {
+			border-right: solid $telegram-big-handler-width $telegram-base-color;
+			border-top: solid $telegram-big-handler-width $telegram-base-color;
+		}
+
+		&--hover {
+			opacity: 1;
+		}
+	}
+}
+
+.telegram-circle-stencil {
+	&__line {
+		border-color: rgba($telegram-line-color, 0.3);
+	}
+	&__preview {
+		border: solid 2px rgba($telegram-line-color, 0.4);
+	}
+	&__handler {
+		&--hover {
+			opacity: 1;
+		}
+	}
+}

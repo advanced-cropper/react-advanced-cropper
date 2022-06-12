@@ -1,0 +1,39 @@
+@import '../constants';
+@import '../mixins';
+
+.telegram-cropper-wrapper {
+	padding: 20px 20px;
+	overflow: hidden;
+	background: black;
+	max-height: 100%;
+	&--with-navigation {
+		padding-bottom: 80px;
+	}
+
+	&__content {
+		position: relative;
+	}
+
+	&__fade {
+		flex-grow: 1;
+		min-height: 0;
+	}
+
+	&__navigation {
+		position: absolute;
+		bottom: 0;
+		max-width: 450px;
+		width: 100%;
+		left: 50%;
+		transform: translateX(-50%);
+	}
+
+	&__spinner {
+		@include hideable();
+		stroke: $telegram-base-color;
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+}

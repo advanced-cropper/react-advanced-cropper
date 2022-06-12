@@ -1,13 +1,14 @@
 import { ComponentType, CSSProperties, ReactNode, Ref } from 'react';
 import { CropperImage, CropperTransitions, AspectRatio, CropperState, ModifierSettings } from 'advanced-cropper/types';
 import { DefaultSettings } from '../../Advanced Cropper/dist/defaults';
+import { AbstractCropperMethodOptions } from '../../Advanced Cropper/dist/instance';
 import {
 	AbstractCropperIntrinsicProps,
 	AbstractCropperProps,
 	AbstractCropperRef,
 	AbstractCropperSettings,
 } from './components/AbstractCropper';
-import { CropperRef } from './components/Cropper';
+import { CropperRef } from './components/croppers/Cropper';
 
 export type StencilComponent = any;
 
@@ -86,6 +87,8 @@ export type CustomCropperProps<Extension extends SettingsExtension> = AbstractCr
 export type CustomCropperRef<Extension extends SettingsExtension> = AbstractCropperRef<ExtendedSettings<Extension>>;
 
 export type CustomCropperSettings = AbstractCropperSettings;
+
+export type CropperMethodOptions = AbstractCropperMethodOptions;
 
 export interface StencilRef {
 	aspectRatio: () => AspectRatio;
