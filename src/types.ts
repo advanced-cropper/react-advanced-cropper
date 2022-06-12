@@ -1,5 +1,12 @@
 import { ComponentType, CSSProperties, ReactNode, Ref } from 'react';
-import { CropperImage, CropperTransitions, AspectRatio, CropperState, ModifierSettings } from 'advanced-cropper/types';
+import {
+	CropperImage,
+	CropperTransitions,
+	AspectRatio,
+	CropperState,
+	ModifierSettings,
+	CoreSettings,
+} from 'advanced-cropper/types';
 import { DefaultSettings } from '../../Advanced Cropper/dist/defaults';
 import { AbstractCropperMethodOptions } from '../../Advanced Cropper/dist/instance';
 import {
@@ -100,6 +107,6 @@ export interface StencilProps<Cropper = CropperRef> {
 
 export type ArbitraryProps = Record<string, any>;
 
-export type ExtendedSettings<Extension extends {}> = Extension & DefaultSettings & ModifierSettings;
+export type ExtendedSettings<Extension extends {}> = Extension & DefaultSettings & CoreSettings & ModifierSettings;
 
 export type SettingsExtension = object;

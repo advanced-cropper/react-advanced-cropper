@@ -4,7 +4,7 @@ import { DrawOptions } from 'advanced-cropper/canvas';
 import { StretchAlgorithm } from 'advanced-cropper/html';
 import { DefaultSettings, defaultStencilConstraints } from 'advanced-cropper/defaults';
 import {
-	BoundarySizeAlgorithm,
+	BoundarySizeAlgorithm, CoreSettings,
 	CropperImage,
 	CropperState,
 	CropperTransitions,
@@ -44,7 +44,7 @@ import './AbstractCropper.scss';
 
 export type AbstractCropperSettingsProp<Settings extends CropperStateSettings> = CropperStateSettingsProp<Settings>;
 
-export type AbstractCropperSettings = DefaultSettings & ModifierSettings;
+export type AbstractCropperSettings = DefaultSettings & CoreSettings & ModifierSettings;
 
 export interface AbstractCropperRef<Settings extends AbstractCropperSettings = AbstractCropperSettings> {
 	reset: () => void;
