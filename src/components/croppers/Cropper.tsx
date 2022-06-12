@@ -1,6 +1,6 @@
 import React, { Ref } from 'react';
 import { isUndefined } from 'advanced-cropper/utils';
-import { CustomCropperProps, CustomCropperRef, CustomCropperSettings, SettingsExtension } from '../../types';
+import { CustomCropperProps, CustomCropperRef, SettingsExtension } from '../../types';
 import { createCropper, splitAbstractCropperProps } from '../../service/cropper';
 import { StencilSize } from '../../../../Advanced Cropper/dist/extensions/stencilSize';
 import { hybridStencilAutoZoom } from '../../deprecated/hybridAutoZoom';
@@ -13,8 +13,6 @@ interface DeprecatedCropperSettings {
 	autoZoom?: boolean;
 }
 
-export type CropperSettings = CustomCropperSettings & DeprecatedCropperSettings;
-
 export type CropperProps<Extension extends SettingsExtension = {}> = CustomCropperProps<Extension>;
 
 export type CropperRef<Extension extends SettingsExtension = {}> = CustomCropperRef<Extension>;
@@ -25,7 +23,7 @@ const CropperComponent = <Extension extends SettingsExtension = {}>(
 ) => {
 	let { settings, postProcess, ...parameters } = splitAbstractCropperProps(props);
 
-	// Process the deprecate properties
+	// Process the deprecated properties
 	const { stencilSize, autoZoom, ...actualSettings } = settings as DeprecatedCropperSettings;
 
 	const deprecationWarning = useDeprecationWarning();

@@ -4,7 +4,6 @@ import { DefaultSettings } from '../../Advanced Cropper/dist/defaults';
 import { AbstractCropperMethodOptions } from '../../Advanced Cropper/dist/instance';
 import {
 	AbstractCropperIntrinsicProps,
-	AbstractCropperProps,
 	AbstractCropperRef,
 	AbstractCropperSettings,
 } from './components/AbstractCropper';

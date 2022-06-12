@@ -262,7 +262,6 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		resetCropper();
 	}, [image]);
 
-	// @ts-ignore
 	useImperativeHandle(mergeRefs([ref, cropperRef]), () => cropperInterface);
 
 	const StencilComponent = stencilComponent;

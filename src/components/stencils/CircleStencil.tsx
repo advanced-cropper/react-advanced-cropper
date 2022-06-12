@@ -9,7 +9,7 @@ import {
 	MoveDirections,
 	CropperImage,
 } from 'advanced-cropper/types';
-import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
+import { getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -17,9 +17,8 @@ import { BoundingBox } from '../service/BoundingBox';
 import { StencilOverlay } from '../service/StencilOverlay';
 import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
-import './CircleStencil.scss';
 import { StencilOptions } from '../../types';
-import { aspectRatio } from '../../../../Advanced Cropper/dist/extensions/stencilSize';
+import './CircleStencil.scss';
 
 type HandlerComponent = ComponentType<any>;
 
