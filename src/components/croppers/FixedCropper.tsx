@@ -6,8 +6,8 @@ import {
 	fixedStencil,
 	StencilSize,
 	fixedStencilConstraints,
-} from '../Advanced Cropper/dist/extensions/stencilSize';
-import { withDefaultSizeRestrictions } from '../Advanced Cropper/dist/defaults';
+} from 'advanced-cropper/extensions/stencilSize';
+import { withDefaultSizeRestrictions } from 'advanced-cropper/defaults';
 import { CustomCropperProps, CustomCropperRef } from '../../types';
 import { createCropper, splitAbstractCropperProps } from '../../service/cropper';
 import { AbstractCropper } from '../AbstractCropper';
@@ -23,7 +23,8 @@ export type FixedCropperProps<Extension extends FixedCropperSettings = FixedCrop
 	UnavailableProps
 >;
 
-export type FixedCropperRef<Extension extends FixedCropperSettings = FixedCropperSettings> = CustomCropperRef<Extension>;
+export type FixedCropperRef<Extension extends FixedCropperSettings = FixedCropperSettings> =
+	CustomCropperRef<Extension>;
 
 const FixedCropperComponent = <Extension extends FixedCropperSettings = FixedCropperSettings>(
 	props: FixedCropperProps<Extension>,
