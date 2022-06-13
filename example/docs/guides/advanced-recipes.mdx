@@ -254,7 +254,7 @@ export const Example = () => {
 
 ## Adjust Stencil
 
-Adjust stencil is the one of [`scaleImage`](/components/cropper.html#resizeimage) prop option.
+Adjust stencil is the one of [`transformImage`](/docs/components/Cropper#transformImage) prop option.
 By default it's enabled. It makes cropper more convenient especially when you have the limitations of width / height,
 but you probably shouldn't  use it if you have fixed stencil, because it will change its size.
 
@@ -269,6 +269,14 @@ You are able to set different the restrictions of an image position by passing t
 - `fitArea` fit image to area and prevents resizing and moving the image beyond the area as much as possible ([example](/introduction/news.html#new-image-restriction-type-borders))
 - `stencil` prevents resizing and moving the image beyond the stencil
 - `none` allows free resizing and moving the image
+
+If you use TypeScript, you should use the corresponding enum value.
+```tsx
+import { ImageRestriction } from 'react-advanced-cropper';
+```
+```tsx
+<Cropper imageRestriction={ImageRestriction.fillArea} />
+```
 
 <ImageRestrictionExample/>
 

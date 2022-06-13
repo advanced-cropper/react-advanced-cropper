@@ -82,44 +82,6 @@ This section still in the development. Stay up to date.
 
 	The optional class for the background that is placed under the cropper background image (actually it wraps that image).
 
-
-### `stencilSize`
-
-- **Type:** `Size | ((state: CropperState, settings: CoreSettings) => Size)`
-
-- **Details:**
-
-	The size of the stencil in pixels (absolute, not relative to an image).
-
-	#### `Object`
-
-	If you just want to set the known size you can pass object to `stencilSize` prop:
-
-	```js
-	{
-    width: 100,
-    height: 100,
-	}
-	```
-
-	#### `Function`
-
-	If you need to set the stencil size based on the boundaries size, you should pass a function.
-	For example:
-
-	```js
-	(state, settings) => {
-    const { boundary } = state;
-    return {
-    	width: boundary.width - 100,
-    	height: boundary.height - 100,
-    }
-	}
-	```
-
-	**See also: [Example](/docs/guides/advanced-recipes#fixed-stencil)**
-
-
 ### `checkOrientation`
 
 - **Type:** `Boolean`
@@ -158,93 +120,6 @@ This section still in the development. Stay up to date.
 
 	**See also: [Example](/docs/guides/advanced-recipes#different-image-restrictions)**
 
-### `scaleImage`
-
-- **Type:** `boolean | ScaleImageSettings`
-```tsx
-interface ScaleImageSettings {
-	touch?: boolean;
-	wheel?:
-    | boolean
-    | {
-        ratio?: number;
-      };
-	adjustStencil?: boolean;
-}
-```
-
-
-- **Default:** `true`
-
-- **Details:**
-
-	This prop is either boolean flag or object settings. The default object used when `true` is passed to `scaleImage`:
-	```js
-	{
-    touch: true,
-    wheel: {
-    	ratio: 0.1
-    },
-    adjustStencil: true
-	}
-	```
-
-	The `touch` field checks if image should be resized by a pinch gesture.
-
-	The `wheel` field is either boolean flag or object. The object currently support only one option: `ratio`, i.e. speed of resizing by wheel.
-
-	The particular attention should be focused on `adjustStencil` parameter. It enables or disables the adjusting
-	of the stencil size on resize image. It makes cropper more convenient especially when you have the limitations of width / height,
-	but you probably shouldn't  use it if you have fixed stencil, because it will change its size.
-
-	**See also: [Example](/docs/guides/advanced-recipes#adjust-stencil)**
-
-
-### `moveImage`
-
-- **Type:** `boolean | MoveImageSettings`
-```tsx
-interface MoveImageSettings {
-	touch?: boolean;
-	mouse?: boolean;
-}
-```
-
-- **Default:** `true`
-
-- **Details:**
-
-	This prop is either boolean flag or object settings. The default object:
-    `js
-    {
-    	touch: true,
-    	mouse: true
-    }
-    `
-
-    The fields:
-    - `touch` is a flag that checks if image should be moved by a touch
-    - `mouse` is a flag that checks if image should be moved by a mouse
-
-
-
-
-### `rotateImage`
-
-- **Type:** `boolean | RotateImageSettings`
-```tsx
-interface RotateImageSettings {
-	touch?: boolean;
-}
-```
-
-- **Default:** `false`
-
-- **Details:**
-
-	This prop is either boolean flag or object settings.
-
-	The `touch` field checks if image should be rotated by a rotate gesture.
 
 
 ### `minWidth`
@@ -323,15 +198,26 @@ interface RotateImageSettings {
 	The props that will be passed to the background wrapper component.
 
 
+### `backgroundComponent`
 
-### `stateSettings`
+- **Type:** `Component`
 
-- **Type:** `object`
+- **Default:** `CropperWrapper`
 
 - **Details:**
 
-	The escape hatch to pass the additional parameters to `CoreSettings`, that could be used
-	by the custom algorithms.
+	The background component. This property can be used to replace the component that display the image.
+
+
+### `backgroundProps`
+
+- **Type:** `object`
+
+- **Default:** `{}`
+
+- **Details:**
+
+	The props that will be passed to the background component.
 
 ### `transitions`
 
@@ -349,24 +235,6 @@ interface TransitionsSettings {
 
 	This flag indicates if transitions should be enabled.
 	The transitions are used during auto-zoom, rotate image, flip image, using `zoom` and `move` methods.
-
-### `autoZoom`
-
-- **Type:** `Boolean`
-
-- **Default:** `false`
-
-- **Details:**
-
-	This flag indicates if auto-zoom should be enabled.
-
-	If the auto-zoom algorithm was not redefined, there are two algorithms used.
-
-	1. If `stencilSize` is not defined, the default simple auto-zoom algorithm will be used. It resizes and move visible area to
-	when you setting the coordinates by `setCoordinates` method, to prevent overlap the coordinates and the visible area.
-
-	2. If `stencilSize` is defined, the default fixed auto-zoom algorithm will be used. It adapts coordinates and visible area
-	to fit the `stencilSize` restrictions.
 
 ### `priority`
 
@@ -540,6 +408,27 @@ interface TransitionsSettings {
 	}
 	```
 	**See also: [Example](/docs/guides/advanced-recipes#default-transforms)**
+
+### `transformImage`
+
+- **Type:** `boolean | TransformImageSettings`
+```tsx
+interface TransformImageSettings {
+	 adjustStencil?: boolean;
+}
+```
+
+- **Default:** `true`
+
+- **Details:**
+
+	This prop is either boolean flag or object settings.
+
+	The `adjustStencil` field enables or disables the adjusting
+   of the stencil size on resize image. It makes cropper more convenient especially when you have the limitations of width / height,
+   but you probably shouldn't  use it if you have fixed stencil, because it will change its size.
+
+   **See also: [Example](/docs/guides/advanced-recipes#adjust-stencil)**
 
 
 ### `boundarySizeAlgorithm`

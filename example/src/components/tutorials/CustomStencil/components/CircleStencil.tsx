@@ -37,12 +37,16 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: 
 		);
 	};
 
+	const onMove = (directions: MoveDirections) => {
+		cropper.moveCoordinates(directions);
+	};
+
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
 			<DraggableElement
 				className="circle-stencil__handler"
-				onDrag={onResize}
-				onDragEnd={cropper.resizeCoordinatesEnd}
+				onMove={onResize}
+				onMoveEnd={cropper.resizeCoordinatesEnd}
 			>
 				<svg xmlns="http://www.w3.org/2000/svg" width="26.7" height="26.3" xmlSpace="preserve">
 					<path
@@ -53,7 +57,7 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: 
 			</DraggableElement>
 			<DraggableArea
 				className="circle-stencil__draggable-area"
-				onMove={cropper.moveCoordinates}
+				onMove={onMove}
 				onMoveEnd={cropper.moveCoordinatesEnd}
 			>
 				<StencilOverlay className="circle-stencil__overlay" />
