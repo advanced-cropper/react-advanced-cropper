@@ -16,6 +16,7 @@ import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import './BoundingBox.scss';
+import { ArtificialTransition } from "./ArtificialTransition";
 
 const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
 const VERTICAL_DIRECTIONS = ['south', 'north', null] as const;
@@ -278,18 +279,15 @@ export const BoundingBox = ({
 						const top =
 							verticalPosition === 'south' ? height : verticalPosition === 'north' ? 0 : height / 2;
 						return (
-							<div
+							<ArtificialTransition
 								key={handler.name}
 								className={'react-bounding-box__handler-wrapper'}
-								style={{
-									...style,
-									top: `${top}px`,
-									left: `${left}px`,
-									transition: getTransitionStyle(transitions),
-								}}
+								transitions={transitions}
+								left={left}
+								top={top}
 							>
 								{handlerElement}
-							</div>
+							</ArtificialTransition>
 						);
 					} else {
 						return handlerElement;
