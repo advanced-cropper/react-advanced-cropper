@@ -79,7 +79,6 @@
   "dependencies": {
     "advanced-cropper": "^0.6.1",
     "classnames": "^2.2.6",
-    "debounce": "^1.2.0",
     "tslib": "^2.0.3"
   }
 }

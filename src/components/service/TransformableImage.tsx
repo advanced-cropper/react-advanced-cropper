@@ -1,7 +1,7 @@
 import React, { ReactNode, CSSProperties, Component, RefObject, createRef } from 'react';
-import debounce from 'debounce';
 import { ImageTransform, Point, SimpleTouch } from 'advanced-cropper/types';
 import { touchesToImageTransform, wheelEventToImageTransform } from 'advanced-cropper/transforms';
+import { debounce } from 'advanced-cropper/utils';
 
 interface Props {
 	onTransform?: (transform: ImageTransform) => void;
