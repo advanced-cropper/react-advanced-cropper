@@ -86,8 +86,10 @@ The examples below are written for `RectangleStencil`.
 ```jsx
 <Cropper
 	stencilProps={{
-		minAspectRatio: 16/8,
-		maxAspectRatio: 4/8
+		aspectRatio: {
+			minimum: 16/8,
+			maximum: 4/8
+		}
 	}}
 />
 ```

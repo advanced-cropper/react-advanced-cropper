@@ -52,6 +52,7 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 			ref={mergeRefs([ref, cropperRef])}
 			stencilConstraints={stencilConstraints}
 			stencilProps={{
+				...stencilProps,
 				lineClassNames: joinClassNames(stencilProps.lineClassNames, {
 					default: 'telegram-stencil__line',
 				}),
@@ -71,7 +72,6 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 					eastNorth: 'telegram-stencil__handler--east-north',
 				}),
 				previewClassName: cn(stencilProps.previewClassName, 'telegram-stencil__preview'),
-				...stencilProps,
 				movable: false,
 			}}
 			wrapperComponent={WrapperComponent}

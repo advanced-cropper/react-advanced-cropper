@@ -1,0 +1,12 @@
+.twitter-cropper {
+	background: none;
+	&__overlay {
+		color: rgba(#edf2f4, 0.5);
+	}
+	&__background {
+		background-color: #edf2f4;
+	}
+	&__preview {
+		border: solid 5px rgb(29, 161, 242);
+	}
+}

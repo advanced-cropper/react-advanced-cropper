@@ -1,5 +1,12 @@
 import React, { useState, useRef } from 'react';
-import { Cropper, CropperSettings, CropperState, CropperRef, getTransformedImageSize, retrieveSizeRestrictions } from 'react-advanced-cropper';
+import {
+	Cropper,
+	DefaultSettings,
+	CropperState,
+	CropperRef,
+	getTransformedImageSize,
+	retrieveSizeRestrictions,
+} from 'react-advanced-cropper';
 import { onInputChange } from '../..//service/react';
 import './CustomRestrictionsExample.scss';
 
@@ -15,7 +22,7 @@ export const CustomRestrictionsExample = () => {
 	const [maxHeight, setMaxHeight] = useState<number>();
 	const [minHeight, setMinHeight] = useState<number>();
 
-	const percentsRestriction = (state: CropperState, settings: CropperSettings) => {
+	const percentsRestriction = (state: CropperState, settings: DefaultSettings) => {
 		const { minWidth, minHeight, maxWidth, maxHeight } = retrieveSizeRestrictions(settings);
 
 		const imageSize = getTransformedImageSize(state);

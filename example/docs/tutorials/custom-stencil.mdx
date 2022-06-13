@@ -399,18 +399,22 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(
 		);
 	};
 
+	const onMove = (directions: MoveDirections) => {
+		cropper.moveCoordinates(directions);
+	};
+
 	return (
 		<StencilWrapper className="circle-stencil" transitions={transitions} {...coordinates}>
 			<DraggableElement
 				className="circle-stencil__handler"
-				onDrag={onResize}
-				onDragEnd={cropper.resizeCoordinatesEnd}
+				onMove={onResize}
+				onMoveEnd={cropper.resizeCoordinatesEnd}
 			>
     		<img src={handlerIcon} />
     	</DraggableElement>
 			<DraggableArea
 				className="circle-stencil__draggable-area"
-				onMove={cropper.moveCoordinates}
+				onMove={onMove}
 				onMoveEnd={cropper.moveCoordinatesEnd}
 			>
 				<StencilOverlay className="circle-stencil__overlay" />

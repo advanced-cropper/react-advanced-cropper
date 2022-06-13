@@ -29,7 +29,6 @@ There is the example of a fixed stencil below, that may be useful for mobile dev
 import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
 ```
 ```tsx
-<FixedCropper
 	src={'https://images.pexels.com/photos/5006465/pexels-photo-5006465.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260'}
 	stencilSize={{
 		width: 300,
@@ -45,7 +44,6 @@ import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
 />
 ```
 
-
 ## Default size and position
 
 Sometimes you should set the default position and default size of cropper. For example, if you automatically detect an user face.
@@ -58,16 +56,16 @@ The function:
 
 ```tsx
 import React from 'react';
-import { Cropper } from 'react-advanced-cropper';
+import { Cropper, CropperState, CoreSettings } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const defaultPosition = () => {
+	const defaultPosition = (state: CropperState, settings: CoreSettings) => {
 			return {
 				left: 100,
 				top: 100,
 			};
 	},
-	const defaultSize = () => {
+	const defaultSize = (state: CropperState, settings: CoreSettings) => {
 			return {
 				width: 400,
 				height: 400,
@@ -82,6 +80,7 @@ export const Example = () => {
 	)
 };
 ```
+
 The object:
 ```tsx
 import React from 'react';
@@ -92,16 +91,12 @@ export const Example = () => {
 		<Cropper
 			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
 			defaultSize={{
-					return {
-						width: 400,
-						height: 400,
-					};
+					width: 400,
+					height: 400,
 			}}
 			defaultPosition={{
-					return {
-						left: 100,
-						top: 100,
-					};
+					left: 100,
+					top: 100,
 			}}
 		/>;
 	)
@@ -262,24 +257,6 @@ Try to resize image when `adjustStencil` is disabled and enabled to feel the dif
 
 <AdjustStencilExample/>
 
-## Different image restrictions
-
-You are able to set different the restrictions of an image position by passing the following string to the `imageRestriction` prop:
-- `fillArea` fill area by image and prevents resizing and moving the image beyond the area
-- `fitArea` fit image to area and prevents resizing and moving the image beyond the area as much as possible ([example](/introduction/news.html#new-image-restriction-type-borders))
-- `stencil` prevents resizing and moving the image beyond the stencil
-- `none` allows free resizing and moving the image
-
-If you use TypeScript, you should use the corresponding enum value.
-```tsx
-import { ImageRestriction } from 'react-advanced-cropper';
-```
-```tsx
-<Cropper imageRestriction={ImageRestriction.fillArea} />
-```
-
-<ImageRestrictionExample/>
-
 
 ## Set coordinates
 
@@ -319,6 +296,25 @@ export const Example = () => {
 };
 ```
 
+## Different image restrictions
+
+You are able to set different the restrictions of an image position by passing the following string to the `imageRestriction` prop:
+- `fillArea` fill area by image and prevents resizing and moving the image beyond the area
+- `fitArea` fit image to area and prevents resizing and moving the image beyond the area as much as possible
+- `stencil` prevents resizing and moving the image beyond the stencil
+- `none` allows free resizing and moving the image
+
+If you use TypeScript, you should use the corresponding enum value.
+```tsx
+import { ImageRestriction } from 'react-advanced-cropper';
+```
+```tsx
+<Cropper imageRestriction={ImageRestriction.fillArea} />
+```
+
+<ImageRestrictionExample/>
+
+
 ## Custom size restrictions
 
 There may be situations, when you need to set the minimum and maximum sizes, for example, in percents, not in pixels. In that situations you should redefine the `sizeRestrictionsAlgorithm` functions by passing your custom function as [a corresponding prop](/components/cropper.html#sizeretrictionsalgorithm)
@@ -327,10 +323,10 @@ There may be situations, when you need to set the minimum and maximum sizes, for
 
 ```js
 import React from 'react';
-import { Cropper, CropperRef, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
+import { Cropper, CropperRef, DefaultSettings, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const percentsRestriction = (state: CropperState, settings: CoreSettings) => {
+	const percentsRestriction = (state: CropperState, settings: DefaultSettings) => {
 		const { minWidth, minHeight, maxWidth, maxHeight } = retrieveSizeRestrictions(settings);
 
 		const imageSize = getTransformedImageSize(state);
@@ -345,7 +341,7 @@ export const Example = () => {
 
 	return (
 		<Cropper
-			sizeRestrictionsAlgorithm={percentsRestriction}
+			sizeRestrictions={percentsRestriction}
 			src={'https://images.unsplash.com/photo-1494205577727-d32e58564756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80'}
 		/>
 	);

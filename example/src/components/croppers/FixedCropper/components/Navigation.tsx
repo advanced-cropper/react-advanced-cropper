@@ -32,7 +32,6 @@ export const Navigation: FC<Props> = ({ className, onZoom, zoom }) => {
 				<ZoomOutIcon />
 			</button>
 			<Slider value={zoom} onChange={onZoom} className="fixed-cropper-navigation__slider" />
-			<div className="test"></div>
 			<button className="fixed-cropper-navigation__button" onClick={onZoomIn}>
 				<ZoomInIcon />
 			</button>

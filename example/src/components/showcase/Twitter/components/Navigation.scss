@@ -1,0 +1,23 @@
+.twitter-cropper-navigation {
+	display: flex;
+	width: 100%;
+	align-items: center;
+	justify-content: center;
+	height: 50px;
+	&__wrapper {
+		display: flex;
+		align-items: center;
+		max-width: 400px;
+		width: 100%;
+	}
+	&__zoom-icon {
+		height: 18.75px;
+		width: 18.75px;
+		fill: rgb(101, 119, 134);
+		flex-shrink: 0;
+	}
+	&__slider {
+		margin-left: 10px;
+		margin-right: 10px;
+	}
+}
