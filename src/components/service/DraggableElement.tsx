@@ -15,6 +15,7 @@ interface Props {
 	onEnter?: () => void;
 	useAnchor?: boolean;
 	activationDistance?: number;
+	rerender?: boolean;
 }
 
 export class DraggableElement extends Component<Props> {
@@ -28,6 +29,7 @@ export class DraggableElement extends Component<Props> {
 		disabled: false,
 		activationDistance: 30,
 		useAnchor: true,
+		rerender: true,
 	};
 
 	constructor(props: Props) {
@@ -195,6 +197,10 @@ export class DraggableElement extends Component<Props> {
 	onMouseUp = () => {
 		this.processEnd();
 	};
+
+	shouldComponentUpdate() {
+		return !!this.props.rerender;
+	}
 
 	componentWillUnmount() {
 		window.removeEventListener('mouseup', this.onMouseUp);
