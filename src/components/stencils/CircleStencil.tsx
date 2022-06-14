@@ -1,4 +1,4 @@
-import React, { ComponentType, forwardRef, useImperativeHandle, CSSProperties, useState, useEffect } from 'react';
+import React, { ComponentType, forwardRef, useImperativeHandle, CSSProperties, useState } from 'react';
 import cn from 'classnames';
 import {
 	CardinalDirection,

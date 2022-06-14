@@ -11,12 +11,11 @@ import {
 	MoveDirections,
 } from 'advanced-cropper/types';
 import { getDirectionNames, isCardinalDirection, isObject } from 'advanced-cropper/utils';
-import { getTransitionStyle } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
+import { ArtificialTransition } from './ArtificialTransition';
 import './BoundingBox.scss';
-import { ArtificialTransition } from "./ArtificialTransition";
 
 const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
 const VERTICAL_DIRECTIONS = ['south', 'north', null] as const;

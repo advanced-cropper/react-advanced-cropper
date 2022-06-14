@@ -4,7 +4,8 @@ import { DrawOptions } from 'advanced-cropper/canvas';
 import { StretchAlgorithm } from 'advanced-cropper/html';
 import { DefaultSettings, defaultStencilConstraints } from 'advanced-cropper/defaults';
 import {
-	BoundarySizeAlgorithm, CoreSettings,
+	BoundarySizeAlgorithm,
+	CoreSettings,
 	CropperImage,
 	CropperState,
 	CropperTransitions,

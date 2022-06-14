@@ -14,7 +14,7 @@ interface Props {
 	top?: number;
 }
 
-export const ArtificialTransition: FC<Props> = ({ className,  transitions, children, ...values }) => {
+export const ArtificialTransition: FC<Props> = ({ className, transitions, children, ...values }) => {
 	const root = useRef<HTMLDivElement>(null);
 
 	const [rememberedValues, setRememberedValues] = useState(values);

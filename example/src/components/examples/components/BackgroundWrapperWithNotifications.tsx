@@ -6,11 +6,11 @@ import {
 	isWheelEvent,
 	useMoveImageOptions,
 	useScaleImageOptions,
+	TransformableImageEvent,
 } from 'react-advanced-cropper';
 import { useDebouncedCallback } from 'use-debounce';
 import './BackgroundWrapperWithNotifications.scss';
 import cn from 'classnames';
-import { TransformableImageEvent } from '../../../../../src';
 
 export const BackgroundWrapperWithNotifications = ({
 	cropper,

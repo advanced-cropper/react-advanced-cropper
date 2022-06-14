@@ -7,8 +7,8 @@ import {
 	ModifierSettings,
 	CoreSettings,
 } from 'advanced-cropper/types';
-import { DefaultSettings } from '../../Advanced Cropper/dist/defaults';
-import { AbstractCropperMethodOptions } from '../../Advanced Cropper/dist/instance';
+import { DefaultSettings } from 'advanced-cropper/defaults';
+import { AbstractCropperMethodOptions } from 'advanced-cropper/instance';
 import {
 	AbstractCropperIntrinsicProps,
 	AbstractCropperRef,
