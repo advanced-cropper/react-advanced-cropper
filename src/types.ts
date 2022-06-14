@@ -6,6 +6,7 @@ import {
 	CropperState,
 	ModifierSettings,
 	CoreSettings,
+	RawAspectRatio,
 } from 'advanced-cropper/types';
 import { DefaultSettings } from 'advanced-cropper/defaults';
 import { AbstractCropperMethodOptions } from 'advanced-cropper/instance';
@@ -97,7 +98,7 @@ export type CustomCropperSettings = AbstractCropperSettings;
 export type CropperMethodOptions = AbstractCropperMethodOptions;
 
 export interface StencilRef {
-	aspectRatio: () => AspectRatio;
+	aspectRatio: RawAspectRatio | (() => RawAspectRatio);
 }
 
 export interface StencilProps<Cropper = CropperRef> {

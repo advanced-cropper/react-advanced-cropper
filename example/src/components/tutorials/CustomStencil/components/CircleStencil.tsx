@@ -15,12 +15,7 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: 
 	const transitions = cropper.getTransitions();
 
 	useImperativeHandle(ref, () => ({
-		aspectRatio: () => {
-			return {
-				minimum: 1,
-				maximum: 1,
-			};
-		},
+		aspectRatio: 1,
 	}));
 
 	const onResize = (shift: MoveDirections) => {

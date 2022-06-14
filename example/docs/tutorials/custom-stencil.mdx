@@ -131,6 +131,7 @@ Therefore the functional component should be wrapped in `forwardRef` method.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
+	StencilRef,
 	StencilProps,
 	StencilWrapper
 } from 'react-advanced-cropper';
@@ -169,6 +170,7 @@ techniques, but they can produce some glitches during the transitions.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
+	StencilRef,
 	StencilProps,
 	StencilWrapper,
 	StencilOverlay
@@ -210,6 +212,7 @@ Let's add the handler to resize the stencil:
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
+	StencilRef,
 	StencilProps,
 	StencilWrapper,
   StencilOverlay
@@ -366,6 +369,7 @@ Fortunately, they are trivial. We just pass the default cropper methods to them.
 ```tsx
 import React, { useImperativeHandle, forwardRef } from 'react';
 import {
+	StencilRef,
 	StencilProps,
 	StencilWrapper,
   StencilOverlay,
