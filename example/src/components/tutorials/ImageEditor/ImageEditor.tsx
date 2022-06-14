@@ -12,7 +12,7 @@ export const ImageEditor = () => {
 	const cropperRef = useRef<CropperRef>(null);
 
 	const [src, setSrc] = useState(
-		'https://images.pexels.com/photos/4383577/pexels-photo-4383577.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
+		'/react-advanced-cropper/img/images/pexels-photo-4383577.jpeg',
 	);
 
 	const [mode, setMode] = useState('crop');

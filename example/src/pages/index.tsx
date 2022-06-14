@@ -17,7 +17,7 @@ import 'react-advanced-cropper/dist/style.css'
 
 export const GettingStartedExample = () => {
     const [image] = useState(
-        'https://images.unsplash.com/photo-1599140849279-1014532882fe?fit=crop&w=1300&q=80',
+        '/react-advanced-cropper/img/images/photo-1599140849279-1014532882fe.jpg',
     );
 
     const onChange = (cropper: CropperRef) => {

@@ -60,7 +60,7 @@ export const SetCoordinatesExample = () => {
 				ref={cropperRef}
 				className={'set-coordinates-example__cropper'}
 				src={
-					'https://images.unsplash.com/photo-1532182657011-d3d31357b5d8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=696&q=80'
+					'/react-advanced-cropper/img/images/photo-1532182657011-d3d31357b5d8.jpg'
 				}
 				stencilProps={{
 					minAspectRatio: 1 / 2,

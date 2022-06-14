@@ -14,7 +14,7 @@ export const CustomRestrictionsExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 	const [src, setSrc] = useState(
-		'https://images.unsplash.com/photo-1494205577727-d32e58564756?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=750&q=80',
+		'/react-advanced-cropper/img/images/photo-1494205577727-d32e58564756.jpg',
 	);
 
 	const [minWidth, setMinWidth] = useState<number>(50);

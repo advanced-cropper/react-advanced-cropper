@@ -49,7 +49,7 @@ export const AdjustStencilExample = () => {
 					top: 183,
 				}}
 				src={
-					'https://images.unsplash.com/photo-1596473322597-91d5b6938b8a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80'
+					'/react-advanced-cropper/img/images/photo-1596473322597-91d5b6938b8a.jpg'
 				}
 			/>
 			<label className="adjust-stencil-example__adjust">

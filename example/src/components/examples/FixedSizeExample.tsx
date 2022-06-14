@@ -7,7 +7,7 @@ export const FixedSizeExample = () => {
 		<FixedCropper
 			className={'fixed-size-example'}
 			src={
-				'https://images.unsplash.com/photo-1527137342181-19aab11a8ee8?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1950&q=80'
+				'/react-advanced-cropper/img/images/photo-1527137342181-19aab11a8ee8.jpg'
 			}
 			stencilSize={{
 				width: 300,

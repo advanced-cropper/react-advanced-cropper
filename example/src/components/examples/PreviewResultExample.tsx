@@ -19,7 +19,7 @@ export const PreviewResultExample = () => {
 	const [transitions, setTransitions] = useState<CropperTransitions>();
 
 	const [src] = useState(
-		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
+		'/react-advanced-cropper/img/images/photo-1623432532623-f8f1347d954c.jpg',
 	);
 
 	const onChange = (cropper: CropperRef) => {

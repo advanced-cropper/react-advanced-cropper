@@ -45,7 +45,7 @@ export const TransformImageExample = () => {
 				ref={cropperRef}
 				className={'transform-image-example__cropper'}
 				src={
-					'https://images.unsplash.com/photo-1538888649860-8fb12eb67541?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1011&q=80'
+					'/react-advanced-cropper/img/images/photo-1538888649860-8fb12eb67541.jpg'
 				}
 			/>
 			<VerticalButtons>

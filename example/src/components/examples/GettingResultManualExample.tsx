@@ -11,7 +11,7 @@ export const GettingResultManualExample = () => {
 	const [preview, setPreview] = useState<string>();
 
 	const [image] = useState(
-		'https://images.unsplash.com/photo-1586083718719-019f9dc6ca94?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1024&q=80',
+		'/react-advanced-cropper/img/images/photo-1586083718719-019f9dc6ca94.jpg',
 	);
 
 	const onCrop = () => {

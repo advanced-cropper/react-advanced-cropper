@@ -28,7 +28,7 @@ export const ImageRestrictionExample = () => {
 				className={'image-restriction-example__cropper'}
 				imageRestriction={restrictionType}
 				src={
-					'https://images.pexels.com/photos/10426274/pexels-photo-10426274.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'
+					'/react-advanced-cropper/img/images/pexels-photo-10426274.jpeg'
 				}
 			/>
 			<div className="image-restriction-example__panel">

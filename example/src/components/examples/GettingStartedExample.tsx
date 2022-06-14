@@ -4,7 +4,7 @@ import './GettingStartedExample.scss';
 
 export const GettingStartedExample = () => {
 	const [image] = useState(
-		'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80',
+		'/react-advanced-cropper/img/images/photo-1599140849279-1014532882fe.jpg',
 	);
 
 	const onChange = (cropper: CropperRef) => {

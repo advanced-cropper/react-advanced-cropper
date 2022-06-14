@@ -47,7 +47,7 @@ export const RotateImageExample = () => {
 				ref={cropperRef}
 				className={'rotate-image-example__cropper'}
 				src={
-					'https://images.unsplash.com/photo-1600353068867-5b4de71e3afb?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=700&q=80'
+					'/react-advanced-cropper/img/images/photo-1600353068867-5b4de71e3afb.jpg'
 				}
 			/>
 			<VerticalButtons>

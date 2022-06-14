@@ -6,7 +6,7 @@ export const DefaultTransformsExample = () => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const [src, setSrc] = useState<string>(
-		'https://images.unsplash.com/photo-1587767959235-abd2d4b4cbe8?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
+		'/react-advanced-cropper/img/images/photo-1587767959235-abd2d4b4cbe8.jpg',
 	);
 
 	const [transformsType, setTransformsType] = useState<string>('horizontal-flip');

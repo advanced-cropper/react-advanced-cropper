@@ -13,7 +13,7 @@ export const FillingCropperExample = () => {
 		<Cropper
 			className={'filling-cropper-example'}
 			src={
-				'https://images.pexels.com/photos/6524107/pexels-photo-6524107.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940'
+				'/react-advanced-cropper/img/images/pexels-photo-6524107.jpeg'
 			}
 			defaultSize={defaultSize}
 		/>

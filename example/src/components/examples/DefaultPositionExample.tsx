@@ -19,7 +19,7 @@ export const DefaultPositionExample = () => {
 		<Cropper
 			className={'default-position-example'}
 			src={
-				'https://images.unsplash.com/photo-1527199372136-dff50c10ea34?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80'
+				'/react-advanced-cropper/img/images/photo-1527199372136-dff50c10ea34.jpg'
 			}
 			defaultSize={defaultSize}
 			defaultPosition={defaultPosition}

@@ -13,7 +13,7 @@ export const ResizeResultExample = () => {
 	const [maxArea, setMaxArea] = useState<number>();
 
 	const [image] = useState(
-		'https://images.pexels.com/photos/1988684/pexels-photo-1988684.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
+		'/react-advanced-cropper/img/images/pexels-photo-1988684.jpeg',
 	);
 
 	const showImage = () => {

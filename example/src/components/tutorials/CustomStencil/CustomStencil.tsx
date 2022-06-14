@@ -4,9 +4,7 @@ import { CircleStencil } from './components/CircleStencil';
 import '../../examples/ChangingStencilExample.scss';
 
 export const CustomStencil = () => {
-	const [image] = useState(
-		'https://images.pexels.com/photos/1451124/pexels-photo-1451124.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940',
-	);
+	const [image] = useState('/react-advanced-cropper/img/images/pexels-photo-1451124.jpeg');
 
 	return <Cropper className={'custom-stencil-example'} stencilComponent={CircleStencil} src={image} />;
 };

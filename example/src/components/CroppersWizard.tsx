@@ -5,6 +5,7 @@ import cn from 'classnames';
 import { useToggle } from '@site/src/service/useToggle';
 import { CloseIcon } from '@site/src/components/icons/CloseIcon';
 import { useHashState } from '@site/src/service/useHashState';
+import { TelegramCropper } from '@site/src/components/showcase/Telegram/components/TelegramCropper';
 import { FixedCropperIcon } from './icons/FixedCropperIcon';
 import { FixedCropper } from './croppers/FixedCropper/FixedCropper';
 import { DefaultCropper } from './croppers/DefaultCropper/DefaultCropper';
@@ -15,7 +16,6 @@ import { SettingsIcon } from './icons/SettingsIcon';
 import { CroppersWizardInfo } from './CroppersWizardInfo';
 import { CroppersWizardSettings } from './CroppersWizardSettings';
 import './CroppersWizard.scss';
-import { TelegramCropper } from "@site/src/components/showcase/Telegram/components/TelegramCropper";
 
 interface Image {
 	src: string;
@@ -100,22 +100,19 @@ export const CroppersWizard: FC = () => {
 	const images: Image[] = [
 		{
 			src: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash.jpg',
-			preview: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash-preview.jpg',
+			preview: '/react-advanced-cropper/img/images/karina-tess-GIgMRVBD-1s-unsplash__preview.jpg',
 		},
 		{
-			src: 'https://images.pexels.com/photos/876344/pexels-photo-876344.jpeg?auto=compress&cs=tinysrgb&h=750&w=1260',
-			preview:
-				'https://images.pexels.com/photos/876344/pexels-photo-876344.jpeg?auto=compress&cs=tinysrgb&h=120&w=120',
+			src: '/react-advanced-cropper/img/images/pexels-photo-876344.jpeg',
+			preview: '/react-advanced-cropper/img/images/pexels-photo-876344__preview.jpeg',
 		},
 		{
-			src: 'https://images.unsplash.com/photo-1599032909756-5deb82fea3b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=1200&q=80',
-			preview:
-				'https://images.unsplash.com/photo-1599032909756-5deb82fea3b0?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=120&q=80',
+			src: '/react-advanced-cropper/img/images/photo-1599032909756-5deb82fea3b0.jpg',
+			preview: '/react-advanced-cropper/img/images/photo-1599032909756-5deb82fea3b0__preview.jpg',
 		},
 		{
-			src: 'https://images.unsplash.com/photo-1639141700803-e5836ba39b4b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1800&q=80',
-			preview:
-				'https://images.unsplash.com/photo-1639141700803-e5836ba39b4b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=120&q=80',
+			src: '/react-advanced-cropper/img/images/photo-1639141700803-e5836ba39b4b.jpg',
+			preview: '/react-advanced-cropper/img/images/photo-1639141700803-e5836ba39b4b__preview.jpg',
 		},
 	];
 
