@@ -17,7 +17,6 @@ interface Props {
 export const StencilWrapper: FC<Props> = ({ className, style, transitions, width, height, left, top, children }) => {
 	return (
 		<ArtificialTransition
-			style={style}
 			className={classnames('react-stencil-wrapper', className)}
 			transitions={transitions}
 			width={width}
