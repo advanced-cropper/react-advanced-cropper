@@ -7,7 +7,7 @@ import { RotateLeftIcon } from '@site/src/components/icons/RotateLeftIcon';
 import { RotateRightIcon } from '@site/src/components/icons/RotateRightIcon';
 import { FlipHorizontalIcon } from '@site/src/components/icons/FlipHorizontalIcon';
 import { FlipVerticalIcon } from '@site/src/components/icons/FlipVerticalIcon';
-import { DownloadIcon } from '@site/src/components/icons/DownloadIcon';
+import { SaveIcon } from '@site/src/components/icons/SaveIcon';
 
 export const RotateImageExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
@@ -64,7 +64,7 @@ export const RotateImageExample = () => {
 					<RotateLeftIcon />
 				</SquareButton>
 				<SquareButton title="Download" onClick={download}>
-					<DownloadIcon />
+					<SaveIcon />
 				</SquareButton>
 			</VerticalButtons>
 		</div>

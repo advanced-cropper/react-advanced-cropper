@@ -13,7 +13,7 @@
     "write-translations": "docusaurus write-translations",
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc"
-	},
+  },
   "dependencies": {
     "@docusaurus/core": "2.0.0-beta.6",
     "@docusaurus/preset-classic": "2.0.0-beta.6",
@@ -33,7 +33,8 @@
     "react-indiana-drag-scroll": "^2.0.1",
     "react-mobile-cropper": "^0.4.1",
     "sass": "^1.42.1",
-    "url-loader": "^4.1.1"
+    "url-loader": "^4.1.1",
+    "use-debounce": "^8.0.1"
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "2.0.0-beta.6",
