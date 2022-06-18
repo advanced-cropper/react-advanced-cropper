@@ -53,7 +53,6 @@ export const HandlerWrapper = ({
 				onMoveEnd={onDragEnd}
 				onLeave={onLeave}
 				onEnter={onEnter}
-				rerender={false}
 				activationDistance={0}
 			>
 				{children}

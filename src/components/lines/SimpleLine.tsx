@@ -46,9 +46,15 @@ export const SimpleLine = ({
 			onEnter={onEnter}
 		>
 			<div
-				className={cn('react-simple-line', defaultClassName, hover && hoverClassName, {
-					[`react-simple-line--${position}`]: !!position,
-				})}
+				className={cn(
+					'react-simple-line',
+					hover && 'react-simple-line--hover',
+					defaultClassName,
+					hover && hoverClassName,
+					{
+						[`react-simple-line--${position}`]: !!position,
+					},
+				)}
 			/>
 		</LineWrapper>
 	);

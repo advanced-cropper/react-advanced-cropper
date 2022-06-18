@@ -59,12 +59,18 @@ export const SimpleHandler = ({
 			onEnter={onEnter}
 		>
 			<div
-				className={cn('react-simple-handler', defaultClassName, hover && hoverClassName, {
-					[`react-simple-handler--${verticalPosition}`]: !!verticalPosition,
-					[`react-simple-handler--${horizontalPosition}`]: !!horizontalPosition,
-					[`react-simple-handler--${horizontalPosition}-${verticalPosition}`]:
-						horizontalPosition && verticalPosition,
-				})}
+				className={cn(
+					'react-simple-handler',
+					hover && 'react-simple-handler--hover',
+					defaultClassName,
+					hover && hoverClassName,
+					{
+						[`react-simple-handler--${verticalPosition}`]: !!verticalPosition,
+						[`react-simple-handler--${horizontalPosition}`]: !!horizontalPosition,
+						[`react-simple-handler--${horizontalPosition}-${verticalPosition}`]:
+							horizontalPosition && verticalPosition,
+					},
+				)}
 			/>
 		</HandlerWrapper>
 	);

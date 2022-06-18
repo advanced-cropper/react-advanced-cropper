@@ -143,10 +143,12 @@ export class DraggableElement extends Component<Props> {
 			}
 		}
 	};
+
 	onTouchEnd = () => {
 		this.started = false;
 		this.processEnd();
 	};
+
 	onTouchMove = (e: TouchEvent) => {
 		if (this.touches.length >= 1) {
 			if (this.started) {
@@ -167,6 +169,7 @@ export class DraggableElement extends Component<Props> {
 			}
 		}
 	};
+
 	onMouseDown = (e: MouseEvent) => {
 		const { onMoveStart, disabled } = this.props;
 		if (!disabled && e.button === 0) {
@@ -180,6 +183,7 @@ export class DraggableElement extends Component<Props> {
 			onMoveStart?.();
 		}
 	};
+
 	onMouseMove = (e: MouseEvent) => {
 		if (!this.props.disabled && this.touches.length) {
 			this.processMove(e, [
@@ -194,6 +198,7 @@ export class DraggableElement extends Component<Props> {
 			e.stopPropagation();
 		}
 	};
+
 	onMouseUp = () => {
 		this.processEnd();
 	};
@@ -241,7 +246,12 @@ export class DraggableElement extends Component<Props> {
 	render() {
 		const { children, className } = this.props;
 		return (
-			<div className={cn('react-draggable-element', className)} ref={this.container}>
+			<div
+				className={cn('react-draggable-element', className)}
+				ref={this.container}
+				onMouseOver={this.onMouseOver}
+				onMouseLeave={this.onMouseLeave}
+			>
 				{children}
 			</div>
 		);
