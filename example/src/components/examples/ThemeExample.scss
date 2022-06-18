@@ -1,0 +1,52 @@
+
+
+.theme-example {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	position: relative;
+	user-select: none;
+	min-height: 200px;
+	border: solid 1px #eee;
+
+	&--compact {
+		@import '~react-advanced-cropper/dist/themes/compact.scss';
+	}
+
+	&--classic {
+		@import '~react-advanced-cropper/dist/themes/classic.scss';
+	}
+
+	&--bubble {
+		@import '~react-advanced-cropper/dist/themes/bubble.scss';
+	}
+
+	&__theme {
+		color: white;
+		position: absolute;
+		font-size: 10px;
+		right: 10px;
+		bottom: 10px;
+		opacity: 0.5;
+	}
+
+	&__button {
+		background: rgba(black, 0.4);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		height: 42px;
+		width: 42px;
+		margin-bottom: 10px;
+		cursor: pointer;
+		transition: background 0.5s;
+		&:hover {
+			background: black;
+		}
+	}
+	&__buttons {
+		position: absolute;
+		left: 10px;
+		top: 50%;
+		transform: translateY(-50%);
+	}
+}
