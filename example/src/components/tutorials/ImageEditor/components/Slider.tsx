@@ -1,7 +1,6 @@
-import React, { PureComponent, useState } from 'react';
+import React, { PureComponent } from 'react';
 import cn from 'classnames';
 import './Slider.scss';
-import { useWindowResize } from '@site/src/service/useWindowResize';
 
 interface Props {
 	className?: string;

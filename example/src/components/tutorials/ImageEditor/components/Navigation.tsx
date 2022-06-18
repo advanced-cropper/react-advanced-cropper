@@ -1,6 +1,6 @@
 import React, { ChangeEvent, FC, useRef } from 'react';
 import cn from 'classnames';
-import { CropIcon } from '@site/src/components/tutorials/ImageEditor/icons/CropIcon';
+import { CropIcon } from '../icons/CropIcon';
 import { HueIcon } from '../icons/HueIcon';
 import { SaturationIcon } from '../icons/SaturationIcon';
 import { ContrastIcon } from '../icons/ContrastIcon';

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef } from 'react';
 import cn from 'classnames';
 import { Cropper, CropperRef } from 'react-advanced-cropper';
 import { Navigation } from './components/Navigation';
@@ -11,9 +11,7 @@ import './ImageEditor.scss';
 export const ImageEditor = () => {
 	const cropperRef = useRef<CropperRef>(null);
 
-	const [src, setSrc] = useState(
-		'/react-advanced-cropper/img/images/pexels-photo-4383577.jpeg',
-	);
+	const [src, setSrc] = useState('/react-advanced-cropper/img/images/pexels-photo-4383577.jpeg');
 
 	const [mode, setMode] = useState('crop');
 
