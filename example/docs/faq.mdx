@@ -65,9 +65,7 @@ The prop `smooth` will be passed into `CustomBackgroundWrapper`.
 If you want to add the custom cropper's setting field, that will be used in its internal algorithms (such as `defaultSize`, `sizeRestrictions`, etc.)
 you can use the generic nature of cropper components:
 ```tsx
-import { CoreSettings } from 'react-advanced-cropper';
-
-interface CustomSettings extends CoreSettings {
+interface CustomSettings {
 	stencilType: string;
 }
 ```

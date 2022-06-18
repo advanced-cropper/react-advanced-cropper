@@ -43,14 +43,12 @@ export const AdjustStencilExample = () => {
 				defaultSize={defaultSize}
 				defaultPosition={defaultPosition}
 				defaultVisibleArea={{
-					width: 594,
-					height: 450,
+					width: 1024,
+					height: 689,
 					left: 19,
-					top: 183,
+					top: 285,
 				}}
-				src={
-					'/react-advanced-cropper/img/images/photo-1596473322597-91d5b6938b8a.jpg'
-				}
+				src={'/react-advanced-cropper/img/images/photo-1596473322597-91d5b6938b8a.jpg'}
 			/>
 			<label className="adjust-stencil-example__adjust">
 				<input type="checkbox" checked={adjustStencil} onChange={onChange} />
