@@ -306,10 +306,10 @@ export const UploadExample = () => {
 
 		// Ensure that you have a file before attempting to read it
 		if (files && files[0]) {
-			// 1. Create the blob link to the file to optimize performance:
+			// Create the blob link to the file to optimize performance:
 			const blob = URL.createObjectURL(files[0]);
 
-			// 2. Get the image type from the extension. It's the simplest way, though be careful it can lead to an incorrect result:
+			// Get the image type from the extension. It's the simplest way, though be careful it can lead to an incorrect result:
 			setImage({
 			   src: blob;
 			   type: files[0].type
@@ -378,7 +378,7 @@ export const UploadExample = () => {
 
 		// Ensure that you have a file before attempting to read it
 		if (files && files[0]) {
-			// 1. Create the blob link to the file to optimize performance:
+			// Create the blob link to the file to optimize performance:
 			const blob = URL.createObjectURL(files[0]);
 
 			// Remember the fallback type:
