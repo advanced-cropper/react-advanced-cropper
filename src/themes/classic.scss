@@ -7,6 +7,9 @@ $grid: true !default;
 
 .react-simple-line {
 	border-color: rgba($line-color, 0.8);
+	&--hover {
+		border-color: rgba($line-color, 1);
+	}
 }
 
 .react-simple-handler {

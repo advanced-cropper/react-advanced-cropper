@@ -31,6 +31,9 @@ $hover-handler-size: 25px !default;
 }
 .react-simple-line {
 	border-color: rgba($line-color, 0.75);
+	&--hover {
+		border-color: rgba($line-color, 1);
+	}
 }
 
 
