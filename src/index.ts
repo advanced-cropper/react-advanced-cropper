@@ -33,6 +33,7 @@ export * from 'advanced-cropper/html';
 export * from 'advanced-cropper/canvas';
 export * from 'advanced-cropper/service';
 export * from 'advanced-cropper/state';
+export * from 'advanced-cropper/images';
 export {
 	isLower,
 	isGreater,

@@ -3,6 +3,9 @@ title: Recipes
 sidebar_position: 1
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 import { ChangingStencilExample } from '../../src/components/examples/ChangingStencilExample';
 import { GettingResultExample } from '../../src/components/examples/GettingResultExample';
 import { GettingResultManualExample } from '../../src/components/examples/GettingResultManualExample';
@@ -273,10 +276,13 @@ That's what you will get:
 :::warning Warning!
 [Blob](https://developer.mozilla.org/en-US/docs/Web/API/Blob) is used in the example below. Ensure that browsers that you support can fully handle it or use the corresponding polyfill.
 :::
+<Tabs>
+
+<TabItem value="simple" label="Simple Example" default>
 
 ```js
 import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
-import { CropperRef, Cropper, getMimeType } from 'react-advanced-cropper';
+import { CropperRef, Cropper } from 'react-advanced-cropper';
 
 interface Image {
 	type?: string;
@@ -303,20 +309,83 @@ export const UploadExample = () => {
 			// 1. Create the blob link to the file to optimize performance:
 			const blob = URL.createObjectURL(files[0]);
 
-			// 2. The steps below are designated to determine a file mime type to use it during the
-			// getting of a cropped image from the canvas. You can replace it them by the following string,
-			// but the type will be derived from the extension and it can lead to an incorrect result:
-			//
-			// setImage({
-			//    src: blob;
-			//    type: files[0].type
-			// })
+			// 2. Get the image type from the extension. It's the simplest way, though be careful it can lead to an incorrect result:
+			setImage({
+			   src: blob;
+			   type: files[0].type
+			})
+		}
+		// Clear the event target value to give the possibility to upload the same image:
+		event.target.value = '';
+	};
 
-			// Create a new FileReader to read this image binary data
-			const reader = new FileReader();
+	useEffect(() => {
+		// Revoke the object URL, to allow the garbage collector to destroy the uploaded before file
+		return () => {
+			if (image && image.src) {
+				URL.revokeObjectURL(image.src);
+			}
+		};
+	}, [image]);
+
+	return (
+		<div className="upload-example">
+			<Cropper className="upload-example__cropper" src={image && image.src} />
+			<div className="buttons-wrapper">
+				<button className="button" onClick={onUpload}>
+					<input ref={inputRef} type="file" accept="image/*" onChange={onLoadImage} />
+					Upload image
+				</button>
+			</div>
+		</div>
+	);
+};
+```
+
+</TabItem>
+
+<TabItem value="advanced" label="Advanced Example" default>
+
+:::note Notice!
+The function `getMimeType` is imported from from `advanced-cropper`, not from `react-advanced-cropper`. It's the dependency of `react-advanced-cropper`. And it's
+preferred way to import such dependencies if you use a bundler (in the future it will be only possible way).
+:::
+
+```js
+import React, { ChangeEvent, useState, useRef, useEffect } from 'react';
+import { CropperRef, Cropper } from 'react-advanced-cropper';
+import { getMimeType } from 'advanced-cropper/images';
+
+interface Image {
+	type?: string;
+	src: string;
+}
+
+export const UploadExample = () => {
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	const [image, setImage] = useState<Image | null>(null);
+
+	const onUpload = () => {
+		if (inputRef.current) {
+			inputRef.current.click();
+		}
+	};
+
+	const onLoadImage = (event: ChangeEvent<HTMLInputElement>) => {
+		// Reference to the DOM input element
+		const { files } = event.target;
+
+		// Ensure that you have a file before attempting to read it
+		if (files && files[0]) {
+			// 1. Create the blob link to the file to optimize performance:
+			const blob = URL.createObjectURL(files[0]);
 
 			// Remember the fallback type:
 			const typeFallback = files[0].type;
+
+			// Create a new FileReader to read this image binary data
+			const reader = new FileReader();
 
 			// Define a callback function to run, when FileReader finishes its job
 			reader.onload = (e) => {
@@ -357,6 +426,11 @@ export const UploadExample = () => {
 	);
 };
 ```
+
+</TabItem>
+
+</Tabs>
+
 
 ## Upload image to a server
 

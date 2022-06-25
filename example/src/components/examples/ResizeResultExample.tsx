@@ -12,9 +12,7 @@ export const ResizeResultExample = () => {
 	const [minWidth, setMinWidth] = useState<number>();
 	const [maxArea, setMaxArea] = useState<number>();
 
-	const [image] = useState(
-		'/react-advanced-cropper/img/images/pexels-photo-1988684.jpeg',
-	);
+	const [image] = useState('/react-advanced-cropper/img/images/pexels-isabella-mariana-1988684.jpg');
 
 	const showImage = () => {
 		if (cropperRef.current) {

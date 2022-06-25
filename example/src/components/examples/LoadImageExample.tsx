@@ -1,5 +1,6 @@
 import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
-import { CropperRef, Cropper, getMimeType } from 'react-advanced-cropper';
+import { CropperRef, Cropper } from 'react-advanced-cropper';
+import { getMimeType } from 'advanced-cropper/images';
 import { saveAs } from 'file-saver';
 import { ClearIcon } from '../../components/icons/ClearIcon';
 import './LoadImageExample.scss';
