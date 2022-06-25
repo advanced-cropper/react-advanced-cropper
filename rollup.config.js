@@ -5,44 +5,43 @@ import typescript from '@rollup/plugin-typescript';
 import replace from '@rollup/plugin-replace';
 import url from '@rollup/plugin-url';
 import { visualizer } from 'rollup-plugin-visualizer';
-import external from 'rollup-plugin-peer-deps-external';
 import postcss from 'rollup-plugin-postcss';
 import autoprefixer from 'autoprefixer';
 import { terser } from 'rollup-plugin-terser';
 import scss from 'rollup-plugin-scss';
 import pkg from './package.json';
 
-const output = [
+const bundles = [
 	{
+		format: 'es',
+		bundle: true,
 		file: pkg.module,
-		format: `es`,
 	},
 	{
+		format: 'cjs',
+		bundle: true,
 		file: pkg.main,
-		format: `cjs`,
 	},
 	{
+		format: 'iife',
+		bundle: false,
 		file: pkg.unpkg,
-		format: `iife`,
-	},
-	{
-		file: pkg.browser || pkg.module.replace('bundler', 'browser'),
-		format: `es`,
 	},
 ];
 
-export default {
+export default bundles.map(({ format, bundle, file }) => ({
 	input: 'src/index.ts',
-	output: output.map((config) => ({
-		...config,
-		name: config.format === 'iife' ? 'ReactAdvancedCropper' : undefined,
+	output: {
+		file,
+		format,
+		name: !bundle ? 'ReactAdvancedCropper' : undefined,
 		globals: {
 			react: 'React',
 		},
 		sourcemap: true,
-	})),
+	},
+	external: bundle ? [/node_modules/] : ['react'],
 	plugins: [
-		external(),
 		scss({
 			output: 'dist/style.css',
 		}),
@@ -54,16 +53,19 @@ export default {
 		resolve(),
 		commonjs(),
 		typescript({ tsconfig: './tsconfig.json' }),
-		terser({
-			format: {
-				comments: false,
-			},
-		}),
-		replace({
-			'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV),
-		}),
+		!bundle &&
+			terser({
+				format: {
+					comments: false,
+				},
+				module: format === 'es',
+			}),
 		visualizer({
 			gzipSize: true,
 		}),
+		!bundle &&
+			replace({
+				'process.env.NODE_ENV': 'production',
+			}),
 	],
-};
+}));
