@@ -1,6 +1,7 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
-import { createState, CropperRef, isEqualStates, CropperProps, Cropper } from 'react-advanced-cropper';
+import { CropperRef, isEqualStates, CropperProps, Cropper } from 'react-advanced-cropper';
+import { getCloserAngle } from 'advanced-cropper/utils';
 import './DefaultCropper.scss';
 import { Navigation } from './components/Navigation';
 
@@ -17,32 +18,16 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 
 	const getDefaultState = (cropper: CropperRef) => {
 		const state = cropper.getState();
-		if (state) {
-			const image = cropper.getImage();
-			const transforms = cropper.getTransforms();
-
-			const k = (transforms.rotate > 0 ? Math.floor : Math.ceil)(transforms.rotate / 360);
-
-			return (props.createStateAlgorithm || createState)(
-				{
-					boundary: state.boundary,
-					imageSize: state.imageSize,
-					priority: props.priority,
-					transforms: image
-						? {
-								...image.transforms,
-								rotate: k * 360 + image.transforms.rotate,
-						  }
-						: {
-								flip: {
-									horizontal: false,
-									vertical: false,
-								},
-								rotate: k * 360,
-						  },
+		const image = cropper.getImage();
+		if (state && image) {
+			const defaultState = cropper.getDefaultState(state.boundary, image);
+			return {
+				...defaultState,
+				transforms: {
+					...defaultState.transforms,
+					rotate: getCloserAngle(state.transforms.rotate, defaultState.transforms.rotate),
 				},
-				cropper.getSettings(),
-			);
+			};
 		} else {
 			return null;
 		}
