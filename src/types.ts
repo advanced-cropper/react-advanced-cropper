@@ -2,7 +2,6 @@ import { ComponentType, CSSProperties, ReactNode, Ref } from 'react';
 import {
 	CropperImage,
 	CropperTransitions,
-	AspectRatio,
 	CropperState,
 	ModifierSettings,
 	CoreSettings,

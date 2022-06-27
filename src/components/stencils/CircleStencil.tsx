@@ -152,18 +152,9 @@ export const CircleStencil = forwardRef<Methods, Props>(
 
 		const { width, height, left, top } = getStencilCoordinates(state);
 
-		const style: CSSProperties = {
-			width: `${width}px`,
-			height: `${height}px`,
-			left: `${left}px`,
-			top: `${top}px`,
-			transition: '0ms',
-		};
-
 		return (
 			state && (
 				<StencilWrapper
-					style={style}
 					className={cn(
 						'react-circle-stencil',
 						movable && 'react-circle-stencil--movable',

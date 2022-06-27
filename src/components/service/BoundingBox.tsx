@@ -165,7 +165,7 @@ export const BoundingBox = ({
 			}
 		});
 		return result;
-	}, [points, lineComponent, lineClassNames, lineWrapperClassNames, disabled]);
+	}, [points, lines, lineComponent, lineClassNames, lineWrapperClassNames, disabled]);
 
 	const handlerNodes = useMemo(() => {
 		const result: HandlerNode[] = [];

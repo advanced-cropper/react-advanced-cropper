@@ -6,7 +6,6 @@ import { ArtificialTransition } from './ArtificialTransition';
 
 interface Props {
 	className?: string;
-	style?: CSSProperties;
 	transitions?: CropperTransitions;
 	width?: number;
 	height?: number;
@@ -14,7 +13,7 @@ interface Props {
 	top: number;
 }
 
-export const StencilWrapper: FC<Props> = ({ className, style, transitions, width, height, left, top, children }) => {
+export const StencilWrapper: FC<Props> = ({ className, transitions, width, height, left, top, children }) => {
 	return (
 		<ArtificialTransition
 			className={classnames('react-stencil-wrapper', className)}

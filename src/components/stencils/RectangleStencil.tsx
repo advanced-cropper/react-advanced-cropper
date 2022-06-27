@@ -169,18 +169,9 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 
 		const { width, height, left, top } = getStencilCoordinates(state);
 
-		const style: CSSProperties = {
-			width: `${width}px`,
-			height: `${height}px`,
-			left: `${left}px`,
-			top: `${top}px`,
-			transition: '0ms',
-		};
-
 		return (
 			state && (
 				<StencilWrapper
-					style={style}
 					className={cn(
 						'react-rectangle-stencil',
 						movable && 'react-rectangle-stencil--movable',

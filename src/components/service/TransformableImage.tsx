@@ -23,8 +23,6 @@ interface Props {
 	style?: CSSProperties;
 }
 
-export type TransformImageType = 'touchTransform' | 'mouseMove' | 'wheelScale';
-
 export class TransformableImageEvent {
 	constructor({ active }: { active: boolean }) {
 		this.active = active;
