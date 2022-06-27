@@ -4,9 +4,75 @@ sidebar_position: 6
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
-
+import TOCInline from "@theme/TOCInline";
 
 # FAQ
+
+## Contents
+
+<TOCInline toc={toc} />
+
+## How to get the default state?
+
+To get the default state you can use the corresponding cropper method.
+
+```tsx
+const cropperRef = useRef<CropperRef>(null);
+const getDefaultState = () => {
+	const state = cropper.getState();
+	const image = cropper.getImage();
+	if (state && image) {
+		cropper.getDefaultState(state.boundary, image);
+	} else {
+		return null;
+	}
+}
+```
+```tsx
+<Cropper
+	ref={cropperRef}
+/>
+```
+
+If you use transitions, rotate an image a lot, and try to set the default state you can encounter the situation that
+image begins rolling like a barrel. It's proper behaviour, because angles are accumulating, and `state.transforms.rotate` can become
+`360`, `720`, `1440`, etc. degrees.
+
+To get more expected behavior you can get the closer angle (i.e. if you resetting angle to `0` from `270`, the angle `360` will be the closer to `270` than `0`,):
+```tsx
+import { getCloserAngle } from 'advanced-cropper/utils'
+```
+```tsx
+const getDefaultState = () => {
+	const state = cropper.getState();
+	const image = cropper.getImage();
+	if (state && image) {
+		const defaultState = cropper.getDefaultState(state.boundary, image);
+		return {
+			...defaultState,
+			transforms: {
+				...defaultState.transforms,
+				rotate: getCloserAngle(state.transforms.rotate, defaultState.transforms.rotate),
+			},
+		};
+	} else {
+		return null;
+	}
+}
+```
+
+
+## How to check if the cropper is dirty?
+
+Get (the default state)[/docs/faq#how-to-get-the-default-state] and compare this state with
+the current state:
+```tsx
+import { isEqualStates } from 'advanced-cropper/service';
+```
+```
+const isDirty = !isEqualStates(cropper.getState(), defaultState);
+```
+
 
 ## I want to add an additional property to the cropper. How to do it?
 
