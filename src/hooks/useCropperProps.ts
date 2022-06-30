@@ -1,11 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useRef } from 'react';
 
 export function useCropperProps<Props>(props: () => Props) {
 	const propsRef = useRef(props);
 
-	useEffect(() => {
-		propsRef.current = props;
-	}, [props]);
+	propsRef.current = props;
 
 	return () => propsRef.current();
 }
