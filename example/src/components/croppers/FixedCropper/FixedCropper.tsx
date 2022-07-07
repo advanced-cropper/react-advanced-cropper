@@ -10,9 +10,9 @@ import AdvancedCropper, {
 import { Wrapper } from './components/Wrapper';
 import './FixedCropper.scss';
 
-export interface FixedCropperProps extends Omit<AdvancedCropper.FixedCropperProps, 'stencilSize'> {
+export type FixedCropperProps = Omit<AdvancedCropper.FixedCropperProps, 'stencilSize'> & {
 	stencilType?: 'circle' | 'rectangle';
-}
+};
 
 export type FixedCropperRef = AdvancedCropper.FixedCropperRef;
 

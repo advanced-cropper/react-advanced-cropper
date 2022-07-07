@@ -64,12 +64,12 @@ const getDefaultState = () => {
 
 ## How to check if the cropper is dirty?
 
-Get (the default state)[/docs/faq#how-to-get-the-default-state] and compare this state with
+Get [the default state](/docs/faq#how-to-get-the-default-state) and compare this state with
 the current state:
 ```tsx
 import { isEqualState } from 'advanced-cropper/service';
 ```
-```
+```tsx
 const isDirty = !isEqualState(cropper.getState(), defaultState);
 ```
 

@@ -1,9 +1,9 @@
 import React, { FC } from 'react';
-import { isNumber } from 'react-advanced-cropper';
+import { isNumber } from 'advanced-cropper/utils';
 import cn from 'classnames';
-import { ZoomInIcon } from '@site/src/components/icons/ZoomInIcon';
-import { ZoomOutIcon } from '@site/src/components/icons/ZoomOutIcon';
-import { Slider } from '@site/src/components/croppers/FixedCropper/components/Slider';
+import { ZoomInIcon } from '../icons/ZoomInIcon';
+import { ZoomOutIcon } from '../icons/ZoomOutIcon';
+import { Slider } from './Slider';
 import './Navigation.scss';
 
 interface Props {
