@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
-import { CropperRef, isEqualStates, CropperProps, Cropper } from 'react-advanced-cropper';
+import { CropperRef, isEqualState, CropperProps, Cropper } from 'react-advanced-cropper';
 import { getCloserAngle } from 'advanced-cropper/utils';
 import './DefaultCropper.scss';
 import { Navigation } from './components/Navigation';
@@ -59,7 +59,7 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 	const onChange = (cropper: CropperRef) => {
 		const state = cropper.getState();
 
-		setChanged(state ? !isEqualStates(state, getDefaultState(cropper)) : false);
+		setChanged(state ? !isEqualState(state, getDefaultState(cropper)) : false);
 	};
 
 	return (

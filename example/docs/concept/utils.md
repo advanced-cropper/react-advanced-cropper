@@ -277,7 +277,7 @@ function approximateSize(params: {
 ### Compare states
 
 ```tsx
-function isEqualStates(a: CropperState | null, b: CropperState | null): boolean
+function isEqualState(a: CropperState | null, b: CropperState | null): boolean
 ```
 
 ## Restrictions

@@ -67,10 +67,10 @@ const getDefaultState = () => {
 Get (the default state)[/docs/faq#how-to-get-the-default-state] and compare this state with
 the current state:
 ```tsx
-import { isEqualStates } from 'advanced-cropper/service';
+import { isEqualState } from 'advanced-cropper/service';
 ```
 ```
-const isDirty = !isEqualStates(cropper.getState(), defaultState);
+const isDirty = !isEqualState(cropper.getState(), defaultState);
 ```
 
 
