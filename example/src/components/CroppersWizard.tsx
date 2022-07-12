@@ -1,6 +1,6 @@
 import React, { FC, useRef, useState } from 'react';
 import { CircleStencil, RectangleStencil, ImageRestriction, Priority } from 'react-advanced-cropper';
-import { preventZoom } from 'advanced-cropper/extensions/preventZoom';
+import { preventZoom } from 'advanced-cropper/extensions/prevent-zoom';
 import cn from 'classnames';
 import { useToggle } from '@site/src/service/useToggle';
 import { CloseIcon } from '@site/src/components/icons/CloseIcon';

@@ -1,6 +1,6 @@
 import React, { Ref } from 'react';
 import { isUndefined } from 'advanced-cropper/utils';
-import { StencilSize } from 'advanced-cropper/extensions/stencilSize';
+import { StencilSize } from 'advanced-cropper/extensions/stencil-size';
 import { CustomCropperProps, CustomCropperRef, SettingsExtension } from '../../types';
 import { createCropper, splitAbstractCropperProps } from '../../service/cropper';
 import { hybridStencilAutoZoom } from '../../deprecated/hybridAutoZoom';

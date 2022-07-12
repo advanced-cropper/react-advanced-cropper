@@ -48,4 +48,4 @@ export {
 } from 'advanced-cropper/utils';
 export { joinClassNames } from './service/utils';
 
-export type { StencilSize } from 'advanced-cropper/extensions/stencilSize';
+export type { StencilSize } from 'advanced-cropper/extensions/stencil-size';

@@ -6,7 +6,7 @@ import {
 	fixedStencil,
 	StencilSize,
 	fixedStencilConstraints,
-} from 'advanced-cropper/extensions/stencilSize';
+} from 'advanced-cropper/extensions/stencil-size';
 import { withDefaultSizeRestrictions } from 'advanced-cropper/defaults';
 import { CustomCropperProps, CustomCropperRef } from '../../types';
 import { createCropper, splitAbstractCropperProps } from '../../service/cropper';

@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC } from 'react';
 import { CropperRef, CropperFade } from 'react-advanced-cropper';
-import { getAbsoluteZoom, getZoomFactor } from 'advanced-cropper/extensions/absoluteZoom';
+import { getAbsoluteZoom, getZoomFactor } from 'advanced-cropper/extensions/absolute-zoom';
 import cn from 'classnames';
 import { Navigation } from './Navigation';
 import './Wrapper.scss';
