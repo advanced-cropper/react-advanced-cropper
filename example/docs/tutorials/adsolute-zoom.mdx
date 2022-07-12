@@ -1,0 +1,308 @@
+---
+title: Absolute Zoom
+sidebar_position: 2
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import {AbsoluteZoom} from '../../src/components/tutorials/AbsoluteZoom/AbsoluteZoom.tsx'
+
+## Idea
+
+Let's look at the cropper below. It's pretty simple, but it has distinguish feature: zoom slider.
+The problem here, that the cropper state doesn't have the concept of absolute zoom. The image zoom is defined by
+the visible area size completely.
+
+
+In this tutorial we will discuss about two different aspects:
+1. First, we need to extend the cropper, add the slider into one.
+2. Secondly, we need to implement the absolute zoom. We should be able to define
+the current absolute zoom value and to zoom an image to specific one.
+
+
+<AbsoluteZoom/>
+
+## Preparation
+
+### Cropper
+
+We will create the simplest custom cropper based on `FixedCropper`.
+
+<Tabs>
+<TabItem value="cropper" label="CustomCropper.tsx" default>
+
+```tsx
+import React, { forwardRef } from 'react';
+import { ImageRestriction, FixedCropper, FixedCropperRef, FixedCropperProps } from 'react-advanced-cropper';
+
+export type CustomCropperProps = FixedCropperProps;
+
+export type CustomCropperRef = FixedCropperRef;
+
+export const CustomCropper = forwardRef<CustomCropperRef, CustomCropperProps>(
+	({ stencilProps, ...props }: CustomCropperProps, ref) => {
+		return (
+			<FixedCropper
+				ref={ref}
+				stencilProps={{
+					handlers: false,
+					lines: false,
+					movable: false,
+					resizable: false,
+					...stencilProps,
+				}}
+				imageRestriction={ImageRestriction.stencil}
+				{...props}
+			/>
+		);
+	},
+);
+
+CustomCropper.displayName = 'CustomCropper';
+```
+
+</TabItem>
+</Tabs>
+
+### Navigation
+
+In this tutorial the prepared component will be used: [`<Navigation/>`](https://github.com/Norserium/react-advanced-cropper/tree/master/example/src/components/tutorials/AbsoluteZoom/components/Navigation/). It can be arbitrary component, but
+for sake of brevity the ready one used.
+
+### Extending the cropper
+
+To add the navigation into the cropper we should create the custom cropper wrapper. The cropper wrapper is the special component
+that wraps all the cropper's internals (include image, stencil, etc.) and has the direct access to the cropper state.component
+
+The default wrapper is [`<CropperWrapper/>`](https://github.com/Norserium/react-advanced-cropper/blob/master/src/components/service/CropperWrapper.tsx).
+It can be used as the foundation for the custom cropper wrapper with navigation and perhaps some other
+advanced features.
+
+<Tabs>
+<TabItem value="tsx" label="CustomWrapper.tsx" default>
+
+```tsx
+import React, { CSSProperties, FC } from 'react';
+import cn from 'classnames';
+import { CropperRef, CropperFade } from 'react-advanced-cropper';
+import { Navigation } from './Navigation/Navigation';
+import './CustomWrapper.scss';
+
+interface Props {
+	cropper: CropperRef;
+	loading: boolean;
+	loaded: boolean;
+	className?: string;
+	style?: CSSProperties;
+}
+
+export const CustomWrapper: FC<Props> = ({ cropper, children, loaded, className }) => {
+	return (
+		<CropperFade className={cn('custom-wrapper', className)} visible={state && loaded}>
+			{children}
+			<Navigation className="custom-wrapper__navigation" />
+		</CropperFade>
+	);
+};
+```
+
+</TabItem>
+<TabItem value="scss" label="CustomWrapper.scss" default>
+
+```scss
+.custom-wrapper {
+	flex-grow: 1;
+	min-height: 0;
+	&__navigation {
+		width: 362px;
+		position: absolute;
+		bottom: 0;
+		// Horizontal centering of the absolute positions element.
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+```
+
+</TabItem>
+</Tabs>
+
+##  Absolute Zoom
+
+The cropper state `CropperState` doesn't have the concept of absolute zoom.
+It can be only derived from it. It's the not trivial process, but, fortunately, there
+is the `advanced-cropper/extensions/absolute-zoom` extension that can be used to accomplish it.
+
+### Extension Functions
+
+The two functions is needed to implement the absolute zoom.
+
+#### `getAbsoluteZoom`
+
+**Definition:**
+````
+getAbsoluteZoom(state: CropperState, settings: CropperSettings, normalize = true): number
+````
+
+**Details:**
+
+This function returns the current absolute visible area size (with respect to different restrictions):
+`0` correspond to the minimum size and `1` correspond to the maximum size.
+
+If `normalize` is `true` the result will always belong to `[0, 1]`.
+
+#### `getZoomFactor`
+
+**Definition:**
+````
+getZoomFactor(state: CropperState, settings: CropperSettings, absoluteZoom: number): number
+````
+
+**Details:**
+
+This function returns the ratio of the visible area size that corresponds to desired absolute zoom and the visible area size that corresponds to the current absolute zoom.
+
+In other words, it's the relative visible area scale that is needed to get
+the desired absolute zoom.
+
+### How to use
+
+The using of these functions is pretty straightforward.
+
+#### Getting the current absolute zoom
+
+```tsx
+const absoluteZoom = getAbsoluteZoom(cropper.getState(), cropper.getSettings());
+```
+
+#### Zooming the cropper to specific absolute zoom:
+
+```tsx
+const onZoom = (value: number, transitions?: boolean) => {
+  if (cropper) {
+    cropper.zoomImage(
+      getZoomFactor(cropper.getState(), cropper.getSettings(), value),
+      {
+        transitions,
+      },
+    );
+  }
+};
+```
+
+##  Integration
+
+### Cropper Wrapper
+
+First of all, let's use the principles described above in the custom wrapper.
+
+<Tabs>
+<TabItem value="tsx" label="CustomWrapper.tsx" default>
+
+```tsx
+import React, { CSSProperties, FC } from 'react';
+import cn from 'classnames';
+import { CropperRef, CropperFade } from 'react-advanced-cropper';
+import { getAbsoluteZoom, getZoomFactor } from 'advanced-cropper/extensions/absolute-zoom';
+import { Navigation } from './Navigation/Navigation';
+import './CustomWrapper.scss';
+
+interface Props {
+	cropper: CropperRef;
+	loading: boolean;
+	loaded: boolean;
+	className?: string;
+	style?: CSSProperties;
+}
+
+export const CustomWrapper: FC<Props> = ({ cropper, children, loaded, className }) => {
+	const state = cropper.getState();
+
+	const settings = cropper.getSettings();
+
+	const absoluteZoom = getAbsoluteZoom(state, settings);
+
+	const onZoom = (value: number, transitions?: boolean) => {
+		cropper.zoomImage(getZoomFactor(state, settings, value), {
+			transitions: !!transitions,
+		});
+	};
+
+
+	return (
+		<CropperFade className={cn('custom-wrapper', className)} visible={state && loaded}>
+			{children}
+			<Navigation className="custom-wrapper__navigation" zoom={absoluteZoom} onZoom={onZoom} />
+		</CropperFade>
+	);
+};
+```
+
+</TabItem>
+<TabItem value="scss" label="CustomWrapper.scss" default>
+
+```scss
+.custom-wrapper {
+	flex-grow: 1;
+	min-height: 0;
+	&__navigation {
+		width: 362px;
+		position: absolute;
+		bottom: 0;
+		// Horizontal centering of the absolute positions element.
+		left: 50%;
+		transform: translateX(-50%);
+	}
+}
+```
+
+</TabItem>
+</Tabs>
+
+
+### Custom Cropper
+
+The created wrapper should be passed into the custom cropper. And that is the last step to create
+the cropper that you can see in the start of this tutorial.
+
+<Tabs>
+<TabItem value="cropper" label="CustomCropper.tsx" default>
+
+```tsx
+import React, { forwardRef } from 'react';
+import { ImageRestriction, FixedCropper, FixedCropperRef, FixedCropperProps } from 'react-advanced-cropper';
+import { CustomWrapper } from './CustomWrapper';
+
+export type CustomCropperProps = FixedCropperProps;
+
+export type CustomCropperRef = FixedCropperRef;
+
+export const CustomCropper = forwardRef<CustomCropperRef, CustomCropperProps>(
+	({ stencilProps, ...props }: CustomCropperProps, ref) => {
+		return (
+			<FixedCropper
+				ref={ref}
+				stencilProps={{
+					handlers: false,
+					lines: false,
+					movable: false,
+					resizable: false,
+					...stencilProps,
+				}}
+				imageRestriction={ImageRestriction.stencil}
+				wrapperComponent={CustomWrapper}
+				{...props}
+			/>
+		);
+	},
+);
+
+CustomCropper.displayName = 'CustomCropper';
+```
+
+</TabItem>
+</Tabs>
+
+
+
+

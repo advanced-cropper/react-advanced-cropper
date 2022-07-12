@@ -1,0 +1,65 @@
+.absolute-zoom-cropper-navigation {
+	height: 80px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
+	&__delimiter {
+		width: 80px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		position: relative;
+	}
+
+	&__dot {
+		width: 6px;
+		height: 6px;
+		background: #393939;
+		border-radius: 50%;
+		transform: scale(1);
+		transition: transform 0.5s;
+
+		&--hidden {
+			transform: scale(0);
+		}
+	}
+
+	&__button {
+		will-change: transform;
+		cursor: pointer;
+		width: 80px;
+		height: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		background: none;
+		border: none;
+		outline: none;
+		transition: transform 0.5s;
+		padding: 0;
+
+		&:hover, &:focus {
+			transform: scale(1.1);
+		}
+	}
+
+	&__reset-button {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transition: transform 0.5s;
+
+		&, &:hover, &:focus {
+			transform: translate(-50%, -50%) scale(1);
+		}
+		transition-delay: 0.25s;
+
+		&--hidden {
+			transition-delay: 0s;
+			&, &:hover, &:focus {
+				transform: translate(-50%, -50%) scale(0);
+			}
+		}
+	}
+}
