@@ -3,8 +3,11 @@ title: Advanced Recipes
 sidebar_position: 2
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 import { FixedSizeExample } from '../../src/components/examples/FixedSizeExample';
-import { DefaultPositionExample } from '../../src/components/examples/DefaultPositionExample';
+import { DefaultCoordinatesExample } from '../../src/components/examples/DefaultCoordinatesExample';
 import { FillingCropperExample } from '../../src/components/examples/FillingCropperExample';
 import { DefaultVisibleArea } from '../../src/components/examples/DefaultVisibleArea';
 import { TransformImageExample } from '../../src/components/examples/TransformImageExample';
@@ -36,8 +39,8 @@ import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
 		height: 300
 	}}
 	stencilProps={{
-		handlers: {},
-		lines: {},
+		handlers: false,
+		lines: false,
 		movable: false,
 		resizable: false
 	}}
@@ -45,44 +48,43 @@ import { FixedCropper, ImageRestriction } from 'react-advanced-cropper';
 />
 ```
 
-## Default size and position
+## Default Coordinates
 
-Sometimes you should set the default position and default size of cropper. For example, if you automatically detect an user face.
+Sometimes you should set the default position and default size of the cropped area. For example, if you automatically detect an user face.
+It can be achieved by using `defaultSize` and `defaultPosition` props.
 
-<DefaultPositionExample/>
+<DefaultCoordinatesExample/>
 
-Notice, you can use either a function or object to set the default position and size.
 
-The function:
+<Tabs>
+<TabItem value="function" label="Function">
 
 ```tsx
 import React from 'react';
 import { Cropper, CropperState, CoreSettings } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const defaultPosition = (state: CropperState, settings: CoreSettings) => {
+	const defaultCoordinates = (state: CropperState, settings: CoreSettings) => {
 			return {
 				left: 100,
 				top: 100,
-			};
-	},
-	const defaultSize = (state: CropperState, settings: CoreSettings) => {
-			return {
 				width: 400,
 				height: 400,
 			};
-	}
+	};
 	return (
 		<Cropper
 			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
-			defaultSize={defaultSize}
-			defaultPosition={defaultPosition}
+			defaultCoordinates={defaultCoordinates}
 		/>;
 	)
 };
 ```
 
-The object:
+</TabItem>
+
+<TabItem value="object" label="Object" default>
+
 ```tsx
 import React from 'react';
 import { Cropper } from 'react-advanced-cropper';
@@ -91,10 +93,39 @@ export const Example = () => {
 	return (
 		<Cropper
 			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
-			defaultSize={{
+			defaultCoordinates={{
+					left: 100,
+					top: 100,
 					width: 400,
 					height: 400,
 			}}
+		/>;
+	)
+};
+```
+
+</TabItem>
+</Tabs>
+
+
+### Position / Size
+
+There are situations, when you need set either position or size. In this case `defaultSize` and `defaultPosition` can
+be very helpful. You can pass the objects or functions to them alike.
+
+
+
+<Tabs>
+<TabItem value="position" label="Default Position" default>
+
+```tsx
+import React from 'react';
+import { Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	return (
+		<Cropper
+			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
 			defaultPosition={{
 					left: 100,
 					top: 100,
@@ -104,9 +135,32 @@ export const Example = () => {
 };
 ```
 
+</TabItem>
+<TabItem value="size" label="Default Size">
+
+```tsx
+import React from 'react';
+import { Cropper } from 'react-advanced-cropper';
+
+export const Example = () => {
+	return (
+		<Cropper
+			src={'https://images.unsplash.com/photo-1599140849279-1014532882fe?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80'}
+			defaultSize={{
+					width: 100,
+					height: 100,
+			}}
+		/>;
+	)
+};
+```
+
+</TabItem>
+</Tabs>
+
 ### Fill the image
 
-The `default-size` prop can determine the default size based on the `state`  as mentioned in [its documentation](/docs/components/Cropper#defaultsize).
+The `defaultSize` prop can determine the default size based on the `state`  as mentioned in [its documentation](/docs/components/Cropper#defaultsize).
 
 It can be used to force the cropper fills all visible area by default:
 
@@ -133,6 +187,7 @@ export const Example = () => {
 <FillingCropperExample/>
 
 
+
 ## Default visible area
 
 Moreover, there are situations where you need to save, for example, previous visible area position, i.e. zoom or translate image.
@@ -140,11 +195,11 @@ To implement it you can use `defaultVisibleArea` prop.
 
 It should be noted, that visible area can be calculated either before default
 coordinates calculation or after one's calculation. The priority is set by
-prop [priority](/components/cropper.html#priority) that can be either `'coordinates'` (default) or `'visibleArea'`.
+prop [priority](/docs/components/Cropper#priority) that can be either `Priority.coordinates` (default) or `Priority.visibleArea`.
 
 :::tip
-If you define only the visible area coordinates it may be easier to set priority to `visibleArea`. It eliminates the necessity
-to set default size and default position by yourself (default algorithms handle this situation).
+If you define only the visible area coordinates it may be easier to set priority to `Priority.visibleArea`. It eliminates the necessity
+to set default coordinates by yourself. Default algorithms will handle this situation instead.
 :::
 
 <DefaultVisibleArea/>
@@ -174,7 +229,7 @@ export const Example = () => {
 
 ## Move and scale image
 
-There are two methods to move and scale image: **move** and **scale**.
+The cropper has two methods for move and scale image: [`moveImage`](/docs/components/Cropper#methods) and [`zoomImage`](/docs/components/Cropper#methods).
 
 <TransformImageExample/>
 
@@ -187,12 +242,12 @@ export const Example = () => {
 	const cropperRef = useRef<CropperRef>(null);
 	const zoom = () => {
 		if (cropperRef.current) {
-			cropperRef.current.zoom(2); // zoom-in 2x
+			cropperRef.current.zoomImage(2); // zoom-in 2x
 		}
 	};
 	const move = () => {
 		if (cropperRef.current) {
-			cropperRef.current.move(50, 100); // move x = 50, y = 100
+			cropperRef.current.moveImage(50, 100); // move x = 50, y = 100
 		}
 	};
 	return (
@@ -208,13 +263,13 @@ export const Example = () => {
 
 ## Rotate / flip image
 
-To rotate image use `rotate` method, it accepts the only argument: `angle` (in degrees).
-
+To rotate image use [`rotateImage`](/docs/components/Cropper#methods) method, it accepts two argument: `rotate` and `options`. They are described
+in the method documentation, but in the most cases you should pass only the desired rotate angle to first one as a number (in degrees).
 :::warning Available Angles
 It's strongly recommended to use an angle multiple of 90. Otherwise, the different restrictions may be broken.
 :::
 
-To flip an image use `flip` method, it accepts two boolean arguments. If first is equal to `true`
+To flip an image use `flip` method, it accepts the three arguments: `horizontal`, `vertical` and `options`. If first is equal to `true`
 then image will be flipped horizontally, if the second is equal to `true` then image will be flipped vertically and etc.
 
 <RotateImageExample/>
@@ -251,8 +306,7 @@ export const Example = () => {
 ## Adjust Stencil
 
 Adjust stencil is the one of [`transformImage`](/docs/components/Cropper#transformImage) prop option.
-By default it's enabled. It makes cropper more convenient especially when you have the limitations of width / height,
-but you probably shouldn't  use it if you have fixed stencil, because it will change its size.
+By default it's enabled. It makes cropper more convenient especially when you have the limitations of width / height.
 
 Try to resize image when `adjustStencil` is disabled and enabled to feel the difference.
 
@@ -324,7 +378,8 @@ There may be situations, when you need to set the minimum and maximum sizes, for
 
 ```js
 import React from 'react';
-import { Cropper, CropperRef, DefaultSettings, retrieveSizeRestrictions, getTransformedImageSize } from 'react-advanced-cropper';
+import { Cropper, CropperRef, DefaultSettings } from 'react-advanced-cropper';
+import { getTransformedImageSize, retrieveSizeRestrictions } from 'advanced-cropper';
 
 export const Example = () => {
 	const percentsRestriction = (state: CropperState, settings: DefaultSettings) => {

@@ -1,21 +1,13 @@
 import React, { useState, useRef } from 'react';
-import {
-	Cropper,
-	DefaultSettings,
-	CropperState,
-	CropperRef,
-	getTransformedImageSize,
-	retrieveSizeRestrictions,
-} from 'react-advanced-cropper';
+import { Cropper, DefaultSettings, CropperState, CropperRef } from 'react-advanced-cropper';
+import { getTransformedImageSize, retrieveSizeRestrictions } from 'advanced-cropper';
 import { onInputChange } from '../..//service/react';
 import './CustomRestrictionsExample.scss';
 
 export const CustomRestrictionsExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
-	const [src, setSrc] = useState(
-		'/react-advanced-cropper/img/images/photo-1494205577727-d32e58564756.jpg',
-	);
+	const [src, setSrc] = useState('/react-advanced-cropper/img/images/photo-1494205577727-d32e58564756.jpg');
 
 	const [minWidth, setMinWidth] = useState<number>(50);
 	const [maxWidth, setMaxWidth] = useState<number>();

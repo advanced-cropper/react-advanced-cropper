@@ -21,19 +21,12 @@ That's the basic hierarchy of common cropper. Each of the components and hooks h
 
 ### Work with the cropper state
 
-#### `useAbstractCropperState`
-
-This hook is the most important in all of the cropper parts.
-
-It wraps all of [the state modifiers](test), provides the interface for state manipulation and add the new concepts:
-- **Transitions**: the way to tell the components when transitions should be enabled;
-- **Postprocess**: the special functions that applies to result of different actions (actually to a new state) before state will be updated. The most common scenario is the creating auto zoom.
-
-
 #### `useCropperState`
 
-This hook is a wrapper of the `useAbstractCropperState`. That hook doesn't define [the cropper settings](any) and any other
-properties, therefore this hook provides the default settings (ones that `createDefaultSettings` function provides) and add default `autoZoom` postprocess function.
+This hook is the most important in all of the cropper parts. It provides the instance of `CropperInstance`, the special
+class that describes all internal logic of the cropper.
+
+Also this hook provides the default settings (ones that `createDefaultSettings` function provides).
 
 ### Work with the cropper image
 
@@ -60,15 +53,6 @@ internally in the convenient way.
 #### `Stencil`
 
 It's the custom component, that is used to display the current cropped area and change it by interaction with it.
-
-
-#### `useMoveImageOptions`
-
-The auxiliary hook, that can be used to parse `MoveImageOptions` object and transform them into the actual options with default values.
-
-#### `useScaleImageOptions`
-
-The auxiliary hook, that can be used to parse `ScaleImageOptions` object and transform them into the actual options with default values.
 
 ### Service
 

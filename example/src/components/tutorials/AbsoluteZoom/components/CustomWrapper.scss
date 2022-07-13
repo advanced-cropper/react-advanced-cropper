@@ -2,7 +2,8 @@
 	flex-grow: 1;
 	min-height: 0;
 	&__navigation {
-		width: 380px;
+		max-width: 100%;
+		width: 462px;
 		position: absolute;
 		bottom: 0;
 		left: 0;

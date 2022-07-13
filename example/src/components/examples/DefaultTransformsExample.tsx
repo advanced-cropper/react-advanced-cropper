@@ -6,10 +6,10 @@ export const DefaultTransformsExample = () => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
 	const [src, setSrc] = useState<string>(
-		'/react-advanced-cropper/img/images/adam-flockemann-9j4xyaSQhUQ-unsplash.jpg',
+		'/react-advanced-cropper/img/images/farzin-yarahmadi-yR3GrvkWnLA-unsplash.jpg',
 	);
 
-	const [transformsType, setTransformsType] = useState<string>('horizontal-flip');
+	const [transformsType, setTransformsType] = useState<string>('rotate-90');
 
 	const defaultTransforms = useMemo(() => {
 		if (transformsType === 'horizontal-flip') {
