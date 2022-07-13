@@ -2,11 +2,12 @@ import { useRef } from 'react';
 import { deprecationWarning } from '../service/utils';
 
 export function useDeprecationWarning() {
-	const fired = useRef<boolean>(false);
+	const fired = useRef<string[]>([]);
 
 	return (message: string) => {
-		if (!fired.current) {
+		if (fired.current.indexOf(message) === -1) {
 			deprecationWarning(message);
+			fired.current.push(message);
 		}
 	};
 }

@@ -2,7 +2,9 @@ import cn from 'classnames';
 import { isObject, isString } from 'advanced-cropper/utils';
 
 export function deprecationWarning(text: string) {
-	console.warn(`Deprecation warning: ${text}`);
+	if (process.env.NODE_ENV === 'development') {
+		console.warn(`Deprecation warning: ${text}`);
+	}
 }
 
 export function joinClassNames(...classNames: unknown[]) {
