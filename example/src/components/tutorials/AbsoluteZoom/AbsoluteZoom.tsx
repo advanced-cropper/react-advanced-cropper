@@ -5,10 +5,11 @@ import { CustomCropper } from './components/CustomCropper';
 export const AbsoluteZoom = () => {
 	return (
 		<CustomCropper
-			src={'/react-advanced-cropper/img/images/photo-1583511655857-d19b40a7a54e.jpg'}
+			className={'absolute-zoom-tutorial'}
+			src={'/react-advanced-cropper/img/images/kamyar-ghalamchi-HO4cDQGPlq0-unsplash.jpg'}
 			stencilSize={{
-				width: 250,
-				height: 250,
+				width: 350,
+				height: 350,
 			}}
 		/>
 	);
