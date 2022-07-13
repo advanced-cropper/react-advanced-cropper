@@ -24,7 +24,7 @@ $telegram-handler-wrapper-size: $telegram-big-handler-size + $telegram-handler-p
 	}
 
 	&__preview {
-		border: solid 2px rgba($telegram-line-color, 0.4);
+		border-color: rgba($telegram-line-color, 0.4);
 	}
 
 	&__handler {
