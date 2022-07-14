@@ -1,5 +1,5 @@
 import React, { ReactNode, CSSProperties, Component, RefObject, createRef } from 'react';
-import { ImageTransform, Point, SimpleTouch } from 'advanced-cropper/types';
+import { DebouncedFunction, ImageTransform, Point, SimpleTouch } from 'advanced-cropper/types';
 import { touchesToImageTransform, wheelEventToImageTransform } from 'advanced-cropper/transforms';
 import { debounce } from 'advanced-cropper/utils';
 
@@ -40,7 +40,7 @@ export class TransformableImage extends Component<Props> {
 	transforming: boolean;
 	anchor: Point;
 	container: RefObject<HTMLDivElement>;
-	debouncedProcessEnd: TransformableImage['processEnd'] & { clear: () => void };
+	debouncedProcessEnd: DebouncedFunction<TransformableImage['processEnd']>;
 
 	static defaultProps = {
 		touchMove: true,
