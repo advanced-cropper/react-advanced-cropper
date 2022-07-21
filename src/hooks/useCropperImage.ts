@@ -29,9 +29,7 @@ export function useCropperImage(options: CropperImageHookSettings) {
 			setLoaded(false);
 			if (src) {
 				setLoading(true);
-				if (onLoadingStart) {
-					onLoadingStart();
-				}
+				onLoadingStart?.();
 				const promises: Promise<unknown>[] = [
 					loadImage(src, {
 						crossOrigin: isUndefined(crossOrigin) ? canvas : crossOrigin,
@@ -47,23 +45,17 @@ export function useCropperImage(options: CropperImageHookSettings) {
 						const [image] = responses as [CropperImage];
 						if (currentSrc.current === src) {
 							setImage(image);
-							if (onLoad) {
-								onLoad(image);
-							}
+							onLoad?.(image);
 						}
 					})
 					.catch(() => {
 						if (currentSrc.current === src) {
-							if (onError) {
-								onError();
-							}
+							onError?.();
 						}
 					})
 					.finally(() => {
 						if (currentSrc.current === src) {
-							if (onLoadingEnd) {
-								onLoadingEnd();
-							}
+							onLoadingEnd?.();
 							setLoading(false);
 						}
 					});
