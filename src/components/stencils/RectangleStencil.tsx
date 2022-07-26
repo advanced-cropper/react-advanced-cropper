@@ -9,7 +9,7 @@ import {
 	CropperState,
 	CropperTransitions,
 	RawAspectRatio,
-} from 'advanced-cropper/types';
+} from 'advanced-cropper';
 import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';

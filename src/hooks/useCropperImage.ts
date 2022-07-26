@@ -1,7 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { isUndefined, promiseTimeout } from 'advanced-cropper/utils';
-import { loadImage } from 'advanced-cropper/image';
-import { CropperImage } from 'advanced-cropper/types';
+import { CropperImage, isUndefined, promiseTimeout, loadImage } from 'advanced-cropper';
 
 export interface CropperImageHookSettings {
 	src?: string | null;

@@ -1,9 +1,9 @@
 import React, { useRef, useState } from 'react';
 import cn from 'classnames';
 import { CropperRef, isEqualState, CropperProps, Cropper } from 'react-advanced-cropper';
-import { getCloserAngle } from 'advanced-cropper/utils';
-import './DefaultCropper.scss';
+import { getCloserAngle } from 'advanced-cropper';
 import { Navigation } from './components/Navigation';
+import './DefaultCropper.scss';
 
 export interface DefaultCropperProps extends CropperProps {
 	wrapperClassName?: string;

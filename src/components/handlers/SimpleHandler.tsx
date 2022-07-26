@@ -1,6 +1,6 @@
 import React, { CSSProperties, useState } from 'react';
 import cn from 'classnames';
-import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper/types';
+import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper';
 import { HandlerWrapper } from '../service/HandlerWrapper';
 import './SimpleHandler.scss';
 

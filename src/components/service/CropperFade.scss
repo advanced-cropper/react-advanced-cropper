@@ -1,12 +1,5 @@
-.react-cropper-fade {
-	visibility: hidden;
-	opacity: 0;
-	transition: 0.5s;
-	display: flex;
-	flex-direction: column;
+@import 'node_modules/advanced-cropper/styles/index.scss';
 
-	&--visible {
-		opacity: 1;
-		visibility: visible;
-	}
+.react-cropper-fade {
+	@include cropper-fade();
 }

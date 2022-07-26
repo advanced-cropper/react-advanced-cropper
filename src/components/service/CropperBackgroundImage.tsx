@@ -1,7 +1,6 @@
 import React, { forwardRef } from 'react';
 import cn from 'classnames';
-import { CropperTransitions, CropperImage, CropperState } from 'advanced-cropper/types';
-import { getBackgroundStyle } from 'advanced-cropper/image';
+import { CropperTransitions, CropperImage, CropperState, getBackgroundStyle } from 'advanced-cropper';
 import { preventDefault } from '../../service/events';
 
 import './CropperBackgroundImage.scss';

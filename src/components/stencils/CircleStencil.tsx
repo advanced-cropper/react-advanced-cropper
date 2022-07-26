@@ -8,9 +8,9 @@ import {
 	ResizeDirections,
 	MoveDirections,
 	CropperImage,
-} from 'advanced-cropper/types';
-import { getStencilCoordinates } from 'advanced-cropper/service';
-import { ResizeOptions } from 'advanced-cropper/state';
+	ResizeOptions,
+	getStencilCoordinates
+} from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import { BoundingBox } from '../service/BoundingBox';

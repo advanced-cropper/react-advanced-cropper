@@ -1,4 +1,4 @@
-import { isUndefined } from 'advanced-cropper/utils';
+import { isUndefined } from 'advanced-cropper';
 import React, { forwardRef } from 'react';
 import { AbstractCropperProps } from '../components/AbstractCropper';
 
@@ -35,7 +35,7 @@ export function splitAbstractCropperProps<Props extends MainProps>(props: Props)
 		canvas,
 		crossOrigin,
 		boundarySizeAlgorithm,
-		stretchAlgorithm,
+		boundaryStretchAlgorithm,
 		style,
 		onReady,
 		onError,
@@ -87,7 +87,7 @@ export function splitAbstractCropperProps<Props extends MainProps>(props: Props)
 			canvas,
 			crossOrigin,
 			boundarySizeAlgorithm,
-			stretchAlgorithm,
+			boundaryStretchAlgorithm: boundaryStretchAlgorithm,
 			style,
 			onReady,
 			onError,

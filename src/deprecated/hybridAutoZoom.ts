@@ -13,7 +13,7 @@ import {
 	ratio,
 	coordinatesToPositionRestrictions,
 } from 'advanced-cropper/service';
-import { CoreSettings, CropperState, PostprocessAction, Size } from 'advanced-cropper/types';
+import { CoreSettings, CropperState, PostprocessAction, Size } from 'advanced-cropper';
 import { copyState } from 'advanced-cropper/state';
 
 export function hybridStencilAutoZoomAlgorithm(state: CropperState, settings: CoreSettings): CropperState {

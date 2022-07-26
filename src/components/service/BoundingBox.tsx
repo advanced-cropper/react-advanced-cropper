@@ -9,9 +9,11 @@ import {
 	CropperTransitions,
 	ResizeDirections,
 	MoveDirections,
-} from 'advanced-cropper/types';
-import { getDirectionNames, isCardinalDirection, isObject } from 'advanced-cropper/utils';
-import { ResizeOptions } from 'advanced-cropper/state';
+	ResizeOptions,
+	getDirectionNames,
+	isCardinalDirection,
+	isObject,
+} from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import { ArtificialTransition } from './ArtificialTransition';

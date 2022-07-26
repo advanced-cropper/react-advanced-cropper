@@ -3,12 +3,12 @@ import {
 	CropperImage,
 	CropperTransitions,
 	CropperState,
+	DefaultSettings,
 	ModifierSettings,
 	CoreSettings,
 	RawAspectRatio,
-} from 'advanced-cropper/types';
-import { DefaultSettings } from 'advanced-cropper/defaults';
-import { AbstractCropperMethodOptions } from 'advanced-cropper/instance';
+	AbstractCropperMethodOptions,
+} from 'advanced-cropper';
 import {
 	AbstractCropperIntrinsicProps,
 	AbstractCropperRef,

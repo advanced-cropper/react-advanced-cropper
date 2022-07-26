@@ -1,7 +1,6 @@
 import React, { CSSProperties, ReactNode } from 'react';
 import classnames from 'classnames';
-import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper/types';
-import { getDirectionNames } from 'advanced-cropper/utils';
+import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection, getDirectionNames } from 'advanced-cropper';
 import { DraggableElement } from './DraggableElement';
 
 import './HandlerWrapper.scss';

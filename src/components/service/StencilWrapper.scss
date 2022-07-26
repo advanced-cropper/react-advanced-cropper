@@ -1,3 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-stencil-wrapper {
-	will-change: transform;
+	@include stencil-wrapper();
 }

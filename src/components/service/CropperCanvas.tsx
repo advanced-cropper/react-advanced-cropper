@@ -1,6 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
-import { CropperState } from 'advanced-cropper/types';
-import { DrawOptions, drawCroppedArea } from 'advanced-cropper/canvas';
+import { CropperState, DrawOptions, drawCroppedArea } from 'advanced-cropper';
 import './CropperCanvas.scss';
 
 export interface CropperCanvasMethods {

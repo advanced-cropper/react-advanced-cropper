@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import classnames from 'classnames';
-import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper/types';
+import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper';
 import { DraggableElement } from './DraggableElement';
 
 import './LineWrapper.scss';

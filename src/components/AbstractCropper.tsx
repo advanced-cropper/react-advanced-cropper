@@ -1,17 +1,20 @@
 import React, { useImperativeHandle, useRef, CSSProperties, Ref } from 'react';
 import cn from 'classnames';
-import { DrawOptions } from 'advanced-cropper/canvas';
-import { StretchAlgorithm } from 'advanced-cropper/html';
-import { DefaultSettings, defaultStencilConstraints } from 'advanced-cropper/defaults';
 import {
+	DrawOptions,
+	BoundaryStretchAlgorithm,
+	DefaultSettings,
+	defaultStencilConstraints,
 	BoundarySizeAlgorithm,
 	CoreSettings,
 	CropperImage,
 	CropperState,
 	CropperTransitions,
 	ModifierSettings,
-} from 'advanced-cropper/types';
-import { AbstractCropperCallbacks, AbstractCropperParameters } from 'advanced-cropper/instance';
+	AbstractCropperCallbacks,
+	AbstractCropperParameters,
+} from 'advanced-cropper';
+
 import {
 	CropperBackgroundWrapperComponent,
 	CropperWrapperComponent,
@@ -96,8 +99,8 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	checkOrientation?: boolean;
 	canvas?: boolean;
 	crossOrigin?: 'anonymous' | 'use-credentials';
+	boundaryStretchAlgorithm?: BoundaryStretchAlgorithm;
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm | string;
-	stretchAlgorithm?: StretchAlgorithm;
 	style?: CSSProperties;
 	onReady?: (cropper: AbstractCropperRef<Settings>) => void;
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;
@@ -130,7 +133,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		boundaryClassName,
 		backgroundClassName,
 		boundarySizeAlgorithm,
-		stretchAlgorithm,
+		boundaryStretchAlgorithm,
 		crossOrigin = true,
 		checkOrientation = true,
 		canvas = true,
@@ -286,7 +289,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		>
 			<StretchableBoundary
 				ref={boundaryRef}
-				stretchAlgorithm={stretchAlgorithm}
+				stretchAlgorithm={boundaryStretchAlgorithm}
 				sizeAlgorithm={boundarySizeAlgorithm}
 				className={cn('react-advanced-cropper__boundary', boundaryClassName)}
 				stretcherClassName={cn('react-advanced-cropper__stretcher')}

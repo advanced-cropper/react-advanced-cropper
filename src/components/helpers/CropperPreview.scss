@@ -1,23 +1,5 @@
-.react-cropper-preview {
-	overflow: hidden;
-	box-sizing: border-box;
-	position: relative;
-	&__content {
-		overflow: hidden;
-		position: relative;
-	}
+@import 'node_modules/advanced-cropper/styles/index.scss';
 
-	&__image {
-		display: none;
-		pointer-events: none;
-		position: absolute;
-		user-select: none;
-		transform-origin: center;
-		// Workaround to prevent bugs at the websites with max-width
-		// rule applied to img (Vuepress for example)
-		max-width: none !important;
-		&--visible {
-			display: block;
-		}
-	}
+.react-cropper-preview {
+	@include cropper-preview();
 }

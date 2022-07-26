@@ -1,7 +1,6 @@
 import React, { ReactNode, Component, RefObject, createRef } from 'react';
 import cn from 'classnames';
-import { MoveDirections, Point, SimpleTouch } from 'advanced-cropper/types';
-import { distance } from 'advanced-cropper/utils';
+import { MoveDirections, Point, SimpleTouch, distance } from 'advanced-cropper';
 import './DraggableElement.scss';
 
 interface Props {

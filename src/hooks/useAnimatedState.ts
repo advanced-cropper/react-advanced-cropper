@@ -1,5 +1,4 @@
-import { CropperTransitions } from 'advanced-cropper/types';
-import { Animation } from 'advanced-cropper/animation';
+import { CropperTransitions, Animation } from 'advanced-cropper';
 import { useRef, useState } from 'react';
 
 export function useTransition<T>(transitions: CropperTransitions | null = null): [(callback: (progress: number) => void) => void, boolean] {

@@ -1,5 +1,5 @@
 import { createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
-import { CoreSettings, ImageRestriction, ModifierSettings } from 'advanced-cropper/types';
+import { CoreSettings, ImageRestriction, ModifierSettings } from 'advanced-cropper';
 import { useLayoutEffect, useRef } from 'react';
 import { CropperInstance, AbstractCropperParameters, AbstractCropperCallbacks } from 'advanced-cropper/instance';
 import { useForceRerender } from './useForceRerender';

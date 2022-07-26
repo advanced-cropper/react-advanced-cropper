@@ -1,9 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-cropper-background-image {
-	user-select: none;
-	position: absolute;
-	transform-origin: center;
-	pointer-events: none;
-	// Workaround to prevent bugs at the websites with max-width
-	// rule applied to img (Vuepress for example)
-	max-width: none !important;
+	@include cropper-background-image();
 }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import cn from 'classnames';
-import { CardinalDirection, MoveDirections } from 'advanced-cropper/types';
+import { CardinalDirection, MoveDirections } from 'advanced-cropper';
 import { LineWrapper } from '../service/LineWrapper';
 import './SimpleLine.scss';
 

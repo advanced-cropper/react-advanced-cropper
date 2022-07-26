@@ -1,6 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-simple-handler {
-	display: block;
-	background: white;
-	height: 10px;
-	width: 10px;
+	@include simple-handler();
 }

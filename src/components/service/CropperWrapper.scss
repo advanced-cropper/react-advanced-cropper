@@ -1,6 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-cropper-wrapper {
-	&__fade {
-		flex-grow: 1;
-		min-height: 0;
-	}
+	@include cropper-wrapper();
 }

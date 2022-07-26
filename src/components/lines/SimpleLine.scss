@@ -1,37 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-simple-line {
-	background: none;
-	transition: border 0.5s;
-	border-color: rgba(white, 0.3);
-	border-width: 0;
-	border-style: solid;
-
-	&--south,
-	&--north {
-		height: 0;
-		width: 100%;
-	}
-
-	&--east,
-	&--west {
-		height: 100%;
-		width: 0;
-	}
-
-	&--east {
-		border-right-width: 1px;
-	}
-	&--west {
-		border-left-width: 1px;
-	}
-	&--south {
-		border-bottom-width: 1px;
-	}
-	&--north {
-		border-top-width: 1px;
-	}
-
-	&--hover {
-		opacity: 1;
-		border-color: white;
-	}
+	@include simple-line();
 }

@@ -1,5 +1,5 @@
-import React, { CSSProperties, FC } from 'react';
-import { CropperTransitions } from 'advanced-cropper/types';
+import React, { FC } from 'react';
+import { CropperTransitions } from 'advanced-cropper';
 import classnames from 'classnames';
 import './StencilWrapper.scss';
 import { ArtificialTransition } from './ArtificialTransition';

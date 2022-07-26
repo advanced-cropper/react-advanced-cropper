@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getOptions } from 'advanced-cropper/utils';
+import { getOptions } from 'advanced-cropper';
 import { RotateImageSettings } from '../types';
 
 export function useRotateImageOptions(rotateImage: RotateImageSettings | boolean) {

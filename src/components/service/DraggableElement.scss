@@ -1,1 +1,5 @@
-.react-draggable-element {}
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
+.react-draggable-element {
+	@include draggable-element();
+}

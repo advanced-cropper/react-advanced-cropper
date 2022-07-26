@@ -1,3 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-cropper-canvas {
-	display: none;
+	@include cropper-canvas();
 }

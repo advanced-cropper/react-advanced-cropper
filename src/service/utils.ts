@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { isObject, isString } from 'advanced-cropper/utils';
+import { isObject, isString } from 'advanced-cropper';
 
 export function deprecationWarning(text: string) {
 	if (process.env.NODE_ENV === 'development') {

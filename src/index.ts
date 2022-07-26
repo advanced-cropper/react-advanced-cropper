@@ -25,7 +25,7 @@ export * from './hooks/useScaleImageOptions';
 export * from './hooks/useUpdateEffect';
 export * from './hooks/useWindowResize';
 export * from './service/react';
-export * from 'advanced-cropper/types';
+export * from 'advanced-cropper';
 export * from 'advanced-cropper/defaults';
 export * from 'advanced-cropper/algorithms';
 export * from 'advanced-cropper/image';
@@ -45,7 +45,7 @@ export {
 	isWheelEvent,
 	isMouseEvent,
 	isTouchEvent,
-} from 'advanced-cropper/utils';
+} from 'advanced-cropper';
 export { joinClassNames } from './service/utils';
 
 export type { StencilSize } from 'advanced-cropper/extensions/stencil-size';

@@ -1,6 +1,6 @@
 import React, { CSSProperties, FC } from 'react';
 import cn from 'classnames';
-import { CropperState } from 'advanced-cropper/types';
+import { CropperState } from 'advanced-cropper';
 import { CropperFade } from './CropperFade';
 import './CropperWrapper.scss';
 

@@ -1,11 +1,16 @@
 import React, { useLayoutEffect, useRef, useState } from 'react';
 import cn from 'classnames';
-import { CropperImage, CropperState, CropperTransitions, Size } from 'advanced-cropper/types';
-import { getPreviewStyle } from 'advanced-cropper/image';
-import { isLower } from 'advanced-cropper/utils';
-import { ratio } from 'advanced-cropper/service';
-import { StretchParams } from 'advanced-cropper/html';
-import { DefaultBoundaryParams } from 'advanced-cropper/defaults';
+import {
+	CropperImage,
+	CropperState,
+	CropperTransitions,
+	DefaultBoundaryParams,
+	BoundaryStretchParams,
+	Size,
+	getPreviewStyle,
+	isLower,
+	ratio,
+} from 'advanced-cropper';
 import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
 import './CropperPreview.scss';
 
@@ -71,7 +76,7 @@ export const CropperPreview = ({
 		};
 	};
 
-	const stretchAlgorithm = function ({ boundary, stretcher, size }: StretchParams) {
+	const stretchAlgorithm = function ({ boundary, stretcher, size }: BoundaryStretchParams) {
 		// Reset stretcher
 		stretcher.style.width = `0px`;
 		stretcher.style.height = `0px`;

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { getOptions } from 'advanced-cropper/utils';
+import { getOptions } from 'advanced-cropper';
 import { ScaleImageSettings } from '../types';
 
 interface UseScaleImageOptions {

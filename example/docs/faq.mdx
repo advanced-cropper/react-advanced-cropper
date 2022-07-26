@@ -40,7 +40,7 @@ image begins rolling like a barrel. It's proper behaviour, because angles are ac
 
 To get more expected behavior you can get the closer angle (i.e. if you resetting angle to `0` from `270`, the angle `360` will be the closer to `270` than `0`,):
 ```tsx
-import { getCloserAngle } from 'advanced-cropper/utils'
+import { getCloserAngle } from 'advanced-cropper'
 ```
 ```tsx
 const getDefaultState = () => {
@@ -67,7 +67,7 @@ const getDefaultState = () => {
 Get [the default state](/docs/faq#how-to-get-the-default-state) and compare this state with
 the current state:
 ```tsx
-import { isEqualState } from 'advanced-cropper/service';
+import { isEqualState } from 'advanced-cropper';
 ```
 ```tsx
 const isDirty = !isEqualState(cropper.getState(), defaultState);

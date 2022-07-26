@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import cn from 'classnames';
-import { isNumber } from 'advanced-cropper/utils';
+import { isNumber } from 'advanced-cropper';
 import { ZoomInIcon } from '../../icons/ZoomInIcon';
 import { ZoomOutIcon } from '../../icons/ZoomOutIcon';
 import { Slider } from './Slider';

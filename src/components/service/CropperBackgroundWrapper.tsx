@@ -1,5 +1,5 @@
 import React, { CSSProperties, ReactNode } from 'react';
-import { CropperTransitions, ImageTransform } from 'advanced-cropper/types';
+import { CropperTransitions, ImageTransform } from 'advanced-cropper';
 import { useRotateImageOptions } from '../../hooks/useRotateImageOptions';
 import { useScaleImageOptions } from '../../hooks/useScaleImageOptions';
 import { useMoveImageOptions } from '../../hooks/useMoveImageOptions';

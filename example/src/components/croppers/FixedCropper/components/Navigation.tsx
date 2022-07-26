@@ -1,5 +1,5 @@
 import React, { FC } from 'react';
-import { isNumber } from 'advanced-cropper/utils';
+import { isNumber } from 'advanced-cropper';
 import cn from 'classnames';
 import { ZoomInIcon } from '../icons/ZoomInIcon';
 import { ZoomOutIcon } from '../icons/ZoomOutIcon';

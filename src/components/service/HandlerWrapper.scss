@@ -1,40 +1,5 @@
+@import 'node_modules/advanced-cropper/styles/index.scss';
+
 .react-handler-wrapper {
-	position: absolute;
-	transform: translate(-50%, -50%);
-	width: 30px;
-	height: 30px;
-	&__draggable {
-		width: 100%;
-		height: 100%;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-	&--west-north {
-		cursor: nw-resize;
-	}
-	&--north {
-		cursor: n-resize;
-	}
-	&--east-north {
-		cursor: ne-resize;
-	}
-	&--east {
-		cursor: e-resize;
-	}
-	&--east-south {
-		cursor: se-resize;
-	}
-	&--south {
-		cursor: s-resize;
-	}
-	&--west-south {
-		cursor: sw-resize;
-	}
-	&--west {
-		cursor: w-resize;
-	}
-	&--disabled {
-		cursor: auto;
-	}
+	@include handler-wrapper();
 }
