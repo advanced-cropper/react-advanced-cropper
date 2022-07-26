@@ -1,8 +1,14 @@
 import React, { ReactNode, forwardRef, useImperativeHandle, useRef, CSSProperties } from 'react';
 import cn from 'classnames';
-import { BoundarySizeAlgorithm, Size, stretchBoundary, BoundaryStretchAlgorithm, fillBoundary, fitBoundary, isFunction } from 'advanced-cropper';
-
-import './StretchableBoundary.scss';
+import {
+	BoundarySizeAlgorithm,
+	Size,
+	stretchBoundary,
+	BoundaryStretchAlgorithm,
+	fillBoundary,
+	fitBoundary,
+	isFunction,
+} from 'advanced-cropper';
 
 interface Props {
 	className?: string;
@@ -84,9 +90,9 @@ export const StretchableBoundary = forwardRef(
 		}));
 
 		return (
-			<div ref={boundaryRef} style={style} className={cn('react-cropper-boundary', className)}>
-				<div ref={stretcherRef} className={cn(['react-cropper-boundary__stretcher', stretcherClassName])} />
-				<div className={cn(['react-cropper-boundary__content', contentClassName])}>{children}</div>
+			<div ref={boundaryRef} style={style} className={cn('advanced-cropper-boundary', className)}>
+				<div ref={stretcherRef} className={cn(['advanced-cropper-boundary__stretcher', stretcherClassName])} />
+				<div className={cn(['advanced-cropper-boundary__content', contentClassName])}>{children}</div>
 			</div>
 		);
 	},

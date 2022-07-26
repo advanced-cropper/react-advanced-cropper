@@ -2,7 +2,6 @@ import React, { CSSProperties, useState } from 'react';
 import cn from 'classnames';
 import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper';
 import { HandlerWrapper } from '../service/HandlerWrapper';
-import './SimpleHandler.scss';
 
 interface Props {
 	defaultClassName?: string;
@@ -41,14 +40,14 @@ export const SimpleHandler = ({
 		<HandlerWrapper
 			style={wrapperStyle}
 			className={cn(
-				'react-simple-handler-wrapper',
+				'advanced-cropper-simple-handler-wrapper',
 				wrapperClassName,
-				verticalPosition && `react-simple-handler-wrapper--${verticalPosition}`,
-				horizontalPosition && `react-simple-handler-wrapper--${horizontalPosition}`,
+				verticalPosition && `advanced-cropper-simple-handler-wrapper--${verticalPosition}`,
+				horizontalPosition && `advanced-cropper-simple-handler-wrapper--${horizontalPosition}`,
 				horizontalPosition &&
 					verticalPosition &&
-					`react-simple-handler-wrapper--${horizontalPosition}-${verticalPosition}`,
-				hover && 'react-simple-handler-wrapper--hover',
+					`advanced-cropper-simple-handler-wrapper--${horizontalPosition}-${verticalPosition}`,
+				hover && 'advanced-cropper-simple-handler-wrapper--hover',
 			)}
 			verticalPosition={verticalPosition}
 			horizontalPosition={horizontalPosition}
@@ -60,14 +59,14 @@ export const SimpleHandler = ({
 		>
 			<div
 				className={cn(
-					'react-simple-handler',
-					hover && 'react-simple-handler--hover',
+					'advanced-cropper-simple-handler',
+					hover && 'advanced-cropper-simple-handler--hover',
 					defaultClassName,
 					hover && hoverClassName,
 					{
-						[`react-simple-handler--${verticalPosition}`]: !!verticalPosition,
-						[`react-simple-handler--${horizontalPosition}`]: !!horizontalPosition,
-						[`react-simple-handler--${horizontalPosition}-${verticalPosition}`]:
+						[`advanced-cropper-simple-handler--${verticalPosition}`]: !!verticalPosition,
+						[`advanced-cropper-simple-handler--${horizontalPosition}`]: !!horizontalPosition,
+						[`advanced-cropper-simple-handler--${horizontalPosition}-${verticalPosition}`]:
 							horizontalPosition && verticalPosition,
 					},
 				)}

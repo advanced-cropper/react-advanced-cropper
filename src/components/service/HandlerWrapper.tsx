@@ -1,9 +1,12 @@
 import React, { CSSProperties, ReactNode } from 'react';
 import classnames from 'classnames';
-import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection, getDirectionNames } from 'advanced-cropper';
+import {
+	HorizontalCardinalDirection,
+	MoveDirections,
+	VerticalCardinalDirection,
+	getDirectionNames,
+} from 'advanced-cropper';
 import { DraggableElement } from './DraggableElement';
-
-import './HandlerWrapper.scss';
 
 interface Props {
 	className?: string;
@@ -40,13 +43,13 @@ export const HandlerWrapper = ({
 			style={style}
 			className={classnames(
 				className,
-				'react-handler-wrapper',
-				position && `react-handler-wrapper--${position}`,
-				disabled && 'react-handler-wrapper--disabled',
+				'advanced-cropper-handler-wrapper',
+				position && `advanced-cropper-handler-wrapper--${position}`,
+				disabled && 'advanced-cropper-handler-wrapper--disabled',
 			)}
 		>
 			<DraggableElement
-				className={'react-handler-wrapper__draggable'}
+				className={'advanced-cropper-handler-wrapper__draggable'}
 				disabled={disabled}
 				onMove={onDrag}
 				onMoveEnd={onDragEnd}

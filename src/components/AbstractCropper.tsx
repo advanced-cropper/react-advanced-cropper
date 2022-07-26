@@ -44,7 +44,6 @@ import { CropperBackgroundImage } from './service/CropperBackgroundImage';
 import { CropperCanvas, CropperCanvasMethods } from './service/CropperCanvas';
 import { RectangleStencil } from './stencils/RectangleStencil';
 import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
-import './AbstractCropper.scss';
 
 export type AbstractCropperSettingsProp<Settings extends CropperStateSettings> = CropperStateSettingsProp<Settings>;
 
@@ -281,7 +280,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 	return (
 		<WrapperComponent
 			{...wrapperProps}
-			className={cn('react-advanced-cropper', className)}
+			className={cn('advanced-cropper', className)}
 			loaded={loaded}
 			cropper={cropperInterface}
 			loading={loading}
@@ -291,22 +290,22 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 				ref={boundaryRef}
 				stretchAlgorithm={boundaryStretchAlgorithm}
 				sizeAlgorithm={boundarySizeAlgorithm}
-				className={cn('react-advanced-cropper__boundary', boundaryClassName)}
-				stretcherClassName={cn('react-advanced-cropper__stretcher')}
+				className={cn('advanced-cropper__boundary', boundaryClassName)}
+				stretcherClassName={cn('advanced-cropper__stretcher')}
 			>
 				<BackgroundWrapperComponent
 					{...backgroundWrapperProps}
 					cropper={cropperInterface}
-					className={'react-advanced-cropper__background-wrapper'}
+					className={'advanced-cropper__background-wrapper'}
 				>
-					<div className={cn('react-advanced-cropper__background', backgroundClassName)}>
+					<div className={cn('advanced-cropper__background', backgroundClassName)}>
 						{cropper.getState() && (
 							<BackgroundComponent
 								{...backgroundProps}
 								ref={imageRef}
 								crossOrigin={crossOrigin}
 								cropper={cropperInterface}
-								className={cn('react-advanced-cropper__image', imageClassName)}
+								className={cn('advanced-cropper__image', imageClassName)}
 							/>
 						)}
 					</div>

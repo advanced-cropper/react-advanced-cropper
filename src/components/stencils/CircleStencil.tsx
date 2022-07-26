@@ -1,4 +1,4 @@
-import React, { ComponentType, forwardRef, useImperativeHandle, CSSProperties, useState } from 'react';
+import React, { ComponentType, forwardRef, useImperativeHandle, useState } from 'react';
 import cn from 'classnames';
 import {
 	CardinalDirection,
@@ -9,7 +9,7 @@ import {
 	MoveDirections,
 	CropperImage,
 	ResizeOptions,
-	getStencilCoordinates
+	getStencilCoordinates,
 } from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -18,7 +18,6 @@ import { StencilOverlay } from '../service/StencilOverlay';
 import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
 import { StencilOptions } from '../../types';
-import './CircleStencil.scss';
 
 type HandlerComponent = ComponentType<any>;
 
@@ -156,11 +155,11 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			state && (
 				<StencilWrapper
 					className={cn(
-						'react-circle-stencil',
-						movable && 'react-circle-stencil--movable',
-						moving && 'react-circle-stencil--moving',
-						resizable && 'react-circle-stencil--resizable',
-						resizing && 'react-circle-stencil--resizing',
+						'advanced-cropper-circle-stencil',
+						movable && 'advanced-cropper-circle-stencil--movable',
+						moving && 'advanced-cropper-circle-stencil--moving',
+						resizable && 'advanced-cropper-circle-stencil--resizable',
+						resizing && 'advanced-cropper-circle-stencil--resizing',
 						moving && movingClassName,
 						resizing && resizingClassName,
 					)}
@@ -171,7 +170,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 					transitions={transitions}
 				>
 					<BoundingBox
-						className={cn(boundingBoxClassName, 'react-circle-stencil__bounding-box')}
+						className={cn(boundingBoxClassName, 'advanced-cropper-circle-stencil__bounding-box')}
 						handlers={handlers}
 						handlerComponent={handlerComponent}
 						handlerClassNames={handlerClassNames}
@@ -191,10 +190,12 @@ export const CircleStencil = forwardRef<Methods, Props>(
 							disabled={!movable}
 							onMove={onMove}
 							onMoveEnd={onMoveEnd}
-							className={cn('react-circle-stencil__draggable-area', draggableAreaClassName)}
+							className={cn('advanced-cropper-circle-stencil__draggable-area', draggableAreaClassName)}
 						>
-							<StencilOverlay className={cn('react-circle-stencil__overlay', overlayClassName)}>
-								<div className={cn('react-circle-stencil__preview', previewClassName)} />
+							<StencilOverlay
+								className={cn('advanced-cropper-circle-stencil__overlay', overlayClassName)}
+							>
+								<div className={cn('advanced-cropper-circle-stencil__preview', previewClassName)} />
 							</StencilOverlay>
 						</DraggableArea>
 					</BoundingBox>

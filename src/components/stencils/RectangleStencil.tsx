@@ -18,7 +18,6 @@ import { BoundingBox } from '../service/BoundingBox';
 import { StencilOverlay } from '../service/StencilOverlay';
 import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
-import './RectangleStencil.scss';
 
 type HandlerComponent = ComponentType<any>;
 
@@ -173,11 +172,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			state && (
 				<StencilWrapper
 					className={cn(
-						'react-rectangle-stencil',
-						movable && 'react-rectangle-stencil--movable',
-						moving && 'react-rectangle-stencil--moving',
-						resizable && 'react-rectangle-stencil--resizable',
-						resizing && 'react-rectangle-stencil--resizing',
+						'advanced-cropper-rectangle-stencil',
+						movable && 'advanced-cropper-rectangle-stencil--movable',
+						moving && 'advanced-cropper-rectangle-stencil--moving',
+						resizable && 'advanced-cropper-rectangle-stencil--resizable',
+						resizing && 'advanced-cropper-rectangle-stencil--resizing',
 						moving && movingClassName,
 						resizing && resizingClassName,
 					)}
@@ -188,7 +187,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 					transitions={transitions}
 				>
 					<BoundingBox
-						className={cn(boundingBoxClassName, 'react-rectangle-stencil__bounding-box')}
+						className={cn(boundingBoxClassName, 'advanced-cropper-rectangle-stencil__bounding-box')}
 						handlers={handlers}
 						handlerComponent={handlerComponent}
 						handlerClassNames={handlerClassNames}
@@ -208,10 +207,12 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 							disabled={!movable}
 							onMove={onMove}
 							onMoveEnd={onMoveEnd}
-							className={cn('react-rectangle-stencil__draggable-area', draggableAreaClassName)}
+							className={cn('advanced-cropper-rectangle-stencil__draggable-area', draggableAreaClassName)}
 						>
-							<StencilOverlay className={cn('react-rectangle-stencil__overlay', overlayClassName)}>
-								<div className={cn('react-rectangle-stencil__preview', previewClassName)} />
+							<StencilOverlay
+								className={cn('advanced-cropper-rectangle-stencil__overlay', overlayClassName)}
+							>
+								<div className={cn('advanced-cropper-rectangle-stencil__preview', previewClassName)} />
 							</StencilOverlay>
 						</DraggableArea>
 					</BoundingBox>

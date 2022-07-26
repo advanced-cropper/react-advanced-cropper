@@ -3,7 +3,6 @@ import { Coordinates, CropperTransitions } from 'advanced-cropper';
 import { deepCompare, isNumber } from 'advanced-cropper';
 import classnames from 'classnames';
 import { useTransition } from '../../hooks/useAnimatedState';
-import './ArtificialTransition.scss';
 
 interface Props {
 	className?: string;
@@ -67,7 +66,7 @@ export const ArtificialTransition: FC<Props> = ({ className, transitions, childr
 	};
 
 	return (
-		<div ref={root} className={classnames('react-artificial-transition', className)} style={rootStyle}>
+		<div ref={root} className={classnames('advanced-cropper-artificial-transition', className)} style={rootStyle}>
 			{children}
 		</div>
 	);

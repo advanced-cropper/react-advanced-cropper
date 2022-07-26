@@ -3,8 +3,6 @@ import cn from 'classnames';
 import { CropperTransitions, CropperImage, CropperState, getBackgroundStyle } from 'advanced-cropper';
 import { preventDefault } from '../../service/events';
 
-import './CropperBackgroundImage.scss';
-
 interface DesiredCropperRef {
 	getState: () => CropperState;
 	getTransitions: () => CropperTransitions;
@@ -31,7 +29,7 @@ export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
 			<img
 				key={src}
 				ref={ref}
-				className={cn('react-cropper-background-image', className)}
+				className={cn('advanced-cropper-background-image', className)}
 				src={src}
 				crossOrigin={crossOrigin === true ? 'anonymous' : crossOrigin || undefined}
 				style={style}

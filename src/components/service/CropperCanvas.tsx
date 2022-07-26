@@ -1,6 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { CropperState, DrawOptions, drawCroppedArea } from 'advanced-cropper';
-import './CropperCanvas.scss';
 
 export interface CropperCanvasMethods {
 	draw: (
@@ -26,8 +25,8 @@ export const CropperCanvas = forwardRef((_, ref) => {
 
 	return (
 		<>
-			<canvas className="react-cropper-canvas" ref={canvasRef} />
-			<canvas className="react-cropper-canvas" ref={spareCanvasRef} />
+			<canvas className="advanced-cropper-canvas" ref={canvasRef} />
+			<canvas className="advanced-cropper-canvas" ref={spareCanvasRef} />
 		</>
 	);
 });

@@ -10,7 +10,7 @@ if (!fs.existsSync('./dist/themes/')) {
 const themes = ['compact', 'classic', 'bubble'];
 
 themes.forEach((theme) => {
-	const result = sass.renderSync({ file: `./src/themes/${theme}.scss` });
+	const result = sass.renderSync({ file: `./node_modules/advanced-cropper/themes/${theme}.scss` });
 	const css = result.css;
 
 	postcss([autoprefixer])
@@ -22,5 +22,5 @@ themes.forEach((theme) => {
 			fs.writeFileSync(`./dist/themes/${theme}.css`, result.css);
 		});
 
-	fs.copyFileSync(`./src/themes/${theme}.scss`, `./dist/themes/${theme}.scss`);
+	fs.copyFileSync(`./node_modules/advanced-cropper/themes/${theme}.scss`, `./dist/themes/${theme}.scss`);
 });

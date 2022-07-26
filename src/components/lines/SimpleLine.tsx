@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import cn from 'classnames';
 import { CardinalDirection, MoveDirections } from 'advanced-cropper';
 import { LineWrapper } from '../service/LineWrapper';
-import './SimpleLine.scss';
 
 interface Props {
 	defaultClassName?: string;
@@ -35,8 +34,8 @@ export const SimpleLine = ({
 
 	return (
 		<LineWrapper
-			className={cn('react-simple-line-wrapper', wrapperClassName, {
-				[`react-simple-line-wrapper--${position}`]: !!position,
+			className={cn('advanced-cropper-simple-line-wrapper', wrapperClassName, {
+				[`advanced-cropper-simple-line-wrapper--${position}`]: !!position,
 			})}
 			position={position}
 			disabled={disabled}
@@ -47,12 +46,12 @@ export const SimpleLine = ({
 		>
 			<div
 				className={cn(
-					'react-simple-line',
-					hover && 'react-simple-line--hover',
+					'advanced-cropper-simple-line',
+					hover && 'advanced-cropper-simple-line--hover',
 					defaultClassName,
 					hover && hoverClassName,
 					{
-						[`react-simple-line--${position}`]: !!position,
+						[`advanced-cropper-simple-line--${position}`]: !!position,
 					},
 				)}
 			/>

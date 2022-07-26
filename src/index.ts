@@ -49,3 +49,5 @@ export {
 export { joinClassNames } from './service/utils';
 
 export type { StencilSize } from 'advanced-cropper/extensions/stencil-size';
+
+import 'advanced-cropper/styles/index.scss';

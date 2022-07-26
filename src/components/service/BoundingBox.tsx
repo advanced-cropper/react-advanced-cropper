@@ -17,7 +17,6 @@ import {
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import { ArtificialTransition } from './ArtificialTransition';
-import './BoundingBox.scss';
 
 const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
 const VERTICAL_DIRECTIONS = ['south', 'north', null] as const;
@@ -178,8 +177,8 @@ export const BoundingBox = ({
 					component: handlerComponent,
 					className: classnames(handlerClassNames.default, handlerClassNames[point.name]),
 					wrapperClassName: classnames(
-						`react-bounding-box__handler`,
-						(!width || !height) && `react-bounding-box__handler--${point.className}`,
+						`advanced-cropper-bounding-box__handler`,
+						(!width || !height) && `advanced-cropper-bounding-box__handler--${point.className}`,
 						handlerWrapperClassNames.default,
 						handlerWrapperClassNames[point.name],
 					),
@@ -241,7 +240,7 @@ export const BoundingBox = ({
 		};
 
 	return (
-		<div className={cn('react-bounding-box', className)} style={style}>
+		<div className={cn('advanced-cropper-bounding-box', className)} style={style}>
 			{children}
 			<div>
 				{lineNodes.map((line) => (
@@ -282,7 +281,7 @@ export const BoundingBox = ({
 						return (
 							<ArtificialTransition
 								key={handler.name}
-								className={'react-bounding-box__handler-wrapper'}
+								className={'advanced-cropper-bounding-box__handler-wrapper'}
 								transitions={transitions}
 								left={left}
 								top={top}

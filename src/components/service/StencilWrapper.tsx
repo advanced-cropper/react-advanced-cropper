@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { CropperTransitions } from 'advanced-cropper';
 import classnames from 'classnames';
-import './StencilWrapper.scss';
+
 import { ArtificialTransition } from './ArtificialTransition';
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 export const StencilWrapper: FC<Props> = ({ className, transitions, width, height, left, top, children }) => {
 	return (
 		<ArtificialTransition
-			className={classnames('react-stencil-wrapper', className)}
+			className={classnames('advanced-cropper-stencil-wrapper', className)}
 			transitions={transitions}
 			width={width}
 			height={height}

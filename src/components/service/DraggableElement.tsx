@@ -1,7 +1,6 @@
 import React, { ReactNode, Component, RefObject, createRef } from 'react';
 import cn from 'classnames';
 import { MoveDirections, Point, SimpleTouch, distance } from 'advanced-cropper';
-import './DraggableElement.scss';
 
 interface Props {
 	className?: string;
@@ -246,7 +245,7 @@ export class DraggableElement extends Component<Props> {
 		const { children, className } = this.props;
 		return (
 			<div
-				className={cn('react-draggable-element', className)}
+				className={cn('advanced-cropper-draggable-element', className)}
 				ref={this.container}
 				onMouseOver={this.onMouseOver}
 				onMouseLeave={this.onMouseLeave}
