@@ -50,8 +50,8 @@ export default function Home(): JSX.Element {
 						<h1 className="main-page__landing-title">Create the cropper you desire</h1>
 						<div className="main-page__section-text">
 							This react cropper library gives you the possibility to create croppers that exactly suited
-							for your website design. Not only the appearance, but the behavior alike. Don’t limit
-							yourself. Rotate, zoom, transitions, autozoom and many other features included.
+							for your website design. Don’t limit yourself. Rotate, zoom, transitions, autozoom and many
+							other features included.
 						</div>
 						<div className="main-page__family">
 							<span className="main-page__family-item main-page__family-item--active">React</span>
@@ -78,14 +78,14 @@ export default function Home(): JSX.Element {
 									<div className="main-page__feature-title">Fully Customisable</div>
 									<div className="main-page__feature-text">
 										Customise almost any aspect of the cropper component, or use it right out of the
-										box.
+										box. Not only the appearance, but the behavior alike.
 									</div>
 								</div>
 								<div className="main-page__feature">
 									<div className="main-page__feature-title">Mobile Support</div>
 									<div className="main-page__feature-text">
-										React Advanced Cropper supports desktop and mobile devices alike. Built-in
-										support of touch events, cropper resizing, etc.
+										The library supports desktop and mobile devices alike. Built-in support of touch
+										events, cropper resizing, etc. to make the image crop smooth and easy.
 									</div>
 								</div>
 							</div>
@@ -116,8 +116,8 @@ export default function Home(): JSX.Element {
 							</div>
 							<div className="main-page__section-text">
 								This library gives you numerous possibilities to customize your cropper. It's almost the
-								framework for creating of the croppers. But also it's very easy to use. Install the
-								library and use the fragments of code below. That's all that you need to start.
+								framework for creating of the image croppers. But also it's very easy to use. Install
+								the library and use the fragments of code below. That's all that you need to start.
 							</div>
 							<div className="main-page__example-installation-block">
 								<InstallationBlock />
