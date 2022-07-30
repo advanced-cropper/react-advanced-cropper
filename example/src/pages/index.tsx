@@ -56,7 +56,7 @@ export default function Home(): JSX.Element {
 						<div className="main-page__family">
 							<span className="main-page__family-item main-page__family-item--active">React</span>
 							<a
-								href={'https://norserium.github.io/vue-advanced-cropper/'}
+								href={'https://advanced-cropper.github.io/vue-advanced-cropper/'}
 								className="main-page__family-item"
 							>
 								Vue

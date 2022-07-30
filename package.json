@@ -4,7 +4,7 @@
   "description": "The react cropper library that gives the possibility to create croppers exactly suited for your website design",
   "author": "Norserium",
   "license": "MIT",
-  "repository": "Norserium/react-advanced-cropper",
+  "repository": "advanced-cropper/react-advanced-cropper",
   "main": "dist/index.cjs.js",
   "unpkg": "dist/index.global.js",
   "jsdelivr": "dist/index.global.js",

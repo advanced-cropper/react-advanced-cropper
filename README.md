@@ -1,10 +1,10 @@
-<p align="center"><a href="https://norserium.github.io/react-advanced-cropper/" target="_blank" rel="noopener noreferrer"><img width="133" src="https://github.com/norserium/react-advanced-cropper/blob/master/example/static/img/github-logo.svg?raw=true&timestamp=1608385818575" alt="React Advanced Cropper logo"></a></p>
+<p align="center"><a href="https://advanced-cropper.github.io/react-advanced-cropper/" target="_blank" rel="noopener noreferrer"><img width="133" src="https://github.com/norserium/react-advanced-cropper/blob/master/example/static/img/github-logo.svg?raw=true&timestamp=1608385818575" alt="React Advanced Cropper logo"></a></p>
 <p align="center">
   <a href="https://npmcharts.com/compare/react-advanced-cropper?minimal=true"><img src="https://img.shields.io/npm/dm/react-advanced-cropper.svg?sanitize=true" alt="Downloads"></a>
   <a href="https://www.npmjs.com/package/react-advanced-cropper"><img src="https://img.shields.io/npm/v/react-advanced-cropper?color=6FCFF0" alt="Version"></a>
   <br>
-  <a href="https://norserium.github.io/react-advanced-cropper/">Documentation</a target="_blank" rel="noopener noreferrer"> /
-  <a href="https://norserium.github.io/react-advanced-cropper/docs/guides/recipes">Examples</a target="_blank" rel="noopener noreferrer"> /
+  <a href="https://advanced-cropper.github.io/react-advanced-cropper/">Documentation</a target="_blank" rel="noopener noreferrer"> /
+  <a href="https://advanced-cropper.github.io/react-advanced-cropper/docs/guides/recipes">Examples</a target="_blank" rel="noopener noreferrer"> /
   <a href="https://codesandbox.io/s/react-advanced-cropper-kkvbz">Sandbox</a target="_blank" rel="noopener noreferrer">
 </p>
 
@@ -24,7 +24,7 @@ It means that you are able to change not only the cropper appearance, you area a
 Features:
 
 - full mobile / desktop support
-- support [all three main types of croppers](https://norserium.github.io/react-advanced-cropper/docs/guides/cropper-types) right out of the box
+- support [all three main types of croppers](https://advanced-cropper.github.io/react-advanced-cropper/docs/guides/cropper-types) right out of the box
 - support both canvas and coordinates modes, minimum and maximum aspect ratios, custom size restrictions
 - zoom, rotate, resize image
 - auto-zoom, transitions
@@ -99,9 +99,9 @@ export const GettingStartedExample = () => {
 | maxWidth                  | `number`             | The maximum width of the stencil (percents)                     			      |
 | maxHeight                 | `number`             | The maximum height of the stencil (percents)                    			      |
 | checkOrientation          | `boolean`            | Check if EXIF orientation should be checked                     			      | `true`
-| resizeImage               | `boolean`, `object`  | The options for the image resizing ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#resizeimage)) | `true`
-| moveImage                 | `boolean`, `object`  | The options for the image moving ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#moveimage))     | `true`
-| rotateImage               | `boolean`, `object`  | The options for the image moving ([details](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper#rotateImage))   | `false`
+| resizeImage               | `boolean`, `object`  | The options for the image resizing ([details](https://advanced-cropper.github.io/react-advanced-cropper/docs/components/Cropper#resizeimage)) | `true`
+| moveImage                 | `boolean`, `object`  | The options for the image moving ([details](https://advanced-cropper.github.io/react-advanced-cropper/docs/components/Cropper#moveimage))     | `true`
+| rotateImage               | `boolean`, `object`  | The options for the image moving ([details](https://advanced-cropper.github.io/react-advanced-cropper/docs/components/Cropper#rotateImage))   | `false`
 | imageRestriction          | `string`             | Set restrictions for image position ('fillArea' 'fitArea', 'stencil', 'none')    | `'fillArea'`
 | defaultSize               | `object`, `Function` | The function that returns the default size of the stencil or object              |
 | defaultPosition           | `object`, `Function` | The function that returns the default position of the stencil or object          |
@@ -114,7 +114,7 @@ export const GettingStartedExample = () => {
 
 
 
-See [the documentation](https://norserium.github.io/react-advanced-cropper/docs/components/Cropper) for more props and details.
+See [the documentation](https://advanced-cropper.github.io/react-advanced-cropper/docs/components/Cropper) for more props and details.
 
 ## RectangleStencil
 
@@ -137,7 +137,7 @@ See [the documentation](https://norserium.github.io/react-advanced-cropper/docs/
 | lineClassNames            | `object`            | The object of custom line classes                              |
 | lineWrapperClassNames     | `object`            | The object of custom line wrapper classes                      |
 
-See [the documentation](https://norserium.github.io/react-advanced-cropper/docs/components/RectangleStencil) for more props and details.
+See [the documentation](https://advanced-cropper.github.io/react-advanced-cropper/docs/components/RectangleStencil) for more props and details.
 
 ## License
 

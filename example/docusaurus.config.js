@@ -8,7 +8,7 @@ require('dotenv').config();
 	module.exports = {
 		title: 'React Advanced Cropper',
 		tagline: 'Create the cropper you desire',
-		url: 'https://norserium.github.io',
+		url: 'https://advanced-cropper.github.io',
 		baseUrl: '/react-advanced-cropper/',
 		onBrokenLinks: 'ignore',
 		onBrokenMarkdownLinks: 'warn',
@@ -65,7 +65,7 @@ require('dotenv').config();
 							label: 'Documentation',
 						},
 						{
-							href: 'https://github.com/Norserium/react-advanced-cropper/',
+							href: 'https://github.com/advanced-cropper/react-advanced-cropper/',
 							label: 'GitHub',
 							position: 'right',
 						},
@@ -109,7 +109,7 @@ require('dotenv').config();
 								},
 								{
 									label: 'GitHub',
-									href: 'https://github.com/Norserium/react-advanced-cropper',
+									href: 'https://github.com/advanced-cropper/react-advanced-cropper',
 								},
 							],
 						},
