@@ -59,9 +59,7 @@ export class TransformableImage extends Component<Props> {
 
 	constructor(props: Props) {
 		super(props);
-
 		this.transforming = false;
-
 		this.touches = [];
 		this.anchor = {
 			left: 0,

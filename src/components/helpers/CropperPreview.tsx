@@ -4,14 +4,14 @@ import {
 	CropperImage,
 	CropperState,
 	CropperTransitions,
-	DefaultBoundaryParams,
-	BoundaryStretchParams,
 	Size,
 	getPreviewStyle,
 	isLower,
 	ratio,
+	stretchPreviewBoundary,
 } from 'advanced-cropper';
 import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
+import { useWindowResize } from '../../hooks/useWindowResize';
 
 interface Props {
 	state: CropperState | null;
@@ -20,9 +20,6 @@ interface Props {
 	className?: string;
 	imageClassName?: string;
 	contentClassName?: string;
-	width?: number;
-	height?: number;
-	fill?: unknown;
 }
 
 export const CropperPreview = ({
@@ -41,6 +38,13 @@ export const CropperPreview = ({
 
 	const imageStyle =
 		state && state.coordinates && image && size ? getPreviewStyle(image, state, coefficient, transitions) : {};
+
+	const contentStyle = size
+		? {
+				width: `${size.width}px`,
+				height: `${size.height}px`,
+		  }
+		: {};
 
 	const refresh = () => {
 		if (boundaryRef.current && state?.coordinates) {
@@ -66,39 +70,7 @@ export const CropperPreview = ({
 		}
 	};
 
-	const sizeAlgorithm = function ({ boundary }: DefaultBoundaryParams) {
-		const { width, height } = boundary.getBoundingClientRect();
-
-		return {
-			width,
-			height,
-		};
-	};
-
-	const stretchAlgorithm = function ({ boundary, stretcher, size }: BoundaryStretchParams) {
-		// Reset stretcher
-		stretcher.style.width = `0px`;
-		stretcher.style.height = `0px`;
-
-		// Stretch the boundary with respect to its width
-		const width = Math.max(boundary.clientWidth, size.width);
-		stretcher.style.width = `${width}px`;
-		stretcher.style.height = `${width / ratio(size)}px`;
-
-		// If the height of boundary larger than current stretcher height
-		// stretch the boundary with respect to its height
-		if (stretcher.clientHeight < boundary.clientHeight) {
-			stretcher.style.height = `${boundary.clientHeight}px`;
-			stretcher.style.width = `${stretcher.clientHeight * ratio(size)}px`;
-		}
-	};
-
-	const contentStyle = size
-		? {
-				width: `${size.width}px`,
-				height: `${size.height}px`,
-		  }
-		: {};
+	useWindowResize(refresh);
 
 	useLayoutEffect(() => {
 		if (state?.coordinates) {
@@ -110,8 +82,7 @@ export const CropperPreview = ({
 	return (
 		<StretchableBoundary
 			ref={boundaryRef}
-			sizeAlgorithm={sizeAlgorithm}
-			stretchAlgorithm={stretchAlgorithm}
+			stretchAlgorithm={stretchPreviewBoundary}
 			className={cn(className, 'advanced-cropper-preview')}
 		>
 			<div className={cn(contentClassName, 'advanced-cropper-preview__content')} style={contentStyle}>

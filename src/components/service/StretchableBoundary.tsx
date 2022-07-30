@@ -3,11 +3,9 @@ import cn from 'classnames';
 import {
 	BoundarySizeAlgorithm,
 	Size,
-	stretchBoundary,
+	stretchCropperBoundary,
 	BoundaryStretchAlgorithm,
 	fillBoundary,
-	fitBoundary,
-	isFunction,
 } from 'advanced-cropper';
 
 interface Props {
@@ -16,7 +14,7 @@ interface Props {
 	stretcherClassName?: string;
 	contentClassName?: string;
 	stretchAlgorithm?: BoundaryStretchAlgorithm;
-	sizeAlgorithm?: BoundarySizeAlgorithm | string;
+	sizeAlgorithm?: BoundarySizeAlgorithm;
 	children?: ReactNode;
 }
 
@@ -32,8 +30,8 @@ export const StretchableBoundary = forwardRef(
 			style,
 			stretcherClassName,
 			contentClassName,
-			stretchAlgorithm = stretchBoundary,
-			sizeAlgorithm,
+			stretchAlgorithm = stretchCropperBoundary,
+			sizeAlgorithm = fillBoundary,
 			children,
 		}: Props,
 		ref,
@@ -53,32 +51,10 @@ export const StretchableBoundary = forwardRef(
 				const stretcher = stretcherRef.current;
 				const boundary = boundaryRef.current;
 
-				if (size && size.width && size.height && stretcher && boundary) {
-					stretchAlgorithm({
-						boundary,
-						stretcher,
-						size,
-					});
-
-					const params = {
-						boundary,
-						size,
-					};
-
-					let result;
-					if (isFunction(sizeAlgorithm)) {
-						result = sizeAlgorithm(params);
-					} else if (sizeAlgorithm === 'fit') {
-						result = fitBoundary(params);
-					} else {
-						result = fillBoundary(params);
-					}
-
-					if (!result.width || !result.height) {
-						return Promise.resolve(null);
-					} else {
-						return Promise.resolve(result);
-					}
+				if (size?.width && size?.height && stretcher && boundary) {
+					stretchAlgorithm(boundary, stretcher, size);
+					const result = sizeAlgorithm(boundary, size);
+					return Promise.resolve(result.width && result.height ? result : null);
 				} else {
 					if (stretcher) {
 						stretcher.style.height = '';
