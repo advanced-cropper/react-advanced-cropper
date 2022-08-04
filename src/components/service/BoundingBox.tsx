@@ -52,8 +52,8 @@ interface Props {
 	onResize?: (directions: ResizeDirections, options: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
-	width?: number;
-	height?: number;
+	width: number;
+	height: number;
 	transitions?: CropperTransitions;
 }
 
@@ -154,6 +154,8 @@ export const BoundingBox = ({
 						disabled && lineClassNames.disabled,
 					),
 					wrapperClassName: classnames(
+						`advanced-cropper-bounding-box__line`,
+						`advanced-cropper-bounding-box__line--${point.name}`,
 						lineWrapperClassNames.default,
 						lineWrapperClassNames[point.name],
 						disabled && lineWrapperClassNames.disabled,
@@ -178,7 +180,7 @@ export const BoundingBox = ({
 					className: classnames(handlerClassNames.default, handlerClassNames[point.name]),
 					wrapperClassName: classnames(
 						`advanced-cropper-bounding-box__handler`,
-						(!width || !height) && `advanced-cropper-bounding-box__handler--${point.className}`,
+						`advanced-cropper-bounding-box__handler--${point.className}`,
 						handlerWrapperClassNames.default,
 						handlerWrapperClassNames[point.name],
 					),
@@ -271,27 +273,20 @@ export const BoundingBox = ({
 							onDragEnd={onResizeEnd}
 						/>
 					);
-					if (width && height) {
-						const { verticalPosition, horizontalPosition } = handler;
-						const left =
-							horizontalPosition === 'east' ? width : horizontalPosition === 'west' ? 0 : width / 2;
-
-						const top =
-							verticalPosition === 'south' ? height : verticalPosition === 'north' ? 0 : height / 2;
-						return (
-							<ArtificialTransition
-								key={handler.name}
-								className={'advanced-cropper-bounding-box__handler-wrapper'}
-								transitions={transitions}
-								left={left}
-								top={top}
-							>
-								{handlerElement}
-							</ArtificialTransition>
-						);
-					} else {
-						return handlerElement;
-					}
+					const { verticalPosition, horizontalPosition } = handler;
+					const left = horizontalPosition === 'east' ? width : horizontalPosition === 'west' ? 0 : width / 2;
+					const top = verticalPosition === 'south' ? height : verticalPosition === 'north' ? 0 : height / 2;
+					return (
+						<ArtificialTransition
+							key={handler.name}
+							className={'advanced-cropper-bounding-box__handler-wrapper'}
+							transitions={transitions}
+							left={left}
+							top={top}
+						>
+							{handlerElement}
+						</ArtificialTransition>
+					);
 				})}
 			</div>
 		</div>

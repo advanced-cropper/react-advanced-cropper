@@ -99,7 +99,7 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	canvas?: boolean;
 	crossOrigin?: 'anonymous' | 'use-credentials';
 	boundaryStretchAlgorithm?: BoundaryStretchAlgorithm;
-	boundarySizeAlgorithm?: BoundarySizeAlgorithm | string;
+	boundarySizeAlgorithm?: BoundarySizeAlgorithm;
 	style?: CSSProperties;
 	onReady?: (cropper: AbstractCropperRef<Settings>) => void;
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;

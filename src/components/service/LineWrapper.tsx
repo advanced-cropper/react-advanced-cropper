@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import classnames from 'classnames';
+import cn from 'classnames';
 import { HorizontalCardinalDirection, MoveDirections, VerticalCardinalDirection } from 'advanced-cropper';
 import { DraggableElement } from './DraggableElement';
 
@@ -26,7 +26,7 @@ export const LineWrapper = ({
 }: Props) => {
 	return (
 		<DraggableElement
-			className={classnames([
+			className={cn([
 				'advanced-cropper-line-wrapper',
 				position && `advanced-cropper-line-wrapper--${position}`,
 				className,
@@ -38,7 +38,14 @@ export const LineWrapper = ({
 			onEnter={onEnter}
 			activationDistance={0}
 		>
-			{children}
+			<div
+				className={cn([
+					'advanced-cropper-line-wrapper__content',
+					position && `advanced-cropper-line-wrapper__content--${position}`,
+				])}
+			>
+				{children}
+			</div>
 		</DraggableElement>
 	);
 };
