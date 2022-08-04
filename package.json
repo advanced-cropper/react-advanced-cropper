@@ -77,7 +77,7 @@
     "dist"
   ],
   "dependencies": {
-    "advanced-cropper": "^0.10.0",
+    "advanced-cropper": "~0.10.0",
     "classnames": "^2.2.6",
     "tslib": "^2.4.0"
   }
