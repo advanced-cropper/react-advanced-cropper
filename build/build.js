@@ -7,7 +7,7 @@ if (!fs.existsSync('./dist/themes/')) {
 	fs.mkdirSync('./dist/themes/');
 }
 
-const themes = ['compact', 'classic', 'bubble'];
+const themes = ['compact', 'classic', 'bubble', 'corners', 'default'];
 
 themes.forEach((theme) => {
 	const result = sass.renderSync({ file: `./node_modules/advanced-cropper/themes/${theme}.scss` });

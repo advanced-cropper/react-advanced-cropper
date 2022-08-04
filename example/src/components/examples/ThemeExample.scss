@@ -20,6 +20,10 @@
 		@import '~react-advanced-cropper/dist/themes/bubble.scss';
 	}
 
+	&--corners {
+		@import '~react-advanced-cropper/dist/themes/corners.scss';
+	}
+
 	&__theme {
 		color: white;
 		position: absolute;

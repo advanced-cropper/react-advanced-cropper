@@ -8,7 +8,7 @@ import { VerticalButtons } from '@site/src/components/examples/components/Vertic
 import './ThemeExample.scss';
 
 interface ThemeExampleProps {
-	theme: 'bubble' | 'classic' | 'compact' | 'default';
+	theme: 'bubble' | 'classic' | 'compact' | 'corners' | 'default';
 }
 
 export const ThemeExample: FC<ThemeExampleProps> = ({ theme }) => {
@@ -21,6 +21,8 @@ export const ThemeExample: FC<ThemeExampleProps> = ({ theme }) => {
 			return '/react-advanced-cropper/img/images/photo-1520927640400-f9e83b1bc43e.jpg';
 		} else if (theme === 'compact') {
 			return '/react-advanced-cropper/img/images/pexels-photo-573238.jpeg';
+		} else if (theme === 'corners') {
+			return '/react-advanced-cropper/img/images/adam-flockemann-9j4xyaSQhUQ-unsplash.jpg';
 		} else {
 			return '/react-advanced-cropper/img/images/photo-1583149577728-9ab503747013.jpg';
 		}

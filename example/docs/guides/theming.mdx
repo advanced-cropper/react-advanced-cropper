@@ -40,24 +40,23 @@ If you loaded styles as written earlier it will be enabled by default. This them
 
 <ThemeExample theme="default"/>
 
+### Corners Theme
 
-### Compact Theme
-
-The compact theme inspired by some of Android croppers. It's well suited
-for mobile devices.
+The theme inspired by some of Android croppers.
 ```js
-import 'react-advanced-cropper/dist/themes/compact.css';
+import 'react-advanced-cropper/dist/themes/corners.css';
 ```
-<ThemeExample theme="compact"/>
+<ThemeExample theme="corners"/>
 
 <details> <summary>SCSS variables</summary>
 
 | Name                  | Default Value              |
 | --------------------- | -------------------------- |
 | $base-color | white  |
+| $accent-color | currentColor  |
 | $grid | true  |
 | $grid-color | $base-color  |
-| $handler-color | $base-color  |
+| $handler-color | $accent-color  |
 | $big-handler-color | $handler-color  |
 | $small-handler-color | $handler-color  |
 | $line-color | $base-color  |
@@ -80,11 +79,38 @@ import 'react-advanced-cropper/dist/themes/classic.css';
 | Name                  | Default Value              |
 | --------------------- | -------------------------- |
 | $base-color | white  |
+| $accent-color | currentColor  |
 | $grid | true  |
 | $grid-color | $base-color  |
-| $handler-color | $base-color  |
+| $handler-color | $accent-color  |
 | $line-color | $base-color  |
 | $handler-size | 8px  |
+
+</details>
+
+### Compact Theme
+
+The compact theme that offers the stencil appearance that doesn't distract from the cropped area.
+```js
+import 'react-advanced-cropper/dist/themes/compact.css';
+```
+<ThemeExample theme="compact"/>
+
+<details> <summary>SCSS variables</summary>
+
+| Name                  | Default Value              |
+| --------------------- | -------------------------- |
+| $base-color | white  |
+| $accent-color | currentColor  |
+| $grid | true  |
+| $grid-color | $base-color  |
+| $handler-color | $accent-color  |
+| $big-handler-color | $handler-color  |
+| $small-handler-color | $handler-color  |
+| $line-color | $base-color  |
+| $big-handler-size | 16px  |
+| $small-handler-size | 4px  |
+| $big-handler-width | 2px  |
 
 </details>
 
@@ -101,9 +127,10 @@ import 'react-advanced-cropper/dist/themes/bubble.css';
 | Name                  | Default Value              |
 | --------------------- | -------------------------- |
 | $base-color | white  |
+| $accent-color | currentColor  |
 | $grid | false  |
 | $grid-color | $base-color  |
-| $handler-color | $base-color  |
+| $handler-color | $accent-color  |
 | $line-color | $base-color  |
 | $handler-size | 14px  |
 | $hover-handler-size | 25px  |
