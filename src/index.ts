@@ -29,11 +29,9 @@ export * from 'advanced-cropper';
 export * from 'advanced-cropper/defaults';
 export * from 'advanced-cropper/algorithms';
 export * from 'advanced-cropper/image';
-export * from 'advanced-cropper/html';
 export * from 'advanced-cropper/canvas';
 export * from 'advanced-cropper/service';
 export * from 'advanced-cropper/state';
-export * from 'advanced-cropper/upload';
 export {
 	isLower,
 	isGreater,

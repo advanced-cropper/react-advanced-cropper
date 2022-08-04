@@ -1,0 +1,128 @@
+@import '../../../css/mixins';
+
+.stencil-structure {
+	&__wrapper {
+		height: 500px;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		border: solid 2px var(--ifm-link-color);
+		position: relative;
+		@include mobile() {
+			height: 350px;
+		}
+	}
+	&__overlay {
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		stroke: #222;
+		background: #333;
+		opacity: 0.9;
+	}
+	&__handler-label {
+		position: absolute;
+		top: -35px;
+		left: 0;
+		transform: translateX(-50%);
+	}
+	&__line-label {
+		position: absolute;
+		top: 50%;
+		left: -35px;
+		transform: translateY(-50%) rotate(-90deg) ;
+	}
+	&__preview-label {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		background: rgba(white, 0.9);
+		color: var(--ifm-color-primary);
+		border: solid 1px var(--ifm-color-primary);
+		padding: 0 12px;
+		border-radius: 12px;
+		transform: translate(-50%, -50%);
+	}
+	&__overlay-label {
+		color: white;
+		position: absolute;
+		left: 50%;
+		transform: translateX(-50%);
+		bottom: 10%;
+		@include mobile() {
+			bottom: 15px;
+		}
+	}
+	&__background {
+		background: white;
+		height: 100%;
+		width: 400px;
+		max-width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-left: solid 2px #2d4a60;
+		border-right: solid 2px #2d4a60;
+		position: relative;
+		@include mobile() {
+			width: 250px;
+		}
+	}
+	&__background-label {
+		color: #2d4a60;
+		position: absolute;
+		left: 10px;
+		top: 0px;
+	}
+	&__background-image {
+		width: 200px;
+	}
+	&__stencil {
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		border: solid 2px var(--ifm-color-primary);
+	}
+	&__stencil-preview {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+		border-radius: 50%;
+		width: 300px;
+		height: 300px;
+		background: white;
+		border: dashed 2px var(--ifm-color-primary);
+		@include mobile() {
+			width: 250px;
+			height: 250px;
+		}
+	}
+	&__handler {
+		position: absolute;
+		&:before {
+			content: "";
+			position: absolute;
+			transform: translate(-50%, -50%);
+			width: 10px;
+			height: 10px;
+			background: white;
+			border: solid 2px var(--ifm-color-primary);
+		}
+		&--north {
+			top: 0;
+		}
+		&--south {
+			bottom: 0;
+		}
+		&--west {
+			left: 0;
+		}
+		&--east {
+			right: 0;
+		}
+	}
+}

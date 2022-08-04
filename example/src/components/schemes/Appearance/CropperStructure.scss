@@ -1,0 +1,47 @@
+@import '../../../css/mixins';
+
+.cropper-structure {
+	&__wrapper {
+		height: 500px;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		border: solid 2px var(--ifm-link-color);
+		position: relative;
+		@include mobile() {
+			height: 400px;
+		}
+	}
+	&__wrapper-background {
+		position: absolute;
+		left: 0;
+		top: 0;
+		height: 100%;
+		width: 100%;
+		opacity: 0.05;
+	}
+	&__background {
+		background: white;
+		height: 100%;
+		width: 400px;
+		max-width: 100%;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-left: solid 2px #2d4a60;
+		border-right: solid 2px #2d4a60;
+		position: relative;
+		@include mobile() {
+			width: 250px;
+		}
+	}
+	&__background-label {
+		color: #2d4a60;
+		position: absolute;
+		left: 10px;
+		top: 0px;
+	}
+	&__background-image {
+		width: 200px;
+	}
+}

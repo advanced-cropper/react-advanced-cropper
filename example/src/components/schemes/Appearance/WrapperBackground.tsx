@@ -4,12 +4,16 @@ interface Props {
 	className?: string;
 }
 
-export const Background: FC<Props> = ({ className }) => {
+export const WrapperBackground: FC<Props> = ({ className }) => {
 	return (
-		<svg className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 267.4 263.6" xmlSpace="preserve">
+		<svg
+			className={className}
+			xmlns="http://www.w3.org/2000/svg"
+			viewBox="0 0 267.4 263.6"
+			preserveAspectRatio="none"
+		>
 			<path
 				fill="none"
-				stroke="#000"
 				strokeWidth="3"
 				strokeLinecap="round"
 				strokeLinejoin="round"
