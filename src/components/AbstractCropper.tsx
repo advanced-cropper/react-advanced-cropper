@@ -255,6 +255,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		getVisibleArea: cropper.getVisibleArea,
 		getTransforms: cropper.getTransforms,
 		getTransitions: cropper.getTransitions,
+		getInteractions: cropper.getInteractions,
 		getSettings: cropper.getSettings,
 		getState: cropper.getState,
 	};

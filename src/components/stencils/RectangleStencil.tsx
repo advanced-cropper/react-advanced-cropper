@@ -1,4 +1,4 @@
-import React, { ComponentType, forwardRef, useImperativeHandle, CSSProperties, useState, useEffect } from 'react';
+import React, { ComponentType, forwardRef, useImperativeHandle } from 'react';
 import cn from 'classnames';
 import {
 	CardinalDirection,
@@ -9,6 +9,7 @@ import {
 	CropperState,
 	CropperTransitions,
 	RawAspectRatio,
+	CropperInteractions,
 } from 'advanced-cropper';
 import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
@@ -38,6 +39,7 @@ interface LineClassNames extends Partial<Record<CardinalDirection, string>> {
 interface DesiredCropperRef {
 	getState: () => CropperState;
 	getTransitions: () => CropperTransitions;
+	getInteractions: () => CropperInteractions;
 	resizeCoordinates: (directions: ResizeDirections, options: ResizeOptions) => void;
 	resizeCoordinatesEnd: () => void;
 	moveCoordinates: (directions: MoveDirections) => void;
@@ -113,33 +115,22 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 		}: Props,
 		ref,
 	) => {
-		const [moving, setMoving] = useState(false);
-
-		const [resizing, setResizing] = useState(false);
-
 		const state = cropper.getState();
-
 		const transitions = cropper.getTransitions();
+		const interactions = cropper.getInteractions();
 
-		const options = {
+		useImperativeHandle(ref, () => ({
 			aspectRatio: createAspectRatio(
 				aspectRatio || {
 					minimum: minAspectRatio,
 					maximum: maxAspectRatio,
 				},
 			),
-		};
-
-		useImperativeHandle(ref, () => options);
-
-		useEffect(() => {
-			cropper.refresh();
-		}, [options.aspectRatio.minimum, options.aspectRatio.maximum]);
+		}));
 
 		const onMove = (directions: MoveDirections) => {
-			if (movable && cropper) {
+			if (cropper && movable) {
 				cropper.moveCoordinates(directions);
-				setMoving(true);
 			}
 		};
 
@@ -147,15 +138,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			if (cropper) {
 				cropper.moveCoordinatesEnd();
 			}
-			setMoving(false);
 		};
 
 		const onResize = (directions: ResizeDirections, options: ResizeOptions) => {
-			if (resizable) {
-				if (cropper) {
-					cropper.resizeCoordinates(directions, options);
-				}
-				setResizing(true);
+			if (cropper && resizable) {
+				cropper.resizeCoordinates(directions, options);
 			}
 		};
 
@@ -163,7 +150,6 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			if (cropper) {
 				cropper.resizeCoordinatesEnd();
 			}
-			setResizing(false);
 		};
 
 		const { width, height, left, top } = getStencilCoordinates(state);
@@ -174,11 +160,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 					className={cn(
 						'advanced-cropper-rectangle-stencil',
 						movable && 'advanced-cropper-rectangle-stencil--movable',
-						moving && 'advanced-cropper-rectangle-stencil--moving',
+						interactions.moveCoordinates && 'advanced-cropper-rectangle-stencil--moving',
 						resizable && 'advanced-cropper-rectangle-stencil--resizable',
-						resizing && 'advanced-cropper-rectangle-stencil--resizing',
-						moving && movingClassName,
-						resizing && resizingClassName,
+						interactions.resizeCoordinates && 'advanced-cropper-rectangle-stencil--resizing',
+						interactions.moveCoordinates && movingClassName,
+						interactions.resizeCoordinates && resizingClassName,
 					)}
 					width={width}
 					height={height}
