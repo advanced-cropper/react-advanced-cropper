@@ -53,25 +53,6 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 			stencilConstraints={stencilConstraints}
 			stencilProps={{
 				...stencilProps,
-				lineClassNames: joinClassNames(stencilProps.lineClassNames, {
-					default: 'telegram-stencil__line',
-				}),
-				handlerWrapperClassNames: joinClassNames(stencilProps.handlerWrapperClassNames, {
-					default: 'telegram-stencil__handler-wrapper',
-					westNorth: 'telegram-stencil__handler-wrapper--west-north',
-					eastSouth: 'telegram-stencil__handler-wrapper--east-south',
-					westSouth: 'telegram-stencil__handler-wrapper--west-south',
-					eastNorth: 'telegram-stencil__handler-wrapper--east-north',
-				}),
-				handlerClassNames: joinClassNames(stencilProps.handlerClassNames, {
-					default: 'telegram-stencil__handler',
-					hover: 'telegram-stencil__handler--hover',
-					westNorth: 'telegram-stencil__handler--west-north',
-					eastSouth: 'telegram-stencil__handler--east-south',
-					westSouth: 'telegram-stencil__handler--west-south',
-					eastNorth: 'telegram-stencil__handler--east-north',
-				}),
-				previewClassName: cn(stencilProps.previewClassName, 'telegram-stencil__preview'),
 				movable: false,
 			}}
 			wrapperComponent={WrapperComponent}
