@@ -198,9 +198,6 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 						lineWrapperClassNames={lineWrapperClassNames}
 						onResize={onResize}
 						onResizeEnd={onResizeEnd}
-						transitions={transitions}
-						width={width}
-						height={height}
 						disabled={!resizable}
 					>
 						<DraggableArea

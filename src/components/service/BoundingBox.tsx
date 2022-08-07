@@ -6,7 +6,6 @@ import {
 	OrdinalDirection,
 	HorizontalCardinalDirection,
 	VerticalCardinalDirection,
-	CropperTransitions,
 	ResizeDirections,
 	MoveDirections,
 	ResizeOptions,
@@ -16,7 +15,6 @@ import {
 } from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
-import { ArtificialTransition } from './ArtificialTransition';
 
 const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
 const VERTICAL_DIRECTIONS = ['south', 'north', null] as const;
@@ -52,9 +50,8 @@ interface Props {
 	onResize?: (directions: ResizeDirections, options: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
-	width: number;
-	height: number;
-	transitions?: CropperTransitions;
+	width?: number;
+	height?: number;
 }
 
 interface HandlerNode {
@@ -62,6 +59,7 @@ interface HandlerNode {
 	component: HandlerComponent;
 	className: string;
 	wrapperClassName?: string;
+	containerClassName?: string;
 	hoverClassName?: string;
 	style?: CSSProperties;
 	verticalPosition: VerticalCardinalDirection | null;
@@ -117,9 +115,6 @@ export const BoundingBox = ({
 	lineClassNames = {},
 	lineWrapperClassNames = {},
 	disabled = false,
-	width,
-	height,
-	transitions,
 }: Props) => {
 	const points = useMemo(() => {
 		const result: PointNode[] = [];
@@ -178,6 +173,10 @@ export const BoundingBox = ({
 					name: point.name,
 					component: handlerComponent,
 					className: classnames(handlerClassNames.default, handlerClassNames[point.name]),
+					containerClassName: classnames(
+						`advanced-cropper-bounding-box__handler-wrapper`,
+						`advanced-cropper-bounding-box__handler-wrapper--${point.className}`,
+					),
 					wrapperClassName: classnames(
 						`advanced-cropper-bounding-box__handler`,
 						`advanced-cropper-bounding-box__handler--${point.className}`,
@@ -192,7 +191,7 @@ export const BoundingBox = ({
 			}
 		});
 		return result;
-	}, [height, width, points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, disabled]);
+	}, [points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, disabled]);
 
 	const onHandlerDrag =
 		(
@@ -262,7 +261,6 @@ export const BoundingBox = ({
 				{handlerNodes.map((handler) => {
 					const handlerElement = (
 						<handler.component
-							key={handler.name}
 							defaultClassName={handler.className}
 							hoverClassName={handler.hoverClassName}
 							wrapperClassName={handler.wrapperClassName}
@@ -273,19 +271,11 @@ export const BoundingBox = ({
 							onDragEnd={onResizeEnd}
 						/>
 					);
-					const { verticalPosition, horizontalPosition } = handler;
-					const left = horizontalPosition === 'east' ? width : horizontalPosition === 'west' ? 0 : width / 2;
-					const top = verticalPosition === 'south' ? height : verticalPosition === 'north' ? 0 : height / 2;
+
 					return (
-						<ArtificialTransition
-							key={handler.name}
-							className={'advanced-cropper-bounding-box__handler-wrapper'}
-							transitions={transitions}
-							left={left}
-							top={top}
-						>
+						<div key={handler.name} className={handler.containerClassName}>
 							{handlerElement}
-						</ArtificialTransition>
+						</div>
 					);
 				})}
 			</div>

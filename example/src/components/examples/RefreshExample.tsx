@@ -1,5 +1,12 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import { ImageRestriction, BoundingBox, CropperRef, Cropper, useWindowResize, ResizeDirections } from 'react-advanced-cropper';
+import {
+	ImageRestriction,
+	BoundingBox,
+	CropperRef,
+	Cropper,
+	useWindowResize,
+	ResizeDirections,
+} from 'react-advanced-cropper';
 import './RefreshExample.scss';
 
 export const RefreshExample = () => {
@@ -86,9 +93,7 @@ export const RefreshExample = () => {
 				<Cropper
 					ref={cropperRef}
 					className={'refresh-example__cropper'}
-					src={
-						'/react-advanced-cropper/img/images/photo-1553301208-a3718cc0150e.jpg'
-					}
+					src={'/react-advanced-cropper/img/images/photo-1553301208-a3718cc0150e.jpg'}
 					stencilProps={{
 						aspectRatio: 1,
 					}}
