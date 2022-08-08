@@ -1,6 +1,6 @@
 {
   "name": "react-advanced-cropper",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "The react cropper library that gives the possibility to create croppers exactly suited for your website design",
   "author": "Norserium",
   "license": "MIT",
@@ -24,9 +24,10 @@
     "npm": ">=5"
   },
   "scripts": {
-    "build": "npm run build:library && npm run build:themes",
+    "build": "npm run build:clean && npm run build:library && npm run build:themes",
+    "build:clean": "node scripts/clean.js",
     "build:library": "rollup -c",
-    "build:themes": "node build/build.js",
+    "build:themes": "node scripts/themes.js",
     "start": "rollup -c -w",
     "prepare": "yarn run build",
     "predeploy": "cd example && yarn build",
@@ -80,5 +81,6 @@
     "advanced-cropper": "~0.10.1",
     "classnames": "^2.2.6",
     "tslib": "^2.4.0"
-  }
+  },
+	"sideEffects": false
 }

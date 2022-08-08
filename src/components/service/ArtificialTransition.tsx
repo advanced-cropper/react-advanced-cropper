@@ -1,6 +1,5 @@
-import React, { CSSProperties, FC, useLayoutEffect, useRef, useState } from 'react';
-import { Coordinates, CropperTransitions } from 'advanced-cropper';
-import { deepCompare, isNumber } from 'advanced-cropper';
+import React, { FC, useLayoutEffect, useRef, useState } from 'react';
+import { Coordinates, CropperTransitions, deepCompare, isNumber } from 'advanced-cropper';
 import classnames from 'classnames';
 import { useTransition } from '../../hooks/useAnimatedState';
 
