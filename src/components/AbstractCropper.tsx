@@ -249,6 +249,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		transformImageEnd: cropper.transformImageEnd,
 		setCoordinates: cropper.setCoordinates,
 		setState: cropper.setState,
+		hasInteractions: cropper.hasInteractions,
 		getDefaultState: cropper.getDefaultState,
 		getStencilCoordinates: cropper.getStencilCoordinates,
 		getCoordinates: cropper.getCoordinates,

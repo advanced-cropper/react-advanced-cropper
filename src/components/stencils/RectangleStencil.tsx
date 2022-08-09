@@ -19,6 +19,7 @@ import { BoundingBox } from '../service/BoundingBox';
 import { StencilOverlay } from '../service/StencilOverlay';
 import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
+import { StencilGrid } from '../service/StencilGrid';
 
 type HandlerComponent = ComponentType<any>;
 
@@ -40,6 +41,7 @@ interface DesiredCropperRef {
 	getState: () => CropperState;
 	getTransitions: () => CropperTransitions;
 	getInteractions: () => CropperInteractions;
+	hasInteractions: () => boolean;
 	resizeCoordinates: (directions: ResizeDirections, options: ResizeOptions) => void;
 	resizeCoordinatesEnd: () => void;
 	moveCoordinates: (directions: MoveDirections) => void;
@@ -60,6 +62,7 @@ interface Props {
 	lineWrapperClassNames?: LineClassNames;
 	movingClassName?: string;
 	resizingClassName?: string;
+	gridClassName?: string;
 	previewClassName?: string;
 	boundingBoxClassName?: string;
 	overlayClassName?: string;
@@ -112,6 +115,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
+			gridClassName,
 		}: Props,
 		ref,
 	) => {
@@ -195,6 +199,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 							<StencilOverlay
 								className={cn('advanced-cropper-rectangle-stencil__overlay', overlayClassName)}
 							>
+								<StencilGrid
+									visible={cropper.hasInteractions()}
+									division={interactions.transformImage.rotate ? 9 : 3}
+									className={cn('advanced-cropper-rectangle-stencil__grid', gridClassName)}
+								/>
 								<div className={cn('advanced-cropper-rectangle-stencil__preview', previewClassName)} />
 							</StencilOverlay>
 						</DraggableArea>
