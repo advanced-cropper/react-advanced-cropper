@@ -9,6 +9,7 @@ interface RotateComponentProps {
 	value: number;
 	step?: number;
 	onChange?: (value: number) => void;
+	onBlur?: () => void;
 	className?: string;
 	barsClassName?: string;
 	barClassName?: string;
@@ -45,6 +46,7 @@ export const RotateComponent = forwardRef<RotateComponentRef, RotateComponentPro
 			value,
 			step = 2.5,
 			thickness = 2,
+			onBlur,
 			onChange,
 			className,
 			valueBarClassName,
@@ -148,6 +150,7 @@ export const RotateComponent = forwardRef<RotateComponentRef, RotateComponentPro
 		const onMoveEnd = () => {
 			document.body.classList.remove('dragging');
 			setDragging(false);
+			onBlur?.();
 		};
 
 		const onMoveStart = () => {

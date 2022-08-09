@@ -22,6 +22,7 @@ export interface PublicNavigationProps {
 interface NavigationProps extends PublicNavigationProps {
 	value: number;
 	onRotate?: (angle: number, options?: CropperMethodOptions) => void;
+	onRotateEnd?: () => void;
 	onFlip?: (horizontal: boolean, vertical?: boolean, options?: CropperMethodOptions) => void;
 	className?: string;
 	disabled?: unknown;
@@ -44,6 +45,7 @@ export const Navigation = forwardRef<NavigationRef, NavigationProps>(
 			disabled,
 			value,
 			onRotate,
+			onRotateEnd,
 			onFlip,
 		}: NavigationProps,
 		ref,
@@ -86,6 +88,8 @@ export const Navigation = forwardRef<NavigationRef, NavigationProps>(
 			if (onRotate && !disabled) {
 				onRotate(angle, {
 					transitions: false,
+					interaction: true,
+					immediate: true,
 				});
 			}
 		};
@@ -142,6 +146,7 @@ export const Navigation = forwardRef<NavigationRef, NavigationProps>(
 					valueBarClassName={valueBarClassName}
 					highlightedBarClassName={highlightedBarClassName}
 					onChange={rotateTo}
+					onBlur={onRotateEnd}
 					from={-45}
 					to={45}
 					value={adjustmentAngle}

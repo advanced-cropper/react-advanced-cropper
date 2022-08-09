@@ -53,6 +53,7 @@ export const CropperWrapper: FC<CropperWrapperProps<CropperRef>> = ({
 						ref={navigationRef}
 						value={rotate}
 						onRotate={cropper.rotateImage}
+						onRotateEnd={cropper.transformImageEnd}
 						onFlip={cropper.flipImage}
 						className={cn('telegram-cropper-wrapper__navigation', navigationProps.className)}
 						buttonClassName={navigationProps.buttonClassName}
