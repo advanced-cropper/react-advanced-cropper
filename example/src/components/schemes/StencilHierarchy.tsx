@@ -20,6 +20,7 @@ export const StencilHierarchy: FC = () => {
 				</HierarchyElement>
 				<HierarchyElement to={'DraggableArea'} type={'component'} title={'DraggableArea'} />
 				<HierarchyElement to={'StencilOverlay'} type={'component'} title={'StencilOverlay'} />
+				<HierarchyElement to={'StencilGrid'} type={'component'} title={'StencilGrid'} />
 			</HierarchyElement>
 		</div>
 	);
