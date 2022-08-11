@@ -7,7 +7,6 @@ import {
 	CropperRef,
 	mergeRefs,
 	ImageRestriction,
-	joinClassNames,
 } from 'react-advanced-cropper';
 import {
 	autoZoom,
@@ -52,6 +51,7 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 			ref={mergeRefs([ref, cropperRef])}
 			stencilConstraints={stencilConstraints}
 			stencilProps={{
+				grid: true,
 				...stencilProps,
 				movable: false,
 			}}

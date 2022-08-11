@@ -44,7 +44,6 @@ export {
 	isMouseEvent,
 	isTouchEvent,
 } from 'advanced-cropper';
-export { joinClassNames } from './service/utils';
 
 export type { StencilSize } from 'advanced-cropper/extensions/stencil-size';
 
