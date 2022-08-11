@@ -5,14 +5,17 @@ import { RectangleStencilIcon } from '@site/src/components/icons/RectangleStenci
 import { CircleStencilIcon } from '@site/src/components/icons/CircleStencilIcon';
 import { SquareButton } from '@site/src/components/examples/components/SquareButton';
 import { VerticalButtons } from '@site/src/components/examples/components/VerticalButtons';
+import { GridStencilIcon } from '@site/src/components/icons/GridStencilIcon';
 import './ThemeExample.scss';
 
 interface ThemeExampleProps {
 	theme: 'bubble' | 'classic' | 'compact' | 'corners' | 'default';
+	grid?: boolean;
 }
 
-export const ThemeExample: FC<ThemeExampleProps> = ({ theme }) => {
+export const ThemeExample: FC<ThemeExampleProps> = ({ theme, grid = true }) => {
 	const [stencilComponent, setStencilComponent] = useState<StencilComponent>(() => RectangleStencil);
+	const [stencilGrid, setStencilGrid] = useState(grid);
 
 	const image = useMemo(() => {
 		if (theme === 'bubble') {
@@ -34,16 +37,30 @@ export const ThemeExample: FC<ThemeExampleProps> = ({ theme }) => {
 	const setCircleStencil = () => {
 		setStencilComponent(CircleStencil);
 	};
+	const toggleGrid = () => {
+		setStencilGrid((value) => !value);
+	};
 
 	return (
 		<div className={cn('theme-example', theme && `theme-example--${theme}`)}>
-			<Cropper src={image} stencilComponent={stencilComponent} />
+			<Cropper src={image} stencilComponent={stencilComponent} stencilProps={{ grid: stencilGrid }} />
 			<VerticalButtons>
-				<SquareButton title="Set Rectangle Stencil" onClick={setRectangleStencil}>
+				<SquareButton
+					className="theme-example__button"
+					title="Set Rectangle Stencil"
+					onClick={setRectangleStencil}
+				>
 					<RectangleStencilIcon />
 				</SquareButton>
-				<SquareButton title="Set Circle Stencil" onClick={setCircleStencil}>
+				<SquareButton className="theme-example__button" title="Set Circle Stencil" onClick={setCircleStencil}>
 					<CircleStencilIcon />
+				</SquareButton>
+				<SquareButton
+					title={stencilGrid ? 'Disable Grid' : 'Enable Grid'}
+					className={cn('theme-example__button', !stencilGrid && 'theme-example__button--inactive')}
+					onClick={toggleGrid}
+				>
+					<GridStencilIcon />
 				</SquareButton>
 			</VerticalButtons>
 			<div className="theme-example__theme">Theme: {theme}</div>

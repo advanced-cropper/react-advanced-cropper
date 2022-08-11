@@ -54,12 +54,11 @@ import 'react-advanced-cropper/dist/themes/corners.css';
 | --------------------- | -------------------------- |
 | $base-color | white  |
 | $accent-color | currentColor  |
-| $grid | true  |
-| $grid-color | $base-color  |
+| $line-color | $base-color  |
+| $grid-color | $line-color  |
 | $handler-color | $accent-color  |
 | $big-handler-color | $handler-color  |
 | $small-handler-color | $handler-color  |
-| $line-color | $base-color  |
 | $big-handler-size | 16px  |
 | $small-handler-size | 4px  |
 | $big-handler-width | 2px  |
@@ -80,10 +79,9 @@ import 'react-advanced-cropper/dist/themes/classic.css';
 | --------------------- | -------------------------- |
 | $base-color | white  |
 | $accent-color | currentColor  |
-| $grid | true  |
-| $grid-color | $base-color  |
-| $handler-color | $accent-color  |
 | $line-color | $base-color  |
+| $grid-color | $line-color  |
+| $handler-color | $accent-color  |
 | $handler-size | 8px  |
 
 </details>
@@ -102,12 +100,11 @@ import 'react-advanced-cropper/dist/themes/compact.css';
 | --------------------- | -------------------------- |
 | $base-color | white  |
 | $accent-color | currentColor  |
-| $grid | true  |
-| $grid-color | $base-color  |
+| $line-color | $base-color  |
+| $grid-color | $line-color  |
 | $handler-color | $accent-color  |
 | $big-handler-color | $handler-color  |
 | $small-handler-color | $handler-color  |
-| $line-color | $base-color  |
 | $big-handler-size | 16px  |
 | $small-handler-size | 4px  |
 | $big-handler-width | 2px  |
@@ -120,7 +117,7 @@ The bright and light theme.
 ```js
 import 'react-advanced-cropper/dist/themes/bubble.css';
 ```
-<ThemeExample theme="bubble"/>
+<ThemeExample theme="bubble" grid={false} />
 
 <details> <summary>SCSS variables</summary>
 
@@ -128,10 +125,9 @@ import 'react-advanced-cropper/dist/themes/bubble.css';
 | --------------------- | -------------------------- |
 | $base-color | white  |
 | $accent-color | currentColor  |
-| $grid | false  |
-| $grid-color | $base-color  |
-| $handler-color | $accent-color  |
 | $line-color | $base-color  |
+| $grid-color | $line-color  |
+| $handler-color | $accent-color  |
 | $handler-size | 14px  |
 | $hover-handler-size | 25px  |
 

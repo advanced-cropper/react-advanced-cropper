@@ -34,23 +34,10 @@
 	}
 
 	&__button {
-		background: rgba(black, 0.4);
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		height: 42px;
-		width: 42px;
-		margin-bottom: 10px;
-		cursor: pointer;
-		transition: background 0.5s;
-		&:hover {
-			background: black;
+		fill: white;
+		transition: fill 0.5s;
+		&--inactive {
+			fill: #888;
 		}
-	}
-	&__buttons {
-		position: absolute;
-		left: 10px;
-		top: 50%;
-		transform: translateY(-50%);
 	}
 }
