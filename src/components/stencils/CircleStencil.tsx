@@ -72,6 +72,7 @@ interface Props {
 	aspectRatio?: number;
 	movable?: boolean;
 	resizable?: boolean;
+	grid?: boolean;
 }
 
 interface Methods {
@@ -102,6 +103,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			lineWrapperClassNames = {},
 			resizable = true,
 			movable = true,
+			grid,
 			gridClassName,
 			movingClassName,
 			resizingClassName,
@@ -188,11 +190,13 @@ export const CircleStencil = forwardRef<Methods, Props>(
 							<StencilOverlay
 								className={cn('advanced-cropper-circle-stencil__overlay', overlayClassName)}
 							>
-								<StencilGrid
-									visible={cropper.hasInteractions()}
-									division={interactions.transformImage.rotate ? 9 : 3}
-									className={cn('advanced-cropper-circle-stencil__grid', gridClassName)}
-								/>
+								{grid && (
+									<StencilGrid
+										visible={cropper.hasInteractions()}
+										division={interactions.transformImage.rotate ? 9 : 3}
+										className={cn('advanced-cropper-circle-stencil__grid', gridClassName)}
+									/>
+								)}
 								<div className={cn('advanced-cropper-circle-stencil__preview', previewClassName)} />
 							</StencilOverlay>
 						</DraggableArea>

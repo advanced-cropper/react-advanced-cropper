@@ -33,6 +33,7 @@ export interface CropperSettings {
 	minHeight?: number;
 	maxHeight?: number;
 	scaleImage?: boolean;
+	grid?: boolean;
 }
 
 export interface CropperDescription {
@@ -60,6 +61,7 @@ export const CroppersWizard: FC = () => {
 		minHeight: 0,
 		maxHeight: undefined,
 		scaleImage: true,
+		grid: true,
 	});
 
 	const croppers = [
@@ -71,7 +73,7 @@ export const CroppersWizard: FC = () => {
 			},
 			features: ['Custom Navigation', 'Styling'],
 			icon: <DefaultCropperIcon />,
-			settings: ['aspectRatio', 'imageRestriction', 'stencil', 'size', 'scaleImage'],
+			settings: ['aspectRatio', 'imageRestriction', 'stencil', 'size', 'scaleImage', 'grid'],
 		},
 		{
 			key: 'mobile-cropper',
@@ -81,7 +83,7 @@ export const CroppersWizard: FC = () => {
 			},
 			features: ['Custom Postprocess', 'Custom Navigation', 'Styling'],
 			icon: <MobileCropperIcon />,
-			settings: ['aspectRatio', 'stencil', 'size'],
+			settings: ['aspectRatio', 'stencil', 'size', 'grid'],
 			link: 'https://github.com/Norserium/react-mobile-cropper/',
 		},
 		{
@@ -184,12 +186,14 @@ export const CroppersWizard: FC = () => {
 		imageRestriction,
 		stencilType,
 		scaleImage,
+		grid,
 	} = settings;
 
 	const stencilProps = {
 		aspectRatio,
 		maxAspectRatio,
 		minAspectRatio,
+		grid,
 	};
 
 	return (
@@ -278,7 +282,7 @@ export const CroppersWizard: FC = () => {
 						open={showSettings && hasSettings}
 						settings={settings}
 						onClose={onCloseSettings}
-						sections={data.settings}
+						properties={data.settings}
 						className={'croppers-wizard__settings'}
 						visibleClassName={'croppers-wizard__settings--visible'}
 					/>

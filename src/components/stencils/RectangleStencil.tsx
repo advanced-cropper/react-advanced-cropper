@@ -72,6 +72,7 @@ interface Props {
 	aspectRatio?: number;
 	movable?: boolean;
 	resizable?: boolean;
+	grid?: boolean;
 }
 
 interface Methods {
@@ -82,6 +83,9 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 	(
 		{
 			cropper,
+			aspectRatio,
+			minAspectRatio,
+			maxAspectRatio,
 			handlerComponent = SimpleHandler,
 			handlers = {
 				eastNorth: true,
@@ -106,16 +110,14 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			lineWrapperClassNames = {},
 			resizable = true,
 			movable = true,
-			aspectRatio,
-			minAspectRatio,
-			maxAspectRatio,
+			grid,
+			gridClassName,
 			movingClassName,
 			resizingClassName,
 			previewClassName,
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
-			gridClassName,
 		}: Props,
 		ref,
 	) => {
@@ -199,11 +201,13 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 							<StencilOverlay
 								className={cn('advanced-cropper-rectangle-stencil__overlay', overlayClassName)}
 							>
-								<StencilGrid
-									visible={cropper.hasInteractions()}
-									division={interactions.transformImage.rotate ? 9 : 3}
-									className={cn('advanced-cropper-rectangle-stencil__grid', gridClassName)}
-								/>
+								{grid && (
+									<StencilGrid
+										visible={cropper.hasInteractions()}
+										division={interactions.transformImage.rotate ? 9 : 3}
+										className={cn('advanced-cropper-rectangle-stencil__grid', gridClassName)}
+									/>
+								)}
 								<div className={cn('advanced-cropper-rectangle-stencil__preview', previewClassName)} />
 							</StencilOverlay>
 						</DraggableArea>

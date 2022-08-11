@@ -4,6 +4,7 @@
 	display: flex;
 	cursor: pointer;
 	align-items: center;
+	flex-shrink: 0;
 	&__label {
 		font-size: 16px;
 		opacity: 0.8;

@@ -24,13 +24,13 @@ interface Props {
 	settings: CropperSettings;
 	open?: boolean;
 	onClose: (value: CropperSettings) => void;
-	sections: string[];
+	properties: string[];
 	className?: string;
 	visibleClassName?: string;
 }
 
 export const CroppersWizardSettings: FC<Props> = (props) => {
-	const { open, onClose, sections, visibleClassName, className } = props;
+	const { open, onClose, properties, visibleClassName, className } = props;
 
 	const [settings, setSettings] = useState(props.settings);
 
@@ -129,12 +129,14 @@ export const CroppersWizardSettings: FC<Props> = (props) => {
 		});
 	};
 
+	const inlineSettings = ['grid', 'scaleImage'].some((property) => properties.indexOf(property) !== -1);
+
 	return (
 		<div className={cn('croppers-wizard-settings', open && visibleClassName, className)}>
 			<button className="croppers-wizard-settings__close-button" onClick={onCloseInternal}>
 				<CloseIcon />
 			</button>
-			{sections.indexOf('aspectRatio') !== -1 && (
+			{properties.indexOf('aspectRatio') !== -1 && (
 				<div className="croppers-wizard-settings__property">
 					<div className="croppers-wizard-settings__property-title">Aspect Ratio</div>
 					<ScrollContainer className="croppers-wizard-settings__property-values">
@@ -160,7 +162,7 @@ export const CroppersWizardSettings: FC<Props> = (props) => {
 					</ScrollContainer>
 				</div>
 			)}
-			{sections.indexOf('imageRestriction') !== -1 && (
+			{properties.indexOf('imageRestriction') !== -1 && (
 				<div className="croppers-wizard-settings__property">
 					<div className="croppers-wizard-settings__property-title">Image Restriction</div>
 					<ScrollContainer className="croppers-wizard-settings__property-values">
@@ -214,14 +216,25 @@ export const CroppersWizardSettings: FC<Props> = (props) => {
 					</div>
 				))}
 			</ScrollContainer>
-			{sections.indexOf('scaleImage') !== -1 && (
-				<div className="croppers-wizard-settings__property">
-					<SettingsCheckbox
-						value={settings.scaleImage}
-						onChange={(value?: boolean) => updateSettings({ scaleImage: value })}
-						label={'Scale Image'}
-					/>
-				</div>
+			{inlineSettings && (
+				<ScrollContainer className="croppers-wizard-settings__property-values">
+					{properties.indexOf('scaleImage') !== -1 && (
+						<SettingsCheckbox
+							className={'croppers-wizard-settings__inline-property'}
+							value={settings.scaleImage}
+							onChange={(value?: boolean) => updateSettings({ scaleImage: value })}
+							label={'Scale Image'}
+						/>
+					)}
+					{properties.indexOf('grid') !== -1 && (
+						<SettingsCheckbox
+							className={'croppers-wizard-settings__inline-property'}
+							value={settings.grid}
+							onChange={(value?: boolean) => updateSettings({ grid: value })}
+							label={'Stencil Grid'}
+						/>
+					)}
+				</ScrollContainer>
 			)}
 		</div>
 	);

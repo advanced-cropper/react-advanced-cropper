@@ -7,6 +7,7 @@ import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
 
 import { ChangingStencilExample } from '../../src/components/examples/ChangingStencilExample';
+import { StencilGridExample } from '../../src/components/examples/StencilGridExample';
 import { GettingResultExample } from '../../src/components/examples/GettingResultExample';
 import { GettingResultManualExample } from '../../src/components/examples/GettingResultManualExample';
 import { ResizeResultExample } from '../../src/components/examples/ResizeResultExample';
@@ -16,7 +17,10 @@ import { UploadExample } from '../../src/components/examples/UploadExample';
 
 # Recipes
 
-## Changing a stencil
+
+## Stencil Tuning
+
+### Change the stencil
 
 There are only two default stencil components now, `RectangleStencil` (default) and `CircleStencil`, but you can easily create your own stencil himself.
 
@@ -47,7 +51,7 @@ export const Example = () => {
 };
 ```
 
-## Passing props to the stencil
+### Pass props to the stencil
 
 To pass any props to the stencil pass them as object to `stencilProps` prop.
 
@@ -65,8 +69,7 @@ For example, that's how you can set aspect ratio:
 
 The list of available props varies from one stencil component to another. The props of default stencils are available in the documentation ([RectangleStencil](/docs/components/RectangleStencil), [CircleStencil](/docs/components/CircleStencil))
 
-## Setting the aspect ratio
-
+### Set the aspect ratio
 
 This library supports setting either aspect ratio value or aspect ratio range (i.e. minimum and maximums aspect ratio values).
 
@@ -76,7 +79,7 @@ entirely depends of used stencil. For example, `CircleStencil` aspect ratio can'
 
 The examples below are written for `RectangleStencil`.
 
-### Fixed aspect ratio
+#### Fixed aspect ratio
 ```jsx
 <Cropper
 	stencilProps={{
@@ -85,7 +88,7 @@ The examples below are written for `RectangleStencil`.
 />
 ```
 
-### Aspect ratio range
+#### Aspect ratio range
 ```jsx
 <Cropper
 	stencilProps={{
@@ -96,6 +99,21 @@ The examples below are written for `RectangleStencil`.
 	}}
 />
 ```
+
+### Add the grid
+
+You can enable the stencil grid for the default stencils to facilitate
+the selecting of the cropped area.
+
+```jsx
+<Cropper
+	stencilProps={{
+		grid: true
+	}}
+/>
+```
+
+<StencilGridExample/>
 
 ## Getting the result
 
