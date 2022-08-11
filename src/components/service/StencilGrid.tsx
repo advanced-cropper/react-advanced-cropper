@@ -1,40 +1,44 @@
-import React, { FC, ReactNode, useEffect, useState } from 'react';
+import React, { FC, ReactNode, useState } from 'react';
 import cn from 'classnames';
+import { useUpdateEffect } from '../../hooks/useUpdateEffect';
 
 export interface StencilGridProps {
 	visible?: boolean;
-	division?: number;
+	columns?: number;
+	rows?: number;
 	className?: string;
 }
 
-export const StencilGrid: FC<StencilGridProps> = ({ division = 3, visible = false, className }) => {
-	const rows: ReactNode[] = [];
+export const StencilGrid: FC<StencilGridProps> = ({ columns = 3, rows = 3, visible = false, className }) => {
+	const nodes: ReactNode[] = [];
 
-	const [visibleDivision, setVisibleDivision] = useState(division);
+	const [currentColumns, setCurrentColumns] = useState(columns);
+	const [currentRows, setCurrentRows] = useState(rows);
 
-	useEffect(() => {
+	useUpdateEffect(() => {
 		if (visible) {
-			setVisibleDivision(division);
+			setCurrentRows(rows);
+			setCurrentColumns(columns);
 		}
-	}, [visible, division]);
+	}, [visible, columns, rows]);
 
-	for (let i = 0; i < visibleDivision; i++) {
+	for (let i = 0; i < currentRows; i++) {
 		const cells: ReactNode[] = [];
-		for (let j = 0; j < visibleDivision; j++) {
+		for (let j = 0; j < currentColumns; j++) {
 			cells.push(
 				<div
 					key={j}
 					className={cn(
 						'advanced-cropper-stencil-grid__cell',
 						i === 0 && 'advanced-cropper-stencil-grid__cell--top',
-						i === visibleDivision - 1 && 'advanced-cropper-stencil-grid__cell--bottom',
+						i === currentRows - 1 && 'advanced-cropper-stencil-grid__cell--bottom',
 						j === 0 && 'advanced-cropper-stencil-grid__cell--left',
-						j === visibleDivision - 1 && 'advanced-cropper-stencil-grid__cell--right',
+						j === currentColumns - 1 && 'advanced-cropper-stencil-grid__cell--right',
 					)}
 				/>,
 			);
 		}
-		rows.push(
+		nodes.push(
 			<div key={i} className={'advanced-cropper-stencil-grid__row'}>
 				{cells}
 			</div>,
@@ -49,7 +53,7 @@ export const StencilGrid: FC<StencilGridProps> = ({ division = 3, visible = fals
 				className,
 			)}
 		>
-			{rows}
+			{nodes}
 		</div>
 	);
 };

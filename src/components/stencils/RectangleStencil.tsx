@@ -204,7 +204,8 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 								{grid && (
 									<StencilGrid
 										visible={cropper.hasInteractions()}
-										division={interactions.transformImage.rotate ? 9 : 3}
+										columns={interactions.transformImage.rotate ? 9 : 3}
+										rows={interactions.transformImage.rotate ? 9 : 3}
 										className={cn('advanced-cropper-rectangle-stencil__grid', gridClassName)}
 									/>
 								)}
