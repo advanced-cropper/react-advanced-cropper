@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
-import { CropperMethodOptions } from 'react-advanced-cropper';
+import { ImmediatelyOptions, InteractionOptions, TransitionOptions } from 'advanced-cropper';
 import cn from 'classnames';
 import { FlipHorizontalIcon } from '../icons/FlipHorizontalIcon';
 import { RotateRightIcon } from '../icons/RotateRightIcon';
@@ -21,9 +21,13 @@ export interface PublicNavigationProps {
 
 interface NavigationProps extends PublicNavigationProps {
 	value: number;
-	onRotate?: (angle: number, options?: CropperMethodOptions) => void;
+	onRotate?: (angle: number, options?: TransitionOptions & InteractionOptions & ImmediatelyOptions) => void;
 	onRotateEnd?: () => void;
-	onFlip?: (horizontal: boolean, vertical?: boolean, options?: CropperMethodOptions) => void;
+	onFlip?: (
+		horizontal: boolean,
+		vertical?: boolean,
+		options?: TransitionOptions & InteractionOptions & ImmediatelyOptions,
+	) => void;
 	className?: string;
 	disabled?: unknown;
 }
@@ -89,7 +93,7 @@ export const Navigation = forwardRef<NavigationRef, NavigationProps>(
 				onRotate(angle, {
 					transitions: false,
 					interaction: true,
-					immediate: true,
+					immediately: true,
 				});
 			}
 		};
