@@ -29,6 +29,11 @@ const bundles = [
 	},
 ];
 
+export function excludedFromBundle(dependency) {
+	// Exclude all dependencies inside node_modules from the bundle, except the styles
+	return /node_modules/.test(dependency) && !/\.s?css$/.test(dependency);
+}
+
 export default bundles.map(({ format, bundle, file }) => ({
 	input: 'src/index.ts',
 	output: {
@@ -40,7 +45,7 @@ export default bundles.map(({ format, bundle, file }) => ({
 		},
 		sourcemap: true,
 	},
-	external: bundle ? [/node_modules/] : ['react'],
+	external: bundle ? excludedFromBundle : ['react'],
 	plugins: [
 		scss({
 			output: 'dist/style.css',

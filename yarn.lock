@@ -1864,10 +1864,10 @@ address@^1.0.1:
   resolved "https://registry.yarnpkg.com/address/-/address-1.1.2.tgz#bf1116c9c758c51b7a933d296b72c221ed9428b6"
   integrity sha512-aT6camzM4xEA54YVJYSqxz1kv4IHnQZRtThJJHhUMRExaU5spC7jX5ugSwTaTgJliIgs4VhZOk7htClvQ/LmRA==
 
-advanced-cropper@0.8.2:
-  version "0.8.2"
-  resolved "https://registry.yarnpkg.com/advanced-cropper/-/advanced-cropper-0.8.2.tgz#97796601da5b87a752d9498a4f57cc3596b08a52"
-  integrity sha512-vgMeqsSRx4Skx7pO4YsDsY12HUkueGk5P7OswOp8kuRTDW9eilpIwro6A41uJh/eu2QZ2UC/8vyTX6SdnOuY5w==
+advanced-cropper@~0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/advanced-cropper/-/advanced-cropper-0.10.2.tgz#b6459601080a9702886e9a3e96f337eb187195f7"
+  integrity sha512-l81sdn73ZOG3R3FD2OHJq48ytTbWbvI7+3ZPDVZxo3h2S59cVyknNBBPg44UXzM8LA4OpJcOjzZFOrb4iT0DhA==
   dependencies:
     tslib "^2.4.0"
 
