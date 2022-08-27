@@ -123,15 +123,10 @@ export const Navigation = forwardRef<NavigationRef, NavigationProps>(
 		};
 
 		const flip = (horizontal: boolean, vertical: boolean) => {
-			if (quarter % 2 === 0) {
-				onFlip?.(horizontal, vertical, {
-					normalize: false,
-				});
-			} else {
-				onFlip?.(vertical, horizontal, {
-					normalize: false,
-				});
-			}
+			const evenQuarter = quarter % 2 === 0;
+			onFlip?.(evenQuarter ? horizontal : vertical, evenQuarter ? vertical : horizontal, {
+				normalize: false,
+			});
 		};
 
 		const flipHorizontal = () => {
