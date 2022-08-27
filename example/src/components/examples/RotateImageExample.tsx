@@ -13,21 +13,11 @@ export const RotateImageExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
 
 	const flip = (horizontal: boolean, vertical: boolean) => () => {
-		const cropper = cropperRef.current;
-		if (cropper) {
-			if (cropper.getTransforms().rotate % 180 !== 0) {
-				cropper.flipImage(!horizontal, !vertical);
-			} else {
-				cropper.flipImage(horizontal, vertical);
-			}
-		}
+		cropperRef.current?.flipImage(horizontal, vertical);
 	};
 
 	const rotate = (angle: number) => () => {
-		const cropper = cropperRef.current;
-		if (cropper) {
-			cropper.rotateImage(angle);
-		}
+		cropperRef.current?.rotateImage(angle);
 	};
 
 	const download = () => {
@@ -46,9 +36,7 @@ export const RotateImageExample = () => {
 			<Cropper
 				ref={cropperRef}
 				className={'rotate-image-example__cropper'}
-				src={
-					'/react-advanced-cropper/img/images/photo-1600353068867-5b4de71e3afb.jpg'
-				}
+				src={'/react-advanced-cropper/img/images/photo-1600353068867-5b4de71e3afb.jpg'}
 			/>
 			<VerticalButtons>
 				<SquareButton title="Flip Horizontal" onClick={flip(true, false)}>

@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
-import { ImmediatelyOptions, InteractionOptions, TransitionOptions } from 'advanced-cropper';
+import { ImmediatelyOptions, InteractionOptions, NormalizeOptions, TransitionOptions } from 'advanced-cropper';
 import cn from 'classnames';
 import { FlipHorizontalIcon } from '../icons/FlipHorizontalIcon';
 import { RotateRightIcon } from '../icons/RotateRightIcon';
@@ -26,7 +26,7 @@ interface NavigationProps extends PublicNavigationProps {
 	onFlip?: (
 		horizontal: boolean,
 		vertical?: boolean,
-		options?: TransitionOptions & InteractionOptions & ImmediatelyOptions,
+		options?: TransitionOptions & InteractionOptions & ImmediatelyOptions & NormalizeOptions,
 	) => void;
 	className?: string;
 	disabled?: unknown;
@@ -122,16 +122,24 @@ export const Navigation = forwardRef<NavigationRef, NavigationProps>(
 			}
 		};
 
-		const flipHorizontal = () => {
-			if (onFlip && !disabled) {
-				onFlip(true);
+		const flip = (horizontal: boolean, vertical: boolean) => {
+			if (quarter % 2 === 0) {
+				onFlip?.(horizontal, vertical, {
+					normalize: false,
+				});
+			} else {
+				onFlip?.(vertical, horizontal, {
+					normalize: false,
+				});
 			}
 		};
 
+		const flipHorizontal = () => {
+			flip(true, false);
+		};
+
 		const flipVertical = () => {
-			if (onFlip && !disabled) {
-				onFlip(false, true);
-			}
+			flip(false, true);
 		};
 
 		return (

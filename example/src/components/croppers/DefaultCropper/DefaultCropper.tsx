@@ -34,26 +34,17 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 	};
 
 	const onRotate = (angle: number) => {
-		if (cropperRef.current) {
-			cropperRef.current.rotateImage(angle);
-		}
+		cropperRef.current?.rotateImage(angle);
 	};
 
 	const onFlip = (horizontal: boolean, vertical: boolean) => {
-		const cropper = cropperRef.current;
-		if (cropper) {
-			if (cropper.getTransforms().rotate % 180 !== 0) {
-				cropper.flipImage(!horizontal, !vertical);
-			} else {
-				cropper.flipImage(horizontal, vertical);
-			}
-		}
+		cropperRef.current?.flipImage(horizontal, vertical);
 	};
 
 	const onReset = () => {
 		const cropper = cropperRef.current;
 		if (cropper) {
-			cropper.setState(getDefaultState(cropper));
+			cropperRef.current?.setState(getDefaultState(cropper));
 		}
 	};
 	const onChange = (cropper: CropperRef) => {

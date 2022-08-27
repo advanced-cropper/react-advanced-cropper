@@ -12,7 +12,7 @@
 
 ---
 
-:warning: It's the beta version. The API can be changed in the future.
+:warning: It's the beta version. The API can be changed in the future. Therefore, it's recommended to fix the version with `~`.
 
 ---
 
