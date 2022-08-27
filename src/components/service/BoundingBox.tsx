@@ -23,13 +23,13 @@ type HandlerComponent = ComponentType<any>;
 
 type LineComponent = ComponentType<any>;
 
-interface HandlersClassNames extends Partial<Record<OrdinalDirection, string>> {
+interface HandlerClassNames extends Partial<Record<OrdinalDirection, string>> {
 	default?: string;
 	disabled?: string;
 	hover?: string;
 }
 
-interface LinesClassNames extends Partial<Record<CardinalDirection, string>> {
+interface LineClassNames extends Partial<Record<CardinalDirection, string>> {
 	default?: string;
 	disabled?: string;
 	hover?: string;
@@ -40,18 +40,16 @@ interface Props {
 	className?: string;
 	handlerComponent?: HandlerComponent;
 	handlers?: boolean | Partial<Record<OrdinalDirection, boolean>>;
-	handlerClassNames?: HandlersClassNames;
-	handlerWrapperClassNames?: HandlersClassNames;
+	handlerClassNames?: HandlerClassNames;
+	handlerWrapperClassNames?: HandlerClassNames;
 	lines?: boolean | Partial<Record<CardinalDirection, boolean>>;
 	lineComponent?: LineComponent;
-	lineClassNames?: LinesClassNames;
-	lineWrapperClassNames?: LinesClassNames;
+	lineClassNames?: LineClassNames;
+	lineWrapperClassNames?: LineClassNames;
 	disabled?: boolean;
 	onResize?: (directions: ResizeDirections, options: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
-	width?: number;
-	height?: number;
 }
 
 interface HandlerNode {
