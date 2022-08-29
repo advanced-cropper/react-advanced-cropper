@@ -46,7 +46,7 @@ export const Example = () => {
 		<Cropper
 			src={image}
 			stencilComponent={CircleStencil}
-		/>;
+		/>
 	)
 };
 ```
@@ -333,7 +333,7 @@ export const UploadExample = () => {
 
 			// Get the image type from the extension. It's the simplest way, though be careful it can lead to an incorrect result:
 			setImage({
-			   src: blob;
+			   src: blob,
 			   type: files[0].type
 			})
 		}
