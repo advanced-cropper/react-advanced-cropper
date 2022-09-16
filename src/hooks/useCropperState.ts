@@ -1,6 +1,6 @@
 import { createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
 import { CoreSettings, ImageRestriction, ModifierSettings } from 'advanced-cropper';
-import { useLayoutEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { CropperInstance, AbstractCropperParameters, AbstractCropperCallbacks } from 'advanced-cropper/instance';
 import { useForceRerender } from './useForceRerender';
 import { useCropperProps } from './useCropperProps';
@@ -55,7 +55,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		}),
 	);
 
-	useLayoutEffect(() => {
+	useEffect(() => {
 		if (!cropper.current.hasInteractions()) {
 			cropper.current.reconcileState();
 		}
