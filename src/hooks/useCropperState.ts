@@ -17,6 +17,9 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 		AbstractCropperCallbacks<Instance> & {
 			settings: CropperStateSettingsProp<Settings>;
 		},
+	settings: {
+		autoReconcileState?: boolean;
+	},
 ) {
 	const rerender = useForceRerender();
 
@@ -56,7 +59,7 @@ export function useCropperState<Settings extends CropperStateSettings, Instance 
 	);
 
 	useLayoutEffect(() => {
-		if (!cropper.current.hasInteractions()) {
+		if (settings.autoReconcileState && !cropper.current.hasInteractions()) {
 			cropper.current.reconcileState();
 		}
 	});

@@ -105,6 +105,7 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;
 	unloadTime?: number;
 	settings: CropperStateSettingsProp<Settings>;
+	autoReconcileState?: boolean;
 }
 
 export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettings> = Omit<
@@ -135,6 +136,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		boundaryStretchAlgorithm,
 		crossOrigin = true,
 		checkOrientation = true,
+		autoReconcileState = true,
 		canvas = true,
 		style,
 		onReady,
@@ -150,19 +152,24 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 	const canvasRef = useRef<CropperCanvasMethods>(null);
 	const cropperRef = useRef<AbstractCropperRef<ExtendedSettings<Extension>>>(null);
 
-	const cropper = useCropperState(() => ({
-		...parameters,
-		getInstance() {
-			return cropperRef.current;
+	const cropper = useCropperState(
+		() => ({
+			...parameters,
+			getInstance() {
+				return cropperRef.current;
+			},
+			settings: {
+				...settings,
+				...stencilConstraints(settings, {
+					...stencilProps,
+					...stencilRef.current,
+				}),
+			},
+		}),
+		{
+			autoReconcileState,
 		},
-		settings: {
-			...settings,
-			...stencilConstraints(settings, {
-				...stencilProps,
-				...stencilRef.current,
-			}),
-		},
-	}));
+	);
 
 	const { image, loaded, loading } = useCropperImage({
 		src,

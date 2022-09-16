@@ -18,6 +18,7 @@ function omitEmpty<Obj extends object>(obj: Obj) {
 export function splitAbstractCropperProps<Props extends MainProps>(props: Props) {
 	const {
 		src,
+		autoReconcileState,
 		backgroundWrapperComponent,
 		backgroundWrapperProps,
 		wrapperComponent,
@@ -70,6 +71,7 @@ export function splitAbstractCropperProps<Props extends MainProps>(props: Props)
 	return {
 		...omitEmpty({
 			src,
+			autoReconcileState,
 			backgroundWrapperComponent,
 			backgroundWrapperProps,
 			wrapperComponent,
