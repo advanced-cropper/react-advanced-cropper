@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef, CSSProperties, Ref } from 'react';
+import React, { useImperativeHandle, useRef, CSSProperties, Ref, useState } from 'react';
 import cn from 'classnames';
 import {
 	DrawOptions,
@@ -152,6 +152,9 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 	const canvasRef = useRef<CropperCanvasMethods>(null);
 	const cropperRef = useRef<AbstractCropperRef<ExtendedSettings<Extension>>>(null);
 
+	const [currentImage, setCurrentImage] = useStateWithCallback<CropperImage | null>(null);
+	const [autoReconcileStateDisabled, setAutoReconcileStateDisabled] = useState(false);
+
 	const cropper = useCropperState(
 		() => ({
 			...parameters,
@@ -167,7 +170,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 			},
 		}),
 		{
-			autoReconcileState,
+			autoReconcileState: autoReconcileState && !autoReconcileStateDisabled,
 		},
 	);
 
@@ -189,36 +192,50 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		},
 	});
 
-	const [currentImage, setCurrentImage] = useStateWithCallback<CropperImage | null>(null);
-
 	const resetCropper = () => {
-		boundaryRef.current?.stretchTo(image).then((boundary) => {
-			setCurrentImage(image, () => {
-				if (boundary && image) {
-					cropper.reset(boundary, image);
-				} else {
-					cropper.clear();
-				}
-			});
-		});
+		if (boundaryRef.current) {
+			setAutoReconcileStateDisabled(true);
+			boundaryRef.current
+				?.stretchTo(image)
+				.then((boundary) => {
+					setCurrentImage(image, () => {
+						if (boundary && image) {
+							cropper.reset(boundary, image);
+						} else {
+							cropper.clear();
+						}
+					});
+				})
+				.finally(() => {
+					setAutoReconcileStateDisabled(false);
+				});
+		}
 	};
 
 	const refreshCropper = () => {
-		boundaryRef.current?.stretchTo(image).then((boundary) => {
-			if (boundary && image) {
-				const state = cropper.getState();
-				if (state) {
-					if (boundary.width !== state.boundary.width || boundary.height !== state.boundary.height) {
-						cropper.setBoundary(boundary);
+		if (boundaryRef.current) {
+			setAutoReconcileStateDisabled(true);
+			boundaryRef.current
+				?.stretchTo(image)
+				.then((boundary) => {
+					if (boundary && image) {
+						const state = cropper.getState();
+						if (state) {
+							if (boundary.width !== state.boundary.width || boundary.height !== state.boundary.height) {
+								cropper.setBoundary(boundary);
+							}
+							cropper.reconcileState();
+						} else {
+							cropper.reset(boundary, image);
+						}
+					} else {
+						cropper.clear();
 					}
-					cropper.reconcileState();
-				} else {
-					cropper.reset(boundary, image);
-				}
-			} else {
-				cropper.clear();
-			}
-		});
+				})
+				.finally(() => {
+					setAutoReconcileStateDisabled(false);
+				});
+		}
 	};
 
 	const cropperInterface = {
