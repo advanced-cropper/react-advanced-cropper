@@ -224,6 +224,8 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 							if (boundary.width !== state.boundary.width || boundary.height !== state.boundary.height) {
 								cropper.setBoundary(boundary);
 							}
+							// It's important because, probably, after the boundary reset
+							// the cropper can meet some restrictions that were broken before
 							cropper.reconcileState();
 						} else {
 							cropper.reset(boundary, image);
