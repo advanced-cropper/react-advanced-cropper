@@ -749,7 +749,10 @@ typing use `CropperRef` type.
 
 - **Returns:**
 
-	The actual [cropper state](/docs/concept/basic):
+	The actual [cropper state](/docs/concept/state):
+	```tsx
+	CropperState | null
+	```
 	```tsx
 	interface CropperState {
     boundary: Boundary;
@@ -792,6 +795,36 @@ typing use `CropperRef` type.
     />
 	)
 	```
+
+
+### `getDefaultState()`
+
+- **Returns:**
+
+	The default [cropper state](/docs/concept/state) for the current image and boundary:
+
+	```tsx
+	CropperState | null
+	```
+
+	```tsx
+	interface CropperState {
+    boundary: Boundary;
+    imageSize: ImageSize;
+    transforms: Transforms;
+    visibleArea: VisibleArea | null;
+    coordinates: Coordinates | null;
+	}
+	```
+
+
+- **Usage:**
+
+	The method allows you to get the default cropper state for the current boundary and image. It will
+	return `null` if image or boundary are not initialized.
+
+	[See `getState`.](/docs/components/Cropper/#getState)
+
 
 
 ### `getCoordinates()`

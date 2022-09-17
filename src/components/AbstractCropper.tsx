@@ -70,7 +70,7 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 	getVisibleArea: CropperStateHook['getVisibleArea'];
 	getTransforms: CropperStateHook['getTransforms'];
 	getStencilCoordinates: CropperStateHook['getStencilCoordinates'];
-	getDefaultState: CropperStateHook['getDefaultState'];
+	getDefaultState: () => CropperState | null;
 	getCanvas: (options?: DrawOptions) => HTMLCanvasElement | null;
 	getSettings: () => Settings;
 	getImage: () => CropperImage | null;
@@ -276,7 +276,6 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		setCoordinates: cropper.setCoordinates,
 		setState: cropper.setState,
 		hasInteractions: cropper.hasInteractions,
-		getDefaultState: cropper.getDefaultState,
 		getStencilCoordinates: cropper.getStencilCoordinates,
 		getCoordinates: cropper.getCoordinates,
 		getVisibleArea: cropper.getVisibleArea,
@@ -285,6 +284,10 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		getInteractions: cropper.getInteractions,
 		getSettings: cropper.getSettings,
 		getState: cropper.getState,
+		getDefaultState() {
+			const state = cropper.getState();
+			return state && image && cropper.createDefaultState(state.boundary, image);
+		},
 	};
 
 	useWindowResize(() => {

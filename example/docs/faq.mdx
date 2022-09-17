@@ -18,14 +18,9 @@ To get the default state you can use the corresponding cropper method.
 
 ```tsx
 const cropperRef = useRef<CropperRef>(null);
+
 const getDefaultState = () => {
-	const state = cropper.getState();
-	const image = cropper.getImage();
-	if (state && image) {
-		cropper.getDefaultState(state.boundary, image);
-	} else {
-		return null;
-	}
+	return cropperRef.current?.getDefaultState();
 }
 ```
 ```tsx
@@ -44,23 +39,19 @@ import { getCloserAngle } from 'advanced-cropper'
 ```
 ```tsx
 const getDefaultState = () => {
-	const state = cropper.getState();
-	const image = cropper.getImage();
-	if (state && image) {
-		const defaultState = cropper.getDefaultState(state.boundary, image);
-		return {
-			...defaultState,
-			transforms: {
-				...defaultState.transforms,
-				rotate: getCloserAngle(state.transforms.rotate, defaultState.transforms.rotate),
-			},
-		};
-	} else {
-		return null;
-	}
-}
+	const currentState = cropperRef.current?.getState();
+	const defaultState = cropperRef.current?.getDefaultState();
+	return currentState && defaultState
+		? {
+				...defaultState,
+				transforms: {
+					...defaultState.transforms,
+					rotate: getCloserAngle(currentState.transforms.rotate, defaultState.transforms.rotate),
+				},
+			}
+		: null;
+};
 ```
-
 
 ## How to check if the cropper is dirty?
 

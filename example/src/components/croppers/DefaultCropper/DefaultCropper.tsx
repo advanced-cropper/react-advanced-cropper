@@ -16,21 +16,18 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 
 	const cropperRef = useRef<CropperRef>(null);
 
-	const getDefaultState = (cropper: CropperRef) => {
-		const state = cropper.getState();
-		const image = cropper.getImage();
-		if (state && image) {
-			const defaultState = cropper.getDefaultState(state.boundary, image);
-			return {
-				...defaultState,
-				transforms: {
-					...defaultState.transforms,
-					rotate: getCloserAngle(state.transforms.rotate, defaultState.transforms.rotate),
-				},
-			};
-		} else {
-			return null;
-		}
+	const getDefaultState = () => {
+		const currentState = cropperRef.current?.getState();
+		const defaultState = cropperRef.current?.getDefaultState();
+		return currentState && defaultState
+			? {
+					...defaultState,
+					transforms: {
+						...defaultState.transforms,
+						rotate: getCloserAngle(currentState.transforms.rotate, defaultState.transforms.rotate),
+					},
+			  }
+			: null;
 	};
 
 	const onRotate = (angle: number) => {
@@ -42,15 +39,10 @@ export const DefaultCropper = ({ wrapperClassName, className, ...props }: Defaul
 	};
 
 	const onReset = () => {
-		const cropper = cropperRef.current;
-		if (cropper) {
-			cropperRef.current?.setState(getDefaultState(cropper));
-		}
+		cropperRef.current?.setState(getDefaultState());
 	};
 	const onChange = (cropper: CropperRef) => {
-		const state = cropper.getState();
-
-		setChanged(state ? !isEqualState(state, getDefaultState(cropper)) : false);
+		setChanged(!isEqualState(cropper.getState(), getDefaultState()));
 	};
 
 	return (
