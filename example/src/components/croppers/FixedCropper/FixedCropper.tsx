@@ -29,7 +29,7 @@ export const FixedCropper: FC<FixedCropperProps> = forwardRef<FixedCropperRef, F
 
 		const stencilSize = ({ boundary }) => {
 			return {
-				width: boundary.width - 80,
+				width: boundary.height - 80,
 				height: boundary.height - 80,
 			};
 		};
