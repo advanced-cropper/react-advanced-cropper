@@ -9,12 +9,13 @@ import {
 	ImageRestriction,
 } from 'react-advanced-cropper';
 import {
-	autoZoom,
+	zoomStencil,
+	fitStencilToImage,
 	resizeCoordinates,
 	transformImage,
 	defaultSize,
 	stencilConstraints,
-} from 'advanced-cropper/showcase/telegram';
+} from 'advanced-cropper/showcase/mobile';
 import { PublicNavigationProps } from './Navigation';
 import { CropperWrapper } from './CropperWrapper';
 import './TelegramCropper.scss';
@@ -63,7 +64,7 @@ export const TelegramCropper = forwardRef((props: TelegramCropperProps, ref) => 
 			}}
 			imageRestriction={ImageRestriction.none}
 			className={cn('telegram-cropper', className)}
-			postProcess={autoZoom}
+			postProcess={[fitStencilToImage, zoomStencil]}
 			defaultSize={defaultSize}
 			transformImageAlgorithm={transformImage}
 			resizeCoordinatesAlgorithm={resizeCoordinates}
