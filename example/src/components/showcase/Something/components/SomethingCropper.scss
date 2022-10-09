@@ -1,0 +1,125 @@
+@import '../../../../css/mixins';
+.something-cropper {
+	height: 600px;
+	display: flex;
+	flex-direction: column;
+	color: white;
+	&__boundary {
+		flex-grow: 1;
+		min-height: 0;
+		min-width: 0;
+	}
+	&__image-wrapper {
+		position: absolute;
+		border-radius: 20px;
+	}
+	&__image {
+		position: absolute;
+		max-width: none;
+	}
+	&__image-wrapper {
+		position: absolute;
+		left: 0;
+		top: 0;
+	}
+	&__content {
+		position: absolute;
+		overflow: hidden;
+		border-radius: 20px;
+	}
+	&__internals {
+		position: absolute;
+	}
+	&__stencil {
+		transition: opacity 0.5s;
+		&--hidden {
+			opacity: 0;
+		}
+	}
+	&__source {
+		visibility: hidden;
+		width: 1px;
+		height: 1px;
+	}
+	&__navigation {
+		margin-top: 32px;
+		z-index: 1;
+		position: relative;
+		margin-left: auto;
+		margin-right: auto;
+		background: white;
+		display: flex;
+		padding: 8px;
+		border-radius: 6px;
+		flex-wrap: wrap;
+		gap: 48px;
+		@include mobile() {
+			gap: 8px;
+		}
+	}
+	&__handler {
+		border-radius: 50%;
+	}
+	&__icon-button {
+		cursor: pointer;
+		border: solid 1px transparent;
+		width: 32px;
+		height: 32px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		transition: 0.5s;
+		border-radius: 6px;
+		&:focus, &:hover {
+			border-color: #6299e3;
+			background: rgba(#6299e3, 0.1);
+		}
+	}
+	&__icon {
+		fill: #6299e3;
+		width: 12px;
+		height: 12px;
+	}
+	&__small-buttons {
+		display: flex;
+		gap: 8px;
+		justify-content: space-around;
+		flex-grow: 1;
+	}
+	&__buttons {
+		display: flex;
+		gap: 8px;
+		@include small-mobile() {
+			flex-grow: 1
+		}
+	}
+	&__button {
+		height: 32px;
+		padding-left: 16px;
+		padding-right: 16px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 12px;
+		border-radius: 8px;
+		cursor: pointer;
+		transition: 0.5s;
+		@include small-mobile() {
+			width: 100%;
+		}
+		&--cancel {
+			color: #555;
+			background: #EEE;
+			&:hover {
+				background: #dcdcdc;
+			}
+		}
+		&--save {
+			background:  #6299e3;
+			color: white;
+			&:hover {
+				background: #3c79ce;
+			}
+		}
+	}
+}

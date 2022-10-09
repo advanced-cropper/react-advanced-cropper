@@ -2,11 +2,7 @@ import React, { forwardRef, useImperativeHandle, useRef } from 'react';
 import { CropperState, DrawOptions, drawCroppedArea } from 'advanced-cropper';
 
 export interface CropperCanvasMethods {
-	draw: (
-		state: CropperState,
-		image: HTMLImageElement | HTMLCanvasElement,
-		options?: DrawOptions,
-	) => HTMLCanvasElement | null;
+	draw: (state: CropperState, image: HTMLElement, options?: DrawOptions) => HTMLCanvasElement | null;
 }
 
 export const CropperCanvas = forwardRef((_, ref) => {
@@ -14,9 +10,15 @@ export const CropperCanvas = forwardRef((_, ref) => {
 	const spareCanvasRef = useRef<HTMLCanvasElement>(null);
 
 	useImperativeHandle(ref, () => ({
-		draw: (state: CropperState, image: HTMLImageElement | HTMLCanvasElement, options: DrawOptions = {}) => {
+		draw: (state: CropperState, image: HTMLElement, options: DrawOptions = {}) => {
 			if (image && canvasRef.current && spareCanvasRef.current) {
-				return drawCroppedArea(state, image, canvasRef.current, spareCanvasRef.current, options);
+				return drawCroppedArea(
+					state,
+					image as HTMLImageElement | HTMLCanvasElement,
+					canvasRef.current,
+					spareCanvasRef.current,
+					options,
+				);
 			} else {
 				return null;
 			}

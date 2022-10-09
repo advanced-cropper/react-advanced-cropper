@@ -4,9 +4,9 @@ import { CropperTransitions, CropperImage, CropperState, getBackgroundStyle } fr
 import { preventDefault } from '../../service/events';
 
 interface DesiredCropperRef {
-	getState: () => CropperState;
+	getState: () => CropperState | null;
 	getTransitions: () => CropperTransitions;
-	getImage: () => CropperImage;
+	getImage: () => CropperImage | null;
 }
 
 interface Props {
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
-	({ className, cropper, crossOrigin }: Props, ref) => {
+	({ className, cropper, crossOrigin = true }: Props, ref) => {
 		const state = cropper.getState();
 		const transitions = cropper.getTransitions();
 		const image = cropper.getImage();

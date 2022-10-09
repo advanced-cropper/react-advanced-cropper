@@ -11,8 +11,6 @@ import {
 	CropperState,
 	CropperTransitions,
 	ModifierSettings,
-	AbstractCropperCallbacks,
-	AbstractCropperParameters,
 } from 'advanced-cropper';
 
 import {
@@ -26,22 +24,13 @@ import {
 	ExtendedSettings,
 	CustomCropperRef,
 } from '../types';
-import { useWindowResize } from '../hooks/useWindowResize';
-import { useCropperImage } from '../hooks/useCropperImage';
-import {
-	CropperStateHook,
-	CropperStateSettings,
-	CropperStateSettingsProp,
-	useCropperState,
-} from '../hooks/useCropperState';
-import { mergeRefs } from '../service/react';
-import { useUpdateEffect } from '../hooks/useUpdateEffect';
-import { useStateWithCallback } from '../hooks/useStateWithCallback';
+import { CropperStateHook, CropperStateSettings, CropperStateSettingsProp } from '../hooks/useCropperState';
 import { createCropper } from '../service/cropper';
-import { StretchableBoundary, StretchableBoundaryMethods } from './service/StretchableBoundary';
+import { AbstractCropperHookProps, useAbstractCropper } from '../hooks/useAbstractCropper';
+import { StretchableBoundary } from './service/StretchableBoundary';
 import { CropperWrapper } from './service/CropperWrapper';
 import { CropperBackgroundImage } from './service/CropperBackgroundImage';
-import { CropperCanvas, CropperCanvasMethods } from './service/CropperCanvas';
+import { CropperCanvas } from './service/CropperCanvas';
 import { RectangleStencil } from './stencils/RectangleStencil';
 import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
 
@@ -79,9 +68,7 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 }
 
 export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
-	extends AbstractCropperParameters<Settings>,
-		AbstractCropperCallbacks<AbstractCropperRef<Settings>> {
-	src?: string | null;
+	extends AbstractCropperHookProps<Settings> {
 	backgroundComponent?: CropperBackgroundComponent;
 	backgroundProps?: ArbitraryProps;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
@@ -95,17 +82,9 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	imageClassName?: string;
 	boundaryClassName?: string;
 	backgroundClassName?: string;
-	checkOrientation?: boolean;
-	canvas?: boolean;
-	crossOrigin?: 'anonymous' | 'use-credentials';
 	boundaryStretchAlgorithm?: BoundaryStretchAlgorithm;
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm;
 	style?: CSSProperties;
-	onReady?: (cropper: AbstractCropperRef<Settings>) => void;
-	onError?: (cropper: AbstractCropperRef<Settings>) => void;
-	unloadTime?: number;
-	settings: CropperStateSettingsProp<Settings>;
-	autoReconcileState?: boolean;
 }
 
 export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettings> = Omit<
@@ -118,7 +97,8 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 	ref: Ref<CustomCropperRef<Extension>>,
 ) => {
 	const {
-		src,
+		style,
+		className,
 		stencilComponent = RectangleStencil,
 		stencilConstraints = defaultStencilConstraints,
 		stencilProps = {},
@@ -126,179 +106,34 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		wrapperProps = {},
 		backgroundComponent = CropperBackgroundImage,
 		backgroundProps = {},
+		backgroundClassName,
 		backgroundWrapperComponent = CropperBackgroundWrapper,
 		backgroundWrapperProps = {},
 		imageClassName,
-		className,
 		boundaryClassName,
-		backgroundClassName,
 		boundarySizeAlgorithm,
 		boundaryStretchAlgorithm,
-		crossOrigin = true,
-		checkOrientation = true,
-		autoReconcileState = true,
 		canvas = true,
-		style,
-		onReady,
-		onError,
-		unloadTime = 500,
+		crossOrigin = true,
 		settings,
 		...parameters
 	} = props;
 
 	const stencilRef = useRef<StencilComponent>(null);
-	const imageRef = useRef<HTMLImageElement | HTMLCanvasElement>(null);
-	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
-	const canvasRef = useRef<CropperCanvasMethods>(null);
-	const cropperRef = useRef<AbstractCropperRef<ExtendedSettings<Extension>>>(null);
 
-	const [currentImage, setCurrentImage] = useStateWithCallback<CropperImage | null>(null);
-	const [autoReconcileStateDisabled, setAutoReconcileStateDisabled] = useState(false);
-
-	const cropper = useCropperState(
-		() => ({
-			...parameters,
-			getInstance() {
-				return cropperRef.current;
-			},
-			settings: {
-				...settings,
-				...stencilConstraints(settings, {
-					...stencilProps,
-					...stencilRef.current,
-				}),
-			},
-		}),
-		{
-			autoReconcileState: autoReconcileState && !autoReconcileStateDisabled,
-		},
-	);
-
-	const { image, loaded, loading } = useCropperImage({
-		src,
+	const { cropper, image, loaded, loading, refs } = useAbstractCropper(() => ({
+		...parameters,
 		crossOrigin,
-		checkOrientation,
-		unloadTime,
+		stencilProps,
 		canvas,
-		onLoad() {
-			if (cropperRef.current) {
-				onReady?.(cropperRef.current);
-			}
+		settings: {
+			...settings,
+			...stencilConstraints(settings, {
+				...stencilProps,
+				...stencilRef.current,
+			}),
 		},
-		onError() {
-			if (cropperRef.current) {
-				onError?.(cropperRef.current);
-			}
-		},
-	});
-
-	const resetCropper = () => {
-		if (boundaryRef.current) {
-			setAutoReconcileStateDisabled(true);
-			boundaryRef.current
-				?.stretchTo(image)
-				.then((boundary) => {
-					setCurrentImage(image, () => {
-						if (boundary && image) {
-							cropper.reset(boundary, image);
-						} else {
-							cropper.clear();
-						}
-					});
-				})
-				.finally(() => {
-					setAutoReconcileStateDisabled(false);
-				});
-		}
-	};
-
-	const refreshCropper = () => {
-		if (boundaryRef.current) {
-			setAutoReconcileStateDisabled(true);
-			boundaryRef.current
-				?.stretchTo(image)
-				.then((boundary) => {
-					if (boundary && image) {
-						const state = cropper.getState();
-						if (state) {
-							if (boundary.width !== state.boundary.width || boundary.height !== state.boundary.height) {
-								cropper.setBoundary(boundary);
-							}
-							// It's important because, probably, after the boundary reset
-							// the cropper can meet some restrictions that were broken before
-							cropper.reconcileState();
-						} else {
-							cropper.reset(boundary, image);
-						}
-					} else {
-						cropper.clear();
-					}
-				})
-				.finally(() => {
-					setAutoReconcileStateDisabled(false);
-				});
-		}
-	};
-
-	const cropperInterface = {
-		reset: () => {
-			resetCropper();
-		},
-		refresh: () => {
-			refreshCropper();
-		},
-		getCanvas: (options?: DrawOptions) => {
-			const state = cropper.getState();
-			if (imageRef.current && canvasRef.current && state) {
-				return canvasRef.current.draw(state, imageRef.current, options);
-			} else {
-				return null;
-			}
-		},
-		getImage: () => {
-			return currentImage ? { ...currentImage } : null;
-		},
-		setImage: (image: CropperImage) => {
-			setCurrentImage(image);
-		},
-		reconcileState: cropper.reconcileState,
-		moveCoordinates: cropper.moveCoordinates,
-		moveCoordinatesEnd: cropper.moveCoordinatesEnd,
-		resizeCoordinates: cropper.resizeCoordinates,
-		clear: cropper.clear,
-		resizeCoordinatesEnd: cropper.resizeCoordinatesEnd,
-		moveImage: cropper.moveImage,
-		flipImage: cropper.flipImage,
-		zoomImage: cropper.zoomImage,
-		rotateImage: cropper.rotateImage,
-		transformImage: cropper.transformImage,
-		transformImageEnd: cropper.transformImageEnd,
-		setCoordinates: cropper.setCoordinates,
-		setState: cropper.setState,
-		hasInteractions: cropper.hasInteractions,
-		getStencilCoordinates: cropper.getStencilCoordinates,
-		getCoordinates: cropper.getCoordinates,
-		getVisibleArea: cropper.getVisibleArea,
-		getTransforms: cropper.getTransforms,
-		getTransitions: cropper.getTransitions,
-		getInteractions: cropper.getInteractions,
-		getSettings: cropper.getSettings,
-		getState: cropper.getState,
-		getDefaultState() {
-			const state = cropper.getState();
-			return state && image && cropper.createDefaultState(state.boundary, image);
-		},
-	};
-
-	useWindowResize(() => {
-		refreshCropper();
-	});
-
-	useUpdateEffect(() => {
-		resetCropper();
-	}, [image]);
-
-	useImperativeHandle(mergeRefs([ref, cropperRef]), () => cropperInterface);
+	}));
 
 	const StencilComponent = stencilComponent;
 
@@ -308,17 +143,19 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 
 	const BackgroundComponent = backgroundComponent;
 
+	useImperativeHandle(ref, () => cropper);
+
 	return (
 		<WrapperComponent
 			{...wrapperProps}
 			className={cn('advanced-cropper', className)}
 			loaded={loaded}
-			cropper={cropperInterface}
+			cropper={cropper}
 			loading={loading}
 			style={style}
 		>
 			<StretchableBoundary
-				ref={boundaryRef}
+				ref={refs.boundary}
 				stretchAlgorithm={boundaryStretchAlgorithm}
 				sizeAlgorithm={boundarySizeAlgorithm}
 				className={cn('advanced-cropper__boundary', boundaryClassName)}
@@ -326,28 +163,23 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 			>
 				<BackgroundWrapperComponent
 					{...backgroundWrapperProps}
-					cropper={cropperInterface}
+					cropper={cropper}
 					className={'advanced-cropper__background-wrapper'}
 				>
 					<div className={cn('advanced-cropper__background', backgroundClassName)}>
 						{cropper.getState() && (
 							<BackgroundComponent
 								{...backgroundProps}
-								ref={imageRef}
+								ref={refs.image}
 								crossOrigin={crossOrigin}
-								cropper={cropperInterface}
+								cropper={cropper}
 								className={cn('advanced-cropper__image', imageClassName)}
 							/>
 						)}
 					</div>
-					<StencilComponent
-						{...stencilProps}
-						ref={stencilRef}
-						cropper={cropperInterface}
-						image={currentImage}
-					/>
+					<StencilComponent {...stencilProps} ref={stencilRef} cropper={cropper} image={image} />
 				</BackgroundWrapperComponent>
-				{canvas && <CropperCanvas ref={canvasRef} />}
+				{canvas && <CropperCanvas ref={refs.canvas} />}
 			</StretchableBoundary>
 		</WrapperComponent>
 	);

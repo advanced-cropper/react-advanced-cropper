@@ -6,18 +6,23 @@ import {
 	CropperImage,
 	MoveDirections,
 	ResizeDirections,
+	CropperState,
+	CropperTransitions,
 	RawAspectRatio,
+	CropperInteractions,
 	Coordinates,
 } from 'advanced-cropper';
 import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
-import { SimpleLine } from '../lines/SimpleLine';
-import { SimpleHandler } from '../handlers/SimpleHandler';
-import { BoundingBox } from '../service/BoundingBox';
-import { StencilOverlay } from '../service/StencilOverlay';
-import { DraggableArea } from '../service/DraggableArea';
-import { StencilWrapper } from '../service/StencilWrapper';
-import { StencilGrid } from '../service/StencilGrid';
+import {
+	BoundingBox,
+	DraggableArea,
+	SimpleHandler,
+	SimpleLine,
+	StencilOverlay,
+	StencilWrapper,
+	StencilGrid,
+} from 'react-advanced-cropper';
 
 type HandlerComponent = ComponentType<any>;
 
@@ -61,13 +66,14 @@ interface Props {
 	resizable?: boolean;
 	grid?: boolean;
 	stencilCoordinates?: Coordinates;
+	transitions?: CropperTransitions;
 }
 
 interface Methods {
 	aspectRatio: RawAspectRatio;
 }
 
-export const RectangleStencil = forwardRef<Methods, Props>(
+export const CustomStencil = forwardRef<Methods, Props>(
 	(
 		{
 			cropper,
@@ -108,11 +114,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			draggableAreaClassName,
 			className,
 			stencilCoordinates,
+			transitions,
 		}: Props,
 		ref,
 	) => {
 		const state = cropper.getState();
-		const transitions = cropper.getTransitions();
 		const interactions = cropper.getInteractions();
 
 		useImperativeHandle(ref, () => ({
@@ -210,4 +216,4 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 	},
 );
 
-RectangleStencil.displayName = 'RectangleStencil';
+CustomStencil.displayName = 'CustomStencil';
