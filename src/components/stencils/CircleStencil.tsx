@@ -38,15 +38,14 @@ interface LinesClassNames extends Partial<Record<CardinalDirection, string>> {
 }
 
 interface DesiredCropperRef {
-	getState: () => CropperState;
+	getState: () => CropperState | null;
 	getTransitions: () => CropperTransitions;
 	getInteractions: () => CropperInteractions;
 	hasInteractions: () => boolean;
-	resizeCoordinates: (directions: ResizeDirections, options: ResizeOptions) => void;
+	resizeCoordinates: (directions: Partial<ResizeDirections>, parameters: unknown) => void;
 	resizeCoordinatesEnd: () => void;
-	moveCoordinates: (directions: MoveDirections) => void;
+	moveCoordinates: (directions: Partial<MoveDirections>) => void;
 	moveCoordinatesEnd: () => void;
-	setStencilOptions: (options: StencilOptions) => void;
 }
 
 interface Props {

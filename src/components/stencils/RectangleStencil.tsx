@@ -8,6 +8,10 @@ import {
 	ResizeDirections,
 	RawAspectRatio,
 	Coordinates,
+	CropperState,
+	CropperTransitions,
+	CropperInteractions,
+	isFunction,
 } from 'advanced-cropper';
 import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
@@ -35,8 +39,19 @@ interface LineClassNames extends Partial<Record<CardinalDirection, string>> {
 	hover?: string;
 }
 
+interface DesiredCropperRef {
+	getState: () => CropperState | null;
+	getTransitions: () => CropperTransitions;
+	getInteractions: () => CropperInteractions;
+	hasInteractions: () => boolean;
+	resizeCoordinates: (directions: Partial<ResizeDirections>, parameters: unknown) => void;
+	resizeCoordinatesEnd: () => void;
+	moveCoordinates: (directions: Partial<MoveDirections>) => void;
+	moveCoordinatesEnd: () => void;
+}
+
 interface Props {
-	cropper: any;
+	cropper: DesiredCropperRef;
 	image?: CropperImage | null;
 	handlerComponent?: HandlerComponent;
 	handlers?: Partial<Record<OrdinalDirection, boolean>>;
@@ -60,7 +75,7 @@ interface Props {
 	movable?: boolean;
 	resizable?: boolean;
 	grid?: boolean;
-	stencilCoordinates?: Coordinates;
+	coordinates?: Coordinates | ((state: CropperState | null) => Coordinates);
 }
 
 interface Methods {
@@ -107,7 +122,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			overlayClassName,
 			draggableAreaClassName,
 			className,
-			stencilCoordinates,
+			coordinates,
 		}: Props,
 		ref,
 	) => {
@@ -148,7 +163,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			}
 		};
 
-		const { width, height, left, top } = stencilCoordinates || getStencilCoordinates(state);
+		const { width, height, left, top } = coordinates
+			? isFunction(coordinates)
+				? coordinates(state)
+				: coordinates
+			: getStencilCoordinates(state);
 
 		return (
 			state && (
