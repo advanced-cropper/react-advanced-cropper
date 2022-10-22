@@ -10,8 +10,8 @@ import {
 	StretchableBoundary,
 	useAbstractCropper,
 } from 'react-advanced-cropper';
-import { defaultPosition, getTransformedImageSize, defaultVisibleArea } from 'advanced-cropper';
-import { fullSize, getStyles } from '../utils';
+import { defaultPosition, defaultVisibleArea, getTransformedImageSize } from 'advanced-cropper';
+import { fullSize, getProperties } from '../utils';
 import { CropIcon } from '../icons/CropIcon';
 import { RotateLeftIcon } from '../icons/RotateLeftIcon';
 import { RotateRightIcon } from '../icons/RotateRightIcon';
@@ -29,18 +29,16 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 
 	const { cropper, image, loaded, loading, refs } = useAbstractCropper(() => ({
 		src,
-		settings: {},
 		postProcess: mode === CropMode.full ? [fullSize] : [],
 	}));
 
-	useImperativeHandle(ref, () => cropper);
-
 	const state = cropper.getState();
+
 	const transitions = cropper.getTransitions();
 
-	const { imageWrapperStyle, contentStyle, stencilCoordinates } = getStyles(image, state, transitions, mode);
-
 	const disabled = transitions.active || mode !== CropMode.crop;
+
+	const { imageWrapperStyle, contentStyle, stencilCoordinates } = getProperties(image, state, transitions, mode);
 
 	const onSetMode = (value: CropMode) => {
 		if (!transitions.active) {
@@ -57,17 +55,23 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 			}
 		}
 	};
+
 	const onCancel = () => {
 		if (mode === CropMode.crop || mode === CropMode.preview) {
 			onSetMode(CropMode.full);
 		}
 	};
+
 	const onSave = () => {
 		if (mode === CropMode.crop) {
 			onSetMode(CropMode.preview);
 		} else {
 			onDownload();
 		}
+	};
+
+	const onRotate = (angle: number) => {
+		cropper.rotateImage(angle);
 	};
 
 	useEffect(() => {
@@ -84,6 +88,8 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 			}
 		}
 	}, [mode]);
+
+	useImperativeHandle(ref, () => cropper);
 
 	return (
 		<CropperWrapper
@@ -132,20 +138,10 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 			<div className={'something-cropper__navigation'}>
 				{mode !== CropMode.crop && (
 					<div className={'something-cropper__small-buttons'}>
-						<div
-							className={'something-cropper__icon-button'}
-							onClick={() => {
-								cropper.rotateImage(-90);
-							}}
-						>
+						<div className={'something-cropper__icon-button'} onClick={() => onRotate(-90)}>
 							<RotateLeftIcon className={'something-cropper__icon'} />
 						</div>
-						<div
-							className={'something-cropper__icon-button'}
-							onClick={() => {
-								cropper.rotateImage(90);
-							}}
-						>
+						<div className={'something-cropper__icon-button'} onClick={() => onRotate(90)}>
 							<RotateRightIcon className={'something-cropper__icon'} />
 						</div>
 						<div className={'something-cropper__icon-button'} onClick={() => onSetMode(CropMode.crop)}>

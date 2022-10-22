@@ -26,9 +26,7 @@
 		position: absolute;
 		overflow: hidden;
 		border-radius: 20px;
-	}
-	&__internals {
-		position: absolute;
+		background-repeat: no-repeat;
 	}
 	&__stencil {
 		transition: opacity 0.5s;

@@ -14,7 +14,7 @@ import {
 	rotateSize,
 	CropperImage,
 } from 'advanced-cropper';
-import { CropMode } from '@site/src/components/showcase/Something/types';
+import { CropMode } from './types';
 
 export function fullSize(state: CropperState, settings: CoreSettings): CropperState {
 	if (isInitializedState(state)) {
@@ -51,7 +51,7 @@ export function fullSize(state: CropperState, settings: CoreSettings): CropperSt
 	return state;
 }
 
-export function getStyles(
+export function getProperties(
 	image: CropperImage | null,
 	state: CropperState | null,
 	transitions: CropperTransitions | null = null,
@@ -62,27 +62,9 @@ export function getStyles(
 
 		const area = mode === CropMode.preview ? state.coordinates : state.visibleArea;
 
-		let coefficient = area.width / state.boundary.width;
-		let contentBox;
-		if (mode !== CropMode.preview) {
-			const imageBox = {
-				left: -area.left,
-				right: -area.left + actualImageSize.width,
-				top: -area.top,
-				bottom: -area.top + actualImageSize.height,
-			};
-
-			contentBox = {
-				width:
-					(Math.min(state.boundary.width * coefficient, Math.max(0, imageBox.right)) -
-						Math.max(0, Math.min(state.boundary.width * coefficient, imageBox.left))) /
-					coefficient,
-				height:
-					(Math.min(state.boundary.height * coefficient, Math.max(0, imageBox.bottom)) -
-						Math.max(0, Math.min(state.boundary.height * coefficient, imageBox.top))) /
-					coefficient,
-			};
-		} else {
+		//  Calculate the size of the displayed box (the box with rounded corners). It's not equal to boundary in general case.
+		let contentBox, coefficient;
+		if (mode === CropMode.preview) {
 			if (ratio(state.coordinates) > ratio(state.boundary)) {
 				contentBox = {
 					width: state.boundary.width,
@@ -94,26 +76,37 @@ export function getStyles(
 					width: state.boundary.height * ratio(state.coordinates),
 				};
 			}
-		}
-
-		if (mode === CropMode.preview) {
 			coefficient = state.coordinates.width / contentBox.width;
+		} else {
+			const imageBox = {
+				left: -area.left,
+				right: -area.left + actualImageSize.width,
+				top: -area.top,
+				bottom: -area.top + actualImageSize.height,
+			};
+
+			coefficient = area.width / state.boundary.width;
+
+			contentBox = {
+				width:
+					(Math.min(state.boundary.width * coefficient, Math.max(0, imageBox.right)) -
+						Math.max(0, Math.min(state.boundary.width * coefficient, imageBox.left))) /
+					coefficient,
+				height:
+					(Math.min(state.boundary.height * coefficient, Math.max(0, imageBox.bottom)) -
+						Math.max(0, Math.min(state.boundary.height * coefficient, imageBox.top))) /
+					coefficient,
+			};
 		}
 
+		// The box should be centered in the boundary:
 		const contentCoordinates = {
 			...rotateSize(contentBox, state.transforms.rotate),
 			left: state.boundary.width / 2 - contentBox.width / 2,
 			top: state.boundary.height / 2 - contentBox.height / 2,
 		};
 
-		const contentTransforms = {
-			rotate: state.transforms.rotate,
-			flip: {
-				horizontal: state.transforms.flip.horizontal,
-				vertical: state.transforms.flip.vertical,
-			},
-		};
-
+		// The box is rotated around its corner, so this rotation should be compensated to rotate box around its center
 		const contentCompensations = {
 			rotate: {
 				left: -(contentBox.width - contentCoordinates.width) / 2,
@@ -121,6 +114,7 @@ export function getStyles(
 			},
 		};
 
+		// These calculations are needed because background shift is calculated after rotation;
 		const backgroundShift = rotatePoint(
 			{
 				left: area.left / coefficient,
@@ -128,39 +122,28 @@ export function getStyles(
 			},
 			state.transforms.rotate,
 		);
-
-		// Rewrite it.
-		if (state.transforms.rotate % 360 === 90) {
+		if (state.transforms.rotate % 360 === 90 || state.transforms.rotate % 360 === 90 - 360) {
 			backgroundShift.left *= -1;
 			backgroundShift.top = image.height / coefficient - contentCoordinates.height - backgroundShift.top;
-		} else if (state.transforms.rotate % 360 === 180) {
+		} else if (state.transforms.rotate % 360 === 180 || state.transforms.rotate % 360 === 180 - 360) {
 			backgroundShift.left = image.width / coefficient - contentCoordinates.width + backgroundShift.left;
 			backgroundShift.top = image.height / coefficient - contentCoordinates.height + backgroundShift.top;
-		} else if (state.transforms.rotate % 360 === 270) {
+		} else if (state.transforms.rotate % 360 === 270 || state.transforms.rotate % 360 === 270 - 360) {
 			backgroundShift.left = image.width / coefficient - contentCoordinates.width - backgroundShift.left;
 			backgroundShift.top *= -1;
-		} else if (state.transforms.rotate % 360 === -90) {
-			backgroundShift.left = image.width / coefficient - contentCoordinates.width - backgroundShift.left;
-			backgroundShift.top *= -1;
-		} else if (state.transforms.rotate % 360 === -180) {
-			backgroundShift.left = image.width / coefficient - contentCoordinates.width + backgroundShift.left;
-			backgroundShift.top = image.height / coefficient - contentCoordinates.height + backgroundShift.top;
-		} else if (state.transforms.rotate % 360 === -270) {
-			backgroundShift.left *= -1;
-			backgroundShift.top = image.height / coefficient - contentCoordinates.height - backgroundShift.top;
 		}
 
 		const contentStyle = {
 			background: `url(${image.src})`,
 			backgroundSize: `${image.width / coefficient}px ${image.height / coefficient}px`,
+			// Background image should not leave the box
 			backgroundPosition: `${Math.max(
-				-(rotateSize(image, 0).width / coefficient - rotateSize(contentCoordinates, 0).width),
+				contentCoordinates.width - image.width / coefficient,
 				Math.min(0, -backgroundShift.left),
 			)}px ${Math.max(
-				-(rotateSize(image, 0).height / coefficient - rotateSize(contentCoordinates, 0).height),
+				contentCoordinates.height - image.height / coefficient,
 				Math.min(0, -backgroundShift.top),
 			)}px`,
-			backgroundRepeat: 'no-repeat',
 			width: `${contentCoordinates.width}px`,
 			height: `${contentCoordinates.height}px`,
 			left: `${contentCoordinates.left}px`,
@@ -169,25 +152,22 @@ export function getStyles(
 			willChange: 'none',
 			transform:
 				`translate3d(${-contentCompensations.rotate.left}px, ${-contentCompensations.rotate.top}px, 0px)` +
-				getStyleTransforms({
-					...contentTransforms,
-					scale: 1,
-				}),
+				getStyleTransforms(state.transforms),
 		};
 
 		const imageWrapperStyle = {
-			width: `${rotateSize(contentCoordinates, -contentTransforms.rotate).width}px`,
-			height: `${rotateSize(contentCoordinates, -contentTransforms.rotate).height}px`,
+			width: `${contentBox.width}px`,
+			height: `${contentBox.height}px`,
 			transition: 'none',
 			willChange: 'none',
 			transform:
 				`translate3d(${contentCompensations.rotate.left}px, ${contentCompensations.rotate.top}px, 0px)` +
 				getStyleTransforms({
-					...contentTransforms,
-					rotate: -contentTransforms.rotate,
-					scale: 1,
+					...state.transforms,
+					rotate: -state.transforms.rotate,
 				}),
 		};
+
 		const stencilCoordinates =
 			mode === CropMode.preview
 				? {
@@ -207,11 +187,12 @@ export function getStyles(
 			contentStyle.transition =
 				imageWrapperStyle.transition = `${transitions.duration}ms ${transitions.timingFunction}`;
 		}
+
 		return {
 			contentStyle,
-			stencilCoordinates,
 			imageWrapperStyle,
+			stencilCoordinates,
 		};
 	}
-	return { contentStyle: {}, internalsStyle: {} };
+	return { contentStyle: {}, internalsStyle: {}, stencilCoordinates: { left: 0, top: 0, width: 0, height: 0 } };
 }
