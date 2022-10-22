@@ -44,7 +44,7 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 
 	const onSetMode = (value: CropMode) => {
 		if (!transitions.active) {
-			cropper.enableTransitions();
+			cropper.startTransitions();
 			setMode(value);
 		}
 	};

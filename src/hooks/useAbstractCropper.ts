@@ -128,7 +128,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		transformImageEnd: cropper.transformImageEnd,
 		setCoordinates: cropper.setCoordinates,
 		setVisibleArea: cropper.setVisibleArea,
-		enableTransitions: cropper.enableTransitions,
+		startTransitions: cropper.startTransitions,
 		setState: cropper.setState,
 		hasInteractions: cropper.hasInteractions,
 		getStencilCoordinates: cropper.getStencilCoordinates,
