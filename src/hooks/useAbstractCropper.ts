@@ -22,7 +22,7 @@ export interface AbstractCropperHookProps<Settings extends AbstractCropperSettin
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;
 	unloadTime?: number;
 	autoReconcileState?: boolean;
-	settings: CropperStateSettingsProp<Settings>;
+	settings?: CropperStateSettingsProp<Settings>;
 }
 
 export function useAbstractCropper<Extension extends SettingsExtension = {}>(

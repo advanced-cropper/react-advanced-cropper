@@ -15,7 +15,7 @@ export type CropperStateSettingsProp<Settings extends CropperStateSettings> = Pa
 export function useCropperState<Settings extends CropperStateSettings, Instance = unknown>(
 	props: () => AbstractCropperParameters<Settings> &
 		AbstractCropperCallbacks<Instance> & {
-			settings: CropperStateSettingsProp<Settings>;
+			settings?: CropperStateSettingsProp<Settings>;
 		},
 ) {
 	const rerender = useForceRerender();
