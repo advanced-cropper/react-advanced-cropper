@@ -1,20 +1,104 @@
 import {
-	copyState,
 	CoreSettings,
+	CropperImage,
 	CropperState,
 	CropperTransitions,
+	ImageTransform,
+	Rotate,
+	applyMove,
+	approximateSize,
+	copyState,
+	diff,
 	getAreaPositionRestrictions,
 	getAreaSizeRestrictions,
+	getAspectRatio,
+	getCenter,
+	getPositionRestrictions,
+	getSizeRestrictions,
 	getStyleTransforms,
 	getTransformedImageSize,
 	isInitializedState,
+	isNumber,
+	mergeSizeRestrictions,
 	moveToPositionRestrictions,
 	ratio,
+	resizeToSizeRestrictions,
 	rotatePoint,
 	rotateSize,
-	CropperImage,
+	transformImage as originalTransformImage,
 } from 'advanced-cropper';
 import { CropMode } from './types';
+
+export function transformImageAlgorithm(state: CropperState, settings: CoreSettings, transform: ImageTransform) {
+	const { flip, rotate, scale, move } = transform;
+
+	return originalTransformImage(rotate ? rotateImageAlgorithm(state, settings, rotate) : state, settings, {
+		flip,
+		move,
+		scale,
+	});
+}
+
+export function rotateImageAlgorithm(state: CropperState, settings: CoreSettings, rotate: number | Rotate) {
+	if (isInitializedState(state)) {
+		const result = copyState(state);
+
+		const angle = isNumber(rotate) ? rotate : rotate.angle;
+
+		const imageCenter = rotatePoint(
+			getCenter({
+				left: 0,
+				top: 0,
+				...getTransformedImageSize(state),
+			}),
+			angle,
+		);
+
+		// Rotate the image
+		result.transforms.rotate += angle;
+
+		// Get the coordinates
+		result.coordinates = {
+			...approximateSize({
+				sizeRestrictions: getSizeRestrictions(result, settings),
+				aspectRatio: getAspectRatio(result, settings),
+				...rotateSize(result.coordinates, angle),
+			}),
+			...rotatePoint(getCenter(result.coordinates), angle),
+		};
+
+		// Move the coordinates to preserve theirs original center position
+		const center = !isNumber(rotate) && rotate.center ? rotate.center : getCenter(state.coordinates);
+		const shift = diff(getCenter(state.coordinates), rotatePoint(getCenter(state.coordinates), angle, center));
+		const imageSize = getTransformedImageSize(result);
+		result.coordinates.left -= imageCenter.left - imageSize.width / 2 + result.coordinates.width / 2 - shift.left;
+		result.coordinates.top -= imageCenter.top - imageSize.height / 2 + result.coordinates.height / 2 - shift.top;
+
+		// Check that visible area doesn't break the area restrictions:
+		result.visibleArea = resizeToSizeRestrictions(
+			result.visibleArea,
+			mergeSizeRestrictions(getAreaSizeRestrictions(result, settings), {
+				minWidth: result.coordinates.width,
+				minHeight: result.coordinates.height,
+			}),
+		);
+
+		// Check that positions restrictions were not broken
+		result.coordinates = moveToPositionRestrictions(result.coordinates, getPositionRestrictions(result, settings));
+
+		// Move the visible area to preserve its position relative to the coordinates
+		result.visibleArea = applyMove(
+			result.visibleArea,
+			diff(getCenter(result.coordinates), getCenter(state.coordinates)),
+		);
+		result.visibleArea = moveToPositionRestrictions(
+			result.visibleArea,
+			getAreaPositionRestrictions(result, settings),
+		);
+		return result;
+	}
+	return state;
+}
 
 export function fullSize(state: CropperState, settings: CoreSettings): CropperState {
 	if (isInitializedState(state)) {

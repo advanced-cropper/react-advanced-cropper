@@ -11,7 +11,7 @@ import {
 	useAbstractCropper,
 } from 'react-advanced-cropper';
 import { defaultPosition, defaultVisibleArea, getTransformedImageSize } from 'advanced-cropper';
-import { fullSize, getProperties } from '../utils';
+import { fullSize, getProperties, transformImageAlgorithm } from '../utils';
 import { CropIcon } from '../icons/CropIcon';
 import { RotateLeftIcon } from '../icons/RotateLeftIcon';
 import { RotateRightIcon } from '../icons/RotateRightIcon';
@@ -30,6 +30,7 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 	const { cropper, image, loaded, loading, refs } = useAbstractCropper(() => ({
 		src,
 		postProcess: mode === CropMode.full ? [fullSize] : [],
+		transformImageAlgorithm,
 	}));
 
 	const state = cropper.getState();
