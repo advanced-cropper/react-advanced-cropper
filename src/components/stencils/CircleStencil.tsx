@@ -5,12 +5,12 @@ import {
 	OrdinalDirection,
 	CropperTransitions,
 	CropperState,
-	ResizeDirections,
 	MoveDirections,
 	CropperImage,
 	ResizeOptions,
 	getStencilCoordinates,
 	CropperInteractions,
+	ResizeAnchor,
 } from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -18,7 +18,6 @@ import { BoundingBox } from '../service/BoundingBox';
 import { StencilOverlay } from '../service/StencilOverlay';
 import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
-import { StencilOptions } from '../../types';
 import { StencilGrid } from '../service/StencilGrid';
 
 type HandlerComponent = ComponentType<any>;
@@ -42,7 +41,7 @@ interface DesiredCropperRef {
 	getTransitions: () => CropperTransitions;
 	getInteractions: () => CropperInteractions;
 	hasInteractions: () => boolean;
-	resizeCoordinates: (directions: Partial<ResizeDirections>, parameters: unknown) => void;
+	resizeCoordinates: (anchor: ResizeAnchor, directions: Partial<MoveDirections>, parameters: unknown) => void;
 	resizeCoordinatesEnd: () => void;
 	moveCoordinates: (directions: Partial<MoveDirections>) => void;
 	moveCoordinatesEnd: () => void;
@@ -134,9 +133,9 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			}
 		};
 
-		const onResize = (directions: ResizeDirections, options: ResizeOptions) => {
+		const onResize = (anchor: ResizeAnchor, directions: MoveDirections, options: ResizeOptions) => {
 			if (cropper && resizable) {
-				cropper.resizeCoordinates(directions, options);
+				cropper.resizeCoordinates(anchor, directions, options);
 			}
 		};
 
@@ -167,6 +166,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 					transitions={transitions}
 				>
 					<BoundingBox
+						reference={state.coordinates}
 						className={cn(boundingBoxClassName, 'advanced-cropper-circle-stencil__bounding-box')}
 						handlers={handlers}
 						handlerComponent={handlerComponent}

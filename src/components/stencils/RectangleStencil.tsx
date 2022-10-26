@@ -5,13 +5,13 @@ import {
 	OrdinalDirection,
 	CropperImage,
 	MoveDirections,
-	ResizeDirections,
 	RawAspectRatio,
 	Coordinates,
 	CropperState,
 	CropperTransitions,
 	CropperInteractions,
 	isFunction,
+	ResizeAnchor,
 } from 'advanced-cropper';
 import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
 import { ResizeOptions } from 'advanced-cropper/state';
@@ -44,7 +44,7 @@ interface DesiredCropperRef {
 	getTransitions: () => CropperTransitions;
 	getInteractions: () => CropperInteractions;
 	hasInteractions: () => boolean;
-	resizeCoordinates: (directions: Partial<ResizeDirections>, parameters: unknown) => void;
+	resizeCoordinates: (anchor: ResizeAnchor, directions: Partial<MoveDirections>, parameters: unknown) => void;
 	resizeCoordinatesEnd: () => void;
 	moveCoordinates: (directions: Partial<MoveDirections>) => void;
 	moveCoordinatesEnd: () => void;
@@ -151,9 +151,9 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			}
 		};
 
-		const onResize = (directions: ResizeDirections, options: ResizeOptions) => {
+		const onResize = (anchor: ResizeAnchor, directions: MoveDirections, options: ResizeOptions) => {
 			if (cropper && resizable) {
-				cropper.resizeCoordinates(directions, options);
+				cropper.resizeCoordinates(anchor, directions, options);
 			}
 		};
 
@@ -189,6 +189,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 					transitions={transitions}
 				>
 					<BoundingBox
+						reference={state.coordinates}
 						className={cn(boundingBoxClassName, 'advanced-cropper-rectangle-stencil__bounding-box')}
 						handlers={handlers}
 						handlerComponent={handlerComponent}

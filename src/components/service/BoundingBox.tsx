@@ -1,4 +1,4 @@
-import React, { ComponentType, useMemo, ReactNode, CSSProperties } from 'react';
+import React, { ComponentType, useMemo, ReactNode, CSSProperties, useState } from 'react';
 import classnames from 'classnames';
 import cn from 'classnames';
 import {
@@ -6,12 +6,13 @@ import {
 	OrdinalDirection,
 	HorizontalCardinalDirection,
 	VerticalCardinalDirection,
-	ResizeDirections,
 	MoveDirections,
 	ResizeOptions,
 	getDirectionNames,
 	isCardinalDirection,
 	isObject,
+	Coordinates,
+	ResizeAnchor,
 } from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -47,9 +48,10 @@ interface Props {
 	lineClassNames?: LineClassNames;
 	lineWrapperClassNames?: LineClassNames;
 	disabled?: boolean;
-	onResize?: (directions: ResizeDirections, options: ResizeOptions) => void;
+	onResize?: (anchor: ResizeAnchor, directions: MoveDirections, options: ResizeOptions) => void;
 	onResizeEnd?: () => void;
 	children?: ReactNode;
+	reference?: Coordinates | null;
 }
 
 interface HandlerNode {
@@ -113,7 +115,10 @@ export const BoundingBox = ({
 	lineClassNames = {},
 	lineWrapperClassNames = {},
 	disabled = false,
+	reference = null,
 }: Props) => {
+	const [lastReference, setLastReference] = useState<Coordinates | null>(null);
+
 	const points = useMemo(() => {
 		const result: PointNode[] = [];
 		HORIZONTAL_DIRECTIONS.forEach((hDirection) => {
@@ -198,22 +203,9 @@ export const BoundingBox = ({
 		) =>
 		({ left, top }: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => {
 			const directions = {
-				left: 0,
-				right: 0,
-				top: 0,
-				bottom: 0,
+				left,
+				top,
 			};
-
-			if (horizontalDirection === 'west') {
-				directions.left -= left;
-			} else if (horizontalDirection === 'east') {
-				directions.right += left;
-			}
-			if (verticalDirection === 'north') {
-				directions.top -= top;
-			} else if (verticalDirection === 'south') {
-				directions.bottom += top;
-			}
 
 			let respectDirection: 'width' | 'height' | undefined;
 			if (!verticalDirection && horizontalDirection) {
@@ -224,19 +216,26 @@ export const BoundingBox = ({
 
 			if (!disabled) {
 				if (onResize) {
-					onResize(directions, {
-						allowedDirections: {
-							left: horizontalDirection === 'west' || !horizontalDirection,
-							right: horizontalDirection === 'east' || !horizontalDirection,
-							bottom: verticalDirection === 'south' || !verticalDirection,
-							top: verticalDirection === 'north' || !verticalDirection,
-						},
-						preserveAspectRatio: nativeEvent && nativeEvent.shiftKey,
-						respectDirection,
-					});
+					const anchor = getDirectionNames(horizontalDirection, verticalDirection).camelCase;
+					if (anchor) {
+						onResize(anchor, directions, {
+							reference: lastReference || reference,
+							preserveAspectRatio: nativeEvent && nativeEvent.shiftKey,
+							respectDirection,
+							compensate: true,
+						});
+					}
+				}
+				if (!lastReference) {
+					setLastReference(reference);
 				}
 			}
 		};
+
+	const onHandlerDragEnd = () => {
+		onResizeEnd?.();
+		setLastReference(null);
+	};
 
 	return (
 		<div className={cn('advanced-cropper-bounding-box', className)} style={style}>
@@ -251,7 +250,7 @@ export const BoundingBox = ({
 						position={line.name}
 						disabled={line.disabled}
 						onDrag={onHandlerDrag(line.horizontalPosition, line.verticalPosition)}
-						onDragEnd={onResizeEnd}
+						onDragEnd={onHandlerDragEnd}
 					/>
 				))}
 			</div>
@@ -266,7 +265,7 @@ export const BoundingBox = ({
 							verticalPosition={handler.verticalPosition}
 							disabled={handler.disabled}
 							onDrag={onHandlerDrag(handler.horizontalPosition, handler.verticalPosition)}
-							onDragEnd={onResizeEnd}
+							onDragEnd={onHandlerDragEnd}
 						/>
 					);
 

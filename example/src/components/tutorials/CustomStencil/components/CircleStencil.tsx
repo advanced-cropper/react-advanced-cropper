@@ -19,17 +19,10 @@ export const CircleStencil = forwardRef<StencilRef, StencilProps>(({ cropper }: 
 	}));
 
 	const onResize = (shift: MoveDirections) => {
-		cropper.resizeCoordinates(
-			{
-				left: -shift.top,
-				right: -shift.top,
-				top: -shift.top,
-				bottom: -shift.top,
-			},
-			{
-				compensate: true,
-			},
-		);
+		cropper.resizeCoordinates('center', {
+			left: shift.left,
+			top: shift.left,
+		});
 	};
 
 	const onMove = (directions: MoveDirections) => {
