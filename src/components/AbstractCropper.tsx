@@ -68,7 +68,7 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 }
 
 export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
-	extends AbstractCropperHookProps<Settings> {
+	extends Omit<AbstractCropperHookProps<Settings>, 'settings'> {
 	backgroundComponent?: CropperBackgroundComponent;
 	backgroundProps?: ArbitraryProps;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
@@ -85,6 +85,7 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	boundaryStretchAlgorithm?: BoundaryStretchAlgorithm;
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm;
 	style?: CSSProperties;
+	settings: CropperStateSettingsProp<Settings>;
 }
 
 export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettings> = Omit<
