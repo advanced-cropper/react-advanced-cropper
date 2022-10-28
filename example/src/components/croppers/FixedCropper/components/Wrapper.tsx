@@ -7,13 +7,11 @@ import './Wrapper.scss';
 
 interface Props {
 	cropper: CropperRef;
-	loading: boolean;
-	loaded: boolean;
 	className?: string;
 	style?: CSSProperties;
 }
 
-export const Wrapper: FC<Props> = ({ cropper, children, loaded, className }) => {
+export const Wrapper: FC<Props> = ({ cropper, children, className }) => {
 	const state = cropper.getState();
 
 	const settings = cropper.getSettings();
@@ -31,7 +29,7 @@ export const Wrapper: FC<Props> = ({ cropper, children, loaded, className }) => 
 	};
 
 	return (
-		<CropperFade className={cn('fixed-cropper-wrapper', className)} visible={state && loaded}>
+		<CropperFade className={cn('fixed-cropper-wrapper', className)} visible={state && cropper.isLoaded()}>
 			<div className="fixed-cropper-wrapper__content">{children}</div>
 			<div className="fixed-cropper-wrapper__navigation" style={{ width: navigationWidth }}>
 				<Navigation zoom={absoluteZoom} onZoom={onZoom} />

@@ -7,8 +7,6 @@ import './CropperWrapper.scss';
 
 export interface CropperWrapperProps<CropperRef = unknown> {
 	cropper: CropperRef;
-	loading: boolean;
-	loaded: boolean;
 	className?: string;
 	style?: CSSProperties;
 	spinnerClassName?: string;
@@ -19,8 +17,6 @@ export interface CropperWrapperProps<CropperRef = unknown> {
 export const CropperWrapper: FC<CropperWrapperProps<CropperRef>> = ({
 	cropper,
 	children,
-	loaded,
-	loading,
 	className,
 	spinnerClassName,
 	navigation,
@@ -46,7 +42,7 @@ export const CropperWrapper: FC<CropperWrapperProps<CropperRef>> = ({
 				className,
 			)}
 		>
-			<CropperFade className={'telegram-cropper-wrapper__fade'} visible={loaded}>
+			<CropperFade className={'telegram-cropper-wrapper__fade'} visible={cropper.isLoaded()}>
 				{children}
 				{navigation && (
 					<Navigation
@@ -68,7 +64,7 @@ export const CropperWrapper: FC<CropperWrapperProps<CropperRef>> = ({
 			<Spinner
 				className={cn(
 					'telegram-cropper-wrapper__spinner',
-					loading && 'telegram-cropper-wrapper__spinner--visible',
+					cropper.isLoading() && 'telegram-cropper-wrapper__spinner--visible',
 					spinnerClassName,
 				)}
 			/>

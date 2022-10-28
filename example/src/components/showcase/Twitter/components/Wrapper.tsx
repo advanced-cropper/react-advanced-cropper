@@ -7,13 +7,11 @@ import './Wrapper.scss';
 
 interface Props {
 	cropper: CropperRef;
-	loading: boolean;
-	loaded: boolean;
 	className?: string;
 	style?: CSSProperties;
 }
 
-export const Wrapper: FC<Props> = ({ cropper, children, loaded, className }) => {
+export const Wrapper: FC<Props> = ({ cropper, children, className }) => {
 	const state = cropper.getState();
 
 	const settings = cropper.getSettings();
@@ -29,7 +27,7 @@ export const Wrapper: FC<Props> = ({ cropper, children, loaded, className }) => 
 	};
 
 	return (
-		<CropperFade className={cn('twitter-cropper-wrapper', className)} visible={state && loaded}>
+		<CropperFade className={cn('twitter-cropper-wrapper', className)} visible={state && cropper.isLoaded()}>
 			<div className="twitter-cropper-wrapper__content">{children}</div>
 			<div className="twitter-cropper-wrapper__navigation">
 				<Navigation zoom={absoluteZoom} onZoom={onZoom} />
