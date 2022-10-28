@@ -13,9 +13,9 @@ export const PreviewResultExample = () => {
 
 	const [src, setSrc] = useState('/react-advanced-cropper/img/images/photo-1623432532623-f8f1347d954c.jpg');
 
-	const onUpdate = (cropper: CropperRef) => {
-		smallPreviewRef.current?.update(cropper);
-		previewRef.current?.update(cropper);
+	const onUpdate = () => {
+		smallPreviewRef.current?.refresh();
+		previewRef.current?.refresh();
 	};
 
 	const onRotate = () => {
@@ -54,9 +54,10 @@ export const PreviewResultExample = () => {
 				onUpdate={onUpdate}
 			/>
 			<div className="preview-result-example__previews">
-				<CropperPreview ref={previewRef} className="preview-result-example__preview" />
+				<CropperPreview ref={previewRef} cropper={cropperRef} className="preview-result-example__preview" />
 				<CropperPreview
 					ref={smallPreviewRef}
+					cropper={cropperRef}
 					className="preview-result-example__preview preview-result-example__preview--small"
 				/>
 			</div>

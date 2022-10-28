@@ -237,28 +237,34 @@ To implement real-time preview of cropping result you can use [`CropperPreview`]
 
 ```jsx
 import React, { useRef, useState } from 'react';
-import { CropperRef, Cropper } from 'react-advanced-cropper';
+import { CropperRef, CropperPreviewRef, Cropper } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const previewRef = useRef<CropperRef>(null);
+	const previewRef = useRef<CropperPreviewRef>(null);
+	const cropperRef = useRef<CropperRef>(null);
 
 	const [src, setSrc] = useState(
 		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
 	);
 
-	const onUpdate = (cropper: CropperRef) => {
-		previewRef.current?.update(cropper);
+	const onUpdate = () => {
+		previewRef.current?.refresh();
 	};
 
 	return (
 		<div>
 			<Cropper
+				ref={cropperRef}
 				className="cropper"
 				stencilProps={{ aspectRatio: 1 }}
 				src={src}
 				onUpdate={onUpdate}
 			/>
-			<CropperPreview ref={previewRef} className="preview" />
+			<CropperPreview
+				ref={previewRef}
+				cropper={cropperRef}
+				className="preview"
+			/>
 		</div>
 	);
 };
