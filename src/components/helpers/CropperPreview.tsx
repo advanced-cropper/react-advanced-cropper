@@ -9,7 +9,15 @@ import React, {
 	useState,
 } from 'react';
 import cn from 'classnames';
-import { CropperImage, CropperState, CropperTransitions, Size, ratio, isGreater } from 'advanced-cropper';
+import {
+	CropperImage,
+	CropperState,
+	CropperTransitions,
+	Size,
+	ratio,
+	isGreater,
+	stretchPreviewBoundary,
+} from 'advanced-cropper';
 import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
 import { useWindowResize } from '../../hooks/useWindowResize';
 import { ArbitraryProps } from '../../types';
@@ -153,6 +161,7 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 					ref={boundaryRef}
 					className={'advanced-cropper-preview__boundary'}
 					contentClassName={'advanced-cropper-preview__boundary-content'}
+					stretchAlgorithm={stretchPreviewBoundary}
 				>
 					<div className={cn(contentClassName, 'advanced-cropper-preview__content')} style={contentStyle}>
 						{instance.current && (

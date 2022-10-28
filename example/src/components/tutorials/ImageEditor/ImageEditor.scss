@@ -3,6 +3,16 @@
 .image-editor {
 	color: $theme-color;
 	border: solid 1px #2b2a30;
+	&__preview {
+		height: 45px;
+		width: 45px;
+		background: black;
+		border: solid 1px #2b2a30;
+		position: absolute;
+		left: 20px;
+		top: 20px;
+		border-radius: 50%;
+	}
 	&__cropper {
 		background: #0f0e13;
 		height: 500px;

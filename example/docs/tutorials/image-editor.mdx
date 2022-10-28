@@ -17,10 +17,10 @@ image editor functionality and integration one with the cropper.
 
 ## Template
 
+The used components are available in [the documentation repository](https://github.com/Norserium/react-advanced-cropper/tree/master/example/src/components/tutorials/ImageEditor/).
+
 <Tabs>
 <TabItem value="tsx" label="TSX" default>
-
-The used components are available in [the documentation repository](https://github.com/Norserium/react-advanced-cropper/tree/master/example/src/components/tutorials/ImageEditor/).
 
 ```tsx
 import React, { useState } from 'react';
@@ -93,8 +93,6 @@ choice any other mode than `crop`.
 
 <Tabs>
 <TabItem value="tsx" label="TSX" default>
-
-The used components are available in [the documentation repository](https://github.com/Norserium/react-advanced-cropper/tree/master/example/src/components/tutorials/ImageEditor/).
 
 ```tsx
 import React, { useState } from 'react';
@@ -294,51 +292,35 @@ that we made. It's performant and very flexible way.
 
 Let's do it.
 
+First of all we should create adjustable image, that will be an alternative for `<img/>` tag.advanced
+
+
+
 <Tabs>
 <TabItem value="tsx" label="TSX" default>
 
 
 ```tsx
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef, useRef, CSSProperties, useLayoutEffect } from 'react';
 import cn from 'classnames';
-import { getBackgroundStyle, mergeRefs, CropperTransitions, CropperImage, CropperState } from 'react-advanced-cropper';
-
+import { mergeRefs } from 'react-advanced-cropper';
 import './AdjustableImage.scss';
 
 interface Props {
+	src?: string;
 	className?: string;
-	image: CropperImage | null;
-	state: CropperState | null;
-	transitions?: CropperTransitions;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 	brightness?: number;
 	saturation?: number;
 	hue?: number;
 	contrast?: number;
+	style?: CSSProperties;
 }
 
 export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
-	(
-		{
-			className,
-			image,
-			state,
-			crossOrigin,
-			transitions,
-			brightness = 0,
-			saturation = 0,
-			hue = 0,
-			contrast = 0,
-		}: Props,
-		ref,
-	) => {
+	({ src, className, crossOrigin, brightness = 0, saturation = 0, hue = 0, contrast = 0, style }: Props, ref) => {
 		const imageRef = useRef<HTMLImageElement>(null);
-
 		const canvasRef = useRef<HTMLCanvasElement>(null);
-
-		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
-
-		const src = image ? image.src : undefined;
 
 		const drawImage = () => {
 			const image = imageRef.current;
@@ -361,20 +343,21 @@ export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
 			}
 		};
 
-		useEffect(() => {
+		useLayoutEffect(() => {
 			drawImage();
-		}, [brightness, saturation, hue, contrast]);
+		}, [src, brightness, saturation, hue, contrast]);
 
 		return (
 			<>
 				<canvas
+					key={`${src}-canvas`}
 					ref={mergeRefs([ref, canvasRef])}
-					className={cn('adjustable-image-canvas', className)}
+					className={cn('adjustable-image-element', className)}
 					style={style}
 				/>
 				{src ? (
 					<img
-						key={src}
+						key={`${src}-img`}
 						ref={imageRef}
 						className={'adjustable-image-source'}
 						src={src}
@@ -402,18 +385,151 @@ AdjustableImage.displayName = 'AdjustableImage';
 </TabItem>
 </Tabs>
 
-Let's use the created background component in our image editor:
+
+Then, we will use this component to create the custom cropper background image component.
+
+<Tabs>
+<TabItem value="tsx" label="TSX" default>
+
+```tsx
+import React, { forwardRef } from 'react';
+import { CropperTransitions, CropperImage, CropperState } from 'react-advanced-cropper';
+import { getBackgroundStyle } from 'advanced-cropper';
+import { AdjustableImage } from './AdjustableImage';
+
+interface DesiredCropperRef {
+	getState: () => CropperState;
+	getTransitions: () => CropperTransitions;
+	getImage: () => CropperImage;
+}
+
+interface Props {
+	className?: string;
+	cropper: DesiredCropperRef;
+	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
+	brightness?: number;
+	saturation?: number;
+	hue?: number;
+	contrast?: number;
+}
+
+export const AdjustableCropperBackground = forwardRef<HTMLCanvasElement, Props>(
+	({ className, cropper, crossOrigin, brightness = 0, saturation = 0, hue = 0, contrast = 0 }: Props, ref) => {
+		const state = cropper.getState();
+		const transitions = cropper.getTransitions();
+		const image = cropper.getImage();
+
+		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
+
+		return (
+			<AdjustableImage
+				src={image?.src}
+				crossOrigin={crossOrigin}
+				brightness={brightness}
+				saturation={saturation}
+				hue={hue}
+				contrast={contrast}
+				ref={ref}
+				className={className}
+				style={style}
+			/>
+		);
+	},
+);
+```
+
+</TabItem>
+</Tabs>
+
+Let's use then the created background component in our image editor:
 
 
 ```tsx
 <Cropper
 	...
-	backgroundComponent={AdjustableImage}
+	backgroundComponent={AdjustableCropperBackground}
+	backgroundProps={adjustments}
+/>
+```
+
+## Preview
+
+What's about the cropper preview? The `CropperPreview` component is pretty similar to the cropper itself by its structure.
+
+First of all, you should create the custom preview background component.
+
+<Tabs>
+<TabItem value="tsx" label="TSX" default>
+
+```tsx
+import React from 'react';
+import { CropperTransitions, CropperImage, CropperState, Size } from 'react-advanced-cropper';
+import { getPreviewStyle } from 'advanced-cropper';
+import { AdjustableImage } from './AdjustableImage';
+
+interface DesiredCropperRef {
+	getState: () => CropperState;
+	getTransitions: () => CropperTransitions;
+	getImage: () => CropperImage;
+}
+
+interface Props {
+	className?: string;
+	cropper: DesiredCropperRef;
+	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
+	brightness?: number;
+	saturation?: number;
+	hue?: number;
+	contrast?: number;
+	size?: Size | null;
+}
+
+export const AdjustablePreviewBackground = ({
+	className,
+	cropper,
+	crossOrigin,
+	brightness = 0,
+	saturation = 0,
+	hue = 0,
+	contrast = 0,
+	size,
+}: Props) => {
+	const state = cropper.getState();
+	const transitions = cropper.getTransitions();
+	const image = cropper.getImage();
+
+	const style = image && state && size ? getPreviewStyle(image, state, size, transitions) : {};
+
+	return (
+		<AdjustableImage
+			src={image?.src}
+			crossOrigin={crossOrigin}
+			brightness={brightness}
+			saturation={saturation}
+			hue={hue}
+			contrast={contrast}
+			className={className}
+			style={style}
+		/>
+	);
+};
+```
+
+</TabItem>
+</Tabs>
+
+Then just pass it to `CropperPreview`:
+
+```tsx
+<CropperPreview
+	...
+	backgroundComponent={AdjustablePreviewBackground}
 	backgroundProps={adjustments}
 />
 ```
 
 After that you will get the same image editor like you see in the start of tutorial. The full source code of the image editor is available in [the following sandbox](https://codesandbox.io/s/react-advanced-cropper-image-editor-90gs8z?file=/src/index.tsx).
+
 
 
 

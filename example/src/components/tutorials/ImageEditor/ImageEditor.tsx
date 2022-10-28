@@ -1,15 +1,17 @@
 import React, { useState, useRef } from 'react';
 import cn from 'classnames';
-import { Cropper, CropperRef } from 'react-advanced-cropper';
+import { Cropper, CropperRef, CropperPreview, CropperPreviewRef } from 'react-advanced-cropper';
+import { AdjustablePreviewBackground } from './components/AdjustablePreviewBackground';
 import { Navigation } from './components/Navigation';
 import { Slider } from './components/Slider';
-import { AdjustableImage } from './components/AdjustableImage';
+import { AdjustableCropperBackground } from './components/AdjustableCropperBackground';
 import { Button } from './components/Button';
 import { ResetIcon } from './icons/ResetIcon';
 import './ImageEditor.scss';
 
 export const ImageEditor = () => {
 	const cropperRef = useRef<CropperRef>(null);
+	const previewRef = useRef<CropperPreviewRef>(null);
 
 	const [src, setSrc] = useState('/react-advanced-cropper/img/images/pexels-photo-4383577.jpeg');
 
@@ -56,6 +58,10 @@ export const ImageEditor = () => {
 		}
 	};
 
+	const onUpdate = () => {
+		previewRef.current?.refresh();
+	};
+
 	const changed = Object.values(adjustments).some((el) => Math.floor(el * 100));
 
 	const cropperEnabled = mode === 'crop';
@@ -80,12 +86,20 @@ export const ImageEditor = () => {
 						scaleImage: cropperEnabled,
 						moveImage: cropperEnabled,
 					}}
-					backgroundComponent={AdjustableImage}
+					backgroundComponent={AdjustableCropperBackground}
 					backgroundProps={adjustments}
+					onUpdate={onUpdate}
 				/>
 				{mode !== 'crop' && (
 					<Slider className="image-editor__slider" value={adjustments[mode]} onChange={onChangeValue} />
 				)}
+				<CropperPreview
+					className={'image-editor__preview'}
+					ref={previewRef}
+					cropper={cropperRef}
+					backgroundComponent={AdjustablePreviewBackground}
+					backgroundProps={adjustments}
+				/>
 				<Button
 					className={cn('image-editor__reset-button', !changed && 'image-editor__reset-button--hidden')}
 					onClick={onReset}

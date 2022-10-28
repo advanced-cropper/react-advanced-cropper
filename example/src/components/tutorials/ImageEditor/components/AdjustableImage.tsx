@@ -1,38 +1,23 @@
-import React, { forwardRef, useEffect, useRef } from 'react';
+import React, { forwardRef, useRef, CSSProperties, useLayoutEffect } from 'react';
 import cn from 'classnames';
-import { getBackgroundStyle, mergeRefs, CropperTransitions, CropperImage, CropperState } from 'react-advanced-cropper';
-
+import { mergeRefs } from 'react-advanced-cropper';
 import './AdjustableImage.scss';
 
-interface DesiredCropperRef {
-	getState: () => CropperState;
-	getTransitions: () => CropperTransitions;
-	getImage: () => CropperImage;
-}
-
 interface Props {
+	src?: string;
 	className?: string;
-	cropper: DesiredCropperRef;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 	brightness?: number;
 	saturation?: number;
 	hue?: number;
 	contrast?: number;
+	style?: CSSProperties;
 }
 
 export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
-	({ className, cropper, crossOrigin, brightness = 0, saturation = 0, hue = 0, contrast = 0 }: Props, ref) => {
-		const state = cropper.getState();
-		const transitions = cropper.getTransitions();
-		const image = cropper.getImage();
-
+	({ src, className, crossOrigin, brightness = 0, saturation = 0, hue = 0, contrast = 0, style }: Props, ref) => {
 		const imageRef = useRef<HTMLImageElement>(null);
-
 		const canvasRef = useRef<HTMLCanvasElement>(null);
-
-		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
-
-		const src = image ? image.src : undefined;
 
 		const drawImage = () => {
 			const image = imageRef.current;
@@ -55,20 +40,21 @@ export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
 			}
 		};
 
-		useEffect(() => {
+		useLayoutEffect(() => {
 			drawImage();
-		}, [brightness, saturation, hue, contrast]);
+		}, [src, brightness, saturation, hue, contrast]);
 
 		return (
 			<>
 				<canvas
+					key={`${src}-canvas`}
 					ref={mergeRefs([ref, canvasRef])}
-					className={cn('adjustable-image-canvas', className)}
+					className={cn('adjustable-image-element', className)}
 					style={style}
 				/>
 				{src ? (
 					<img
-						key={src}
+						key={`${src}-img`}
 						ref={imageRef}
 						className={'adjustable-image-source'}
 						src={src}
