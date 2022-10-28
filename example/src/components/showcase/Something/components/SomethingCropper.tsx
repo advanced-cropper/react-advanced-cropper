@@ -27,7 +27,7 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 	const { src, className } = props;
 	const [mode, setMode] = useState<CropMode>(CropMode.full);
 
-	const { cropper, image, loaded, loading, refs } = useAbstractCropper(() => ({
+	const { cropper, image, refs } = useAbstractCropper(() => ({
 		src,
 		postProcess: mode === CropMode.full ? [fullSize] : [],
 		transformImageAlgorithm,
@@ -93,12 +93,7 @@ export const SomethingCropper = forwardRef((props: SomethingCropperProps, ref: R
 	useImperativeHandle(ref, () => cropper);
 
 	return (
-		<CropperWrapper
-			className={cn('something-cropper', className)}
-			loaded={loaded}
-			cropper={cropper}
-			loading={loading}
-		>
+		<CropperWrapper className={cn('something-cropper', className)} cropper={cropper}>
 			<StretchableBoundary
 				ref={refs.boundary}
 				className={cn('something-cropper__boundary')}
