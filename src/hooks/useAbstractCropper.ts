@@ -32,6 +32,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		src,
 		onReady,
 		onError,
+		onUpdate,
 		canvas = true,
 		unloadTime = 500,
 		crossOrigin = true,
@@ -158,6 +159,8 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		getImage: () => {
 			return currentImage ? { ...currentImage } : null;
 		},
+		isLoading: () => loading,
+		isLoaded: () => loaded,
 	};
 
 	useWindowResize(() => {
@@ -168,6 +171,12 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		resetCropper();
 	}, [image]);
 
+	useUpdateEffect(() => {
+		if (cropperRef.current) {
+			onUpdate?.(cropperRef.current);
+		}
+	}, [loaded, loading]);
+
 	useImperativeHandle(cropperRef, () => cropperInterface);
 
 	return {
@@ -177,8 +186,6 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 			boundary: boundaryRef,
 			canvas: canvasRef,
 		},
-		loading,
-		loaded,
 		image: currentImage,
 	};
 }

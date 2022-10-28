@@ -237,31 +237,17 @@ To implement real-time preview of cropping result you can use [`CropperPreview`]
 
 ```jsx
 import React, { useRef, useState } from 'react';
-import {
-	CropperRef,
-	Cropper,
-	CropperPreview,
-	CropperImage,
-	CropperState,
-	CropperTransitions,
-} from 'react-advanced-cropper';
+import { CropperRef, Cropper } from 'react-advanced-cropper';
 
 export const Example = () => {
-	const [state, setState] = useState<CropperState | null>(null);
-	const [image, setImage] = useState<CropperImage | null>(null);
-	const [transitions, setTransitions] = useState<CropperTransitions>();
+	const previewRef = useRef<CropperRef>(null);
 
 	const [src, setSrc] = useState(
 		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
 	);
 
-	const onChange = (cropper: CropperRef) => {
-		setState(cropper.getState());
-		setImage(cropper.getImage());
-	};
-
-	const onTransitionsChange = (cropper: CropperRef) => {
-		setTransitions(cropper.getTransitions());
+	const onUpdate = (cropper: CropperRef) => {
+		previewRef.current?.update(cropper);
 	};
 
 	return (
@@ -270,16 +256,9 @@ export const Example = () => {
 				className="cropper"
 				stencilProps={{ aspectRatio: 1 }}
 				src={src}
-				onChange={onChange}
-				onTransitionsStart={onTransitionsChange}
-				onTransitionsEnd={onTransitionsChange}
+				onUpdate={onUpdate}
 			/>
-			<CropperPreview
-				className="preview"
-				image={image}
-				state={state}
-				transitions={transitions}
-			/>
+			<CropperPreview ref={previewRef} className="preview" />
 		</div>
 	);
 };

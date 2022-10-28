@@ -29,8 +29,12 @@
 		bottom: 0;
 	}
 	&__button {
+		fill: white;
 		&:not(:last-child) {
 			margin-right: 16px;
 		}
+	}
+	&__download-input{
+		display: none;
 	}
 }

@@ -1,101 +1,166 @@
-import React, { useLayoutEffect, useRef, useState } from 'react';
+import React, {
+	ComponentType,
+	CSSProperties,
+	forwardRef,
+	useImperativeHandle,
+	useLayoutEffect,
+	useRef,
+	useState,
+} from 'react';
 import cn from 'classnames';
-import {
-	CropperImage,
-	CropperState,
-	CropperTransitions,
-	Size,
-	getPreviewStyle,
-	isLower,
-	ratio,
-	stretchPreviewBoundary,
-} from 'advanced-cropper';
+import { CropperImage, CropperState, CropperTransitions, Size, ratio, isGreater } from 'advanced-cropper';
 import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
 import { useWindowResize } from '../../hooks/useWindowResize';
+import { ArbitraryProps } from '../../types';
+import { CropperRef } from '../croppers/Cropper';
+import { CropperPreviewWrapper } from './CropperPreviewWrapper';
+import { CropperPreviewBackground } from './CropperPreviewBackground';
 
-interface Props {
-	state: CropperState | null;
-	image: CropperImage | null;
-	transitions?: CropperTransitions | null;
-	className?: string;
-	imageClassName?: string;
-	contentClassName?: string;
+export interface CropperPreviewRef {
+	update: (instance: CropperRef) => void;
 }
 
-export const CropperPreview = ({
-	className,
-	contentClassName,
-	imageClassName,
-	state,
-	image,
-	transitions = null,
-}: Props) => {
-	const boundaryRef = useRef<StretchableBoundaryMethods>(null);
+type PreviewWrapperComponent = ComponentType<{
+	cropper: any;
+	className?: string;
+	style?: CSSProperties;
+	loading?: boolean;
+	loaded?: boolean;
+}>;
 
-	const [size, setSize] = useState<Size | null>(null);
+type PreviewBackgroundComponent = ComponentType<{
+	cropper: any;
+	size: Size | null;
+	className?: string;
+}>;
 
-	const [coefficient, setCoefficient] = useState(1);
+interface Props {
+	state?: CropperState | null;
+	image?: CropperImage | null;
+	transitions?: CropperTransitions | null;
+	loading?: boolean;
+	loaded?: boolean;
+	className?: string;
+	contentClassName?: string;
+	backgroundClassName?: string;
+	backgroundComponent?: PreviewBackgroundComponent;
+	backgroundProps?: ArbitraryProps;
+	wrapperComponent?: PreviewWrapperComponent;
+	wrapperProps?: ArbitraryProps;
+	style?: CSSProperties;
+}
 
-	const imageStyle =
-		state && state.coordinates && image && size ? getPreviewStyle(image, state, coefficient, transitions) : {};
+export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
+	(
+		{
+			className,
+			contentClassName,
+			state = null,
+			image = null,
+			transitions = null,
+			backgroundComponent = CropperPreviewBackground,
+			backgroundProps,
+			backgroundClassName,
+			wrapperComponent = CropperPreviewWrapper,
+			wrapperProps,
+			loaded = true,
+			loading = false,
+			style,
+		}: Props,
+		ref,
+	) => {
+		const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 
-	const contentStyle = size
-		? {
-				width: `${size.width}px`,
-				height: `${size.height}px`,
-		  }
-		: {};
+		const [cropper, setCropper] = useState<{ current: CropperRef | null }>({ current: null });
 
-	const refresh = () => {
-		if (boundaryRef.current && state?.coordinates) {
-			boundaryRef.current.stretchTo(state.coordinates).then((size) => {
-				if (size && state.coordinates) {
-					if (!isLower(ratio(state.coordinates), ratio(size))) {
-						setSize({
-							width: size.width,
-							height: size.width / ratio(state.coordinates),
-						});
-						setCoefficient(state.coordinates.width / size.width);
+		const instance = cropper.current || {
+			getState: () => state,
+			getTransitions: () => transitions,
+			getImage: () => image,
+			isLoaded: () => loaded,
+			isLoading: () => loading,
+		};
+
+		const [size, setSize] = useState<Size | null>(null);
+
+		const coordinates = instance.getState()?.coordinates;
+
+		const src = instance.getImage()?.src;
+
+		const contentStyle = size
+			? {
+					width: `${size.width}px`,
+					height: `${size.height}px`,
+			  }
+			: {};
+
+		const refresh = () => {
+			if (boundaryRef.current && coordinates) {
+				boundaryRef.current.stretchTo(coordinates).then((size) => {
+					if (size && coordinates) {
+						if (isGreater(ratio(coordinates), ratio(size))) {
+							setSize({
+								width: size.width,
+								height: size.width / ratio(coordinates),
+							});
+						} else {
+							setSize({
+								width: size.height * ratio(coordinates),
+								height: size.height,
+							});
+						}
 					} else {
-						setSize({
-							width: size.height * ratio(state.coordinates),
-							height: size.height,
-						});
-						setCoefficient(state.coordinates.height / size.height);
+						setSize(null);
 					}
-				} else {
-					setSize(null);
-				}
-			});
-		}
-	};
+				});
+			}
+		};
 
-	useWindowResize(refresh);
+		useWindowResize(refresh);
 
-	useLayoutEffect(() => {
-		if (state?.coordinates) {
-			refresh();
-		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [image?.src, state?.coordinates]);
+		useLayoutEffect(() => {
+			if (coordinates) {
+				refresh();
+			}
+			// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [src, instance]);
 
-	return (
-		<StretchableBoundary
-			ref={boundaryRef}
-			stretchAlgorithm={stretchPreviewBoundary}
-			className={cn(className, 'advanced-cropper-preview')}
-		>
-			<div className={cn(contentClassName, 'advanced-cropper-preview__content')} style={contentStyle}>
-				<img
-					src={image ? image.src : undefined}
-					className={cn(
-						imageClassName,
-						'advanced-cropper-preview__image',
-						image && image.src && 'advanced-cropper-preview__image--visible',
-					)}
-					style={imageStyle}
-				/>
-			</div>
-		</StretchableBoundary>
-	);
-};
+		useImperativeHandle(ref, () => ({
+			update(cropper: CropperRef) {
+				setCropper({ current: cropper });
+			},
+		}));
+
+		const WrapperComponent = wrapperComponent;
+
+		const BackgroundComponent = backgroundComponent || 'img';
+
+		return (
+			<WrapperComponent
+				{...wrapperProps}
+				className={cn(className, 'advanced-cropper-preview')}
+				cropper={instance}
+				style={style}
+			>
+				<StretchableBoundary
+					ref={boundaryRef}
+					className={'advanced-cropper-preview__boundary'}
+					contentClassName={'advanced-cropper-preview__boundary-content'}
+				>
+					<div className={cn(contentClassName, 'advanced-cropper-preview__content')} style={contentStyle}>
+						<BackgroundComponent
+							{...backgroundProps}
+							cropper={instance}
+							size={size}
+							className={cn(
+								backgroundClassName,
+								'advanced-cropper-preview__image',
+								src && 'advanced-cropper-preview__image--visible',
+							)}
+						/>
+					</div>
+				</StretchableBoundary>
+			</WrapperComponent>
+		);
+	},
+);

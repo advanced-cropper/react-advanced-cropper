@@ -20,8 +20,6 @@ export type StencilComponent = any;
 
 export type CropperWrapperComponent = ComponentType<{
 	cropper: any;
-	loading: boolean;
-	loaded: boolean;
 	className?: string;
 	style?: CSSProperties;
 }>;

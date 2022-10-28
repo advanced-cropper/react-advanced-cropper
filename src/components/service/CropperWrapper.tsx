@@ -5,18 +5,19 @@ import { CropperFade } from './CropperFade';
 
 interface DesiredCropperRef {
 	getState: () => CropperState | null;
+	isLoading: () => boolean;
+	isLoaded: () => boolean;
 }
 
 export interface CropperWrapperProps {
 	cropper?: DesiredCropperRef;
-	loading?: boolean;
-	loaded?: boolean;
 	className?: string;
 	style?: CSSProperties;
 }
 
-export const CropperWrapper: FC<CropperWrapperProps> = ({ cropper, children, loaded, className, style }) => {
+export const CropperWrapper: FC<CropperWrapperProps> = ({ cropper, children, className, style }) => {
 	const state = cropper ? cropper.getState() : null;
+	const loaded = cropper ? cropper.isLoaded() : false;
 	return (
 		<div className={cn(className, 'advanced-cropper-wrapper')} style={style}>
 			<CropperFade visible={state && loaded} className={'advanced-cropper-wrapper__fade'}>

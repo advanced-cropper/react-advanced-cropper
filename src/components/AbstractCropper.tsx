@@ -65,6 +65,8 @@ export interface AbstractCropperRef<Settings extends AbstractCropperSettings = A
 	getImage: () => CropperImage | null;
 	getState: () => CropperState | null;
 	getTransitions: () => CropperTransitions;
+	isLoading: () => boolean;
+	isLoaded: () => boolean;
 }
 
 export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
@@ -122,7 +124,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 
 	const stencilRef = useRef<StencilComponent>(null);
 
-	const { cropper, image, loaded, loading, refs } = useAbstractCropper(() => ({
+	const { cropper, image, refs } = useAbstractCropper(() => ({
 		...parameters,
 		crossOrigin,
 		stencilProps,
@@ -150,9 +152,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		<WrapperComponent
 			{...wrapperProps}
 			className={cn('advanced-cropper', className)}
-			loaded={loaded}
 			cropper={cropper}
-			loading={loading}
 			style={style}
 		>
 			<StretchableBoundary
