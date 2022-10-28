@@ -148,12 +148,18 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 
 	useImperativeHandle(ref, () => cropper);
 
+	const deprecatedWrapperProps = {
+		loading: cropper.isLoading(),
+		loaded: cropper.isLoaded(),
+	};
+
 	return (
 		<WrapperComponent
 			{...wrapperProps}
 			className={cn('advanced-cropper', className)}
 			cropper={cropper}
 			style={style}
+			{...deprecatedWrapperProps}
 		>
 			<StretchableBoundary
 				ref={refs.boundary}
