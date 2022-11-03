@@ -1,4 +1,4 @@
-import React, { useImperativeHandle, useRef, CSSProperties, Ref, useState } from 'react';
+import React, { useImperativeHandle, useRef, CSSProperties, Ref } from 'react';
 import cn from 'classnames';
 import {
 	DrawOptions,
@@ -11,6 +11,7 @@ import {
 	CropperState,
 	CropperTransitions,
 	ModifierSettings,
+	InitializeSettings,
 } from 'advanced-cropper';
 
 import {
@@ -36,7 +37,7 @@ import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
 
 export type AbstractCropperSettingsProp<Settings extends CropperStateSettings> = CropperStateSettingsProp<Settings>;
 
-export type AbstractCropperSettings = DefaultSettings & CoreSettings & ModifierSettings;
+export type AbstractCropperSettings = DefaultSettings & CoreSettings & ModifierSettings & InitializeSettings;
 
 export interface AbstractCropperRef<Settings extends AbstractCropperSettings = AbstractCropperSettings> {
 	reset: () => void;

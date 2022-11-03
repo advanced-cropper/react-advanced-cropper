@@ -1,11 +1,17 @@
-import { createDefaultSettings, DefaultSettings } from 'advanced-cropper/defaults';
-import { CoreSettings, ImageRestriction, ModifierSettings } from 'advanced-cropper';
 import { useRef } from 'react';
-import { CropperInstance, AbstractCropperParameters, AbstractCropperCallbacks } from 'advanced-cropper/instance';
+import {
+	ImageRestriction,
+	createDefaultSettings,
+	CropperInstance,
+	AbstractCropperParameters,
+	AbstractCropperCallbacks,
+	AbstractCropperSettings,
+	DefaultSettings,
+} from 'advanced-cropper';
 import { useForceRerender } from './useForceRerender';
 import { useCropperProps } from './useCropperProps';
 
-export type CropperStateSettings = DefaultSettings & CoreSettings & ModifierSettings;
+export type CropperStateSettings = DefaultSettings & AbstractCropperSettings;
 
 export type CropperStateSettingsProp<Settings extends CropperStateSettings> = Partial<
 	Pick<Settings, keyof CropperStateSettings>

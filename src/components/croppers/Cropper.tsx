@@ -1,7 +1,7 @@
 import React, { forwardRef, Ref } from 'react';
 import { isUndefined } from 'advanced-cropper';
 import { StencilSize } from 'advanced-cropper/extensions/stencil-size';
-import { CustomCropperProps, CustomCropperRef, ExtendedSettings, SettingsExtension } from '../../types';
+import { CustomCropperProps, CustomCropperRef, ExtendedSettings } from '../../types';
 import { hybridStencilAutoZoom } from '../../deprecated/hybridAutoZoom';
 import { useDeprecationWarning } from '../../hooks/useDeprecationWarning';
 import { AbstractCropper, AbstractCropperIntrinsicProps } from '../AbstractCropper';
@@ -13,9 +13,9 @@ interface DeprecatedCropperSettings {
 	autoZoom?: boolean;
 }
 
-export type CropperProps = CustomCropperProps<{}>;
+export type CropperProps = CustomCropperProps;
 
-export type CropperRef = CustomCropperRef<{}>;
+export type CropperRef = CustomCropperRef;
 
 export const Cropper = forwardRef((props: CropperProps, ref?: Ref<CropperRef>) => {
 	const cropperProps = useAbstractCropperProps(props);
@@ -54,7 +54,7 @@ export const Cropper = forwardRef((props: CropperProps, ref?: Ref<CropperRef>) =
 		);
 	}
 
-	return <AbstractCropper<DeprecatedCropperSettings> {...intrinsicProps} ref={ref} settings={actualSettings} />;
+	return <AbstractCropper {...intrinsicProps} ref={ref} settings={actualSettings} />;
 });
 
 Cropper.displayName = 'CropperComponent';

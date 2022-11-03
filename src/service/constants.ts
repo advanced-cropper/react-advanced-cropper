@@ -15,5 +15,7 @@ export const defaultSettings = [
 	'maxHeight',
 	'defaultSize',
 	'defaultPosition',
+	'defaultTransforms',
 	'imageRestriction',
+	'priority',
 ];
