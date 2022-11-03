@@ -81,7 +81,6 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	stencilProps?: ArbitraryProps;
 	stencilConstraints?: StencilConstraints<AbstractCropperSettingsProp<Settings>>;
 	className?: string;
-	imageClassName?: string;
 	boundaryClassName?: string;
 	backgroundClassName?: string;
 	boundaryStretchAlgorithm?: BoundaryStretchAlgorithm;
@@ -112,7 +111,6 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		backgroundClassName,
 		backgroundWrapperComponent = CropperBackgroundWrapper,
 		backgroundWrapperProps = {},
-		imageClassName,
 		boundaryClassName,
 		boundarySizeAlgorithm,
 		boundaryStretchAlgorithm,
@@ -173,17 +171,15 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 					cropper={cropper}
 					className={'advanced-cropper__background-wrapper'}
 				>
-					<div className={cn('advanced-cropper__background', backgroundClassName)}>
-						{cropper.getState() && (
-							<BackgroundComponent
-								{...backgroundProps}
-								ref={refs.image}
-								crossOrigin={crossOrigin}
-								cropper={cropper}
-								className={cn('advanced-cropper__image', imageClassName)}
-							/>
-						)}
-					</div>
+					{cropper.getState() && (
+						<BackgroundComponent
+							{...backgroundProps}
+							ref={refs.image}
+							crossOrigin={crossOrigin}
+							cropper={cropper}
+							className={cn('advanced-cropper__background', backgroundClassName)}
+						/>
+					)}
 					<StencilComponent {...stencilProps} ref={stencilRef} cropper={cropper} image={image} />
 				</BackgroundWrapperComponent>
 				{canvas && <CropperCanvas ref={refs.canvas} />}
