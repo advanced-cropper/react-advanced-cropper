@@ -75,5 +75,16 @@ export function useCropperImage(options: CropperImageHookSettings) {
 		}
 	}, [image])
 
-	return { loading, loaded, image, setImage };
+	return {
+		isLoading() {
+			return loading;
+		},
+		isLoaded() {
+			return loaded
+		},
+		getImage() {
+			return image;
+		},
+		setImage,
+	};
 }

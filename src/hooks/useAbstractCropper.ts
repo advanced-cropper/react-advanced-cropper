@@ -54,7 +54,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		},
 	}));
 
-	const { image, loaded, loading } = useCropperImage({
+	const cropperImage = useCropperImage({
 		src,
 		crossOrigin,
 		checkOrientation,
@@ -77,6 +77,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 	const resetCropper = async () => {
 		if (boundaryRef.current) {
 			autoReconcile.pause();
+			const image = cropperImage.getImage();
 			const boundary = await boundaryRef.current?.stretchTo(image);
 			setCurrentImage(image, () => {
 				if (boundary && image) {
@@ -92,6 +93,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 	const refreshCropper = async () => {
 		if (boundaryRef.current) {
 			autoReconcile.pause();
+			const image = cropperImage.getImage();
 			const boundary = await boundaryRef.current?.stretchTo(image);
 			if (boundary && image) {
 				const state = cropper.getState();
@@ -142,6 +144,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		getState: cropper.getState,
 		getDefaultState() {
 			const state = cropper.getState();
+			const image = cropperImage.getImage();
 			if (state && image) {
 				return cropper.createDefaultState(state.boundary, image);
 			} else {
@@ -159,8 +162,8 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		getImage: () => {
 			return currentImage ? { ...currentImage } : null;
 		},
-		isLoading: () => loading,
-		isLoaded: () => loaded,
+		isLoading: cropperImage.isLoading,
+		isLoaded: cropperImage.isLoaded,
 	};
 
 	useWindowResize(() => {
@@ -169,13 +172,13 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 
 	useUpdateEffect(() => {
 		resetCropper();
-	}, [image]);
+	}, [cropperImage.getImage()]);
 
 	useUpdateEffect(() => {
 		if (cropperRef.current) {
 			onUpdate?.(cropperRef.current);
 		}
-	}, [loaded, loading]);
+	}, [cropperImage.isLoaded(), cropperImage.isLoading()]);
 
 	useImperativeHandle(cropperRef, () => cropperInterface);
 
