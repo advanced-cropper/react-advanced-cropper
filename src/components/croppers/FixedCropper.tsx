@@ -1,4 +1,4 @@
-import React, { Ref } from 'react';
+import React, { forwardRef, Ref } from 'react';
 import {
 	defaultSize,
 	sizeRestrictions,
@@ -9,8 +9,9 @@ import {
 } from 'advanced-cropper/extensions/stencil-size';
 import { withDefaultSizeRestrictions } from 'advanced-cropper/defaults';
 import { CustomCropperProps, CustomCropperRef } from '../../types';
-import { createCropper, splitAbstractCropperProps } from '../../service/cropper';
 import { AbstractCropper } from '../AbstractCropper';
+import { useAbstractCropperProps } from '../../hooks/useAbstractCropperProps';
+import { defaultSettings } from '../../service/constants';
 
 type UnavailableProps = 'sizeRestrictions' | 'aspectRatio';
 
@@ -18,37 +19,30 @@ export interface FixedCropperSettings {
 	stencilSize: StencilSize<this>;
 }
 
-export type FixedCropperProps<Extension extends FixedCropperSettings = FixedCropperSettings> = Omit<
-	CustomCropperProps<Extension>,
-	UnavailableProps
->;
+export type FixedCropperProps = Omit<CustomCropperProps<FixedCropperSettings>, UnavailableProps>;
 
-export type FixedCropperRef<Extension extends FixedCropperSettings = FixedCropperSettings> =
-	CustomCropperRef<Extension>;
+export type FixedCropperRef = CustomCropperRef<FixedCropperSettings>;
 
-const FixedCropperComponent = <Extension extends FixedCropperSettings = FixedCropperSettings>(
-	props: FixedCropperProps<Extension>,
-	ref?: Ref<FixedCropperRef<Extension>>,
-) => {
-	const { settings, ...parameters } = splitAbstractCropperProps(props);
+export const FixedCropper = forwardRef((props: FixedCropperProps, ref?: Ref<FixedCropperRef>) => {
+	const cropperProps = useAbstractCropperProps(props, [...defaultSettings, 'stencilSize']);
 	return (
 		<AbstractCropper<FixedCropperSettings>
 			postProcess={fixedStencil}
 			stencilConstraints={fixedStencilConstraints}
-			{...parameters}
+			{...cropperProps.props}
 			settings={{
-				defaultSize: defaultSize,
-				aspectRatio: aspectRatio,
+				defaultSize,
+				aspectRatio,
 				sizeRestrictions: withDefaultSizeRestrictions(sizeRestrictions),
-				...settings,
+				...cropperProps.settings,
 				transformImage: {
-					...settings.transformImage,
+					...cropperProps.settings.transformImage,
 					adjustStencil: false,
 				},
 			}}
 			ref={ref}
 		/>
 	);
-};
+});
 
-export const FixedCropper = createCropper(FixedCropperComponent);
+FixedCropper.displayName = 'FixedCropper';
