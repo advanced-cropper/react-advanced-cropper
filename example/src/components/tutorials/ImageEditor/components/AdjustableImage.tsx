@@ -1,6 +1,6 @@
 import React, { forwardRef, useRef, CSSProperties, useLayoutEffect } from 'react';
 import cn from 'classnames';
-import { mergeRefs } from 'react-advanced-cropper';
+import { mergeRefs, CropperSource } from 'react-advanced-cropper';
 import './AdjustableImage.scss';
 
 interface Props {
@@ -52,16 +52,15 @@ export const AdjustableImage = forwardRef<HTMLCanvasElement, Props>(
 					className={cn('adjustable-image-element', className)}
 					style={style}
 				/>
-				{src ? (
-					<img
-						key={`${src}-img`}
-						ref={imageRef}
-						className={'adjustable-image-source'}
-						src={src}
-						crossOrigin={crossOrigin === true ? 'anonymous' : crossOrigin || undefined}
-						onLoad={drawImage}
-					/>
-				) : null}
+				1{' '}
+				<CropperSource
+					key={`${src}-img`}
+					ref={imageRef}
+					className={'adjustable-image-source'}
+					src={src}
+					crossOrigin={crossOrigin}
+					onLoad={drawImage}
+				/>
 			</>
 		);
 	},

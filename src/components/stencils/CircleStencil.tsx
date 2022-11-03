@@ -6,11 +6,13 @@ import {
 	CropperTransitions,
 	CropperState,
 	MoveDirections,
-	CropperImage,
 	ResizeOptions,
 	getStencilCoordinates,
 	CropperInteractions,
 	ResizeAnchor,
+	isFunction,
+	Coordinates,
+	RawAspectRatio,
 } from 'advanced-cropper';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
@@ -24,13 +26,13 @@ type HandlerComponent = ComponentType<any>;
 
 type LineComponent = ComponentType<any>;
 
-interface HandlersClassNames extends Partial<Record<OrdinalDirection, string>> {
+interface HandlerClassNames extends Partial<Record<OrdinalDirection, string>> {
 	default?: string;
 	disabled?: string;
 	hover?: string;
 }
 
-interface LinesClassNames extends Partial<Record<CardinalDirection, string>> {
+interface LineClassNames extends Partial<Record<CardinalDirection, string>> {
 	default?: string;
 	disabled?: string;
 	hover?: string;
@@ -49,15 +51,16 @@ interface DesiredCropperRef {
 
 interface Props {
 	cropper: DesiredCropperRef;
-	image: CropperImage | null;
+	coordinates?: Coordinates | ((state: CropperState | null) => Coordinates);
 	handlerComponent?: HandlerComponent;
 	handlers?: Partial<Record<OrdinalDirection, boolean>>;
-	handlerClassNames?: HandlersClassNames;
-	handlerWrapperClassNames?: HandlersClassNames;
+	handlerClassNames?: HandlerClassNames;
+	handlerWrapperClassNames?: HandlerClassNames;
 	lines?: Partial<Record<CardinalDirection, boolean>>;
 	lineComponent?: LineComponent;
-	lineClassNames?: LinesClassNames;
-	lineWrapperClassNames?: LinesClassNames;
+	lineClassNames?: LineClassNames;
+	lineWrapperClassNames?: LineClassNames;
+	className?: string;
 	movingClassName?: string;
 	resizingClassName?: string;
 	gridClassName?: string;
@@ -65,22 +68,20 @@ interface Props {
 	boundingBoxClassName?: string;
 	overlayClassName?: string;
 	draggableAreaClassName?: string;
-	minAspectRatio?: number;
-	maxAspectRatio?: number;
-	aspectRatio?: number;
 	movable?: boolean;
 	resizable?: boolean;
 	grid?: boolean;
 }
 
 interface Methods {
-	aspectRatio: number;
+	aspectRatio: RawAspectRatio;
 }
 
 export const CircleStencil = forwardRef<Methods, Props>(
 	(
 		{
 			cropper,
+			coordinates,
 			handlerComponent = SimpleHandler,
 			handlers = {
 				eastNorth: true,
@@ -103,6 +104,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			movable = true,
 			grid,
 			gridClassName,
+			className,
 			movingClassName,
 			resizingClassName,
 			previewClassName,
@@ -145,19 +147,26 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			}
 		};
 
-		const { width, height, left, top } = getStencilCoordinates(state);
+		const { width, height, left, top } = coordinates
+			? isFunction(coordinates)
+				? coordinates(state)
+				: coordinates
+			: getStencilCoordinates(state);
 
 		return (
 			state && (
 				<StencilWrapper
 					className={cn(
 						'advanced-cropper-circle-stencil',
-						movable && 'advanced-cropper-circle-stencil--movable',
-						interactions.moveCoordinates && 'advanced-cropper-circle-stencil--moving',
-						resizable && 'advanced-cropper-circle-stencil--resizable',
-						interactions.resizeCoordinates && 'advanced-cropper-circle-stencil--resizing',
+						className,
 						interactions.moveCoordinates && movingClassName,
 						interactions.resizeCoordinates && resizingClassName,
+						{
+							'advanced-cropper-circle-stencil--movable': movable,
+							'advanced-cropper-circle-stencil--moving': interactions.moveCoordinates,
+							'advanced-cropper-circle-stencil--resizable': resizable,
+							'advanced-cropper-circle-stencil--resizing': interactions.resizeCoordinates,
+						},
 					)}
 					width={width}
 					height={height}

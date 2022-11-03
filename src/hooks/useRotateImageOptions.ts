@@ -1,8 +1,12 @@
 import { useMemo } from 'react';
 import { getOptions } from 'advanced-cropper';
-import { RotateImageSettings } from '../types';
+import { RotateImageOptions } from '../types';
 
-export function useRotateImageOptions(rotateImage: RotateImageSettings | boolean) {
+interface DefinedRotateImageOptions {
+	touch: boolean;
+}
+
+export function useRotateImageOptions(rotateImage: RotateImageOptions | boolean): DefinedRotateImageOptions {
 	return useMemo(
 		() =>
 			getOptions(

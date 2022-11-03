@@ -3,18 +3,18 @@ import cn from 'classnames';
 import {
 	CardinalDirection,
 	OrdinalDirection,
-	CropperImage,
-	MoveDirections,
-	RawAspectRatio,
-	Coordinates,
-	CropperState,
 	CropperTransitions,
+	CropperState,
+	MoveDirections,
+	ResizeOptions,
+	getStencilCoordinates,
 	CropperInteractions,
-	isFunction,
 	ResizeAnchor,
+	isFunction,
+	Coordinates,
+	RawAspectRatio,
+	createAspectRatio,
 } from 'advanced-cropper';
-import { createAspectRatio, getStencilCoordinates } from 'advanced-cropper/service';
-import { ResizeOptions } from 'advanced-cropper/state';
 import { SimpleLine } from '../lines/SimpleLine';
 import { SimpleHandler } from '../handlers/SimpleHandler';
 import { BoundingBox } from '../service/BoundingBox';
@@ -52,7 +52,7 @@ interface DesiredCropperRef {
 
 interface Props {
 	cropper: DesiredCropperRef;
-	image?: CropperImage | null;
+	coordinates?: Coordinates | ((state: CropperState | null) => Coordinates);
 	handlerComponent?: HandlerComponent;
 	handlers?: Partial<Record<OrdinalDirection, boolean>>;
 	handlerClassNames?: HandlerClassNames;
@@ -71,11 +71,10 @@ interface Props {
 	draggableAreaClassName?: string;
 	minAspectRatio?: number;
 	maxAspectRatio?: number;
-	aspectRatio?: number;
+	aspectRatio?: RawAspectRatio;
 	movable?: boolean;
 	resizable?: boolean;
 	grid?: boolean;
-	coordinates?: Coordinates | ((state: CropperState | null) => Coordinates);
 }
 
 interface Methods {
@@ -86,6 +85,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 	(
 		{
 			cropper,
+			coordinates,
 			aspectRatio,
 			minAspectRatio,
 			maxAspectRatio,
@@ -115,14 +115,13 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			movable = true,
 			grid,
 			gridClassName,
+			className,
 			movingClassName,
 			resizingClassName,
 			previewClassName,
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
-			className,
-			coordinates,
 		}: Props,
 		ref,
 	) => {
@@ -175,12 +174,14 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 					className={cn(
 						'advanced-cropper-rectangle-stencil',
 						className,
-						movable && 'advanced-cropper-rectangle-stencil--movable',
-						interactions.moveCoordinates && 'advanced-cropper-rectangle-stencil--moving',
-						resizable && 'advanced-cropper-rectangle-stencil--resizable',
-						interactions.resizeCoordinates && 'advanced-cropper-rectangle-stencil--resizing',
 						interactions.moveCoordinates && movingClassName,
 						interactions.resizeCoordinates && resizingClassName,
+						{
+							'advanced-cropper-rectangle-stencil--movable': movable,
+							'advanced-cropper-rectangle-stencil--moving': interactions.moveCoordinates,
+							'advanced-cropper-rectangle-stencil--resizable': resizable,
+							'advanced-cropper-rectangle-stencil--resizing': interactions.resizeCoordinates,
+						},
 					)}
 					width={width}
 					height={height}

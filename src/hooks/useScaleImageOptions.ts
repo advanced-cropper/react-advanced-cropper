@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { getOptions } from 'advanced-cropper';
-import { ScaleImageSettings } from '../types';
+import { ScaleImageOptions } from '../types';
 
-interface UseScaleImageOptions {
+interface DefinedScaleImageOptions {
 	touch: boolean;
 	wheel:
 		| boolean
@@ -11,8 +11,8 @@ interface UseScaleImageOptions {
 		  };
 }
 
-export function useScaleImageOptions(scaleImage: ScaleImageSettings | boolean) {
-	return useMemo<UseScaleImageOptions>(
+export function useScaleImageOptions(scaleImage: ScaleImageOptions | boolean): DefinedScaleImageOptions {
+	return useMemo(
 		() =>
 			getOptions(
 				scaleImage,

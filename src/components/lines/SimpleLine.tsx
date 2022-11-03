@@ -9,8 +9,8 @@ interface Props {
 	wrapperClassName?: string;
 	position?: CardinalDirection;
 	disabled?: boolean;
-	onDrag?: (directions: MoveDirections, event: TouchEvent | MouseEvent) => void;
-	onDragEnd?: () => void;
+	onMove?: (directions: MoveDirections, event: TouchEvent | MouseEvent) => void;
+	onMoveEnd?: () => void;
 }
 
 export const SimpleLine = ({
@@ -19,8 +19,8 @@ export const SimpleLine = ({
 	wrapperClassName,
 	defaultClassName,
 	disabled,
-	onDrag,
-	onDragEnd,
+	onMove,
+	onMoveEnd,
 }: Props) => {
 	const [hover, setHover] = useState(false);
 
@@ -39,8 +39,8 @@ export const SimpleLine = ({
 			})}
 			position={position}
 			disabled={disabled}
-			onDrag={onDrag}
-			onDragEnd={onDragEnd}
+			onDrag={onMove}
+			onDragEnd={onMoveEnd}
 			onLeave={onLeave}
 			onEnter={onEnter}
 		>

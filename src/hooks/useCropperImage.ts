@@ -14,7 +14,7 @@ export interface CropperImageHookSettings {
 }
 
 export function useCropperImage(options: CropperImageHookSettings) {
-	const { src, onLoadingStart, onLoadingEnd, onError, onLoad, crossOrigin, checkOrientation, canvas } = options;
+	const { src, onLoadingStart, onLoadingEnd, onError, onLoad, crossOrigin, checkOrientation, canvas, unloadTime } = options;
 	const [loading, setLoading] = useState(false);
 	const [loaded, setLoaded] = useState(false);
 	const [image, setImage] = useState<CropperImage | null>(null);
@@ -35,8 +35,8 @@ export function useCropperImage(options: CropperImageHookSettings) {
 					}),
 				];
 
-				if (loaded && options.unloadTime) {
-					promises.push(promiseTimeout(options.unloadTime));
+				if (loaded && unloadTime) {
+					promises.push(promiseTimeout(unloadTime));
 				}
 				Promise.all(promises)
 					.then((responses) => {
@@ -58,8 +58,8 @@ export function useCropperImage(options: CropperImageHookSettings) {
 						}
 					});
 			} else {
-				if (options.unloadTime) {
-					promiseTimeout(options.unloadTime).then(() => {
+				if (unloadTime) {
+					promiseTimeout(unloadTime).then(() => {
 						setImage(null)
 					})
 				} else {

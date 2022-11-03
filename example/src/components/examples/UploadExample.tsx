@@ -5,9 +5,7 @@ import './UploadExample.scss';
 export const UploadExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
 
-	const [image] = useState(
-		'/react-advanced-cropper/img/images/photo-1604335079441-274c03ad99a1.jpg',
-	);
+	const [image] = useState('/react-advanced-cropper/img/images/photo-1604335079441-274c03ad99a1.jpg');
 
 	const onUpload = () => {
 		const canvas = cropperRef.current?.getCanvas();

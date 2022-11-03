@@ -1,8 +1,13 @@
 import { useMemo } from 'react';
 import { getOptions } from 'advanced-cropper';
-import { MoveImageSettings } from '../types';
+import { MoveImageOptions } from '../types';
 
-export function useMoveImageOptions(moveImage: MoveImageSettings | boolean) {
+interface DefinedMoveImageOptions {
+	touch: boolean;
+	mouse: boolean;
+}
+
+export function useMoveImageOptions(moveImage: MoveImageOptions | boolean): DefinedMoveImageOptions {
 	return useMemo(
 		() =>
 			getOptions(

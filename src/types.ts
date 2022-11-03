@@ -63,7 +63,7 @@ export type StencilConstraints<Settings extends {}> = (
 	stencilOptions: StencilOptions,
 ) => Partial<Settings>;
 
-export interface ScaleImageSettings {
+export interface ScaleImageOptions {
 	touch?: boolean;
 	wheel?:
 		| boolean
@@ -73,11 +73,11 @@ export interface ScaleImageSettings {
 	adjustStencil?: boolean;
 }
 
-export interface RotateImageSettings {
+export interface RotateImageOptions {
 	touch?: boolean;
 }
 
-export interface MoveImageSettings {
+export interface MoveImageOptions {
 	touch?: boolean;
 	mouse?: boolean;
 }

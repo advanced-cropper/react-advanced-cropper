@@ -11,8 +11,8 @@ interface Props {
 	verticalPosition?: VerticalCardinalDirection;
 	horizontalPosition?: HorizontalCardinalDirection;
 	disabled?: boolean;
-	onDrag?: (shift: MoveDirections, event: TouchEvent | MouseEvent) => void;
-	onDragEnd?: () => void;
+	onMove?: (shift: MoveDirections, event: TouchEvent | MouseEvent) => void;
+	onMoveEnd?: () => void;
 }
 
 export const SimpleHandler = ({
@@ -23,8 +23,8 @@ export const SimpleHandler = ({
 	defaultClassName,
 	wrapperStyle,
 	disabled,
-	onDrag,
-	onDragEnd,
+	onMove,
+	onMoveEnd,
 }: Props) => {
 	const [hover, setHover] = useState(false);
 
@@ -52,8 +52,8 @@ export const SimpleHandler = ({
 			verticalPosition={verticalPosition}
 			horizontalPosition={horizontalPosition}
 			disabled={disabled}
-			onDrag={onDrag}
-			onDragEnd={onDragEnd}
+			onDrag={onMove}
+			onDragEnd={onMoveEnd}
 			onLeave={onLeave}
 			onEnter={onEnter}
 		>

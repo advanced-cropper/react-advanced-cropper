@@ -148,7 +148,7 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 
 		const WrapperComponent = wrapperComponent;
 
-		const BackgroundComponent = backgroundComponent || 'img';
+		const BackgroundComponent = backgroundComponent;
 
 		return (
 			<WrapperComponent

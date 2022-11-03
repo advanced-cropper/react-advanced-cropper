@@ -3,7 +3,7 @@ import { CropperTransitions, ImageTransform } from 'advanced-cropper';
 import { useRotateImageOptions } from '../../hooks/useRotateImageOptions';
 import { useScaleImageOptions } from '../../hooks/useScaleImageOptions';
 import { useMoveImageOptions } from '../../hooks/useMoveImageOptions';
-import { MoveImageSettings, RotateImageSettings, ScaleImageSettings } from '../../types';
+import { MoveImageOptions, RotateImageOptions, ScaleImageOptions } from '../../types';
 import { TransformableImage } from './TransformableImage';
 
 interface DesiredCropperRef {
@@ -14,9 +14,9 @@ interface DesiredCropperRef {
 
 export interface CropperBackgroundWrapperProps {
 	cropper: DesiredCropperRef;
-	rotateImage?: boolean | RotateImageSettings;
-	scaleImage?: boolean | ScaleImageSettings;
-	moveImage?: boolean | MoveImageSettings;
+	rotateImage?: boolean | RotateImageOptions;
+	scaleImage?: boolean | ScaleImageOptions;
+	moveImage?: boolean | MoveImageOptions;
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;

@@ -1,5 +1,4 @@
 import React, { ComponentType, useMemo, ReactNode, CSSProperties, useState } from 'react';
-import classnames from 'classnames';
 import cn from 'classnames';
 import {
 	CardinalDirection,
@@ -69,7 +68,7 @@ interface HandlerNode {
 
 interface LineNode {
 	name: CardinalDirection;
-	component: HandlerComponent;
+	component: LineComponent;
 	className: string;
 	wrapperClassName?: string;
 	hoverClassName?: string;
@@ -146,12 +145,12 @@ export const BoundingBox = ({
 				result.push({
 					name: point.name,
 					component: lineComponent,
-					className: classnames(
+					className: cn(
 						lineClassNames.default,
 						lineClassNames[point.name],
 						disabled && lineClassNames.disabled,
 					),
-					wrapperClassName: classnames(
+					wrapperClassName: cn(
 						`advanced-cropper-bounding-box__line`,
 						`advanced-cropper-bounding-box__line--${point.name}`,
 						lineWrapperClassNames.default,
@@ -175,12 +174,12 @@ export const BoundingBox = ({
 				result.push({
 					name: point.name,
 					component: handlerComponent,
-					className: classnames(handlerClassNames.default, handlerClassNames[point.name]),
-					containerClassName: classnames(
+					className: cn(handlerClassNames.default, handlerClassNames[point.name]),
+					containerClassName: cn(
 						`advanced-cropper-bounding-box__handler-wrapper`,
 						`advanced-cropper-bounding-box__handler-wrapper--${point.className}`,
 					),
-					wrapperClassName: classnames(
+					wrapperClassName: cn(
 						`advanced-cropper-bounding-box__handler`,
 						`advanced-cropper-bounding-box__handler--${point.className}`,
 						handlerWrapperClassNames.default,
@@ -196,11 +195,8 @@ export const BoundingBox = ({
 		return result;
 	}, [points, handlers, handlerComponent, handlerClassNames, handlerWrapperClassNames, disabled]);
 
-	const onHandlerDrag =
-		(
-			horizontalDirection: HorizontalCardinalDirection | null,
-			verticalDirection: VerticalCardinalDirection | null,
-		) =>
+	const onHandlerMove =
+		(horizontalPosition: HorizontalCardinalDirection | null, verticalPosition: VerticalCardinalDirection | null) =>
 		({ left, top }: MoveDirections, nativeEvent: MouseEvent | TouchEvent) => {
 			const directions = {
 				left,
@@ -208,15 +204,15 @@ export const BoundingBox = ({
 			};
 
 			let respectDirection: 'width' | 'height' | undefined;
-			if (!verticalDirection && horizontalDirection) {
+			if (!verticalPosition && horizontalPosition) {
 				respectDirection = 'width';
-			} else if (verticalDirection && !horizontalDirection) {
+			} else if (verticalPosition && !horizontalPosition) {
 				respectDirection = 'height';
 			}
 
 			if (!disabled) {
 				if (onResize) {
-					const anchor = getDirectionNames(horizontalDirection, verticalDirection).camelCase;
+					const anchor = getDirectionNames(horizontalPosition, verticalPosition).camelCase;
 					if (anchor) {
 						onResize(anchor, directions, {
 							reference: lastReference || reference,
@@ -232,7 +228,7 @@ export const BoundingBox = ({
 			}
 		};
 
-	const onHandlerDragEnd = () => {
+	const onHandlerMoveEnd = () => {
 		onResizeEnd?.();
 		setLastReference(null);
 	};
@@ -249,8 +245,8 @@ export const BoundingBox = ({
 						wrapperClassName={line.wrapperClassName}
 						position={line.name}
 						disabled={line.disabled}
-						onDrag={onHandlerDrag(line.horizontalPosition, line.verticalPosition)}
-						onDragEnd={onHandlerDragEnd}
+						onMove={onHandlerMove(line.horizontalPosition, line.verticalPosition)}
+						onMoveEnd={onHandlerMoveEnd}
 					/>
 				))}
 			</div>
@@ -264,8 +260,8 @@ export const BoundingBox = ({
 							horizontalPosition={handler.horizontalPosition}
 							verticalPosition={handler.verticalPosition}
 							disabled={handler.disabled}
-							onDrag={onHandlerDrag(handler.horizontalPosition, handler.verticalPosition)}
-							onDragEnd={onHandlerDragEnd}
+							onMove={onHandlerMove(handler.horizontalPosition, handler.verticalPosition)}
+							onMoveEnd={onHandlerMoveEnd}
 						/>
 					);
 
