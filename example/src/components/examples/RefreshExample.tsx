@@ -1,13 +1,7 @@
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import {
-	ImageRestriction,
-	BoundingBox,
-	CropperRef,
-	Cropper,
-	useWindowResize,
-	ResizeDirections,
-} from 'react-advanced-cropper';
+import { ImageRestriction, BoundingBox, CropperRef, Cropper, useWindowResize } from 'react-advanced-cropper';
 import './RefreshExample.scss';
+import { ResizeAnchor, anchorMoveToResizeDirections, MoveDirections } from 'advanced-cropper';
 
 export const RefreshExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
@@ -37,25 +31,14 @@ export const RefreshExample = () => {
 		updateCoordinates(width, height);
 	};
 
-	const onResize = (resize: ResizeDirections) => {
+	const onResize = (anchor: ResizeAnchor, directions: MoveDirections) => {
 		const container = containerRef.current;
 		if (container) {
-			const directions = { ...resize };
-
-			if (directions.left) {
-				directions.right = directions.left;
-			}
-			if (directions.right) {
-				directions.left = directions.right;
-			}
-			if (directions.top) {
-				directions.bottom = directions.top;
-			}
-			if (directions.bottom) {
-				directions.top = directions.bottom;
-			}
-
-			updateCoordinates(width + directions.left + directions.right, height + directions.top + directions.bottom);
+			const resizeDirections = anchorMoveToResizeDirections(anchor, directions);
+			updateCoordinates(
+				width + (resizeDirections.left + resizeDirections.right) * 2,
+				height + (resizeDirections.top + resizeDirections.bottom) * 2,
+			);
 		}
 	};
 

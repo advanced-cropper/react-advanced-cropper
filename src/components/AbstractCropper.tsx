@@ -25,7 +25,7 @@ import {
 	ExtendedSettings,
 	CustomCropperRef,
 } from '../types';
-import { CropperStateHook, CropperStateSettings, CropperStateSettingsProp } from '../hooks/useCropperState';
+import { CropperStateHook, CropperInstanceSettings, CropperInstanceSettingsProp } from '../hooks/useCropperInstance';
 import { createCropper } from '../service/cropper';
 import { AbstractCropperHookProps, useAbstractCropper } from '../hooks/useAbstractCropper';
 import { StretchableBoundary } from './service/StretchableBoundary';
@@ -35,13 +35,15 @@ import { CropperCanvas } from './service/CropperCanvas';
 import { RectangleStencil } from './stencils/RectangleStencil';
 import { CropperBackgroundWrapper } from './service/CropperBackgroundWrapper';
 
-export type AbstractCropperSettingsProp<Settings extends CropperStateSettings> = CropperStateSettingsProp<Settings>;
+export type AbstractCropperSettingsProp<Settings extends CropperInstanceSettings> =
+	CropperInstanceSettingsProp<Settings>;
 
 export type AbstractCropperSettings = DefaultSettings & CoreSettings & ModifierSettings & InitializeSettings;
 
 export interface AbstractCropperRef<Settings extends AbstractCropperSettings = AbstractCropperSettings> {
 	reset: () => void;
 	refresh: () => void;
+	clear: () => void;
 	setCoordinates: CropperStateHook['setCoordinates'];
 	setState: CropperStateHook['setState'];
 	setImage: (image: CropperImage) => void;
@@ -74,8 +76,10 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	extends Omit<AbstractCropperHookProps<Settings>, 'settings'> {
 	backgroundComponent?: CropperBackgroundComponent;
 	backgroundProps?: ArbitraryProps;
+	backgroundClassName?: string;
 	backgroundWrapperComponent?: CropperBackgroundWrapperComponent;
 	backgroundWrapperProps?: ArbitraryProps;
+	backgroundWrapperClassName?: string;
 	wrapperComponent?: CropperWrapperComponent;
 	wrapperProps?: ArbitraryProps;
 	stencilComponent?: StencilComponent;
@@ -83,11 +87,10 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	stencilConstraints?: StencilConstraints<AbstractCropperSettingsProp<Settings>>;
 	className?: string;
 	boundaryClassName?: string;
-	backgroundClassName?: string;
 	boundaryStretchAlgorithm?: BoundaryStretchAlgorithm;
 	boundarySizeAlgorithm?: BoundarySizeAlgorithm;
 	style?: CSSProperties;
-	settings: CropperStateSettingsProp<Settings>;
+	settings: CropperInstanceSettingsProp<Settings>;
 }
 
 export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettings> = Omit<

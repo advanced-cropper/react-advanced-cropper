@@ -1,5 +1,4 @@
 import { ComponentType, CSSProperties, ReactNode } from 'react';
-import { DefaultSettings, ModifierSettings, CoreSettings, InitializeSettings } from 'advanced-cropper';
 import {
 	AbstractCropperIntrinsicProps,
 	AbstractCropperRef,
@@ -54,19 +53,13 @@ export interface MoveImageOptions {
 export type CustomCropperProps<Extension extends SettingsExtension = {}> = AbstractCropperIntrinsicProps<
 	ExtendedSettings<Extension>
 > &
-	Partial<Pick<ExtendedSettings<Extension>, keyof CustomCropperSettings>> &
-	Omit<ExtendedSettings<Extension>, keyof CustomCropperSettings>;
+	Partial<Pick<ExtendedSettings<Extension>, keyof AbstractCropperSettings>> &
+	Omit<ExtendedSettings<Extension>, keyof AbstractCropperSettings>;
 
 export type CustomCropperRef<Extension extends SettingsExtension = {}> = AbstractCropperRef<
 	ExtendedSettings<Extension>
 >;
 
-export type CustomCropperSettings = AbstractCropperSettings;
-
-export type ExtendedSettings<Extension extends {}> = Extension &
-	DefaultSettings &
-	CoreSettings &
-	ModifierSettings &
-	InitializeSettings;
+export type ExtendedSettings<Extension extends {} = {}> = Extension & AbstractCropperSettings;
 
 export type SettingsExtension = object;

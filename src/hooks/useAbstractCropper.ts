@@ -1,19 +1,24 @@
 import { useImperativeHandle, useRef } from 'react';
-import { AbstractCropperCallbacks, AbstractCropperParameters, CropperImage, DrawOptions } from 'advanced-cropper';
+import {
+	AbstractCropperInstanceCallbacks,
+	AbstractCropperInstanceParameters,
+	CropperImage,
+	DrawOptions,
+} from 'advanced-cropper';
 import { StretchableBoundaryMethods } from '../components/service/StretchableBoundary';
 import { CropperCanvasMethods } from '../components/service/CropperCanvas';
 import { ExtendedSettings, SettingsExtension } from '../types';
 import { AbstractCropperRef, AbstractCropperSettings } from '../components/AbstractCropper';
 import { useStateWithCallback } from './useStateWithCallback';
-import { CropperStateSettingsProp, useCropperState } from './useCropperState';
+import { CropperInstanceSettingsProp, useCropperInstance } from './useCropperInstance';
 import { useCropperImage } from './useCropperImage';
 import { useWindowResize } from './useWindowResize';
 import { useUpdateEffect } from './useUpdateEffect';
 import { useCropperAutoReconcile } from './useCropperAutoReconcile';
 
 export interface AbstractCropperHookProps<Settings extends AbstractCropperSettings>
-	extends AbstractCropperParameters<Settings>,
-		AbstractCropperCallbacks<AbstractCropperRef<Settings>> {
+	extends AbstractCropperInstanceParameters<Settings>,
+		AbstractCropperInstanceCallbacks<AbstractCropperRef<Settings>> {
 	src?: string | null;
 	checkOrientation?: boolean;
 	canvas?: boolean;
@@ -22,7 +27,7 @@ export interface AbstractCropperHookProps<Settings extends AbstractCropperSettin
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;
 	unloadTime?: number;
 	autoReconcileState?: boolean;
-	settings?: CropperStateSettingsProp<Settings>;
+	settings?: CropperInstanceSettingsProp<Settings>;
 }
 
 export function useAbstractCropper<Extension extends SettingsExtension = {}>(
@@ -47,7 +52,7 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 
 	const [currentImage, setCurrentImage] = useStateWithCallback<CropperImage | null>(null);
 
-	const cropper = useCropperState(() => ({
+	const cropper = useCropperInstance(() => ({
 		...props(),
 		getInstance() {
 			return cropperRef.current;

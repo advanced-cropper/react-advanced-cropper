@@ -21,7 +21,7 @@ export * from './components/lines/SimpleLine';
 export * from './components/handlers/SimpleHandler';
 export * from './types';
 export * from './hooks/useAbstractCropper';
-export * from './hooks/useCropperState';
+export * from './hooks/useCropperInstance';
 export * from './hooks/useCropperImage';
 export * from './hooks/useMoveImageOptions';
 export * from './hooks/useScaleImageOptions';
