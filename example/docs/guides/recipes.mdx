@@ -235,6 +235,78 @@ To implement real-time preview of cropping result you can use [`CropperPreview`]
 
 <PreviewResultExample/>
 
+<br/>
+
+There are currently exists two competing approaches to use `<CropperPreview/>`. Which one will
+remain still not decided, so feel free to use any of them.
+
+
+<Tabs>
+<TabItem value="state" label="Stateful" default>
+
+
+```tsx
+import React, { useRef, useState } from 'react';
+import {
+	Cropper,
+	CropperPreview,
+	CropperState,
+	CropperImage,
+	CropperTransitions,
+} from 'react-advanced-cropper';
+
+interface PreviewState {
+	state: CropperState | null;
+	image: CropperImage | null;
+	transitions: CropperTransitions | null;
+	loading?: false;
+	loaded?: false;
+}
+
+export const Example = () => {
+	const [previewState, setPreviewState] = useState<PreviewState>({
+		state: null,
+		image: null,
+		transitions: null
+	});
+
+	const [src, setSrc] = useState(
+		'https://images.unsplash.com/photo-1623432532623-f8f1347d954c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=387&q=80',
+	);
+
+	const onUpdate = () => {
+		setPreviewState({
+			state: cropper.getState(),
+			image: cropper.getImage(),
+			transitions: cropper.getTransitions(),
+			loaded: cropper.isLoaded(),
+			loading: cropper.isLoading(),
+		});
+	};
+
+	return (
+		<div>
+			<Cropper
+				ref={cropperRef}
+				className="cropper"
+				stencilProps={{ aspectRatio: 1 }}
+				src={src}
+				onUpdate={onUpdate}
+			/>
+			<CropperPreview
+				ref={previewRef}
+				className="preview"
+				{...previewState}
+			/>
+		</div>
+	);
+};
+```
+
+</TabItem>
+<TabItem value="reference" label="Reference">
+
+
 ```jsx
 import React, { useRef, useState } from 'react';
 import { CropperRef, CropperPreviewRef, Cropper } from 'react-advanced-cropper';
@@ -269,6 +341,10 @@ export const Example = () => {
 	);
 };
 ```
+
+</TabItem>
+</Tabs>
+
 
 As an alternative you can  add the preview component inside the cropper wrapper, just like the slider in [this tutorial](/docs/tutorials/absolute-zoom/).
 It can even improve the performance slightly.

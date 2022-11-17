@@ -1,21 +1,45 @@
 import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
-import { CropperRef, Cropper, CropperPreview, CropperPreviewRef } from 'react-advanced-cropper';
+import {
+	CropperRef,
+	Cropper,
+	CropperPreview,
+	CropperState,
+	CropperImage,
+	CropperTransitions,
+} from 'react-advanced-cropper';
 import './PreviewResultExample.scss';
 import { RotateLeftIcon } from '../icons/RotateLeftIcon';
 import { UploadIcon } from '../icons/UploadIcon';
 import { SquareButton } from './components/SquareButton';
 
+interface PreviewState {
+	state: CropperState | null;
+	image: CropperImage | null;
+	transitions: CropperTransitions | null;
+	loading?: false;
+	loaded?: false;
+}
+
 export const PreviewResultExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
-	const previewRef = useRef<CropperPreviewRef>(null);
-	const smallPreviewRef = useRef<CropperPreviewRef>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
+
+	const [previewState, setPreviewState] = useState<PreviewState>({
+		state: null,
+		image: null,
+		transitions: null,
+	});
 
 	const [src, setSrc] = useState('/react-advanced-cropper/img/images/photo-1623432532623-f8f1347d954c.jpg');
 
-	const onUpdate = () => {
-		smallPreviewRef.current?.refresh();
-		previewRef.current?.refresh();
+	const onUpdate = (cropper: CropperRef) => {
+		setPreviewState({
+			state: cropper.getState(),
+			image: cropper.getImage(),
+			transitions: cropper.getTransitions(),
+			loaded: cropper.isLoaded(),
+			loading: cropper.isLoading(),
+		});
 	};
 
 	const onRotate = () => {
@@ -54,10 +78,9 @@ export const PreviewResultExample = () => {
 				onUpdate={onUpdate}
 			/>
 			<div className="preview-result-example__previews">
-				<CropperPreview ref={previewRef} cropper={cropperRef} className="preview-result-example__preview" />
+				<CropperPreview {...previewState} className="preview-result-example__preview" />
 				<CropperPreview
-					ref={smallPreviewRef}
-					cropper={cropperRef}
+					{...previewState}
 					className="preview-result-example__preview preview-result-example__preview--small"
 				/>
 			</div>
