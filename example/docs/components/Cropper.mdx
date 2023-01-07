@@ -852,10 +852,12 @@ typing use `CropperRef` type.
 
 	The cropper transforms:
 	```tsx
-	interface CropperTransitions {
-    timingFunction: string;
-    duration: number;
-    active: boolean;
+	interface Transforms {
+		rotate: number;
+		flip: {
+			horizontal: boolean;
+			vertical: boolean;
+		};
 	}
 	```
 
