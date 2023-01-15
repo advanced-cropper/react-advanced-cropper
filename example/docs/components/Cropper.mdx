@@ -65,15 +65,6 @@ This section still in the development. Stay up to date.
 	The optional class for the cropper image
 
 
-### `boundariesClassName`
-
-- **Type:** `String`
-
-- **Details:**
-
-	The optional class for the boundaries. Probably you should not use this prop.
-
-
 ### `backgroundClassName`
 
 - **Type:** `String`
@@ -431,46 +422,36 @@ interface TransformImageSettings {
    **See also: [Example](/docs/guides/advanced-recipes#adjust-stencil)**
 
 
-### `boundarySizeAlgorithm`
+### `boundaryComponent`
 
-- **Type:** `'fit' | 'fill' | BoundarySizeAlgorithm`
+- **Type:** `Component`
 
-```
-type BoundarySizeAlgorithm = ({ boundary, size }: {
-    boundary: HTMLElement;
-    size: Size;
-}) => Boundary
-```
-
-- **Default:**  `'fill'`
+- **Default:** `StretchableBoundary`
 
 - **Details:**
 
-	It's either an string or static function.
+	The boundary component. This property can be used to replace the boundary on the custom component.
 
-	#### 'String'
 
-	There are available two string values:
+### `boundaryClassName`
 
-	- `'fill'`, boundaries should fill the cropper
-	- `'fit'`, boundaries should have the same aspect ratio as the image and should be fitted to the cropper
+- **Type:** `String`
 
-	#### 'Function'
+- **Details:**
 
-	The static function that accepts the only argument, the object with following fields:
-	- `boundary: HTMLElement`, i.e. DOM element of the boundary;
-	- `size: Size`, i.e. desired image size,
+	The optional class for the boundary. Probably you should not use this prop.
 
-	It should return the object with `height` and `width` fields, i.e. width and height of the area.
 
-	```js
-	({ boundary, size  }) => {
-    return {
-    	width: boundary.clientWidth,
-    	height: boundary.clientHeight,
-    }
-	}
-	```
+### `boundaryProps`
+
+- **Type:** `object`
+
+- **Default:** `{}`
+
+- **Details:**
+
+	The props that will be passed to the boundary component.
+
 
 ### `stretchAlgorithm`
 

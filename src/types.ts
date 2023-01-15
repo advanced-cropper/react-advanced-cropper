@@ -15,6 +15,8 @@ export type CropperWrapperComponent = ComponentType<{
 	style?: CSSProperties;
 }>;
 
+export type CropperBoundaryComponent = any;
+
 export type CropperBackgroundComponent = any;
 
 export type CropperBackgroundWrapperComponent = ComponentType<{
