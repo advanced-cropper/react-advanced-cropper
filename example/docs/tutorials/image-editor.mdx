@@ -22,11 +22,26 @@ The used components are available in [the documentation repository](https://gith
 <Tabs>
 <TabItem value="tsx" label="TSX" default>
 
+:::note
+To make this code works for Safari the polyfill is needed. Otherwise you can use any library
+that implements custom filters for canvas.
+
+You can use the [context-filter-polyfill](https://www.npmjs.com/package/context-filter-polyfill) for example:
+```
+yarn add context-filter-polyfill
+```
+:::
+
 ```tsx
 import React, { useState } from 'react';
 import { Navigation } from './components/Navigation';
 import { Slider } from './components/Slider';
 import './ImageEditor.scss';
+
+// The polyfill for Safari browser. The dynamic require is needed to work with SSR
+if (typeof window !== 'undefined') {
+	require('context-filter-polyfill');
+}
 
 export const ImageEditor = () => {
 	const [mode, setMode] = useState('crop');

@@ -9,6 +9,11 @@ import { Button } from './components/Button';
 import { ResetIcon } from './icons/ResetIcon';
 import './ImageEditor.scss';
 
+// The polyfill for Safari browser. The dynamic require is needed to work with SSR
+if (typeof window !== 'undefined') {
+	require('context-filter-polyfill');
+}
+
 export const ImageEditor = () => {
 	const cropperRef = useRef<CropperRef>(null);
 	const previewRef = useRef<CropperPreviewRef>(null);
