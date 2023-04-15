@@ -1,4 +1,4 @@
-import React, { CSSProperties, FC } from 'react';
+import React, { CSSProperties, FC, ReactNode } from 'react';
 import cn from 'classnames';
 import { CropperFade } from '../service/CropperFade';
 
@@ -10,6 +10,7 @@ export interface CropperPreviewWrapperProps {
 	cropper?: DesiredCropperRef;
 	className?: string;
 	style?: CSSProperties;
+	children?: ReactNode;
 }
 
 export const CropperPreviewWrapper: FC<CropperPreviewWrapperProps> = ({ children, cropper, className, style }) => {

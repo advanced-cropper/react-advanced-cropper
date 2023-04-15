@@ -1,4 +1,4 @@
-import React, { FC, useLayoutEffect, useRef, useState } from 'react';
+import React, { FC, ReactNode, useLayoutEffect, useRef, useState } from 'react';
 import { Coordinates, CropperTransitions, deepCompare, isNumber } from 'advanced-cropper';
 import classnames from 'classnames';
 import { useTransition } from '../../hooks/useTransition';
@@ -10,6 +10,7 @@ interface Props {
 	height?: number;
 	left?: number;
 	top?: number;
+	children?: ReactNode;
 }
 
 export const ArtificialTransition: FC<Props> = ({ className, transitions, children, ...values }) => {

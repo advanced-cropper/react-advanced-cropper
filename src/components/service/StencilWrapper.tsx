@@ -1,10 +1,11 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { CropperTransitions } from 'advanced-cropper';
 import classnames from 'classnames';
 
 import { ArtificialTransition } from './ArtificialTransition';
 
 interface Props {
+	children?: ReactNode;
 	className?: string;
 	transitions?: CropperTransitions;
 	width?: number;
