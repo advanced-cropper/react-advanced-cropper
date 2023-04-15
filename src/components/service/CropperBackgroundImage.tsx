@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { CSSProperties, forwardRef } from 'react';
 import cn from 'classnames';
 import { CropperTransitions, CropperImage, CropperState, getBackgroundStyle } from 'advanced-cropper';
 import { preventDefault } from '../../service/events';
@@ -9,19 +9,20 @@ interface DesiredCropperRef {
 	getImage: () => CropperImage | null;
 }
 
-interface Props {
+export interface CropperBackgroundImageProps {
 	className?: string;
 	cropper: DesiredCropperRef;
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
+	style?: CSSProperties;
 }
 
-export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
-	({ className, cropper, crossOrigin = true }: Props, ref) => {
+export const CropperBackgroundImage = forwardRef<HTMLImageElement, CropperBackgroundImageProps>(
+	({ className, style, cropper, crossOrigin = true }: CropperBackgroundImageProps, ref) => {
 		const state = cropper.getState();
 		const transitions = cropper.getTransitions();
 		const image = cropper.getImage();
 
-		const style = image && state ? getBackgroundStyle(image, state, transitions) : {};
+		const transformStyles = image && state ? getBackgroundStyle(image, state, transitions) : {};
 
 		const src = image ? image.src : undefined;
 
@@ -32,7 +33,10 @@ export const CropperBackgroundImage = forwardRef<HTMLImageElement, Props>(
 				className={cn('advanced-cropper-background-image', className)}
 				src={src}
 				crossOrigin={crossOrigin === true ? 'anonymous' : crossOrigin || undefined}
-				style={style}
+				style={{
+					...transformStyles,
+					...style,
+				}}
 				onMouseDown={preventDefault}
 			/>
 		) : null;
