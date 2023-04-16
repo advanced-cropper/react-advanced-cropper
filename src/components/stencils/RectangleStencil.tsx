@@ -1,4 +1,4 @@
-import React, { ComponentType, forwardRef, useImperativeHandle } from 'react';
+import React, { FC, forwardRef, useImperativeHandle } from 'react';
 import cn from 'classnames';
 import {
 	CardinalDirection,
@@ -23,9 +23,9 @@ import { DraggableArea } from '../service/DraggableArea';
 import { StencilWrapper } from '../service/StencilWrapper';
 import { StencilGrid } from '../service/StencilGrid';
 
-type HandlerComponent = ComponentType<any>;
+type HandlerComponent = FC<any>;
 
-type LineComponent = ComponentType<any>;
+type LineComponent = FC<any>;
 
 interface HandlerClassNames extends Partial<Record<OrdinalDirection, string>> {
 	default?: string;

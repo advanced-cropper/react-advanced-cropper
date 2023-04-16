@@ -1,4 +1,4 @@
-import { ComponentType, CSSProperties, ReactNode } from 'react';
+import { CSSProperties, FC, ReactNode } from 'react';
 import {
 	AbstractCropperIntrinsicProps,
 	AbstractCropperRef,
@@ -9,17 +9,18 @@ export type ArbitraryProps = Record<string, any>;
 
 export type StencilComponent = any;
 
-export type CropperWrapperComponent = ComponentType<{
+export type CropperWrapperComponent = FC<{
 	cropper: any;
 	className?: string;
 	style?: CSSProperties;
+	children?: ReactNode;
 }>;
 
 export type CropperBoundaryComponent = any;
 
 export type CropperBackgroundComponent = any;
 
-export type CropperBackgroundWrapperComponent = ComponentType<{
+export type CropperBackgroundWrapperComponent = FC<{
 	cropper: any;
 	children?: ReactNode;
 	className?: string;

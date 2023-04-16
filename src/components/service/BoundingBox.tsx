@@ -1,4 +1,4 @@
-import React, { ComponentType, useMemo, ReactNode, CSSProperties, useState } from 'react';
+import React, { useMemo, ReactNode, CSSProperties, useState, FC } from 'react';
 import cn from 'classnames';
 import {
 	CardinalDirection,
@@ -19,9 +19,9 @@ import { SimpleHandler } from '../handlers/SimpleHandler';
 const HORIZONTAL_DIRECTIONS = ['east', 'west', null] as const;
 const VERTICAL_DIRECTIONS = ['south', 'north', null] as const;
 
-type HandlerComponent = ComponentType<any>;
+type HandlerComponent = FC<any>;
 
-type LineComponent = ComponentType<any>;
+type LineComponent = FC<any>;
 
 interface HandlerClassNames extends Partial<Record<OrdinalDirection, string>> {
 	default?: string;
