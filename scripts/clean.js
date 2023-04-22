@@ -1,7 +1,9 @@
 const fs = require('fs');
 
 async function removeDirectory(directory) {
-	fs.rmdirSync(directory, { recursive: true, force: true });
+	if (fs.existsSync(directory)) {
+		fs.rmdirSync(directory, { recursive: true, force: true });
+	}
 }
 
 async function run() {
