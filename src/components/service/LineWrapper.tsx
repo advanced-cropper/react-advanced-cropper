@@ -29,6 +29,7 @@ export const LineWrapper = ({
 			className={cn([
 				'advanced-cropper-line-wrapper',
 				position && `advanced-cropper-line-wrapper--${position}`,
+				disabled && `advanced-cropper-line-wrapper--disabled`,
 				className,
 			])}
 			disabled={disabled}
