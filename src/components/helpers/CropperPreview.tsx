@@ -20,7 +20,7 @@ import {
 } from 'advanced-cropper';
 import { StretchableBoundary, StretchableBoundaryMethods } from '../service/StretchableBoundary';
 import { useWindowResize } from '../../hooks/useWindowResize';
-import { ArbitraryProps } from '../../types';
+import { ArbitraryProps, CropperBoundaryComponent } from '../../types';
 import { useForceRerender } from '../../hooks/useForceRerender';
 import { CropperPreviewWrapper } from './CropperPreviewWrapper';
 import { CropperPreviewBackground } from './CropperPreviewBackground';
@@ -62,6 +62,9 @@ interface Props {
 	backgroundClassName?: string;
 	backgroundComponent?: PreviewBackgroundComponent;
 	backgroundProps?: ArbitraryProps;
+	boundaryComponent?: CropperBoundaryComponent;
+	boundaryProps?: ArbitraryProps;
+	boundaryClassName?: string;
 	wrapperComponent?: PreviewWrapperComponent;
 	wrapperProps?: ArbitraryProps;
 	style?: CSSProperties;
@@ -79,6 +82,9 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 			backgroundComponent = CropperPreviewBackground,
 			backgroundProps,
 			backgroundClassName,
+			boundaryComponent = StretchableBoundary,
+			boundaryProps,
+			boundaryClassName,
 			wrapperComponent = CropperPreviewWrapper,
 			wrapperProps,
 			loaded = true,
@@ -150,6 +156,8 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 
 		const BackgroundComponent = backgroundComponent;
 
+		const BoundaryComponent = boundaryComponent;
+
 		return (
 			<WrapperComponent
 				{...wrapperProps}
@@ -157,11 +165,11 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 				cropper={instance.current}
 				style={style}
 			>
-				<StretchableBoundary
+				<BoundaryComponent
 					ref={boundaryRef}
-					className={'advanced-cropper-preview__boundary'}
-					contentClassName={'advanced-cropper-preview__boundary-content'}
 					stretchAlgorithm={stretchPreviewBoundary}
+					{...boundaryProps}
+					className={cn('advanced-cropper-preview__boundary', boundaryClassName)}
 				>
 					<div className={cn(contentClassName, 'advanced-cropper-preview__content')} style={contentStyle}>
 						{instance.current && (
@@ -177,7 +185,7 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 							/>
 						)}
 					</div>
-				</StretchableBoundary>
+				</BoundaryComponent>
 			</WrapperComponent>
 		);
 	},
