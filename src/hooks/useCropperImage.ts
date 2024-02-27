@@ -69,7 +69,7 @@ export function useCropperImage(options: CropperImageHookSettings) {
 				}
 			}
 		}
-	}, [src]);
+	}, [src, image]);
 
 	useEffect(() => {
 		if (image) {

@@ -6,6 +6,7 @@ import {
 	CropperState,
 	CropperImage,
 	CropperTransitions,
+	CropperPreviewRef,
 } from 'react-advanced-cropper';
 import './PreviewResultExample.scss';
 import { RotateLeftIcon } from '../icons/RotateLeftIcon';
@@ -24,22 +25,14 @@ export const PreviewResultExample = () => {
 	const cropperRef = useRef<CropperRef>(null);
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const [previewState, setPreviewState] = useState<PreviewState>({
-		state: null,
-		image: null,
-		transitions: null,
-	});
+	const largePreviewRef = useRef<CropperPreviewRef>(null);
+	const smallPreviewRef = useRef<CropperPreviewRef>(null);
 
 	const [src, setSrc] = useState('/react-advanced-cropper/img/images/photo-1623432532623-f8f1347d954c.jpg');
 
 	const onUpdate = (cropper: CropperRef) => {
-		setPreviewState({
-			state: cropper.getState(),
-			image: cropper.getImage(),
-			transitions: cropper.getTransitions(),
-			loaded: cropper.isLoaded(),
-			loading: cropper.isLoading(),
-		});
+		largePreviewRef.current?.update(cropper);
+		smallPreviewRef.current?.update(cropper);
 	};
 
 	const onRotate = () => {
@@ -78,9 +71,9 @@ export const PreviewResultExample = () => {
 				onUpdate={onUpdate}
 			/>
 			<div className="preview-result-example__previews">
-				<CropperPreview {...previewState} className="preview-result-example__preview" />
+				<CropperPreview ref={largePreviewRef} className="preview-result-example__preview" />
 				<CropperPreview
-					{...previewState}
+					ref={smallPreviewRef}
 					className="preview-result-example__preview preview-result-example__preview--small"
 				/>
 			</div>

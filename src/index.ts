@@ -27,6 +27,7 @@ export * from './hooks/useCropperInstance';
 export * from './hooks/useCropperImage';
 export * from './hooks/useMoveImageOptions';
 export * from './hooks/useScaleImageOptions';
+export * from './hooks/useRotateImageOptions';
 export * from './hooks/useUpdateEffect';
 export * from './hooks/useWindowResize';
 export * from './service/react';

@@ -35,6 +35,7 @@ interface DesiredCropperRef {
 
 export interface CropperPreviewRef {
 	refresh: () => void;
+	update: (cropper?: DesiredCropperRef) => void;
 }
 
 type PreviewWrapperComponent = ComponentType<{
@@ -98,7 +99,9 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 
 		const boundaryRef = useRef<StretchableBoundaryMethods>(null);
 
-		const instance = cropper || {
+		const internalInstance = useRef<DesiredCropperRef | null>(null);
+
+		const instance = cropper || (internalInstance.current ? internalInstance : {
 			current: {
 				getState: () => state,
 				getTransitions: () => transitions,
@@ -106,7 +109,7 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 				isLoaded: () => loaded,
 				isLoading: () => loading,
 			},
-		};
+		});
 
 		const [size, setSize] = useState<Size | null>(null);
 
@@ -122,6 +125,7 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 			: {};
 
 		const refresh = () => {
+			const coordinates = instance.current?.getState()?.coordinates;
 			if (boundaryRef.current && coordinates) {
 				boundaryRef.current.stretchTo(coordinates).then((size) => {
 					if (size && coordinates) {
@@ -149,7 +153,15 @@ export const CropperPreview = forwardRef<CropperPreviewRef, Props>(
 		useLayoutEffect(refresh, [coordinates?.height, coordinates?.width]);
 
 		useImperativeHandle(ref, () => ({
-			refresh: rerender,
+			refresh,
+			update(cropper?: DesiredCropperRef) {
+				if (cropper) {
+					internalInstance.current = cropper;
+				} else {
+					internalInstance.current = null;
+				}
+				refresh();
+			}
 		}));
 
 		const WrapperComponent = wrapperComponent;

@@ -63,8 +63,8 @@ export const ImageEditor = () => {
 		}
 	};
 
-	const onUpdate = () => {
-		previewRef.current?.refresh();
+	const onUpdate = (cropper: CropperRef) => {
+		previewRef.current?.update(cropper);
 	};
 
 	const changed = Object.values(adjustments).some((el) => Math.floor(el * 100));
@@ -101,7 +101,6 @@ export const ImageEditor = () => {
 				<CropperPreview
 					className={'image-editor__preview'}
 					ref={previewRef}
-					cropper={cropperRef}
 					backgroundComponent={AdjustablePreviewBackground}
 					backgroundProps={adjustments}
 				/>

@@ -13,7 +13,6 @@ import { CroppersWizard } from '../components/CroppersWizard';
 const example = `
 import React, { useState } from 'react';
 import { CropperRef, Cropper } from 'react-advanced-cropper';
-import 'react-advanced-cropper/dist/style.css'
 
 export const GettingStartedExample = () => {
     const [image] = useState(
