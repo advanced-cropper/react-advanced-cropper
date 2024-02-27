@@ -59,11 +59,13 @@ export function useCropperImage(options: CropperImageHookSettings) {
 					});
 			} else {
 				if (unloadTime) {
-					promiseTimeout(unloadTime).then(() => {
-						setImage(null)
-					})
+						promiseTimeout(unloadTime).then(() => {
+							if (currentSrc.current === src) {
+								setImage(null)
+							}
+						})
 				} else {
-					setImage(null)
+						setImage(null)
 				}
 			}
 		}
