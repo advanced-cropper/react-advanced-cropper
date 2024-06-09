@@ -90,6 +90,7 @@ export interface AbstractCropperProps<Settings extends AbstractCropperSettings>
 	boundaryClassName?: string;
 	style?: CSSProperties;
 	settings: CropperInstanceSettingsProp<Settings>;
+	disabled?: boolean;
 }
 
 export type AbstractCropperIntrinsicProps<Settings extends AbstractCropperSettings> = Omit<
@@ -119,6 +120,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 		boundaryClassName,
 		canvas = true,
 		crossOrigin = true,
+		disabled,
 		settings,
 		...parameters
 	} = props;
@@ -159,6 +161,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 	return (
 		<WrapperComponent
 			{...wrapperProps}
+			disabled={disabled}
 			className={cn('advanced-cropper', className)}
 			cropper={cropper}
 			style={style}
@@ -171,6 +174,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 			>
 				<BackgroundWrapperComponent
 					{...backgroundWrapperProps}
+					disabled={disabled}
 					cropper={cropper}
 					className={'advanced-cropper__background-wrapper'}
 				>
@@ -183,7 +187,7 @@ const AbstractCropperComponent = <Extension extends SettingsExtension = {}>(
 							className={cn('advanced-cropper__background', backgroundClassName)}
 						/>
 					)}
-					<StencilComponent {...stencilProps} ref={stencilRef} cropper={cropper} image={image} />
+					<StencilComponent {...stencilProps} disabled={disabled} ref={stencilRef} cropper={cropper} image={image} />
 				</BackgroundWrapperComponent>
 				{canvas && <CropperCanvas ref={refs.canvas} />}
 			</BoundaryComponent>

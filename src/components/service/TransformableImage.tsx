@@ -27,6 +27,7 @@ interface Props {
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
+	preventDefault?: boolean;
 }
 
 export class TransformableImageEvent {
@@ -100,12 +101,12 @@ export class TransformableImage extends Component<Props> {
 	};
 
 	processEvent = (nativeEvent: Event) => {
-		const { onEvent, disabled } = this.props;
+		const { onEvent, disabled, preventDefault = true } = this.props;
 		const transformEvent = new TransformableImageEvent({ active: this.transforming });
 
 		if (onEvent) {
 			onEvent(transformEvent, nativeEvent);
-		} else {
+		} else if (preventDefault) {
 			nativeEvent.preventDefault();
 			nativeEvent.stopPropagation();
 		}

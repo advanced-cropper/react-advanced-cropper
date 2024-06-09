@@ -25,6 +25,7 @@ export type CropperBackgroundWrapperComponent = FC<{
 	children?: ReactNode;
 	className?: string;
 	style?: CSSProperties;
+	disabled?: boolean;
 }>;
 
 export type StencilOptions = Record<string, unknown>;

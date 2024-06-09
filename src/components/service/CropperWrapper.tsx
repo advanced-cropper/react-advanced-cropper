@@ -14,6 +14,7 @@ export interface CropperWrapperProps {
 	className?: string;
 	style?: CSSProperties;
 	children?: ReactNode;
+	disabled?: boolean;
 }
 
 export const CropperWrapper: FC<CropperWrapperProps> = ({ cropper, children, className, style }) => {

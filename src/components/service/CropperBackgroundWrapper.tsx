@@ -21,6 +21,7 @@ export interface CropperBackgroundWrapperProps {
 	className?: string;
 	style?: CSSProperties;
 	timeout?: number;
+	disabled?: boolean;
 }
 
 export const CropperBackgroundWrapper = ({
@@ -32,6 +33,7 @@ export const CropperBackgroundWrapper = ({
 	style,
 	cropper,
 	timeout,
+	disabled
 }: CropperBackgroundWrapperProps) => {
 	const transitions = cropper.getTransitions();
 
@@ -50,7 +52,8 @@ export const CropperBackgroundWrapper = ({
 			touchScale={scaleImageOptions.touch}
 			wheelScale={scaleImageOptions.wheel}
 			touchRotate={rotateImageOptions.touch}
-			disabled={transitions.active}
+			disabled={transitions.active || disabled}
+			preventDefault={!disabled}
 			timeout={timeout}
 		>
 			{children}

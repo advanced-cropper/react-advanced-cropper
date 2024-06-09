@@ -75,6 +75,7 @@ interface Props {
 	movable?: boolean;
 	resizable?: boolean;
 	grid?: boolean;
+	disabled?: boolean;
 }
 
 interface Methods {
@@ -122,12 +123,16 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
+			disabled,
 		}: Props,
 		ref,
 	) => {
 		const state = cropper.getState();
 		const transitions = cropper.getTransitions();
 		const interactions = cropper.getInteractions();
+
+		const resizeAllowed = resizable && !disabled;
+		const moveAllowed = movable && !disabled;
 
 		useImperativeHandle(ref, () => ({
 			aspectRatio: createAspectRatio(
@@ -139,7 +144,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 		}));
 
 		const onMove = (directions: MoveDirections) => {
-			if (cropper && movable) {
+			if (cropper && moveAllowed) {
 				cropper.moveCoordinates(directions);
 			}
 		};
@@ -151,7 +156,7 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 		};
 
 		const onResize = (anchor: ResizeAnchor, directions: MoveDirections, options: ResizeOptions) => {
-			if (cropper && resizable) {
+			if (cropper && resizeAllowed) {
 				cropper.resizeCoordinates(anchor, directions, options);
 			}
 		};
@@ -177,10 +182,11 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 						interactions.moveCoordinates && movingClassName,
 						interactions.resizeCoordinates && resizingClassName,
 						{
-							'advanced-cropper-rectangle-stencil--movable': movable,
+							'advanced-cropper-rectangle-stencil--movable': moveAllowed,
 							'advanced-cropper-rectangle-stencil--moving': interactions.moveCoordinates,
-							'advanced-cropper-rectangle-stencil--resizable': resizable,
+							'advanced-cropper-rectangle-stencil--resizable': resizeAllowed,
 							'advanced-cropper-rectangle-stencil--resizing': interactions.resizeCoordinates,
+							'advanced-cropper-rectangle-stencil--disabled': disabled,
 						},
 					)}
 					width={width}
@@ -202,10 +208,10 @@ export const RectangleStencil = forwardRef<Methods, Props>(
 						lineWrapperClassNames={lineWrapperClassNames}
 						onResize={onResize}
 						onResizeEnd={onResizeEnd}
-						disabled={!resizable}
+						disabled={!resizeAllowed}
 					>
 						<DraggableArea
-							disabled={!movable}
+							disabled={!moveAllowed}
 							onMove={onMove}
 							onMoveEnd={onMoveEnd}
 							className={cn('advanced-cropper-rectangle-stencil__draggable-area', draggableAreaClassName)}

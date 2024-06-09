@@ -70,6 +70,7 @@ interface Props {
 	draggableAreaClassName?: string;
 	movable?: boolean;
 	resizable?: boolean;
+	disabled?: boolean;
 	grid?: boolean;
 }
 
@@ -111,6 +112,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 			boundingBoxClassName,
 			overlayClassName,
 			draggableAreaClassName,
+			disabled,
 		}: Props,
 		ref,
 	) => {
@@ -118,13 +120,16 @@ export const CircleStencil = forwardRef<Methods, Props>(
 		const transitions = cropper.getTransitions();
 		const interactions = cropper.getInteractions();
 
+		const resizeAllowed = resizable && !disabled;
+		const moveAllowed = movable && !disabled;
+
 		useImperativeHandle(ref, () => ({
 			aspectRatio: 1,
 			boundingBox: 'circle',
 		}));
 
 		const onMove = (directions: MoveDirections) => {
-			if (cropper && movable) {
+			if (cropper && moveAllowed) {
 				cropper.moveCoordinates(directions);
 			}
 		};
@@ -136,7 +141,7 @@ export const CircleStencil = forwardRef<Methods, Props>(
 		};
 
 		const onResize = (anchor: ResizeAnchor, directions: MoveDirections, options: ResizeOptions) => {
-			if (cropper && resizable) {
+			if (cropper && resizeAllowed) {
 				cropper.resizeCoordinates(anchor, directions, options);
 			}
 		};
@@ -162,10 +167,11 @@ export const CircleStencil = forwardRef<Methods, Props>(
 						interactions.moveCoordinates && movingClassName,
 						interactions.resizeCoordinates && resizingClassName,
 						{
-							'advanced-cropper-circle-stencil--movable': movable,
+							'advanced-cropper-circle-stencil--movable': moveAllowed,
 							'advanced-cropper-circle-stencil--moving': interactions.moveCoordinates,
-							'advanced-cropper-circle-stencil--resizable': resizable,
+							'advanced-cropper-circle-stencil--resizable': resizeAllowed,
 							'advanced-cropper-circle-stencil--resizing': interactions.resizeCoordinates,
+							'advanced-cropper-circle-stencil--disabled': disabled,
 						},
 					)}
 					width={width}
@@ -187,10 +193,10 @@ export const CircleStencil = forwardRef<Methods, Props>(
 						lineWrapperClassNames={lineWrapperClassNames}
 						onResize={onResize}
 						onResizeEnd={onResizeEnd}
-						disabled={!resizable}
+						disabled={!resizeAllowed}
 					>
 						<DraggableArea
-							disabled={!movable}
+							disabled={!moveAllowed}
 							onMove={onMove}
 							onMoveEnd={onMoveEnd}
 							className={cn('advanced-cropper-circle-stencil__draggable-area', draggableAreaClassName)}
