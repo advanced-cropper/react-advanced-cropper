@@ -25,6 +25,7 @@ export interface AbstractCropperHookProps<Settings extends AbstractCropperSettin
 	crossOrigin?: 'anonymous' | 'use-credentials' | boolean;
 	onReady?: (cropper: AbstractCropperRef<Settings>) => void;
 	onError?: (cropper: AbstractCropperRef<Settings>) => void;
+	onUpdate?: (cropper: AbstractCropperRef<Settings>) => void;
 	unloadTime?: number;
 	autoReconcileState?: boolean;
 	settings?: CropperInstanceSettingsProp<Settings>;
@@ -65,11 +66,6 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 		checkOrientation,
 		unloadTime,
 		canvas,
-		onLoad() {
-			if (cropperRef.current) {
-				onReady?.(cropperRef.current);
-			}
-		},
 		onError() {
 			if (cropperRef.current) {
 				onError?.(cropperRef.current);
@@ -178,6 +174,12 @@ export function useAbstractCropper<Extension extends SettingsExtension = {}>(
 	useUpdateEffect(() => {
 		resetCropper();
 	}, [cropperImage.getImage()]);
+
+	useUpdateEffect(() => {
+		if (cropperRef.current && currentImage) {
+			onReady?.(cropperRef.current);
+		}
+	}, [currentImage])
 
 	useUpdateEffect(() => {
 		if (cropperRef.current) {

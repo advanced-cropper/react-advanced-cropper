@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { CropperImage, isUndefined, promiseTimeout, loadImage } from 'advanced-cropper';
+import { useStateWithCallback } from "./useStateWithCallback";
 
 export interface CropperImageHookSettings {
 	src?: string | null;
@@ -15,9 +16,9 @@ export interface CropperImageHookSettings {
 
 export function useCropperImage(options: CropperImageHookSettings) {
 	const { src, onLoadingStart, onLoadingEnd, onError, onLoad, crossOrigin, checkOrientation, canvas, unloadTime } = options;
-	const [loading, setLoading] = useState(false);
-	const [loaded, setLoaded] = useState(false);
 	const [image, setImage] = useState<CropperImage | null>(null);
+	const [loading, setLoading] = useState(false);
+	const [loaded, setLoaded] = useStateWithCallback(false);
 
 	const currentSrc = useRef<string | null>(null);
 
@@ -43,7 +44,6 @@ export function useCropperImage(options: CropperImageHookSettings) {
 						const [image] = responses as [CropperImage];
 						if (currentSrc.current === src) {
 							setImage(image);
-							onLoad?.(image);
 						}
 					})
 					.catch(() => {
@@ -73,7 +73,9 @@ export function useCropperImage(options: CropperImageHookSettings) {
 
 	useEffect(() => {
 		if (image) {
-			setLoaded(true)
+			setLoaded(true, () => {
+				onLoad?.(image);
+			})
 		}
 	}, [image])
 
