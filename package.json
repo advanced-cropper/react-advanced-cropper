@@ -1,6 +1,6 @@
 {
   "name": "react-advanced-cropper",
-  "version": "0.19.5",
+  "version": "0.20.0",
   "description": "The react cropper library that gives the possibility to create croppers exactly suited for your website design",
   "author": "Norserium",
   "license": "MIT",
@@ -85,7 +85,7 @@
     "dist"
   ],
   "dependencies": {
-    "advanced-cropper": "~0.18.0",
+    "advanced-cropper": "~0.17.1",
     "classnames": "^2.2.6",
     "tslib": "^2.4.0"
   },
