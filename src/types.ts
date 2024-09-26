@@ -14,6 +14,17 @@ export type CropperWrapperComponent = FC<{
 	className?: string;
 	style?: CSSProperties;
 	children?: ReactNode;
+	disabled?: boolean;
+
+	/**
+	 * @deprecated Use `cropper.isLoaded()` instead.
+	 */
+	loading?: boolean;
+
+	/**
+	 * @deprecated Use `cropper.isLoaded()` instead.
+	 */
+	loaded: boolean;
 }>;
 
 export type CropperBoundaryComponent = any;
