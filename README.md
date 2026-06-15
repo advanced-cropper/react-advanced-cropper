@@ -5,7 +5,7 @@
   <br>
   <a href="https://advanced-cropper.github.io/react-advanced-cropper/">Documentation</a target="_blank" rel="noopener noreferrer"> /
   <a href="https://advanced-cropper.github.io/react-advanced-cropper/docs/guides/recipes">Examples</a target="_blank" rel="noopener noreferrer"> /
-  <a href="https://codesandbox.io/s/react-advanced-cropper-kkvbz">Sandbox</a target="_blank" rel="noopener noreferrer">
+  <a href="https://codesandbox.io/p/sandbox/crjhlx">Sandbox</a target="_blank" rel="noopener noreferrer">
 </p>
 
 <h2 align="center"> </h2>
