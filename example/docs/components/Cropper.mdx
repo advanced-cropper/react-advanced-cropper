@@ -3,6 +3,8 @@ title: Cropper
 sidebar_position: 1
 ---
 import TOCInline from "@theme/TOCInline";
+import { RotateCoordinatesExample } from '../../src/components/examples/RotateCoordinatesExample';
+
 
 :::note
 This section still in the development. Stay up to date.
@@ -833,10 +835,13 @@ typing use `CropperRef` type.
 	}
 	```
 
+  :::note Important notice
+	If an image is rotated, the coordinates are calculated relative to an image bounding box.
+	<RotateCoordinatesExample/>
+	:::
 
-- **Usage:**
 
-	[See `getState`.](/docs/components/Cropper/#getState)
+
 
 ### `getTransforms()`
 
@@ -1006,6 +1011,7 @@ typing use `CropperRef` type.
     height: imageSize.height
 	}))
 	```
+
 
 	#### `Array`
 
