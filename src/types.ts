@@ -14,6 +14,7 @@ export type CropperWrapperComponent = FC<{
 	className?: string;
 	style?: CSSProperties;
 	children?: ReactNode;
+	disabled?: boolean;
 }>;
 
 export type CropperBoundaryComponent = any;
