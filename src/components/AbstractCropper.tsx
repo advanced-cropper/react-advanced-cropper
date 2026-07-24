@@ -40,8 +40,8 @@ export type AbstractCropperSettingsProp<Settings extends CropperInstanceSettings
 export type AbstractCropperSettings = DefaultSettings & CoreSettings & ModifierSettings & InitializeSettings;
 
 export interface AbstractCropperRef<Settings extends AbstractCropperSettings = AbstractCropperSettings> {
-	reset: () => void;
-	refresh: () => void;
+	reset: () => Promise<void>;
+	refresh: () => Promise<void>;
 	clear: () => void;
 	setCoordinates: CropperStateHook['setCoordinates'];
 	setState: CropperStateHook['setState'];
