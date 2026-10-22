@@ -1,7 +1,7 @@
 import { ExtendedSettings, SettingsExtension } from '../types';
 import { AbstractCropperIntrinsicProps } from '../components/AbstractCropper';
 import { defaultSettings } from '../service/constants';
-import { CoreSettings, DefaultSettings, ModifierSettings } from '../../../../Advanced Cropper/advanced-cropper/dist';
+import { CoreSettings, DefaultSettings, ModifierSettings } from 'advanced-cropper';
 
 type Props<Extension extends SettingsExtension> = AbstractCropperIntrinsicProps<ExtendedSettings<Extension>>;
 
